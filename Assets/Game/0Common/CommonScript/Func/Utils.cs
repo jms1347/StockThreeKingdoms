@@ -87,7 +87,7 @@ public static class Utils
     // 단위 문자열 목록: 10^3마다 증가 (K, M, B, T, ...)
     private static readonly string[] Suffixes = new string[]
     {
-            "", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"
+         "", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"
     };
 
     /**
