@@ -49,4 +49,5 @@ MonoBehaviour:
   soundManagerPrefab: {fileID: 0}
   fadeManagerPrefab: {fileID: 0}
   popupManagerPrefab: {fileID: 0}
+  capitalManagerPrefab: {fileID: 21633341834516372, guid: 936ea725d0eea804b8344b32cd4b7f16, type: 3}
   nextSceneName: TitleScene
