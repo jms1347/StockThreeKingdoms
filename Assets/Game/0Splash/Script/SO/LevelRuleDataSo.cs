@@ -4,13 +4,17 @@ using System.Collections.Generic;
 [System.Serializable]
 public class LevelRuleData
 {
-    // ¿¹: "Rule_Edu_Easy_1"
-    public string ruleID;
+    public int level;
 
-    // ¿¹: 5 (È½¼ö)
-    public int requiredCount;
+    public double clickPowerCost;
+    public double clickPowerValue;
+
+    public double autoIncomeCost;
+    public double autoIncomeValue;
+
+    public double soldierGradeCost;
+    public double soldierGradeValue;
 }
-
 [CreateAssetMenu(fileName = "LevelRuleDataSo", menuName = "ScriptableObject/LevelRuleDataSo")]
 public class LevelRuleDataSo : ScriptableObject
 {

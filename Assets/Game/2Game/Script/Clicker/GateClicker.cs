@@ -1,40 +1,38 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections;
 
 public class GateClicker : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("UI ¿¬°á")]
-    public TextMeshProUGUI goldText; // ÀçÈ­ Ç¥½Ã ÅØ½ºÆ®
+    [Header("UI ì—°ê²°")]
+    public TextMeshProUGUI goldText;
 
     private Coroutine holdCoroutine;
 
     void Update()
     {
-        // UI ¾÷µ¥ÀÌÆ®´Â ¸Å ÇÁ·¹ÀÓ ManagerÀÇ ÇöÀç ¼öÄ¡¸¦ °¡Á®¿Í¼­ Ç¥½ÃÇÕ´Ï´Ù.
         if (goldText != null)
         {
-            // Utils.AbbreviateScore ´ë½Å "N0" Æ÷¸ËÀ¸·Î ÄŞ¸¶ Ç¥½Ã
-            goldText.text = "ÀÚº»: " + Mathf.FloorToInt((float)CapitalManager.Instance.currentGold).ToString("N0");
+            // ğŸ”¥ double í˜•ì„ ê·¸ëŒ€ë¡œ í¬ë§·íŒ…í•˜ì—¬ 21ì–µ ì˜¤ë²„í”Œë¡œìš° ë°©ì§€
+            goldText.text = "ìë³¸: " + CapitalManager.Instance.currentGold.ToString("N0");
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("¼º¹® ÅÇ! ÀÚº» ÃàÀû ½ÃÀÛ");
+        if (!DataManager.Instance.IsReady) return; // ë¡œë”© ì¤‘ í´ë¦­ ë°©ì§€
 
-        // 1. ´©¸£´Â ¼ø°£ Áï½Ã 1È¸ º¸»ó (ÀÌ¸§ º¯°æ ¿Ï·á!)
-        CapitalManager.Instance.AddGold(CapitalManager.Instance.GetClickPowerGold());
+        // Managerì—ì„œ í˜„ì¬ ë ˆë²¨ì— ë§ëŠ” ë°ì´í„°ë¥¼ ì§ì ‘ êº¼ë‚´ì˜µë‹ˆë‹¤.
+        LevelRuleData data = DataManager.Instance.GetLevelData(CapitalManager.Instance.clickPowerLevel);
+        if (data != null) CapitalManager.Instance.AddGold(data.clickPowerValue);
 
-        // 2. ±âÁ¸ ÄÚ·çÆ¾ Á¤¸® ¹× Áö¼Ó È¹µæ ÄÚ·çÆ¾ ½ÃÀÛ
         if (holdCoroutine != null) StopCoroutine(holdCoroutine);
         holdCoroutine = StartCoroutine(AddGoldOverTime());
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("Å¬¸¯ Á¾·á");
         if (holdCoroutine != null)
         {
             StopCoroutine(holdCoroutine);
@@ -46,13 +44,13 @@ public class GateClicker : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         while (true)
         {
-            // ÃÊ´ç È¹µæ·® = CapitalManagerÀÇ 'Å¬¸¯ ÆÄ¿ö' ±â¹İ ¼öÀÍ (ÀÌ¸§ º¯°æ ¿Ï·á!)
-            double goldToAdd = CapitalManager.Instance.GetClickPowerGold() * Time.deltaTime;
-
-            // ¸Å´ÏÀú¿¡ ÀÚº» Ãß°¡
-            CapitalManager.Instance.AddGold(goldToAdd);
-
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ ´ë±â
+            LevelRuleData data = DataManager.Instance.GetLevelData(CapitalManager.Instance.clickPowerLevel);
+            if (data != null)
+            {
+                double goldToAdd = data.clickPowerValue * Time.deltaTime;
+                CapitalManager.Instance.AddGold(goldToAdd);
+            }
+            yield return null;
         }
     }
 }

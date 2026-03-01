@@ -44,10 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f26d5d29c736746a90f7a88260a1af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SingletonLoader
-  googlesheetManagerPrefab: {fileID: 0}
+  googlesheetManagerPrefab: {fileID: 3034103495671089719, guid: e24f11da0bbce1c4086cd3fdd0dd642a, type: 3}
+  dataManagerPrefab: {fileID: 7174210814265474002, guid: a388f6603ab5ed04bacd55ec2d1eb7f2, type: 3}
   translationManagerPrefab: {fileID: 0}
   soundManagerPrefab: {fileID: 0}
   fadeManagerPrefab: {fileID: 0}
   popupManagerPrefab: {fileID: 0}
   capitalManagerPrefab: {fileID: 21633341834516372, guid: 936ea725d0eea804b8344b32cd4b7f16, type: 3}
-  nextSceneName: TitleScene
+  nextSceneName: TestScene
