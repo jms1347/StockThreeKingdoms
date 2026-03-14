@@ -1,18 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SingletonLoader : MonoBehaviour
 {
     [Header("Manager Prefabs")]
     public GameObject googlesheetManagerPrefab;
+    public GameObject dataManagerPrefab;
     public GameObject translationManagerPrefab;
     public GameObject soundManagerPrefab;
     public GameObject fadeManagerPrefab;
     public GameObject popupManagerPrefab;
+    public GameObject capitalManagerPrefab;
 
     [Header("Scene Transition")]
     [Tooltip("매니저 로드 완료 후 이동할 다음 씬의 이름입니다.")]
-    public string nextSceneName = "TitleScene";
+    public string nextSceneName = "TestScene";
 
     private void Awake()
     {
@@ -24,9 +26,11 @@ public class SingletonLoader : MonoBehaviour
     {
         // 위 Singleton<T> 클래스에서 이미 중복 체크와 null 체크를 하므로 안심하고 호출 가능합니다.
         // 각 매니저 스크립트는 Singleton<T>를 상속받았다고 가정합니다.
+        CapitalManager.Load(capitalManagerPrefab);
 
         // 예시: public class GoogleSheetManager : Singleton<GoogleSheetManager> { ... }
-        // GoogleSheetManager.Load(googlesheetManagerPrefab);
+        GoogleSheetManager.Load(googlesheetManagerPrefab);
+        DataManager.Load(dataManagerPrefab);
         // TranslationManager.Load(translationManagerPrefab);
         // SoundManager.Load(soundManagerPrefab);
         // FadeManager.Load(fadeManagerPrefab);
@@ -35,13 +39,21 @@ public class SingletonLoader : MonoBehaviour
 
     private void LoadNextScene()
     {
-        if (!string.IsNullOrEmpty(nextSceneName))
-        {
-            SceneManager.LoadScene(nextSceneName);
-        }
-        else
+        if (string.IsNullOrEmpty(nextSceneName))
         {
             Debug.LogWarning("[SingletonLoader] 이동할 다음 씬의 이름이 설정되지 않았습니다.");
+            return;
         }
+
+        // 이미 목표 씬에 있는 경우에는 씬을 다시 로드하지 않는다.
+        // (예: TestScene 안에도 SingletonLoader 프리팹이 있는 경우
+        //  TestScene → TestScene 무한 로드를 방지)
+        var currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == nextSceneName)
+        {
+            return;
+        }
+
+        SceneManager.LoadScene(nextSceneName);
     }
 }
