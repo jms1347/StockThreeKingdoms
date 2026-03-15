@@ -1,9 +1,21 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
 
 public class CapitalManager : Singleton<CapitalManager>
 {
     [Header("보유 자본 (재화)")]
-    public double currentGold = 0;
+    public Action<double> OnGoldChanged; 
+
+    private double _currentGold;
+    public double currentGold 
+    {
+        get { return _currentGold; }
+        set 
+        {
+            _currentGold = value;
+            OnGoldChanged?.Invoke(_currentGold); // 골드가 바뀔 때마다 이벤트 발생
+        }
+    }
     public double currentGrain = 0;
 
     [Header("수거 대기중인 자본 (창고)")]

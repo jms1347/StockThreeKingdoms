@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CapitalManager
   currentGold: 0
   currentGrain: 0
-  laborLevel: 1
-  marketLevel: 1
-  soldierGradeLevel: 1
+  accumulatedGold: 0
+  clickPowerLevel: 0
+  autoIncomeLevel: 0
+  soldierGradeLevel: 0

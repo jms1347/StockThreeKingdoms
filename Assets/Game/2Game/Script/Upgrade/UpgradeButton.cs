@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -15,52 +16,104 @@ public class UpgradeButton : MonoBehaviour
     public TextMeshProUGUI costText;
     public Button myButton;
 
-    void Update()
+    // 비용을 캐싱해두어 골드 변동 시마다 데이터를 다시 찾지 않게 합니다.
+    private double cachedCost; 
+
+    void Start()
     {
-        // 1. 구글 시트 다운로드가 안 끝났으면 UI 업데이트 대기
-        if (!DataManager.Instance.IsReady)
+        // 초기 텍스트 설정
+        if (costText != null) costText.text = "로딩중...";
+        if (myButton != null) myButton.interactable = false;
+
+        // 1. 데이터 매니저 이벤트 구독
+        if (DataManager.Instance.IsReady)
         {
-            if (costText != null) costText.text = "로딩중...";
-            myButton.interactable = false;
-            return; // 아래 로직은 실행하지 않음
+            InitializeUI();
+        }
+        else
+        {
+            DataManager.Instance.OnDataReady += InitializeUI;
         }
 
-        // 2. 다운로드가 끝났다면 정상 작동
-        double currentCost = GetCurrentCost();
+        // 2. 골드 변경 이벤트 구독
+        if (CapitalManager.Instance != null)
+        {
+            CapitalManager.Instance.OnGoldChanged += HandleGoldChanged;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // 메모리 누수 방지를 위한 이벤트 구독 해제 (매우 중요)
+        if (DataManager.Instance != null)
+        {
+            DataManager.Instance.OnDataReady -= InitializeUI;
+        }
+        if (CapitalManager.Instance != null)
+        {
+            CapitalManager.Instance.OnGoldChanged -= HandleGoldChanged;
+        }
+    }
+
+    private void InitializeUI()
+    {
+        UpdateUpgradeUI();
+        HandleGoldChanged(CapitalManager.Instance.currentGold);
+    }
+
+    // [무거운 작업] 레벨, 비용, 효과 텍스트를 업데이트 (레벨업 시, 데이터 로드 시에만 호출)
+    private void UpdateUpgradeUI()
+    {
+        if (!DataManager.Instance.IsReady) return;
+
         int currentLevel = GetCurrentLevel();
         LevelRuleData data = DataManager.Instance.GetLevelData(currentLevel);
+        
+        cachedCost = GetCurrentCost(); // 다음 레벨 비용 캐싱
 
         if (levelText != null) levelText.text = $"Lv. {currentLevel}";
 
         if (effectText != null && data != null)
         {
-            if (type == UpgradeType.ClickPower)
-                effectText.text = $"클릭 파워: +{data.clickPowerValue}";
-            else if (type == UpgradeType.AutoIncome)
-                effectText.text = $"자동 수익: 초당 +{data.autoIncomeValue}";
-            else if (type == UpgradeType.SoldierGrade)
-                effectText.text = $"병사 투자 효율 증가";
+            switch (type)
+            {
+                case UpgradeType.ClickPower:
+                    effectText.text = $"클릭 파워: +{data.clickPowerValue}";
+                    break;
+                case UpgradeType.AutoIncome:
+                    effectText.text = $"자동 수익: 초당 +{data.autoIncomeValue}";
+                    break;
+                case UpgradeType.SoldierGrade:
+                    effectText.text = $"병사 투자 효율 증가";
+                    break;
+            }
         }
 
-        // 🔥 Mathf.FloorToInt 삭제! double 형에 바로 ToString("N0")을 써서 21억 한계 돌파
         if (costText != null)
         {
-            if (data == null) costText.text = "MAX"; // 데이터가 없으면 만렙 처리
-            else costText.text = $"{currentCost:N0} 골드";
+            if (data == null) costText.text = "MAX";
+            else costText.text = $"{cachedCost:N0} 골드";
         }
+    }
 
-        // 버튼 활성화 여부
-        myButton.interactable = (data != null) && (CapitalManager.Instance.currentGold >= currentCost);
+    // [가벼운 작업] 버튼의 활성화 여부만 체크 (골드가 바뀔 때마다 호출)
+    private void HandleGoldChanged(double currentGold)
+    {
+        if (!DataManager.Instance.IsReady) return;
+
+        // 매번 데이터를 찾지 않고 캐싱된 비용(cachedCost)과 비교
+        bool isMaxLevel = DataManager.Instance.GetLevelData(GetCurrentLevel()) == null;
+        if (myButton != null) myButton.interactable = (!isMaxLevel) && (currentGold >= cachedCost);
     }
 
     public void OnUpgradeClicked()
     {
         if (!DataManager.Instance.IsReady) return;
 
-        double cost = GetCurrentCost();
-        if (CapitalManager.Instance.currentGold >= cost)
+        if (CapitalManager.Instance.currentGold >= cachedCost)
         {
-            CapitalManager.Instance.currentGold -= cost;
+            // 골드 차감 (Property의 setter를 통해 자동으로 OnGoldChanged 이벤트가 발생함)
+            CapitalManager.Instance.currentGold -= cachedCost;
 
             switch (type)
             {
@@ -68,6 +121,12 @@ public class UpgradeButton : MonoBehaviour
                 case UpgradeType.AutoIncome: CapitalManager.Instance.autoIncomeLevel++; break;
                 case UpgradeType.SoldierGrade: CapitalManager.Instance.soldierGradeLevel++; break;
             }
+
+            // 레벨이 올랐으므로 UI 전체 갱신
+            UpdateUpgradeUI();
+            
+            // UI 갱신 후 바뀐 비용으로 버튼 상태 재검사
+            HandleGoldChanged(CapitalManager.Instance.currentGold);
         }
     }
 
