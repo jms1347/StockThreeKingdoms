@@ -16,7 +16,6 @@ public class UserData
     public int DailySteps; // 당일 누적 걸음 수 
     public DateTime LastStepUpdatedTime; // 걸음수 마지막 갱신 시간 (어뷰징 방지 및 초기화용)
     
-    [cite_start]// [4] 본영 성장 인프라 (업그레이드 레벨) 
     public int LaborLevel;   // 노동력 레벨 (터치당 금화 획득량 증가)
     public int MarketLevel;  // 시장 레벨 (초당 자동 금화 획득량 증가)
     public int FarmLevel;    // 농장 레벨 (초당 식량 자동 생산 - 기획안 확장) [cite: 13]
