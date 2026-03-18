@@ -12,11 +12,17 @@ public class GateClicker : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void Update()
     {
-        if (goldText != null)
-        {
-            // 🔥 double 형을 그대로 포맷팅하여 21억 오버플로우 방지
-            goldText.text = "자본: " + GameManager.Instance.currentGold.ToString("N0");
-        }
+        if (goldText != null && GameManager.Instance != null)
+            goldText.text = "자본: " + FormatAbbreviated(GameManager.Instance.currentGold);
+    }
+
+    static string FormatAbbreviated(double value)
+    {
+        if (value >= 1e12) return (value / 1e12).ToString("0.#") + "T";
+        if (value >= 1e9) return (value / 1e9).ToString("0.#") + "G";
+        if (value >= 1e6) return (value / 1e6).ToString("0.#") + "M";
+        if (value >= 1e3) return (value / 1e3).ToString("0.#") + "K";
+        return value.ToString("N0");
     }
 
     public void OnPointerDown(PointerEventData eventData)
