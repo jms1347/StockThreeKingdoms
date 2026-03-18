@@ -3126,11 +3126,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1576410426}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6ee3a663cfc5941aa729626a56518d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HoldClicker
-  scoreText: {fileID: 6316235455227766860}
-  scorePerSecond: 10
+  m_Script: {fileID: 11500000, guid: 461af0954b5c27c4189834db64988b01, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GateClicker
+  goldText: {fileID: 6316235455227766860}
 --- !u!1 &1588191910
 GameObject:
   m_ObjectHideFlags: 0
