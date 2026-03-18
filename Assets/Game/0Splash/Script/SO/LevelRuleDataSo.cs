@@ -11,6 +11,7 @@ public class LevelRuleData
 
     public double autoIncomeCost;
     public double autoIncomeValue;
+    public double maxStorageCapacity;  // 금고 최대 용량 (8시간 기준: autoIncomeValue * 28800)
 
     public double soldierGradeCost;
     public double soldierGradeValue;

@@ -13,25 +13,15 @@ public class GateClicker : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Update()
     {
         if (goldText != null && GameManager.Instance != null)
-            goldText.text = "자본: " + FormatAbbreviated(GameManager.Instance.currentGold);
-    }
-
-    static string FormatAbbreviated(double value)
-    {
-        if (value >= 1e12) return (value / 1e12).ToString("0.#") + "T";
-        if (value >= 1e9) return (value / 1e9).ToString("0.#") + "G";
-        if (value >= 1e6) return (value / 1e6).ToString("0.#") + "M";
-        if (value >= 1e3) return (value / 1e3).ToString("0.#") + "K";
-        return value.ToString("N0");
+            goldText.text = "자본: " + Utils.AbbreviateScore(GameManager.Instance.currentGold);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!DataManager.Instance.IsReady) return; // 로딩 중 클릭 방지
+        if (GameManager.Instance == null) return;
 
-        // Manager에서 현재 레벨에 맞는 데이터를 직접 꺼내옵니다.
-        LevelRuleData data = DataManager.Instance.GetLevelData(GameManager.Instance.clickPowerLevel);
-        if (data != null) GameManager.Instance.AddGold(data.clickPowerValue);
+        double value = GameManager.Instance.GetClickPowerValue(GameManager.Instance.clickPowerLevel);
+        if (value > 0) GameManager.Instance.AddGold(value);
 
         if (holdCoroutine != null) StopCoroutine(holdCoroutine);
         holdCoroutine = StartCoroutine(AddGoldOverTime());
@@ -50,12 +40,9 @@ public class GateClicker : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         while (true)
         {
-            LevelRuleData data = DataManager.Instance.GetLevelData(GameManager.Instance.clickPowerLevel);
-            if (data != null)
-            {
-                double goldToAdd = data.clickPowerValue * Time.deltaTime;
-                GameManager.Instance.AddGold(goldToAdd);
-            }
+            double value = GameManager.Instance.GetClickPowerValue(GameManager.Instance.clickPowerLevel);
+            if (value > 0)
+                GameManager.Instance.AddGold(value * Time.deltaTime);
             yield return null;
         }
     }

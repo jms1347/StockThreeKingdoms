@@ -21,38 +21,18 @@ public class UpgradeButton : MonoBehaviour
 
     void Start()
     {
-        // 초기 텍스트 설정
-        if (costText != null) costText.text = "로딩중...";
-        if (myButton != null) myButton.interactable = false;
-
-        // 1. 데이터 매니저 이벤트 구독
-        if (DataManager.Instance.IsReady)
-        {
-            InitializeUI();
-        }
-        else
-        {
-            DataManager.Instance.OnDataReady += InitializeUI;
-        }
-
-        // 2. 골드 변경 이벤트 구독
+        if (costText != null) costText.text = "";
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnGoldChanged += HandleGoldChanged;
+            InitializeUI();
         }
     }
 
     void OnDestroy()
     {
-        // 메모리 누수 방지를 위한 이벤트 구독 해제 (매우 중요)
-        if (DataManager.Instance != null)
-        {
-            DataManager.Instance.OnDataReady -= InitializeUI;
-        }
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.OnGoldChanged -= HandleGoldChanged;
-        }
     }
 
     private void InitializeUI()
@@ -61,54 +41,44 @@ public class UpgradeButton : MonoBehaviour
         HandleGoldChanged(GameManager.Instance.currentGold);
     }
 
-    // [무거운 작업] 레벨, 비용, 효과 텍스트를 업데이트 (레벨업 시, 데이터 로드 시에만 호출)
     private void UpdateUpgradeUI()
     {
-        if (!DataManager.Instance.IsReady) return;
+        if (GameManager.Instance == null) return;
 
         int currentLevel = GetCurrentLevel();
-        LevelRuleData data = DataManager.Instance.GetLevelData(currentLevel);
-        
-        cachedCost = GetCurrentCost(); // 다음 레벨 비용 캐싱
+        cachedCost = GetCurrentCost();
 
         if (levelText != null) levelText.text = $"Lv. {currentLevel}";
 
-        if (effectText != null && data != null)
+        if (effectText != null)
         {
             switch (type)
             {
                 case UpgradeType.ClickPower:
-                    effectText.text = $"클릭 파워: +{data.clickPowerValue}";
+                    effectText.text = $"클릭 파워: +{Utils.AbbreviateScore(GameManager.Instance.GetClickPowerValue(currentLevel))}";
                     break;
                 case UpgradeType.AutoIncome:
-                    effectText.text = $"자동 수익: 초당 +{data.autoIncomeValue}";
+                    effectText.text = $"자동 수익: 초당 +{Utils.AbbreviateScore(GameManager.Instance.GetAutoIncomeValue(currentLevel))}";
                     break;
                 case UpgradeType.SoldierGrade:
-                    effectText.text = $"병사 투자 효율 증가";
+                    effectText.text = $"병사 효율 x{GameManager.Instance.GetSoldierGradeMultiplier(currentLevel):F1}";
                     break;
             }
         }
 
         if (costText != null)
-        {
-            if (data == null) costText.text = "MAX";
-            else costText.text = $"{cachedCost:N0} 골드";
-        }
+            costText.text = Utils.AbbreviateScore(cachedCost) + " 골드";
     }
 
-    // [가벼운 작업] 버튼의 활성화 여부만 체크 (골드가 바뀔 때마다 호출)
     private void HandleGoldChanged(double currentGold)
     {
-        if (!DataManager.Instance.IsReady) return;
-
-        // 매번 데이터를 찾지 않고 캐싱된 비용(cachedCost)과 비교
-        bool isMaxLevel = DataManager.Instance.GetLevelData(GetCurrentLevel()) == null;
-        if (myButton != null) myButton.interactable = (!isMaxLevel) && (currentGold >= cachedCost);
+        if (myButton != null)
+            myButton.interactable = currentGold >= cachedCost;
     }
 
     public void OnUpgradeClicked()
     {
-        if (!DataManager.Instance.IsReady) return;
+        if (GameManager.Instance == null) return;
 
         if (GameManager.Instance.currentGold >= cachedCost)
         {
@@ -143,14 +113,12 @@ public class UpgradeButton : MonoBehaviour
 
     private double GetCurrentCost()
     {
-        LevelRuleData data = DataManager.Instance.GetLevelData(GetCurrentLevel());
-        if (data == null) return double.MaxValue;
-
+        int lv = GetCurrentLevel();
         switch (type)
         {
-            case UpgradeType.ClickPower: return data.clickPowerCost;
-            case UpgradeType.AutoIncome: return data.autoIncomeCost;
-            case UpgradeType.SoldierGrade: return data.soldierGradeCost;
+            case UpgradeType.ClickPower: return GameManager.Instance.GetClickPowerCost(lv);
+            case UpgradeType.AutoIncome: return GameManager.Instance.GetAutoIncomeCost(lv);
+            case UpgradeType.SoldierGrade: return GameManager.Instance.GetSoldierGradeCost(lv);
             default: return double.MaxValue;
         }
     }

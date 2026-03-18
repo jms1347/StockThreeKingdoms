@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks; // UniTask
@@ -9,7 +9,7 @@ using UniRx;
 public class GoogleSheetManager : Singleton<GoogleSheetManager>
 {
     // ★ 구글 시트 URL (웹에 게시 -> TSV 형식으로 추출한 URL을 넣으세요)
-    const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:G";
+    const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:H";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -93,7 +93,12 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             double.TryParse(cells[5].Trim(), out rule.soldierGradeCost);
             double.TryParse(cells[6].Trim(), out rule.soldierGradeValue);
 
-            // ★ 딕셔너리에 바로 저장!
+            // H열: maxStorageCapacity (없으면 8시간 = autoIncomeValue * 28800)
+            if (cells.Length >= 8 && double.TryParse(cells[7].Trim(), out var cap) && cap > 0)
+                rule.maxStorageCapacity = cap;
+            else
+                rule.maxStorageCapacity = rule.autoIncomeValue * 28800;
+
             DataManager.Instance.levelRuleMap[rule.level] = rule;
         }
     }

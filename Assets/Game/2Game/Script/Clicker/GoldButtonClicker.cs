@@ -35,15 +35,15 @@ public class GoldButtonClicker : MonoBehaviour
             GameManager.Instance.OnGoldChanged -= RefreshResourceUI;
     }
 
-    /// <summary> 클릭 시 호출. DataManager 노동력 레벨(clickPowerLevel)에 따른 금화 추가 </summary>
+    /// <summary> 클릭 시 노동력 레벨에 따른 금화 추가 </summary>
     public void OnClickAddGold()
     {
-        if (!DataManager.Instance.IsReady) return;
+        if (GameManager.Instance == null) return;
 
-        int laborLevel = GameManager.Instance.clickPowerLevel;
-        LevelRuleData data = DataManager.Instance.GetLevelData(laborLevel);
-        if (data != null)
-            GameManager.Instance.AddGold(data.clickPowerValue);
+        int lv = GameManager.Instance.clickPowerLevel;
+        double value = GameManager.Instance.GetClickPowerValue(lv);
+        if (value > 0)
+            GameManager.Instance.AddGold(value);
     }
 
     void RefreshResourceUI(double _)
@@ -51,9 +51,9 @@ public class GoldButtonClicker : MonoBehaviour
         if (GameManager.Instance == null) return;
 
         if (goldText != null)
-            goldText.text = "금화: " + GameManager.Instance.currentGold.ToString("N0");
+            goldText.text = "금화: " + Utils.AbbreviateScore(GameManager.Instance.currentGold);
 
         if (grainText != null)
-            grainText.text = "식량: " + GameManager.Instance.currentGrain.ToString("N0");
+            grainText.text = "식량: " + Utils.AbbreviateScore(GameManager.Instance.currentGrain);
     }
 }

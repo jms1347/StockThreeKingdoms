@@ -20,6 +20,10 @@ public class UserData
     public int farmLevel;           // 농장 레벨 (식량 자동 생성용) [cite: 13, 41]
     public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
+    // [금고] AutoIncome 오프라인 적립용
+    public double lastCollectTime;   // 마지막 수령/계산 시점 (Unix 초)
+    public double accumulatedGold;   // 금고에 쌓인 미수령 금화
+
     // [M2E 데이터]
     public int dailyStepCount;      // 오늘 걸음 수 [cite: 13, 180]
     public float walkCurrency;      // 만보기 재화 [cite: 130]
