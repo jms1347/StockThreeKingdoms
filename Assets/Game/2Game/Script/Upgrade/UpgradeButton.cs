@@ -36,9 +36,9 @@ public class UpgradeButton : MonoBehaviour
         }
 
         // 2. 골드 변경 이벤트 구독
-        if (CapitalManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            CapitalManager.Instance.OnGoldChanged += HandleGoldChanged;
+            GameManager.Instance.OnGoldChanged += HandleGoldChanged;
         }
     }
 
@@ -49,16 +49,16 @@ public class UpgradeButton : MonoBehaviour
         {
             DataManager.Instance.OnDataReady -= InitializeUI;
         }
-        if (CapitalManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            CapitalManager.Instance.OnGoldChanged -= HandleGoldChanged;
+            GameManager.Instance.OnGoldChanged -= HandleGoldChanged;
         }
     }
 
     private void InitializeUI()
     {
         UpdateUpgradeUI();
-        HandleGoldChanged(CapitalManager.Instance.currentGold);
+        HandleGoldChanged(GameManager.Instance.currentGold);
     }
 
     // [무거운 작업] 레벨, 비용, 효과 텍스트를 업데이트 (레벨업 시, 데이터 로드 시에만 호출)
@@ -110,23 +110,23 @@ public class UpgradeButton : MonoBehaviour
     {
         if (!DataManager.Instance.IsReady) return;
 
-        if (CapitalManager.Instance.currentGold >= cachedCost)
+        if (GameManager.Instance.currentGold >= cachedCost)
         {
             // 골드 차감 (Property의 setter를 통해 자동으로 OnGoldChanged 이벤트가 발생함)
-            CapitalManager.Instance.currentGold -= cachedCost;
+            GameManager.Instance.currentGold -= cachedCost;
 
             switch (type)
             {
-                case UpgradeType.ClickPower: CapitalManager.Instance.clickPowerLevel++; break;
-                case UpgradeType.AutoIncome: CapitalManager.Instance.autoIncomeLevel++; break;
-                case UpgradeType.SoldierGrade: CapitalManager.Instance.soldierGradeLevel++; break;
+                case UpgradeType.ClickPower: GameManager.Instance.clickPowerLevel++; break;
+                case UpgradeType.AutoIncome: GameManager.Instance.autoIncomeLevel++; break;
+                case UpgradeType.SoldierGrade: GameManager.Instance.soldierGradeLevel++; break;
             }
 
             // 레벨이 올랐으므로 UI 전체 갱신
             UpdateUpgradeUI();
             
             // UI 갱신 후 바뀐 비용으로 버튼 상태 재검사
-            HandleGoldChanged(CapitalManager.Instance.currentGold);
+            HandleGoldChanged(GameManager.Instance.currentGold);
         }
     }
 
@@ -134,9 +134,9 @@ public class UpgradeButton : MonoBehaviour
     {
         switch (type)
         {
-            case UpgradeType.ClickPower: return CapitalManager.Instance.clickPowerLevel;
-            case UpgradeType.AutoIncome: return CapitalManager.Instance.autoIncomeLevel;
-            case UpgradeType.SoldierGrade: return CapitalManager.Instance.soldierGradeLevel;
+            case UpgradeType.ClickPower: return GameManager.Instance.clickPowerLevel;
+            case UpgradeType.AutoIncome: return GameManager.Instance.autoIncomeLevel;
+            case UpgradeType.SoldierGrade: return GameManager.Instance.soldierGradeLevel;
             default: return 1;
         }
     }

@@ -15,9 +15,10 @@ public class UserData
     public long soldierCount;       // 보유 병사 수 [cite: 6, 45]
 
     // [성장 레벨]
-    public int laborLevel;          // 노동력 레벨 [cite: 12, 149]
-    public int marketLevel;         // 시장 레벨 [cite: 12, 151]
+    public int laborLevel;          // 노동력 레벨 (클릭당 금화) [cite: 12, 149]
+    public int marketLevel;         // 시장 레벨 (자동 수익) [cite: 12, 151]
     public int farmLevel;           // 농장 레벨 (식량 자동 생성용) [cite: 13, 41]
+    public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
     // [M2E 데이터]
     public int dailyStepCount;      // 오늘 걸음 수 [cite: 13, 180]
@@ -35,6 +36,7 @@ public class UserData
         laborLevel = 1;
         marketLevel = 0;
         farmLevel = 0;
+        soldierGradeLevel = 1;
         dailyStepCount = 0;
     }
 }
