@@ -41,7 +41,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 200}
+  m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6960286933996670124
 CanvasRenderer:
@@ -64,8 +64,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeButton
   type: 0
-  baseCost: 50
-  costMultiplier: 1.15
   levelText: {fileID: 7937347508765409405}
   effectText: {fileID: 6168614498792399628}
   costText: {fileID: 6073615842634709271}
