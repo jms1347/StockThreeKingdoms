@@ -12,6 +12,7 @@ public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public HomeController controller;
 
     Coroutine _holdCoroutine;
+    float _holdStartTime;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -19,6 +20,7 @@ public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
         controller.OnGateClick();
+        _holdStartTime = Time.time;
         if (_holdCoroutine != null) StopCoroutine(_holdCoroutine);
         _holdCoroutine = StartCoroutine(HoldLoop());
     }
@@ -40,11 +42,12 @@ public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     IEnumerator HoldLoop()
     {
-        // 첫 탭은 OnPointerDown에서 이미 처리됨 → 이후 프레임부터 초당 누적
+        // 첫 탭은 OnPointerDown에서 이미 처리됨 → 이후 프레임부터 누른 시간에 따라 가속
         while (true)
         {
             yield return null;
-            controller?.OnGateHoldFrame();
+            float holdDuration = Time.time - _holdStartTime;
+            controller?.OnGateHoldFrame(holdDuration);
         }
     }
 }

@@ -127,12 +127,24 @@ public class HomeController : MonoBehaviour
         gm.AddGold((long)GoldPerClick);
     }
 
-    /// <summary> 대문 길게 누르기 — 매 프레임 호출. GoldPerClick을 초당 획득량으로 사용. </summary>
-    public void OnGateHoldFrame()
+    /// <summary>
+    /// 대문 길게 누르기 — holdDuration에 따라 가속.
+    /// 0~0.5초: 느리게(0.3x) → 0.5~2초: 가속(0.3x→2x) → 2초+: 일정속도(2x).
+    /// </summary>
+    public void OnGateHoldFrame(float holdDuration)
     {
         var gm = GameManager.InstanceOrNull;
         if (gm == null) return;
-        double rate = GoldPerClick;
+
+        float scale;
+        if (holdDuration < 0.5f)
+            scale = 0.3f;
+        else if (holdDuration < 2f)
+            scale = Mathf.Lerp(0.3f, 2f, (holdDuration - 0.5f) / 1.5f);
+        else
+            scale = 2f;
+
+        double rate = GoldPerClick * scale;
         double add = rate * Time.deltaTime + _gateHoldRemainder;
         long whole = (long)Math.Floor(add);
         _gateHoldRemainder = add - whole;
