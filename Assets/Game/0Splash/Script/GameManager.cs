@@ -38,8 +38,9 @@ public class GameManager : Singleton<GameManager>
 
     private string savePath;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();  // Singleton: _instance 설정 + DontDestroyOnLoad (씬 전환 시 유지)
         savePath = Path.Combine(Application.persistentDataPath, "userData.json");
         LoadUserData();
     }

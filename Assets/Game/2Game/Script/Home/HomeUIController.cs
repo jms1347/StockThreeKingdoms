@@ -65,16 +65,18 @@ public class HomeUIController : MonoBehaviour
 
     void SubscribeEvents()
     {
-        if (GameManager.Instance == null) return;
-        GameManager.Instance.OnGoldChanged += OnGoldChangedHandler;
-        GameManager.Instance.OnGrainChanged += OnGrainChangedHandler;
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        gm.OnGoldChanged += OnGoldChangedHandler;
+        gm.OnGrainChanged += OnGrainChangedHandler;
     }
 
     void UnsubscribeEvents()
     {
-        if (GameManager.Instance == null) return;
-        GameManager.Instance.OnGoldChanged -= OnGoldChangedHandler;
-        GameManager.Instance.OnGrainChanged -= OnGrainChangedHandler;
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        gm.OnGoldChanged -= OnGoldChangedHandler;
+        gm.OnGrainChanged -= OnGrainChangedHandler;
     }
 
     void OnGoldChangedHandler(long gold)
@@ -93,7 +95,7 @@ public class HomeUIController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(0.2f);
-            if (_controller == null) continue;
+            if (_controller == null || GameManager.InstanceOrNull == null) continue;
 
             double mAcc = _controller.CurrentMarketAccumulated;
             double mMax = _controller.GetMarketMaxCapacity();
@@ -138,17 +140,18 @@ public class HomeUIController : MonoBehaviour
         if (collectFarmButton != null)
             collectFarmButton.onClick.AddListener(() => _controller?.CollectFarmGrain());
         if (hireFarmWorkerButton != null)
-            hireFarmWorkerButton.onClick.AddListener(() => { _controller?.HireFarmWorkers(1); UpdateFarmWorkersUI(GameManager.Instance?.currentUser?.soldierCount ?? 0); });
+            hireFarmWorkerButton.onClick.AddListener(() => { _controller?.HireFarmWorkers(1); UpdateFarmWorkersUI(GameManager.InstanceOrNull?.currentUser?.soldierCount ?? 0); });
         if (buyGrainButton != null)
             buyGrainButton.onClick.AddListener(() => _controller?.BuyGrain(1));
     }
 
     void RefreshAllUI()
     {
-        if (GameManager.Instance == null) return;
-        UpdateGoldUI(GameManager.Instance.currentGold);
-        UpdateGrainUI(GameManager.Instance.currentGrain);
-        UpdateFarmWorkersUI(GameManager.Instance.currentUser?.soldierCount ?? 0);
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        UpdateGoldUI(gm.currentGold);
+        UpdateGrainUI(gm.currentGrain);
+        UpdateFarmWorkersUI(gm.currentUser?.soldierCount ?? 0);
         UpdateLaborUI();
         UpdateMarketUI();
         UpdateFarmUI();
@@ -172,9 +175,10 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateLaborUI()
     {
-        if (laborLabelText == null || _controller == null || GameManager.Instance == null) return;
+        var gm = GameManager.InstanceOrNull;
+        if (laborLabelText == null || _controller == null || gm == null) return;
 
-        int lv = GameManager.Instance.clickPowerLevel;
+        int lv = gm.clickPowerLevel;
         double current = _controller.GoldPerClick;
         double next = HomeController.BaseGoldPerClick + ((lv + 1) * HomeController.ExtraValuePerLaborLevel);
         double cost = HomeController.UpgradeCost(HomeController.LaborBaseCost, lv);
@@ -187,11 +191,12 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateMarketUI()
     {
-        if (marketLabelText == null || _controller == null || GameManager.Instance == null) return;
+        var gm = GameManager.InstanceOrNull;
+        if (marketLabelText == null || _controller == null || gm == null) return;
 
-        int lv = GameManager.Instance.autoIncomeLevel;
-        double current = lv <= 0 ? 0 : GameManager.Instance.GetAutoIncomeValue(lv);
-        double next = lv <= 0 ? 1 : GameManager.Instance.GetAutoIncomeValue(lv + 1);
+        int lv = gm.autoIncomeLevel;
+        double current = lv <= 0 ? 0 : gm.GetAutoIncomeValue(lv);
+        double next = lv <= 0 ? 1 : gm.GetAutoIncomeValue(lv + 1);
         double cost = HomeController.UpgradeCost(HomeController.MarketBaseCost, lv);
 
         marketLabelText.text =
@@ -202,11 +207,12 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateFarmUI()
     {
-        if (farmLabelText == null || _controller == null || GameManager.Instance == null) return;
+        var gm = GameManager.InstanceOrNull;
+        if (farmLabelText == null || _controller == null || gm == null) return;
 
-        int lv = GameManager.Instance.currentUser?.farmLevel ?? 0;
-        double current = lv <= 0 ? 0 : GameManager.Instance.GetAutoIncomeValue(lv);
-        double next = lv <= 0 ? 1 : GameManager.Instance.GetAutoIncomeValue(lv + 1);
+        int lv = gm.currentUser?.farmLevel ?? 0;
+        double current = lv <= 0 ? 0 : gm.GetAutoIncomeValue(lv);
+        double next = lv <= 0 ? 1 : gm.GetAutoIncomeValue(lv + 1);
         double cost = HomeController.UpgradeCost(HomeController.FarmBaseCost, lv);
 
         farmLabelText.text =

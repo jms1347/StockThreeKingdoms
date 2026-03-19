@@ -19,8 +19,14 @@ public class HomeController : MonoBehaviour
     static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 
     /// <summary> 클릭당 금화 </summary>
-    public double GoldPerClick =>
-        BaseGoldPerClick + (GameManager.Instance.clickPowerLevel * ExtraValuePerLaborLevel);
+    public double GoldPerClick
+    {
+        get
+        {
+            var gm = GameManager.InstanceOrNull;
+            return BaseGoldPerClick + ((gm?.clickPowerLevel ?? 1) * ExtraValuePerLaborLevel);
+        }
+    }
 
     /// <summary> 업그레이드 비용 </summary>
     public static double UpgradeCost(double baseCost, int level) =>
@@ -31,7 +37,7 @@ public class HomeController : MonoBehaviour
     {
         get
         {
-            var gm = GameManager.Instance;
+            var gm = GameManager.InstanceOrNull;
             if (gm?.currentUser == null) return 0;
             double rate = GetMarketValuePerSec();
             if (rate <= 0) return 0;
@@ -48,7 +54,7 @@ public class HomeController : MonoBehaviour
     {
         get
         {
-            var gm = GameManager.Instance;
+            var gm = GameManager.InstanceOrNull;
             if (gm?.currentUser == null) return 0;
             double rate = GetFarmValuePerSec();
             if (rate <= 0) return 0;
@@ -62,7 +68,7 @@ public class HomeController : MonoBehaviour
 
     double GetMarketValuePerSec()
     {
-        var gm = GameManager.Instance;
+        var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return 0;
         if (DataManager.Instance != null && DataManager.Instance.IsReady)
         {
@@ -74,7 +80,7 @@ public class HomeController : MonoBehaviour
 
     double GetFarmValuePerSec()
     {
-        var gm = GameManager.Instance;
+        var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return 0;
         if (DataManager.Instance != null && DataManager.Instance.IsReady)
         {
@@ -86,7 +92,7 @@ public class HomeController : MonoBehaviour
 
     public double GetMarketMaxCapacity()
     {
-        var gm = GameManager.Instance;
+        var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return 0;
         int lv = gm.currentUser.marketLevel;
         if (DataManager.Instance != null && DataManager.Instance.IsReady)
@@ -99,7 +105,7 @@ public class HomeController : MonoBehaviour
 
     public double GetFarmMaxCapacity()
     {
-        var gm = GameManager.Instance;
+        var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return 0;
         int lv = gm.currentUser.farmLevel;
         if (DataManager.Instance != null && DataManager.Instance.IsReady)
@@ -113,73 +119,87 @@ public class HomeController : MonoBehaviour
     /// <summary> 대문 터치 </summary>
     public void OnGateClick()
     {
-        if (GameManager.Instance == null) return;
-        GameManager.Instance.AddGold((long)GoldPerClick);
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        gm.AddGold((long)GoldPerClick);
     }
 
     public void UpgradeLabor()
     {
-        if (GameManager.Instance == null) return;
-        double cost = UpgradeCost(LaborBaseCost, GameManager.Instance.clickPowerLevel);
-        if (GameManager.Instance.UseGold((long)cost))
-            GameManager.Instance.clickPowerLevel++;
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        double cost = UpgradeCost(LaborBaseCost, gm.clickPowerLevel);
+        if (gm.UseGold((long)cost))
+            gm.clickPowerLevel++;
     }
 
     public void UpgradeMarket()
     {
-        if (GameManager.Instance == null) return;
-        double cost = UpgradeCost(MarketBaseCost, GameManager.Instance.autoIncomeLevel);
-        if (GameManager.Instance.UseGold((long)cost))
-            GameManager.Instance.autoIncomeLevel++;
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        double cost = UpgradeCost(MarketBaseCost, gm.autoIncomeLevel);
+        if (gm.UseGold((long)cost))
+            gm.autoIncomeLevel++;
     }
 
     public void UpgradeFarm()
     {
-        if (GameManager.Instance == null) return;
-        double cost = UpgradeCost(FarmBaseCost, GameManager.Instance.currentUser.farmLevel);
-        if (GameManager.Instance.UseGold((long)cost))
-            GameManager.Instance.currentUser.farmLevel++;
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        double cost = UpgradeCost(FarmBaseCost, gm.currentUser.farmLevel);
+        if (gm.UseGold((long)cost))
+            gm.currentUser.farmLevel++;
     }
 
     public void HireFarmWorkers(int count)
     {
-        if (GameManager.Instance == null || count <= 0) return;
-        int maxAfford = (int)(GameManager.Instance.currentGold / FarmWorkerCost);
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null || count <= 0) return;
+        int maxAfford = (int)(gm.currentGold / FarmWorkerCost);
         int actual = Mathf.Min(count, maxAfford);
-        if (actual > 0 && GameManager.Instance.UseGold(actual * FarmWorkerCost))
-            GameManager.Instance.currentUser.soldierCount += actual;
+        if (actual > 0 && gm.UseGold(actual * FarmWorkerCost))
+            gm.currentUser.soldierCount += actual;
     }
 
     public void BuyGrain(int count)
     {
-        if (GameManager.Instance == null || count <= 0) return;
-        int maxAfford = (int)(GameManager.Instance.currentGold / GrainCost);
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null || count <= 0) return;
+        int maxAfford = (int)(gm.currentGold / GrainCost);
         int actual = Mathf.Min(count, maxAfford);
-        if (actual > 0 && GameManager.Instance.UseGold(actual * GrainCost))
-            GameManager.Instance.AddGrain(actual);
+        if (actual > 0 && gm.UseGold(actual * GrainCost))
+            gm.AddGrain(actual);
     }
 
-    public int GetMaxAffordableFarmWorkers() =>
-        GameManager.Instance != null ? (int)(GameManager.Instance.currentGold / FarmWorkerCost) : 0;
+    public int GetMaxAffordableFarmWorkers()
+    {
+        var gm = GameManager.InstanceOrNull;
+        return gm != null ? (int)(gm.currentGold / FarmWorkerCost) : 0;
+    }
 
-    public int GetMaxAffordableGrain() =>
-        GameManager.Instance != null ? (int)(GameManager.Instance.currentGold / GrainCost) : 0;
+    public int GetMaxAffordableGrain()
+    {
+        var gm = GameManager.InstanceOrNull;
+        return gm != null ? (int)(gm.currentGold / GrainCost) : 0;
+    }
 
     public void CollectMarketGold()
     {
-        if (GameManager.Instance?.currentUser == null) return;
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return;
         double acc = CurrentMarketAccumulated;
         if (acc <= 0) return;
-        GameManager.Instance.AddGold((long)acc);
-        GameManager.Instance.currentUser.lastMarketCollectTime = GetUnixTime();
+        gm.AddGold((long)acc);
+        gm.currentUser.lastMarketCollectTime = GetUnixTime();
     }
 
     public void CollectFarmGrain()
     {
-        if (GameManager.Instance?.currentUser == null) return;
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return;
         double acc = CurrentFarmAccumulated;
         if (acc <= 0) return;
-        GameManager.Instance.AddGrain((long)acc);
-        GameManager.Instance.currentUser.lastFarmCollectTime = GetUnixTime();
+        gm.AddGrain((long)acc);
+        gm.currentUser.lastFarmCollectTime = GetUnixTime();
     }
 }

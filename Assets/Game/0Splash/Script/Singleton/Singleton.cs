@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
@@ -16,6 +16,9 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             return _instance;
         }
     }
+
+    /// <summary> null 체크용. 경고 없이 반환 (씬 전환 등 예상된 null 상황용) </summary>
+    public static T InstanceOrNull => _instance;
 
     protected virtual void Awake()
     {
