@@ -46,7 +46,7 @@ public class GoldButtonClicker : MonoBehaviour
             GameManager.Instance.AddGold(value);
     }
 
-    void RefreshResourceUI(double _)
+    void RefreshResourceUI(long _)
     {
         if (GameManager.Instance == null) return;
 

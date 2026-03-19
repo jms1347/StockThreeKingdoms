@@ -32,7 +32,7 @@ public class VaultDisplay : MonoBehaviour
 
         if (fillBarText != null && maxCap > 0)
         {
-            float ratio = (float)Mathd.Clamp01(display / maxCap);
+            float ratio = Mathf.Clamp01((float)(display / maxCap));
             int filled = Mathf.RoundToInt(ratio * 5);
             fillBarText.text = new string('●', filled) + new string('○', 5 - filled);
         }
