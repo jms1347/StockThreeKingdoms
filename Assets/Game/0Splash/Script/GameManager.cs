@@ -87,7 +87,15 @@ public class GameManager : Singleton<GameManager>
     }
 
     /// <summary> 금화 추가 (수거 등) </summary>
-    public void AddGold(long amount) => currentGold += amount;
+    public void AddGold(long amount)
+    {
+        if (currentUser == null)
+        {
+            LoadUserData();
+            if (currentUser == null) return;
+        }
+        currentGold += amount;
+    }
     public void AddGold(double amount) => AddGold((long)amount);
 
     /// <summary> 금화 차감. 성공 시 true </summary>

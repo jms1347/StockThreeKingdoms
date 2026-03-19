@@ -47,6 +47,10 @@ public class HomeUIController : MonoBehaviour
         _controller = GetComponent<HomeController>();
         if (_controller == null) return;
 
+        // gateButton 참조가 Inspector에서 빠진 경우 자동 탐색
+        if (gateButton == null)
+            gateButton = transform.Find("GateButton")?.GetComponent<Button>();
+
         SubscribeEvents();
         RefreshAllUI();
         BindButtons();
@@ -115,8 +119,14 @@ public class HomeUIController : MonoBehaviour
 
     void BindButtons()
     {
-        if (gateButton != null)
+        if (gateButton == null)
+        {
+            Debug.LogWarning("[HomeUIController] gateButton이 연결되지 않았습니다. Inspector에서 GateButton을 할당하세요.");
+        }
+        else
+        {
             gateButton.onClick.AddListener(() => { _controller?.OnGateClick(); });
+        }
         if (laborUpgradeButton != null)
             laborUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeLabor(); UpdateLaborUI(); });
         if (marketUpgradeButton != null)
