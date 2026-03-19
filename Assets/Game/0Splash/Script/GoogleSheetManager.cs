@@ -9,7 +9,7 @@ using UniRx;
 public class GoogleSheetManager : Singleton<GoogleSheetManager>
 {
     // ★ 구글 시트 URL (웹에 게시 -> TSV 형식으로 추출한 URL을 넣으세요)
-    const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:H";
+    const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:I";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -81,23 +81,24 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 7) continue;
+            if (cells.Length < 6) continue;
 
             LevelRuleData rule = new LevelRuleData();
 
-            int.TryParse(cells[0].Trim(), out rule.level);
-            double.TryParse(cells[1].Trim(), out rule.clickPowerCost);
-            double.TryParse(cells[2].Trim(), out rule.clickPowerValue);
-            double.TryParse(cells[3].Trim(), out rule.autoIncomeCost);
-            double.TryParse(cells[4].Trim(), out rule.autoIncomeValue);
-            double.TryParse(cells[5].Trim(), out rule.soldierGradeCost);
-            double.TryParse(cells[6].Trim(), out rule.soldierGradeValue);
+            int.TryParse(cells[0].Trim(), out rule.level);                    // A: 레벨
+            double.TryParse(cells[1].Trim(), out rule.laborCost);              // B: 노동력 비용
+            double.TryParse(cells[2].Trim(), out rule.laborValue);             // C: 노동력 추가 금화
+            double.TryParse(cells[3].Trim(), out rule.marketCost);              // D: 시장 비용
+            double.TryParse(cells[4].Trim(), out rule.marketValuePerSec);      // E: 시장 금화/초
+            double.TryParse(cells.Length > 5 ? cells[5].Trim() : "0", out rule.marketMaxCapacity);  // F: 시장 창고 MAX
+            double.TryParse(cells.Length > 6 ? cells[6].Trim() : "0", out rule.farmCost);            // G: 농장 비용
+            double.TryParse(cells.Length > 7 ? cells[7].Trim() : "0", out rule.farmValuePerSec);    // H: 농장 식량/초
+            double.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out rule.farmMaxCapacity);    // I: 농장 창고 MAX
 
-            // H열: maxStorageCapacity (없으면 8시간 = autoIncomeValue * 28800)
-            if (cells.Length >= 8 && double.TryParse(cells[7].Trim(), out var cap) && cap > 0)
-                rule.maxStorageCapacity = cap;
-            else
-                rule.maxStorageCapacity = rule.autoIncomeValue * 28800;
+            if (rule.marketMaxCapacity <= 0 && rule.marketValuePerSec > 0)
+                rule.marketMaxCapacity = rule.marketValuePerSec * 28800;
+            if (rule.farmMaxCapacity <= 0 && rule.farmValuePerSec > 0)
+                rule.farmMaxCapacity = rule.farmValuePerSec * 28800;
 
             DataManager.Instance.levelRuleMap[rule.level] = rule;
         }

@@ -33,11 +33,12 @@ public class GameManager : Singleton<GameManager>
     [Header("유저 데이터")]
     public UserData currentUser;
 
-    [Header("수거 대기 자본 (금고)")]
-    public double accumulatedGold = 0;
-
     public Action<double> OnGoldChanged;
-    public Action<double, double> OnVaultChanged;
+
+    /// <summary> 시장 창고 누적량 (현재 / MAX) 변동 시 </summary>
+    public Action<double, double> OnAccumulatedMarketChanged;
+    /// <summary> 농장 창고 누적량 (현재 / MAX) 변동 시 </summary>
+    public Action<double, double> OnAccumulatedFarmChanged;
 
     private string savePath;
 
@@ -45,8 +46,6 @@ public class GameManager : Singleton<GameManager>
     {
         savePath = Path.Combine(Application.persistentDataPath, "userData.json");
         LoadUserData();
-        accumulatedGold = currentUser?.accumulatedGold ?? 0;
-        RefreshAccumulatedGold();
     }
 
     // ---- 밸런스 계산 (레벨 → 비용/효과) ----
@@ -54,84 +53,65 @@ public class GameManager : Singleton<GameManager>
     public double GetClickPowerValue(int level) => balance.clickPowerBaseValue + balance.clickPowerValuePerLevel * level;
     public double GetAutoIncomeCost(int level) => balance.autoIncomeBaseCost * Math.Pow(balance.autoIncomeCostMult, level);
     public double GetAutoIncomeValue(int level) => level <= 0 ? 0 : balance.autoIncomeBaseValue + balance.autoIncomeValuePerLevel * level;
-    public double GetMaxStorageCapacity(int level) => GetAutoIncomeValue(level) * (balance.vaultHours * 3600);
     public double GetSoldierGradeCost(int level) => balance.soldierGradeBaseCost * Math.Pow(balance.soldierGradeCostMult, level - 1);
     public double GetSoldierGradeMultiplier(int level) => balance.soldierGradeBaseMult + balance.soldierGradeMultPerLevel * level;
-
-    void OnApplicationFocus(bool hasFocus)
-    {
-        if (hasFocus) RefreshAccumulatedGold();
-    }
 
     void OnApplicationPause(bool paused)
     {
         if (paused)
         {
-            RefreshAccumulatedGold();
-            if (currentUser != null) currentUser.accumulatedGold = accumulatedGold;
+            if (currentUser != null)
+                currentUser.lastCollectTime = GetUnixTime();
             SaveUserData();
-        }
-        else
-        {
-            accumulatedGold = currentUser?.accumulatedGold ?? 0;
-            RefreshAccumulatedGold();
         }
     }
 
     void OnApplicationQuit()
     {
-        RefreshAccumulatedGold();
-        if (currentUser != null) currentUser.accumulatedGold = accumulatedGold;
+        if (currentUser != null)
+            currentUser.lastCollectTime = GetUnixTime();
         SaveUserData();
     }
 
-    // ---- 타임스탬프 방식 AutoIncome ----
-    // Accumulated = min((CurrentTime - LastCollectTime) * IncomePerSec, MaxCapacity)
-    static double GetUnixTime()
-    {
-        return DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
-    }
+    // ---- 창고 누적 (시장/농장) ----
+    public double GetAccumulatedMarketGold() => currentUser?.accumulatedMarketGold ?? 0;
+    public double GetAccumulatedFarmGrain() => currentUser?.accumulatedFarmGrain ?? 0;
 
-    public void RefreshAccumulatedGold()
-    {
-        if (currentUser == null) return;
-
-        int lv = currentUser.marketLevel;
-        double perSec = GetAutoIncomeValue(lv);
-        if (perSec <= 0)
-        {
-            currentUser.lastCollectTime = GetUnixTime();
-            return;
-        }
-
-        double now = GetUnixTime();
-        double elapsed = now - currentUser.lastCollectTime;
-        double income = perSec * elapsed;
-        double cap = GetMaxStorageCapacity(lv);
-
-        accumulatedGold = Math.Min(accumulatedGold + income, cap);
-        currentUser.lastCollectTime = now;
-        OnVaultChanged?.Invoke(accumulatedGold, cap);
-    }
-
-    /// <summary> 화면 표시용 - Text만 Time에 맞춰 연산. 성능 부하 거의 없음. </summary>
-    public double GetDisplayAccumulatedGold()
-    {
-        if (currentUser == null) return accumulatedGold;
-
-        double perSec = GetAutoIncomeValue(currentUser.marketLevel);
-        if (perSec <= 0) return accumulatedGold;
-
-        double now = GetUnixTime();
-        double elapsed = now - currentUser.lastCollectTime;
-        double cap = GetMaxStorageCapacity(currentUser.marketLevel);
-        return Math.Min(accumulatedGold + perSec * elapsed, cap);
-    }
-
-    public double GetMaxStorageCapacity()
+    /// <summary> 현재 시장 레벨 기준 창고 MAX치. DataManager 준비 시 시트값, 아니면 formula 사용 </summary>
+    public double GetMarketMaxCapacity()
     {
         if (currentUser == null) return 0;
-        return GetMaxStorageCapacity(currentUser.marketLevel);
+        int lv = currentUser.marketLevel;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(lv);
+            if (d != null && d.marketMaxCapacity > 0) return d.marketMaxCapacity;
+        }
+        return GetAutoIncomeValue(lv) * (balance.vaultHours * 3600);
+    }
+
+    /// <summary> 현재 농장 레벨 기준 창고 MAX치 </summary>
+    public double GetFarmMaxCapacity()
+    {
+        if (currentUser == null) return 0;
+        int lv = currentUser.farmLevel;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(lv);
+            if (d != null && d.farmMaxCapacity > 0) return d.farmMaxCapacity;
+        }
+        double perSec = GetAutoIncomeValue(lv);
+        return perSec > 0 ? perSec * (balance.vaultHours * 3600) : 0;
+    }
+
+    public void RaiseAccumulatedMarketChanged()
+    {
+        OnAccumulatedMarketChanged?.Invoke(GetAccumulatedMarketGold(), GetMarketMaxCapacity());
+    }
+
+    public void RaiseAccumulatedFarmChanged()
+    {
+        OnAccumulatedFarmChanged?.Invoke(GetAccumulatedFarmGrain(), GetFarmMaxCapacity());
     }
 
     // ---- 자본 ----
@@ -162,17 +142,7 @@ public class GameManager : Singleton<GameManager>
         currentGold += amount;
     }
 
-    public void ClaimAccumulatedGold()
-    {
-        RefreshAccumulatedGold();
-        if (accumulatedGold > 0)
-        {
-            AddGold(accumulatedGold);
-            accumulatedGold = 0;
-            currentUser.lastCollectTime = GetUnixTime();
-            OnVaultChanged?.Invoke(0, GetMaxStorageCapacity());
-        }
-    }
+    static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 
     // ---- 저장/로드 ----
 

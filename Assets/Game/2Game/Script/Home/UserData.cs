@@ -9,7 +9,7 @@ public class HomeUserData
     // ---- Action 이벤트 (데이터 변동 시 호출) ----
     public Action<long> OnGoldChanged;
     public Action<long> OnGrainChanged;
-    public Action<long> OnSoldiersChanged;
+    public Action<long> OnFarmWorkersChanged;
     public Action<int> OnLaborLevelChanged;
     public Action<int> OnMarketLevelChanged;
     public Action<int> OnFarmLevelChanged;
@@ -18,7 +18,7 @@ public class HomeUserData
     public const int BaseGoldPerClick = 10;
     public const int ExtraValuePerLaborLevel = 5;
     public const double UpgradeCostMult = 1.15;
-    public const int SoldierCost = 100;
+    public const int FarmWorkerCost = 100;
     public const int GrainCost = 2;
 
     // 노동력/시장/농장 업그레이드 기본 비용
@@ -59,10 +59,10 @@ public class HomeUserData
         set { _data.grain = Math.Max(0, value); OnGrainChanged?.Invoke(_data.grain); }
     }
 
-    public long Soldiers
+    public long FarmWorkers
     {
         get => _data.soldierCount;
-        set { _data.soldierCount = Math.Max(0, value); OnSoldiersChanged?.Invoke(_data.soldierCount); }
+        set { _data.soldierCount = Math.Max(0, value); OnFarmWorkersChanged?.Invoke(_data.soldierCount); }
     }
 
     public int LaborLevel
@@ -83,12 +83,52 @@ public class HomeUserData
         set { _data.farmLevel = Math.Max(0, value); OnFarmLevelChanged?.Invoke(_data.farmLevel); }
     }
 
+    /// <summary> 시장 창고 누적 금화 </summary>
+    public double AccumulatedMarketGold => _data.accumulatedMarketGold;
+
+    /// <summary> 농장 창고 누적 식량 </summary>
+    public double AccumulatedFarmGrain => _data.accumulatedFarmGrain;
+
+    public void SetAccumulatedMarketGold(double value)
+    {
+        _data.accumulatedMarketGold = Math.Max(0, value);
+        GameManager.Instance?.RaiseAccumulatedMarketChanged();
+    }
+
+    public void SetAccumulatedFarmGrain(double value)
+    {
+        _data.accumulatedFarmGrain = Math.Max(0, value);
+        GameManager.Instance?.RaiseAccumulatedFarmChanged();
+    }
+
+    /// <summary> 현재 시장 레벨 기준 창고 MAX치 </summary>
+    public double GetMarketMaxCapacity()
+    {
+        if (GameManager.Instance != null && DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(MarketLevel);
+            if (d != null && d.marketMaxCapacity > 0) return d.marketMaxCapacity;
+        }
+        return GameManager.Instance != null ? GameManager.Instance.GetMarketMaxCapacity() : 0;
+    }
+
+    /// <summary> 현재 농장 레벨 기준 창고 MAX치 </summary>
+    public double GetFarmMaxCapacity()
+    {
+        if (GameManager.Instance != null && DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(FarmLevel);
+            if (d != null && d.farmMaxCapacity > 0) return d.farmMaxCapacity;
+        }
+        return GameManager.Instance != null ? GameManager.Instance.GetFarmMaxCapacity() : 0;
+    }
+
     /// <summary> 로드 직후 UI 초기화용. 모든 이벤트를 한 번씩 호출. </summary>
     public void NotifyAll()
     {
         OnGoldChanged?.Invoke(_data.gold);
         OnGrainChanged?.Invoke(_data.grain);
-        OnSoldiersChanged?.Invoke(_data.soldierCount);
+        OnFarmWorkersChanged?.Invoke(_data.soldierCount);
         OnLaborLevelChanged?.Invoke(LaborLevel);
         OnMarketLevelChanged?.Invoke(MarketLevel);
         OnFarmLevelChanged?.Invoke(FarmLevel);

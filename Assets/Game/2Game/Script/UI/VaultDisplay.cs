@@ -14,8 +14,8 @@ public class VaultDisplay : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        double display = GameManager.Instance.GetDisplayAccumulatedGold();
-        double maxCap = GameManager.Instance.GetMaxStorageCapacity();
+        double display = GameManager.Instance.GetAccumulatedMarketGold();
+        double maxCap = GameManager.Instance.GetMarketMaxCapacity();
 
         if (amountText != null)
             amountText.text = "⚙️ " + Utils.AbbreviateScore(display);

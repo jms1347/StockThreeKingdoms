@@ -66,16 +66,16 @@ public class HomeController : MonoBehaviour
         }
     }
 
-    /// <summary> 병사 고용: 100 Gold -> 1 Soldier. 현재 Gold 기반 최대 수량만큼 적용. </summary>
-    public void HireSoldiers(int count)
+    /// <summary> 농장 인력 고용: 100 Gold -> 1 FarmWorker. 현재 Gold 기반 최대 수량만큼 적용. </summary>
+    public void HireFarmWorkers(int count)
     {
         if (_data == null || count <= 0) return;
-        int maxAfford = (int)(_data.Gold / HomeUserData.SoldierCost);
+        int maxAfford = (int)(_data.Gold / HomeUserData.FarmWorkerCost);
         int actual = Mathf.Min(count, maxAfford);
         if (actual > 0)
         {
-            _data.Gold -= (long)(actual * HomeUserData.SoldierCost);
-            _data.Soldiers += actual;
+            _data.Gold -= (long)(actual * HomeUserData.FarmWorkerCost);
+            _data.FarmWorkers += actual;
         }
     }
 
@@ -92,15 +92,37 @@ public class HomeController : MonoBehaviour
         }
     }
 
-    /// <summary> 현재 Gold로 병사 최대 고용 가능 수 </summary>
-    public int GetMaxAffordableSoldiers()
+    /// <summary> 현재 Gold로 농장 인력 최대 고용 가능 수 </summary>
+    public int GetMaxAffordableFarmWorkers()
     {
-        return _data != null ? (int)(_data.Gold / HomeUserData.SoldierCost) : 0;
+        return _data != null ? (int)(_data.Gold / HomeUserData.FarmWorkerCost) : 0;
     }
 
     /// <summary> 현재 Gold로 식량 최대 구매 가능 수 </summary>
     public int GetMaxAffordableGrain()
     {
         return _data != null ? (int)(_data.Gold / HomeUserData.GrainCost) : 0;
+    }
+
+    /// <summary> 시장 창고 수거: 누적 금화를 Gold에 이동 후 창고 초기화 </summary>
+    public void CollectMarketGold()
+    {
+        if (_data == null) return;
+        double acc = _data.AccumulatedMarketGold;
+        if (acc <= 0) return;
+        _data.Gold += (long)acc;
+        _data.SetAccumulatedMarketGold(0);
+        GameManager.Instance?.RaiseAccumulatedMarketChanged();
+    }
+
+    /// <summary> 농장 창고 수거: 누적 식량을 Grain에 이동 후 창고 초기화 </summary>
+    public void CollectFarmGrain()
+    {
+        if (_data == null) return;
+        double acc = _data.AccumulatedFarmGrain;
+        if (acc <= 0) return;
+        _data.Grain += (long)acc;
+        _data.SetAccumulatedFarmGrain(0);
+        GameManager.Instance?.RaiseAccumulatedFarmChanged();
     }
 }

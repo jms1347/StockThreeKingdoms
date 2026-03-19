@@ -6,15 +6,16 @@ public class LevelRuleData
 {
     public int level;
 
-    public double clickPowerCost;
-    public double clickPowerValue;
+    public double laborCost;
+    public double laborValue;
 
-    public double autoIncomeCost;
-    public double autoIncomeValue;
-    public double maxStorageCapacity;  // 금고 최대 용량 (8시간 기준: autoIncomeValue * 28800)
+    public double marketCost;
+    public double marketValuePerSec;
+    public double marketMaxCapacity;
 
-    public double soldierGradeCost;
-    public double soldierGradeValue;
+    public double farmCost;
+    public double farmValuePerSec;
+    public double farmMaxCapacity;
 }
 [CreateAssetMenu(fileName = "LevelRuleDataSo", menuName = "ScriptableObject/LevelRuleDataSo")]
 public class LevelRuleDataSo : ScriptableObject
