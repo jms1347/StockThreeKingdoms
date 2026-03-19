@@ -127,7 +127,9 @@ public class HomeUIController : MonoBehaviour
         }
         else
         {
-            gateButton.onClick.AddListener(() => { _controller?.OnGateClick(); });
+            var hold = gateButton.GetComponent<GateButtonHold>();
+            if (hold == null) hold = gateButton.gameObject.AddComponent<GateButtonHold>();
+            hold.controller = _controller;
         }
         if (laborUpgradeButton != null)
             laborUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeLabor(); UpdateLaborUI(); });

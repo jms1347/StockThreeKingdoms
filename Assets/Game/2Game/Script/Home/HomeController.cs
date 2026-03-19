@@ -18,6 +18,9 @@ public class HomeController : MonoBehaviour
 
     static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 
+    /// <summary> 길게 누르기 시 소수 금화 누적 (프레임마다 정수로 전환) </summary>
+    double _gateHoldRemainder;
+
     /// <summary> 클릭당 금화 </summary>
     public double GoldPerClick
     {
@@ -116,12 +119,30 @@ public class HomeController : MonoBehaviour
         return gm.GetAutoIncomeValue(lv) * (gm.balance.vaultHours * 3600);
     }
 
-    /// <summary> 대문 터치 </summary>
+    /// <summary> 대문 터치 (탭 1회) </summary>
     public void OnGateClick()
     {
         var gm = GameManager.InstanceOrNull;
         if (gm == null) return;
         gm.AddGold((long)GoldPerClick);
+    }
+
+    /// <summary> 대문 길게 누르기 — 매 프레임 호출. GoldPerClick을 초당 획득량으로 사용. </summary>
+    public void OnGateHoldFrame()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        double rate = GoldPerClick;
+        double add = rate * Time.deltaTime + _gateHoldRemainder;
+        long whole = (long)Math.Floor(add);
+        _gateHoldRemainder = add - whole;
+        if (whole > 0) gm.AddGold(whole);
+    }
+
+    /// <summary> 손을 떼면 소수 누적 초기화 </summary>
+    public void OnGateHoldEnd()
+    {
+        _gateHoldRemainder = 0;
     }
 
     public void UpgradeLabor()
