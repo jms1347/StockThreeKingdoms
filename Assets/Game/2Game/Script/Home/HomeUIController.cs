@@ -4,9 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// Home 탭 View Controller.
-/// TextMeshProUGUI와 Button만 관리. 수치 연산은 하지 않음.
-/// UserData Action 이벤트 구독 → UI 갱신.
+/// 본영 화면 담당. GameManager.OnGoldChanged/OnGrainChanged 구독, 코루틴으로 창고 UI 갱신.
 /// </summary>
 [RequireComponent(typeof(HomeController))]
 public class HomeUIController : MonoBehaviour
@@ -43,27 +41,17 @@ public class HomeUIController : MonoBehaviour
     public Button gateButton;
 
     private HomeController _controller;
-    private HomeUserData _data;
-
-    private Action<int> _onLaborChanged;
-    private Action<int> _onMarketChanged;
-    private Action<int> _onFarmChanged;
-    private Action<long> _onGoldForSupply;
 
     void Start()
     {
         _controller = GetComponent<HomeController>();
         if (_controller == null) return;
 
-        _data = _controller.Data;
-        if (_data == null) return;
-
         SubscribeEvents();
-        _data.NotifyAll();
+        RefreshAllUI();
         BindButtons();
 
-        GameManager.Instance?.RaiseAccumulatedMarketChanged();
-        GameManager.Instance?.RaiseAccumulatedFarmChanged();
+        StartCoroutine(UpdateAccumulateUICoroutine());
     }
 
     void OnDisable()
@@ -73,114 +61,113 @@ public class HomeUIController : MonoBehaviour
 
     void SubscribeEvents()
     {
-        if (_data == null) return;
-        _data.OnGoldChanged += OnGoldChangedHandler;
-        _data.OnGrainChanged += UpdateGrainUI;
-        _data.OnFarmWorkersChanged += UpdateFarmWorkersUI;
-        _data.OnLaborLevelChanged += OnLaborLevelChangedHandler;
-        _data.OnMarketLevelChanged += OnMarketLevelChangedHandler;
-        _data.OnFarmLevelChanged += OnFarmLevelChangedHandler;
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnAccumulatedMarketChanged += OnAccumulatedMarketChangedHandler;
-            GameManager.Instance.OnAccumulatedFarmChanged += OnAccumulatedFarmChangedHandler;
-        }
+        if (GameManager.Instance == null) return;
+        GameManager.Instance.OnGoldChanged += OnGoldChangedHandler;
+        GameManager.Instance.OnGrainChanged += OnGrainChangedHandler;
     }
 
     void UnsubscribeEvents()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnAccumulatedMarketChanged -= OnAccumulatedMarketChangedHandler;
-            GameManager.Instance.OnAccumulatedFarmChanged -= OnAccumulatedFarmChangedHandler;
-        }
-        if (_data == null) return;
-        _data.OnGoldChanged -= OnGoldChangedHandler;
-        _data.OnGrainChanged -= UpdateGrainUI;
-        _data.OnFarmWorkersChanged -= UpdateFarmWorkersUI;
-        _data.OnLaborLevelChanged -= OnLaborLevelChangedHandler;
-        _data.OnMarketLevelChanged -= OnMarketLevelChangedHandler;
-        _data.OnFarmLevelChanged -= OnFarmLevelChangedHandler;
-    }
-
-    void OnAccumulatedMarketChangedHandler(double accumulated, double maxCap)
-    {
-        if (marketAccumulateText != null)
-        {
-            marketAccumulateText.text = maxCap > 0 ? $"{accumulated:F0} / {maxCap:F0}" : "0 / 0";
-            marketAccumulateText.color = (maxCap > 0 && accumulated >= maxCap) ? Color.red : Color.white;
-        }
-        if (marketAccumulateSlider != null && maxCap > 0)
-            marketAccumulateSlider.value = (float)(accumulated / maxCap);
-    }
-
-    void OnAccumulatedFarmChangedHandler(double accumulated, double maxCap)
-    {
-        if (farmAccumulateText != null)
-        {
-            farmAccumulateText.text = maxCap > 0 ? $"{accumulated:F0} / {maxCap:F0}" : "0 / 0";
-            farmAccumulateText.color = (maxCap > 0 && accumulated >= maxCap) ? Color.red : Color.white;
-        }
-        if (farmAccumulateSlider != null && maxCap > 0)
-            farmAccumulateSlider.value = (float)(accumulated / maxCap);
+        if (GameManager.Instance == null) return;
+        GameManager.Instance.OnGoldChanged -= OnGoldChangedHandler;
+        GameManager.Instance.OnGrainChanged -= OnGrainChangedHandler;
     }
 
     void OnGoldChangedHandler(long gold)
     {
         UpdateGoldUI(gold);
-        UpdateSupplyUI(gold);
+        UpdateSupplyUI();
     }
 
-    void OnLaborLevelChangedHandler(int _) => UpdateLaborUI();
-    void OnMarketLevelChangedHandler(int _) => UpdateMarketUI();
-    void OnFarmLevelChangedHandler(int _) => UpdateFarmUI();
+    void OnGrainChangedHandler(long grain)
+    {
+        UpdateGrainUI(grain);
+    }
+
+    System.Collections.IEnumerator UpdateAccumulateUICoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            if (_controller == null) continue;
+
+            double mAcc = _controller.CurrentMarketAccumulated;
+            double mMax = _controller.GetMarketMaxCapacity();
+            if (marketAccumulateText != null)
+            {
+                marketAccumulateText.text = mMax > 0 ? $"{mAcc:F0} / {mMax:F0}" : "0 / 0";
+                marketAccumulateText.color = (mMax > 0 && mAcc >= mMax) ? Color.red : Color.white;
+            }
+            if (marketAccumulateSlider != null && mMax > 0)
+                marketAccumulateSlider.value = (float)Math.Min(1.0, mAcc / mMax);
+
+            double fAcc = _controller.CurrentFarmAccumulated;
+            double fMax = _controller.GetFarmMaxCapacity();
+            if (farmAccumulateText != null)
+            {
+                farmAccumulateText.text = fMax > 0 ? $"{fAcc:F0} / {fMax:F0}" : "0 / 0";
+                farmAccumulateText.color = (fMax > 0 && fAcc >= fMax) ? Color.red : Color.white;
+            }
+            if (farmAccumulateSlider != null && fMax > 0)
+                farmAccumulateSlider.value = (float)Math.Min(1.0, fAcc / fMax);
+        }
+    }
 
     void BindButtons()
     {
         if (gateButton != null)
-            gateButton.onClick.AddListener(() => _controller?.OnGateClick());
+            gateButton.onClick.AddListener(() => { _controller?.OnGateClick(); });
         if (laborUpgradeButton != null)
-            laborUpgradeButton.onClick.AddListener(() => _controller?.UpgradeLabor());
+            laborUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeLabor(); UpdateLaborUI(); });
         if (marketUpgradeButton != null)
-            marketUpgradeButton.onClick.AddListener(() => _controller?.UpgradeMarket());
+            marketUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeMarket(); UpdateMarketUI(); });
         if (collectMarketButton != null)
             collectMarketButton.onClick.AddListener(() => _controller?.CollectMarketGold());
         if (farmUpgradeButton != null)
-            farmUpgradeButton.onClick.AddListener(() => _controller?.UpgradeFarm());
+            farmUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeFarm(); UpdateFarmUI(); });
         if (collectFarmButton != null)
             collectFarmButton.onClick.AddListener(() => _controller?.CollectFarmGrain());
         if (hireFarmWorkerButton != null)
-            hireFarmWorkerButton.onClick.AddListener(() => _controller?.HireFarmWorkers(1));
+            hireFarmWorkerButton.onClick.AddListener(() => { _controller?.HireFarmWorkers(1); UpdateFarmWorkersUI(GameManager.Instance?.currentUser?.soldierCount ?? 0); });
         if (buyGrainButton != null)
             buyGrainButton.onClick.AddListener(() => _controller?.BuyGrain(1));
     }
 
+    void RefreshAllUI()
+    {
+        if (GameManager.Instance == null) return;
+        UpdateGoldUI(GameManager.Instance.currentGold);
+        UpdateGrainUI(GameManager.Instance.currentGrain);
+        UpdateFarmWorkersUI(GameManager.Instance.currentUser?.soldierCount ?? 0);
+        UpdateLaborUI();
+        UpdateMarketUI();
+        UpdateFarmUI();
+        UpdateSupplyUI();
+    }
+
     void UpdateGoldUI(long gold)
     {
-        if (goldText != null)
-            goldText.text = gold.ToString("N0");
+        if (goldText != null) goldText.text = gold.ToString("N0");
     }
 
     void UpdateGrainUI(long grain)
     {
-        if (grainText != null)
-            grainText.text = grain.ToString("N0");
+        if (grainText != null) grainText.text = grain.ToString("N0");
     }
 
     void UpdateFarmWorkersUI(long farmWorkers)
     {
-        if (farmWorkersText != null)
-            farmWorkersText.text = farmWorkers.ToString("N0");
+        if (farmWorkersText != null) farmWorkersText.text = farmWorkers.ToString("N0");
     }
 
     void UpdateLaborUI()
     {
-        if (laborLabelText == null || _data == null) return;
+        if (laborLabelText == null || _controller == null || GameManager.Instance == null) return;
 
-        int lv = _data.LaborLevel;
-        double current = _data.GoldPerClick;
-        double next = HomeUserData.BaseGoldPerClick + ((lv + 1) * HomeUserData.ExtraValuePerLaborLevel);
-        double cost = HomeUserData.UpgradeCost(HomeUserData.LaborBaseCost, lv);
+        int lv = GameManager.Instance.clickPowerLevel;
+        double current = _controller.GoldPerClick;
+        double next = HomeController.BaseGoldPerClick + ((lv + 1) * HomeController.ExtraValuePerLaborLevel);
+        double cost = HomeController.UpgradeCost(HomeController.LaborBaseCost, lv);
 
         laborLabelText.text =
             $"클릭당 금화 획득량 상승\n(Level {lv})\n" +
@@ -190,12 +177,12 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateMarketUI()
     {
-        if (marketLabelText == null || _data == null) return;
+        if (marketLabelText == null || _controller == null || GameManager.Instance == null) return;
 
-        int lv = _data.MarketLevel;
-        double current = _data.GoldPerSec;
-        double next = lv <= 0 ? 1 : 2 + lv;
-        double cost = HomeUserData.UpgradeCost(HomeUserData.MarketBaseCost, lv);
+        int lv = GameManager.Instance.autoIncomeLevel;
+        double current = lv <= 0 ? 0 : GameManager.Instance.GetAutoIncomeValue(lv);
+        double next = lv <= 0 ? 1 : GameManager.Instance.GetAutoIncomeValue(lv + 1);
+        double cost = HomeController.UpgradeCost(HomeController.MarketBaseCost, lv);
 
         marketLabelText.text =
             $"초당 금화 자동 생산량 상승\n(Level {lv})\n" +
@@ -205,12 +192,12 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateFarmUI()
     {
-        if (farmLabelText == null || _data == null) return;
+        if (farmLabelText == null || _controller == null || GameManager.Instance == null) return;
 
-        int lv = _data.FarmLevel;
-        double current = _data.GrainPerSec;
-        double next = lv <= 0 ? 1 : 2 + lv;
-        double cost = HomeUserData.UpgradeCost(HomeUserData.FarmBaseCost, lv);
+        int lv = GameManager.Instance.currentUser?.farmLevel ?? 0;
+        double current = lv <= 0 ? 0 : GameManager.Instance.GetAutoIncomeValue(lv);
+        double next = lv <= 0 ? 1 : GameManager.Instance.GetAutoIncomeValue(lv + 1);
+        double cost = HomeController.UpgradeCost(HomeController.FarmBaseCost, lv);
 
         farmLabelText.text =
             $"초당 식량 자동 생산량 상승\n(Level {lv})\n" +
@@ -218,7 +205,7 @@ public class HomeUIController : MonoBehaviour
             $"비용: {cost:F0} Gold";
     }
 
-    void UpdateSupplyUI(long _)
+    void UpdateSupplyUI()
     {
         if (supplyLabelText == null || _controller == null) return;
 

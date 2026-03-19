@@ -33,12 +33,8 @@ public class GameManager : Singleton<GameManager>
     [Header("유저 데이터")]
     public UserData currentUser;
 
-    public Action<double> OnGoldChanged;
-
-    /// <summary> 시장 창고 누적량 (현재 / MAX) 변동 시 </summary>
-    public Action<double, double> OnAccumulatedMarketChanged;
-    /// <summary> 농장 창고 누적량 (현재 / MAX) 변동 시 </summary>
-    public Action<double, double> OnAccumulatedFarmChanged;
+    public Action<long> OnGoldChanged;
+    public Action<long> OnGrainChanged;
 
     private string savePath;
 
@@ -58,89 +54,56 @@ public class GameManager : Singleton<GameManager>
 
     void OnApplicationPause(bool paused)
     {
-        if (paused)
-        {
-            if (currentUser != null)
-                currentUser.lastCollectTime = GetUnixTime();
-            SaveUserData();
-        }
+        if (paused) SaveUserData();
     }
 
     void OnApplicationQuit()
     {
-        if (currentUser != null)
-            currentUser.lastCollectTime = GetUnixTime();
         SaveUserData();
     }
 
-    // ---- 창고 누적 (시장/농장) ----
-    public double GetAccumulatedMarketGold() => currentUser?.accumulatedMarketGold ?? 0;
-    public double GetAccumulatedFarmGrain() => currentUser?.accumulatedFarmGrain ?? 0;
+    // ---- 글로벌 재화 (은행장) ----
 
-    /// <summary> 현재 시장 레벨 기준 창고 MAX치. DataManager 준비 시 시트값, 아니면 formula 사용 </summary>
-    public double GetMarketMaxCapacity()
-    {
-        if (currentUser == null) return 0;
-        int lv = currentUser.marketLevel;
-        if (DataManager.Instance != null && DataManager.Instance.IsReady)
-        {
-            var d = DataManager.Instance.GetLevelData(lv);
-            if (d != null && d.marketMaxCapacity > 0) return d.marketMaxCapacity;
-        }
-        return GetAutoIncomeValue(lv) * (balance.vaultHours * 3600);
-    }
-
-    /// <summary> 현재 농장 레벨 기준 창고 MAX치 </summary>
-    public double GetFarmMaxCapacity()
-    {
-        if (currentUser == null) return 0;
-        int lv = currentUser.farmLevel;
-        if (DataManager.Instance != null && DataManager.Instance.IsReady)
-        {
-            var d = DataManager.Instance.GetLevelData(lv);
-            if (d != null && d.farmMaxCapacity > 0) return d.farmMaxCapacity;
-        }
-        double perSec = GetAutoIncomeValue(lv);
-        return perSec > 0 ? perSec * (balance.vaultHours * 3600) : 0;
-    }
-
-    public void RaiseAccumulatedMarketChanged()
-    {
-        OnAccumulatedMarketChanged?.Invoke(GetAccumulatedMarketGold(), GetMarketMaxCapacity());
-    }
-
-    public void RaiseAccumulatedFarmChanged()
-    {
-        OnAccumulatedFarmChanged?.Invoke(GetAccumulatedFarmGrain(), GetFarmMaxCapacity());
-    }
-
-    // ---- 자본 ----
-
-    public double currentGold
+    public long currentGold
     {
         get => currentUser != null ? currentUser.gold : 0;
         set
         {
             if (currentUser == null) return;
-            currentUser.gold = (long)Math.Max(0, value);
-            OnGoldChanged?.Invoke((double)currentUser.gold);
+            currentUser.gold = Math.Max(0L, value);
+            OnGoldChanged?.Invoke(currentUser.gold);
         }
     }
 
-    public double currentGrain
+    public long currentGrain
     {
         get => currentUser != null ? currentUser.grain : 0;
-        set { if (currentUser != null) currentUser.grain = (long)Math.Max(0, value); }
+        set
+        {
+            if (currentUser == null) return;
+            currentUser.grain = Math.Max(0L, value);
+            OnGrainChanged?.Invoke(currentUser.grain);
+        }
     }
+
+    /// <summary> 금화 추가 (수거 등) </summary>
+    public void AddGold(long amount) => currentGold += amount;
+    public void AddGold(double amount) => AddGold((long)amount);
+
+    /// <summary> 금화 차감. 성공 시 true </summary>
+    public bool UseGold(long amount)
+    {
+        if (currentUser == null || currentUser.gold < amount) return false;
+        currentGold -= amount;
+        return true;
+    }
+
+    /// <summary> 식량 추가 (수거 등) </summary>
+    public void AddGrain(long amount) => currentGrain += amount;
 
     public int clickPowerLevel { get => currentUser?.laborLevel ?? 1; set { if (currentUser != null) currentUser.laborLevel = value; } }
     public int autoIncomeLevel { get => currentUser?.marketLevel ?? 0; set { if (currentUser != null) currentUser.marketLevel = value; } }
     public int soldierGradeLevel { get => currentUser?.soldierGradeLevel ?? 1; set { if (currentUser != null) currentUser.soldierGradeLevel = value; } }
-
-    public void AddGold(double amount)
-    {
-        currentGold += amount;
-    }
 
     static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 
@@ -165,7 +128,10 @@ public class GameManager : Singleton<GameManager>
         {
             currentUser = new UserData();
         }
-        if (currentUser.lastCollectTime <= 0)
-            currentUser.lastCollectTime = GetUnixTime();
+        double now = GetUnixTime();
+        if (currentUser.lastMarketCollectTime <= 0)
+            currentUser.lastMarketCollectTime = now;
+        if (currentUser.lastFarmCollectTime <= 0)
+            currentUser.lastFarmCollectTime = now;
     }
 }

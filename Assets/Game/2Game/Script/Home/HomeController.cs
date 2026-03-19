@@ -1,128 +1,185 @@
 using UnityEngine;
+using System;
 
 /// <summary>
-/// Home 탭 Logic Controller.
-/// UI를 직접 조작하지 않고, 버튼 클릭 시 수치 연산과 조건 검사만 담당.
+/// 본영 탭 전용 로직 매니저. 계산·조작만 담당. GameManager를 통해 재화 변경.
 /// </summary>
 public class HomeController : MonoBehaviour
 {
-    private HomeUserData _data;
+    // ---- 밸런스 상수 ----
+    public const int BaseGoldPerClick = 10;
+    public const int ExtraValuePerLaborLevel = 5;
+    public const double UpgradeCostMult = 1.15;
+    public const int FarmWorkerCost = 100;
+    public const int GrainCost = 2;
+    public const double LaborBaseCost = 50;
+    public const double MarketBaseCost = 100;
+    public const double FarmBaseCost = 80;
 
-    public HomeUserData Data => _data;
+    static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 
-    void Awake()
+    /// <summary> 클릭당 금화 </summary>
+    public double GoldPerClick =>
+        BaseGoldPerClick + (GameManager.Instance.clickPowerLevel * ExtraValuePerLaborLevel);
+
+    /// <summary> 업그레이드 비용 </summary>
+    public static double UpgradeCost(double baseCost, int level) =>
+        baseCost * Math.Pow(UpgradeCostMult, level);
+
+    /// <summary> 시장 창고 현재 누적량 (Timestamp 기반 동적 계산) </summary>
+    public double CurrentMarketAccumulated
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentUser != null)
-            _data = new HomeUserData(GameManager.Instance.currentUser);
-        else
-            _data = new HomeUserData(new UserData());
+        get
+        {
+            var gm = GameManager.Instance;
+            if (gm?.currentUser == null) return 0;
+            double rate = GetMarketValuePerSec();
+            if (rate <= 0) return 0;
+            double now = GetUnixTime();
+            double last = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
+            double elapsed = Math.Max(0, now - last);
+            double maxCap = GetMarketMaxCapacity();
+            return Math.Min(elapsed * rate, maxCap > 0 ? maxCap : double.MaxValue);
+        }
     }
 
-    void Start()
+    /// <summary> 농장 창고 현재 누적량 </summary>
+    public double CurrentFarmAccumulated
     {
-        _data?.NotifyAll();
+        get
+        {
+            var gm = GameManager.Instance;
+            if (gm?.currentUser == null) return 0;
+            double rate = GetFarmValuePerSec();
+            if (rate <= 0) return 0;
+            double now = GetUnixTime();
+            double last = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
+            double elapsed = Math.Max(0, now - last);
+            double maxCap = GetFarmMaxCapacity();
+            return Math.Min(elapsed * rate, maxCap > 0 ? maxCap : double.MaxValue);
+        }
     }
 
-    /// <summary> 대문 터치: Gold에 GoldPerClick만큼 증가 </summary>
+    double GetMarketValuePerSec()
+    {
+        var gm = GameManager.Instance;
+        if (gm?.currentUser == null) return 0;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(gm.currentUser.marketLevel);
+            if (d != null && d.marketValuePerSec > 0) return d.marketValuePerSec;
+        }
+        return gm.GetAutoIncomeValue(gm.currentUser.marketLevel);
+    }
+
+    double GetFarmValuePerSec()
+    {
+        var gm = GameManager.Instance;
+        if (gm?.currentUser == null) return 0;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(gm.currentUser.farmLevel);
+            if (d != null && d.farmValuePerSec > 0) return d.farmValuePerSec;
+        }
+        return gm.GetAutoIncomeValue(gm.currentUser.farmLevel);
+    }
+
+    public double GetMarketMaxCapacity()
+    {
+        var gm = GameManager.Instance;
+        if (gm?.currentUser == null) return 0;
+        int lv = gm.currentUser.marketLevel;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(lv);
+            if (d != null && d.marketMaxCapacity > 0) return d.marketMaxCapacity;
+        }
+        return gm.GetAutoIncomeValue(lv) * (gm.balance.vaultHours * 3600);
+    }
+
+    public double GetFarmMaxCapacity()
+    {
+        var gm = GameManager.Instance;
+        if (gm?.currentUser == null) return 0;
+        int lv = gm.currentUser.farmLevel;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(lv);
+            if (d != null && d.farmMaxCapacity > 0) return d.farmMaxCapacity;
+        }
+        return gm.GetAutoIncomeValue(lv) * (gm.balance.vaultHours * 3600);
+    }
+
+    /// <summary> 대문 터치 </summary>
     public void OnGateClick()
     {
-        if (_data == null) return;
-        _data.Gold += (long)_data.GoldPerClick;
+        if (GameManager.Instance == null) return;
+        GameManager.Instance.AddGold((long)GoldPerClick);
     }
 
-    /// <summary> 노동력 업그레이드. Gold >= UpgradeCost 확인 후 차감 & 레벨+1 </summary>
     public void UpgradeLabor()
     {
-        if (_data == null) return;
-        double cost = HomeUserData.UpgradeCost(HomeUserData.LaborBaseCost, _data.LaborLevel);
-        if (_data.Gold >= cost)
-        {
-            _data.Gold -= (long)cost;
-            _data.LaborLevel++;
-        }
+        if (GameManager.Instance == null) return;
+        double cost = UpgradeCost(LaborBaseCost, GameManager.Instance.clickPowerLevel);
+        if (GameManager.Instance.UseGold((long)cost))
+            GameManager.Instance.clickPowerLevel++;
     }
 
-    /// <summary> 시장 업그레이드 </summary>
     public void UpgradeMarket()
     {
-        if (_data == null) return;
-        double cost = HomeUserData.UpgradeCost(HomeUserData.MarketBaseCost, _data.MarketLevel);
-        if (_data.Gold >= cost)
-        {
-            _data.Gold -= (long)cost;
-            _data.MarketLevel++;
-        }
+        if (GameManager.Instance == null) return;
+        double cost = UpgradeCost(MarketBaseCost, GameManager.Instance.autoIncomeLevel);
+        if (GameManager.Instance.UseGold((long)cost))
+            GameManager.Instance.autoIncomeLevel++;
     }
 
-    /// <summary> 농장 업그레이드 </summary>
     public void UpgradeFarm()
     {
-        if (_data == null) return;
-        double cost = HomeUserData.UpgradeCost(HomeUserData.FarmBaseCost, _data.FarmLevel);
-        if (_data.Gold >= cost)
-        {
-            _data.Gold -= (long)cost;
-            _data.FarmLevel++;
-        }
+        if (GameManager.Instance == null) return;
+        double cost = UpgradeCost(FarmBaseCost, GameManager.Instance.currentUser.farmLevel);
+        if (GameManager.Instance.UseGold((long)cost))
+            GameManager.Instance.currentUser.farmLevel++;
     }
 
-    /// <summary> 농장 인력 고용: 100 Gold -> 1 FarmWorker. 현재 Gold 기반 최대 수량만큼 적용. </summary>
     public void HireFarmWorkers(int count)
     {
-        if (_data == null || count <= 0) return;
-        int maxAfford = (int)(_data.Gold / HomeUserData.FarmWorkerCost);
+        if (GameManager.Instance == null || count <= 0) return;
+        int maxAfford = (int)(GameManager.Instance.currentGold / FarmWorkerCost);
         int actual = Mathf.Min(count, maxAfford);
-        if (actual > 0)
-        {
-            _data.Gold -= (long)(actual * HomeUserData.FarmWorkerCost);
-            _data.FarmWorkers += actual;
-        }
+        if (actual > 0 && GameManager.Instance.UseGold(actual * FarmWorkerCost))
+            GameManager.Instance.currentUser.soldierCount += actual;
     }
 
-    /// <summary> 식량 구매: 2 Gold -> 1 Grain. 현재 Gold 기반 최대 수량만큼 적용. </summary>
     public void BuyGrain(int count)
     {
-        if (_data == null || count <= 0) return;
-        int maxAfford = (int)(_data.Gold / HomeUserData.GrainCost);
+        if (GameManager.Instance == null || count <= 0) return;
+        int maxAfford = (int)(GameManager.Instance.currentGold / GrainCost);
         int actual = Mathf.Min(count, maxAfford);
-        if (actual > 0)
-        {
-            _data.Gold -= (long)(actual * HomeUserData.GrainCost);
-            _data.Grain += actual;
-        }
+        if (actual > 0 && GameManager.Instance.UseGold(actual * GrainCost))
+            GameManager.Instance.AddGrain(actual);
     }
 
-    /// <summary> 현재 Gold로 농장 인력 최대 고용 가능 수 </summary>
-    public int GetMaxAffordableFarmWorkers()
-    {
-        return _data != null ? (int)(_data.Gold / HomeUserData.FarmWorkerCost) : 0;
-    }
+    public int GetMaxAffordableFarmWorkers() =>
+        GameManager.Instance != null ? (int)(GameManager.Instance.currentGold / FarmWorkerCost) : 0;
 
-    /// <summary> 현재 Gold로 식량 최대 구매 가능 수 </summary>
-    public int GetMaxAffordableGrain()
-    {
-        return _data != null ? (int)(_data.Gold / HomeUserData.GrainCost) : 0;
-    }
+    public int GetMaxAffordableGrain() =>
+        GameManager.Instance != null ? (int)(GameManager.Instance.currentGold / GrainCost) : 0;
 
-    /// <summary> 시장 창고 수거: 누적 금화를 Gold에 이동 후 창고 초기화 </summary>
     public void CollectMarketGold()
     {
-        if (_data == null) return;
-        double acc = _data.AccumulatedMarketGold;
+        if (GameManager.Instance?.currentUser == null) return;
+        double acc = CurrentMarketAccumulated;
         if (acc <= 0) return;
-        _data.Gold += (long)acc;
-        _data.SetAccumulatedMarketGold(0);
-        GameManager.Instance?.RaiseAccumulatedMarketChanged();
+        GameManager.Instance.AddGold((long)acc);
+        GameManager.Instance.currentUser.lastMarketCollectTime = GetUnixTime();
     }
 
-    /// <summary> 농장 창고 수거: 누적 식량을 Grain에 이동 후 창고 초기화 </summary>
     public void CollectFarmGrain()
     {
-        if (_data == null) return;
-        double acc = _data.AccumulatedFarmGrain;
+        if (GameManager.Instance?.currentUser == null) return;
+        double acc = CurrentFarmAccumulated;
         if (acc <= 0) return;
-        _data.Grain += (long)acc;
-        _data.SetAccumulatedFarmGrain(0);
-        GameManager.Instance?.RaiseAccumulatedFarmChanged();
+        GameManager.Instance.AddGrain((long)acc);
+        GameManager.Instance.currentUser.lastFarmCollectTime = GetUnixTime();
     }
 }

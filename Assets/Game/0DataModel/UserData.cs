@@ -20,10 +20,9 @@ public class UserData
     public int farmLevel;           // 농장 레벨 (식량 자동 생성용) [cite: 13, 41]
     public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
-    // [창고] 시장/농장 누적 (수거 전)
-    public double lastCollectTime;       // 마지막 접속 시점 (Unix 초) - 오프라인 보상용
-    public double accumulatedMarketGold; // 시장 창고 누적 금화
-    public double accumulatedFarmGrain;  // 농장 창고 누적 식량
+    // [창고] Timestamp 기반 - 마지막 수거 시점 (Unix 초)
+    public double lastMarketCollectTime;  // 시장 마지막 수거 시점
+    public double lastFarmCollectTime;     // 농장 마지막 수거 시점
 
     // [M2E 데이터]
     public int dailyStepCount;      // 오늘 걸음 수 [cite: 13, 180]
@@ -43,7 +42,7 @@ public class UserData
         farmLevel = 0;
         soldierGradeLevel = 1;
         dailyStepCount = 0;
-        accumulatedMarketGold = 0;
-        accumulatedFarmGrain = 0;
+        lastMarketCollectTime = 0;
+        lastFarmCollectTime = 0;
     }
 }

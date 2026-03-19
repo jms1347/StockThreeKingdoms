@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary> 금고 실시간 카운팅 연출. Text만 Time에 맞춰 연산, 실제 데이터 수정 없음. 성능 부하 거의 없음. </summary>
+/// <summary> 금고 실시간 카운팅 연출. HomeController에서 동적 계산값 조회. </summary>
 public class VaultDisplay : MonoBehaviour
 {
     [Header("UI")]
@@ -10,12 +10,19 @@ public class VaultDisplay : MonoBehaviour
     [Tooltip("버튼 위 충만감 연출 예: ●●●○○ (선택)")]
     public TextMeshProUGUI fillBarText;
 
+    HomeController _homeController;
+
+    void Start()
+    {
+        _homeController = FindObjectOfType<HomeController>();
+    }
+
     void Update()
     {
-        if (GameManager.Instance == null) return;
+        if (_homeController == null) return;
 
-        double display = GameManager.Instance.GetAccumulatedMarketGold();
-        double maxCap = GameManager.Instance.GetMarketMaxCapacity();
+        double display = _homeController.CurrentMarketAccumulated;
+        double maxCap = _homeController.GetMarketMaxCapacity();
 
         if (amountText != null)
             amountText.text = "⚙️ " + Utils.AbbreviateScore(display);
@@ -29,16 +36,5 @@ public class VaultDisplay : MonoBehaviour
             int filled = Mathf.RoundToInt(ratio * 5);
             fillBarText.text = new string('●', filled) + new string('○', 5 - filled);
         }
-    }
-}
-
-/// <summary> double용 Clamp01 </summary>
-public static class Mathd
-{
-    public static double Clamp01(double value)
-    {
-        if (value < 0) return 0;
-        if (value > 1) return 1;
-        return value;
     }
 }

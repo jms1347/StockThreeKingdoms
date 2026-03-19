@@ -70,7 +70,7 @@ public class UpgradeButton : MonoBehaviour
             costText.text = Utils.AbbreviateScore(cachedCost) + " 골드";
     }
 
-    private void HandleGoldChanged(double currentGold)
+    private void HandleGoldChanged(long currentGold)
     {
         if (myButton != null)
             myButton.interactable = currentGold >= cachedCost;
@@ -80,22 +80,16 @@ public class UpgradeButton : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        if (GameManager.Instance.currentGold >= cachedCost)
+        long cost = (long)cachedCost;
+        if (GameManager.Instance.UseGold(cost))
         {
-            // 골드 차감 (Property의 setter를 통해 자동으로 OnGoldChanged 이벤트가 발생함)
-            GameManager.Instance.currentGold -= cachedCost;
-
             switch (type)
             {
                 case UpgradeType.ClickPower: GameManager.Instance.clickPowerLevel++; break;
                 case UpgradeType.AutoIncome: GameManager.Instance.autoIncomeLevel++; break;
                 case UpgradeType.SoldierGrade: GameManager.Instance.soldierGradeLevel++; break;
             }
-
-            // 레벨이 올랐으므로 UI 전체 갱신
             UpdateUpgradeUI();
-            
-            // UI 갱신 후 바뀐 비용으로 버튼 상태 재검사
             HandleGoldChanged(GameManager.Instance.currentGold);
         }
     }
