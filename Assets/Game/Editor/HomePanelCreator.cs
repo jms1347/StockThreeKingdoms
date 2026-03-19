@@ -33,11 +33,16 @@ public static class HomePanelCreator
         GameObject root = new GameObject("HomePanels");
         root.transform.SetParent(parent, false);
 
-        RectTransform rootRect = root.AddComponent<RectTransform>();
-        rootRect.anchorMin = new Vector2(0, 0);
-        rootRect.anchorMax = new Vector2(1, 1);
-        rootRect.offsetMin = new Vector2(20, 20);
-        rootRect.offsetMax = new Vector2(-20, -20);
+        Image rootBg = root.AddComponent<Image>();
+        rootBg.color = new Color(0, 0, 0, 0);
+        RectTransform rootRect = root.transform as RectTransform;
+        if (rootRect != null)
+        {
+            rootRect.anchorMin = new Vector2(0, 0);
+            rootRect.anchorMax = new Vector2(1, 1);
+            rootRect.offsetMin = new Vector2(20, 20);
+            rootRect.offsetMax = new Vector2(-20, -20);
+        }
 
         VerticalLayoutGroup rootLayout = root.AddComponent<VerticalLayoutGroup>();
         rootLayout.spacing = 16;
@@ -53,9 +58,67 @@ public static class HomePanelCreator
         CreateFarmPanel(root.transform);
         CreateSupplyPanel(root.transform);
 
+        AddScriptsAndWireReferences(root);
+        EnsureManagersExist();
+
         Selection.activeGameObject = root;
         Undo.RegisterCreatedObjectUndo(root, "Create Home Panels");
-        Debug.Log("[HomePanelCreator] LaborPanel, MarketPanel, FarmPanel, SupplyPanel 생성 완료. HomeUIController에 연결해주세요.");
+        Debug.Log("[HomePanelCreator] 본영 패널 생성 완료. 씬 저장 후 플레이해보세요.");
+    }
+
+    static void AddScriptsAndWireReferences(GameObject root)
+    {
+        root.AddComponent<HomeController>();
+        HomeUIController ui = root.AddComponent<HomeUIController>();
+
+        Transform t = root.transform;
+        ui.goldText = t.Find("ResourceBar/GoldText")?.GetComponent<TextMeshProUGUI>();
+        ui.grainText = t.Find("ResourceBar/GrainText")?.GetComponent<TextMeshProUGUI>();
+        ui.farmWorkersText = t.Find("ResourceBar/FarmWorkersText")?.GetComponent<TextMeshProUGUI>();
+        ui.gateButton = t.Find("GateButton")?.GetComponent<Button>();
+
+        ui.laborLabelText = t.Find("LaborPanel/LaborLabelText")?.GetComponent<TextMeshProUGUI>();
+        ui.laborUpgradeButton = t.Find("LaborPanel/LaborUpgradeButton")?.GetComponent<Button>();
+
+        ui.marketLabelText = t.Find("MarketPanel/MarketLabelText")?.GetComponent<TextMeshProUGUI>();
+        ui.marketAccumulateText = t.Find("MarketPanel/MarketAccumulateText")?.GetComponent<TextMeshProUGUI>();
+        ui.marketAccumulateSlider = t.Find("MarketPanel/MarketAccumulateSlider")?.GetComponent<Slider>();
+        ui.marketUpgradeButton = t.Find("MarketPanel/MarketButtons/MarketUpgradeButton")?.GetComponent<Button>();
+        ui.collectMarketButton = t.Find("MarketPanel/MarketButtons/CollectMarketButton")?.GetComponent<Button>();
+
+        ui.farmLabelText = t.Find("FarmPanel/FarmLabelText")?.GetComponent<TextMeshProUGUI>();
+        ui.farmAccumulateText = t.Find("FarmPanel/FarmAccumulateText")?.GetComponent<TextMeshProUGUI>();
+        ui.farmAccumulateSlider = t.Find("FarmPanel/FarmAccumulateSlider")?.GetComponent<Slider>();
+        ui.farmUpgradeButton = t.Find("FarmPanel/FarmButtons/FarmUpgradeButton")?.GetComponent<Button>();
+        ui.collectFarmButton = t.Find("FarmPanel/FarmButtons/CollectFarmButton")?.GetComponent<Button>();
+
+        ui.supplyLabelText = t.Find("SupplyPanel/SupplyLabelText")?.GetComponent<TextMeshProUGUI>();
+        ui.hireFarmWorkerButton = t.Find("SupplyPanel/SupplyButtons/HireFarmWorkerButton")?.GetComponent<Button>();
+        ui.buyGrainButton = t.Find("SupplyPanel/SupplyButtons/BuyGrainButton")?.GetComponent<Button>();
+
+        EditorUtility.SetDirty(ui);
+    }
+
+    static void EnsureManagersExist()
+    {
+        if (Object.FindObjectOfType<GameManager>() == null)
+        {
+            GameObject gm = new GameObject("GameManager");
+            gm.AddComponent<GameManager>();
+            Undo.RegisterCreatedObjectUndo(gm, "Create GameManager");
+        }
+        if (Object.FindObjectOfType<DataManager>() == null)
+        {
+            GameObject dm = new GameObject("DataManager");
+            dm.AddComponent<DataManager>();
+            Undo.RegisterCreatedObjectUndo(dm, "Create DataManager");
+        }
+        if (Object.FindObjectOfType<GoogleSheetManager>() == null)
+        {
+            GameObject gsm = new GameObject("GoogleSheetManager");
+            gsm.AddComponent<GoogleSheetManager>();
+            Undo.RegisterCreatedObjectUndo(gsm, "Create GoogleSheetManager");
+        }
     }
 
     static GameObject CreatePanel(Transform parent, string name, string title)
@@ -132,7 +195,8 @@ public static class HomePanelCreator
         GameObject obj = new GameObject(name);
         obj.transform.SetParent(parent, false);
 
-        RectTransform objRect = obj.AddComponent<RectTransform>();
+        Image trackImg = obj.AddComponent<Image>();
+        trackImg.color = new Color(0.2f, 0.2f, 0.2f);
 
         GameObject fillArea = new GameObject("Fill Area");
         fillArea.transform.SetParent(obj.transform, false);
@@ -168,8 +232,10 @@ public static class HomePanelCreator
         GameObject bar = new GameObject("ResourceBar");
         bar.transform.SetParent(parent, false);
 
-        RectTransform rect = bar.AddComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(0, 60);
+        Image barBg = bar.AddComponent<Image>();
+        barBg.color = new Color(0.15f, 0.15f, 0.2f, 0.9f);
+        RectTransform rect = bar.transform as RectTransform;
+        if (rect != null) rect.sizeDelta = new Vector2(0, 60);
 
         HorizontalLayoutGroup hlg = bar.AddComponent<HorizontalLayoutGroup>();
         hlg.spacing = 16;
