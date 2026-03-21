@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
 
     protected override void Awake()
     {
+        TimeManager.EnsureCreated();
         base.Awake();  // Singleton: _instance 설정 + DontDestroyOnLoad (씬 전환 시 유지)
         savePath = Path.Combine(Application.persistentDataPath, "userData.json");
         LoadUserData();
@@ -114,8 +115,6 @@ public class GameManager : Singleton<GameManager>
     public int autoIncomeLevel { get => currentUser?.marketLevel ?? 0; set { if (currentUser != null) currentUser.marketLevel = value; } }
     public int soldierGradeLevel { get => currentUser?.soldierGradeLevel ?? 1; set { if (currentUser != null) currentUser.soldierGradeLevel = value; } }
 
-    static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
-
     // ---- 저장/로드 ----
 
     public void SaveUserData()
@@ -145,7 +144,7 @@ public class GameManager : Singleton<GameManager>
         if (currentUser.stepsToday <= 0 && currentUser.dailyStepCount > 0)
             currentUser.stepsToday = currentUser.dailyStepCount;
 
-        double now = GetUnixTime();
+        long now = TimeManager.GetUnixNow();
         if (currentUser.lastMarketCollectTime <= 0)
             currentUser.lastMarketCollectTime = now;
         if (currentUser.lastFarmCollectTime <= 0)

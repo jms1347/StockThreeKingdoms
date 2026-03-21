@@ -232,9 +232,9 @@ public class CollectionManager : MonoBehaviour
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
 
-        double now = UnixNow();
-        double mLast = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
-        double fLast = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
+        long now = TimeManager.GetUnixNow();
+        long mLast = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
+        long fLast = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
 
         int goldOn = PileCountFromElapsedHours(now - mLast);
         int grainOn = PileCountFromElapsedHours(now - fLast);
@@ -243,10 +243,10 @@ public class CollectionManager : MonoBehaviour
         SetPileArray(grainPiles, grainOn);
     }
 
-    static int PileCountFromElapsedHours(double elapsedSeconds)
+    static int PileCountFromElapsedHours(long elapsedSeconds)
     {
         if (elapsedSeconds <= 0) return 0;
-        double hours = elapsedSeconds / 3600.0;
+        double hours = elapsedSeconds / 3600.0d;
         double ratio = (hours / 8.0) * 8.0;
         int n = (int)Math.Floor(ratio);
         return Mathf.Clamp(n, 0, 8);
@@ -444,5 +444,4 @@ public class CollectionManager : MonoBehaviour
         return u * u * a + 2f * u * t * b + t * t * c;
     }
 
-    static double UnixNow() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 }

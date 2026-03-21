@@ -20,9 +20,9 @@ public class UserData
     public int farmLevel;           // 농장 레벨 (식량 자동 생성용) [cite: 13, 41]
     public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
-    // [창고] Timestamp 기반 - 마지막 수거 시점 (Unix 초)
-    public double lastMarketCollectTime;  // 시장 마지막 수거 시점
-    public double lastFarmCollectTime;     // 농장 마지막 수거 시점
+    // [창고] Timestamp 기반 - 마지막 수거 시점 (UTC Unix 초, 정수)
+    public long lastMarketCollectTime;
+    public long lastFarmCollectTime;
 
     // [M2E 데이터]
     public int dailyStepCount;      // 레거시 호환 (구 세이브)

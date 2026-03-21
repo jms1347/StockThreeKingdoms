@@ -22,7 +22,7 @@ public class HomeController : MonoBehaviour
     /// <summary>목표별 식량 보상</summary>
     public static readonly int[] StepRewardGrain = { 100, 250, 400, 600 };
 
-    static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
+    static long NowUnixSeconds() => TimeManager.GetUnixNow();
 
     /// <summary> 길게 누르기 시 소수 금화 누적 (프레임마다 정수로 전환) </summary>
     double _gateHoldRemainder;
@@ -50,8 +50,8 @@ public class HomeController : MonoBehaviour
             if (gm?.currentUser == null) return 0;
             double rate = GetMarketValuePerSec();
             if (rate <= 0) return 0;
-            double now = GetUnixTime();
-            double last = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
+            long now = NowUnixSeconds();
+            long last = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
             double elapsed = Math.Max(0, now - last);
             double maxCap = GetMarketMaxCapacity();
             return Math.Min(elapsed * rate, maxCap > 0 ? maxCap : double.MaxValue);
@@ -67,8 +67,8 @@ public class HomeController : MonoBehaviour
             if (gm?.currentUser == null) return 0;
             double rate = GetFarmValuePerSec();
             if (rate <= 0) return 0;
-            double now = GetUnixTime();
-            double last = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
+            long now = NowUnixSeconds();
+            long last = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
             double elapsed = Math.Max(0, now - last);
             double maxCap = GetFarmMaxCapacity();
             return Math.Min(elapsed * rate, maxCap > 0 ? maxCap : double.MaxValue);
@@ -175,19 +175,34 @@ public class HomeController : MonoBehaviour
     public void UpgradeMarket()
     {
         var gm = GameManager.InstanceOrNull;
-        if (gm == null) return;
-        double cost = UpgradeCost(MarketBaseCost, gm.autoIncomeLevel);
-        if (gm.UseGold((long)cost))
-            gm.autoIncomeLevel++;
+        if (gm?.currentUser == null) return;
+        int oldLevel = gm.autoIncomeLevel;
+        double cost = UpgradeCost(MarketBaseCost, oldLevel);
+        if (!gm.UseGold((long)cost)) return;
+
+        gm.autoIncomeLevel++;
+        // 생산 없음(0) → 첫 가동(1): 로드 시각이 아니라 '업그레이드한 지금'부터 누적
+        if (oldLevel <= 0)
+        {
+            gm.currentUser.lastMarketCollectTime = NowUnixSeconds();
+            gm.SaveUserData();
+        }
     }
 
     public void UpgradeFarm()
     {
         var gm = GameManager.InstanceOrNull;
-        if (gm == null) return;
-        double cost = UpgradeCost(FarmBaseCost, gm.currentUser.farmLevel);
-        if (gm.UseGold((long)cost))
-            gm.currentUser.farmLevel++;
+        if (gm?.currentUser == null) return;
+        int oldLevel = gm.currentUser.farmLevel;
+        double cost = UpgradeCost(FarmBaseCost, oldLevel);
+        if (!gm.UseGold((long)cost)) return;
+
+        gm.currentUser.farmLevel++;
+        if (oldLevel <= 0)
+        {
+            gm.currentUser.lastFarmCollectTime = NowUnixSeconds();
+            gm.SaveUserData();
+        }
     }
 
     public void HireFarmWorkers(int count)
@@ -229,7 +244,7 @@ public class HomeController : MonoBehaviour
         double acc = CurrentMarketAccumulated;
         if (acc <= 0) return;
         gm.AddGold((long)acc);
-        gm.currentUser.lastMarketCollectTime = GetUnixTime();
+        gm.currentUser.lastMarketCollectTime = NowUnixSeconds();
     }
 
     public void CollectFarmGrain()
@@ -239,7 +254,7 @@ public class HomeController : MonoBehaviour
         double acc = CurrentFarmAccumulated;
         if (acc <= 0) return;
         gm.AddGrain((long)acc);
-        gm.currentUser.lastFarmCollectTime = GetUnixTime();
+        gm.currentUser.lastFarmCollectTime = NowUnixSeconds();
     }
 
     /// <summary>
@@ -258,7 +273,7 @@ public class HomeController : MonoBehaviour
         long totalGrain = (long)CurrentFarmAccumulated;
         if (totalGold <= 0 && totalGrain <= 0) return false;
 
-        double now = GetUnixTime();
+        long now = NowUnixSeconds();
         gm.currentUser.lastMarketCollectTime = now;
         gm.currentUser.lastFarmCollectTime = now;
 
