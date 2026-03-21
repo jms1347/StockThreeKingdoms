@@ -268,6 +268,9 @@ public class HomeUIController : MonoBehaviour
             RollGrainDisplay(grain);
     }
 
+    /// <summary>만보기 텍스트·게이지·버튼을 즉시 갱신 (에디터 테스트용 등)</summary>
+    public void RefreshPedometerNow() => RefreshPedometerUI();
+
     void RefreshPedometerUI()
     {
         var u = GameManager.InstanceOrNull?.currentUser;

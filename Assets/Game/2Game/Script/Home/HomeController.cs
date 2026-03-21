@@ -293,24 +293,33 @@ public class HomeController : MonoBehaviour
 #if UNITY_EDITOR
     void Update()
     {
-        // 에디터에서 만보기 테스트: F9 +500, F10 +2000
-        if (Input.GetKeyDown(KeyCode.F9))
+        // 에디터 전용 만보기 테스트 (Play 모드 + Game 뷰 포커스 권장)
+        // F9: +500보, F10: +2000보, F11: 걸음·보상 상태 콘솔 로그
+        var gm = GameManager.InstanceOrNull;
+        var ui = GetComponent<HomeUIController>();
+
+        if (Input.GetKeyDown(KeyCode.F9) && gm?.currentUser != null)
         {
-            var gm = GameManager.InstanceOrNull;
-            if (gm?.currentUser != null)
-            {
-                gm.currentUser.stepsToday += 500;
-                gm.currentUser.dailyStepCount = gm.currentUser.stepsToday;
-            }
+            gm.currentUser.stepsToday += 500;
+            gm.currentUser.dailyStepCount = gm.currentUser.stepsToday;
+            ui?.RefreshPedometerNow();
+            Debug.Log($"[Editor 만보기] stepsToday = {gm.currentUser.stepsToday} (F9 +500)");
         }
-        if (Input.GetKeyDown(KeyCode.F10))
+        if (Input.GetKeyDown(KeyCode.F10) && gm?.currentUser != null)
         {
-            var gm = GameManager.InstanceOrNull;
-            if (gm?.currentUser != null)
-            {
-                gm.currentUser.stepsToday += 2000;
-                gm.currentUser.dailyStepCount = gm.currentUser.stepsToday;
-            }
+            gm.currentUser.stepsToday += 2000;
+            gm.currentUser.dailyStepCount = gm.currentUser.stepsToday;
+            ui?.RefreshPedometerNow();
+            Debug.Log($"[Editor 만보기] stepsToday = {gm.currentUser.stepsToday} (F10 +2000)");
+        }
+        if (Input.GetKeyDown(KeyCode.F11) && gm?.currentUser != null)
+        {
+            var u = gm.currentUser;
+            var c = u.stepRewardsClaimed;
+            string r = c != null && c.Length >= 4
+                ? $"{c[0]},{c[1]},{c[2]},{c[3]}"
+                : "(배열 없음)";
+            Debug.Log($"[Editor 만보기] stepsToday={u.stepsToday}, 보상수령=[{r}]");
         }
     }
 #endif

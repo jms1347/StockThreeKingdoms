@@ -209,6 +209,22 @@ public class CollectionManager : MonoBehaviour
             if (homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: false))
                 _shakeCooldownUntil = Time.unscaledTime + ShakeCooldownSec;
         }
+
+#if UNITY_EDITOR
+        // 에디터에선 가속도가 거의 0 → F8로 흔들기 수거와 동일 경로 테스트 (쿨다운 동일)
+        if (Input.GetKeyDown(KeyCode.F8))
+        {
+            if (Time.unscaledTime < _shakeCooldownUntil) return;
+            if (homeController != null &&
+                homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: false))
+            {
+                _shakeCooldownUntil = Time.unscaledTime + ShakeCooldownSec;
+                Debug.Log("[Editor 흔들기] F8 → 창고 비행 수거 시도 (누적 자원이 있어야 발동)");
+            }
+            else
+                Debug.Log("[Editor 흔들기] F8 — 수거 안 됨: 비행 중이거나 창고 누적 0, 또는 HomeController 없음");
+        }
+#endif
     }
 
     public void UpdatePileVisuals()
