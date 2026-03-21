@@ -121,6 +121,7 @@ public class GameManager : Singleton<GameManager>
     public void SaveUserData()
     {
         if (currentUser == null) return;
+        currentUser.dailyStepCount = currentUser.stepsToday;
         string json = JsonUtility.ToJson(currentUser, true);
         File.WriteAllText(savePath, json);
         Debug.Log("데이터 저장 완료: " + savePath);
@@ -137,6 +138,13 @@ public class GameManager : Singleton<GameManager>
         {
             currentUser = new UserData();
         }
+
+        if (currentUser.stepRewardsClaimed == null || currentUser.stepRewardsClaimed.Length != 4)
+            currentUser.stepRewardsClaimed = new bool[4];
+
+        if (currentUser.stepsToday <= 0 && currentUser.dailyStepCount > 0)
+            currentUser.stepsToday = currentUser.dailyStepCount;
+
         double now = GetUnixTime();
         if (currentUser.lastMarketCollectTime <= 0)
             currentUser.lastMarketCollectTime = now;

@@ -10,6 +10,8 @@ using UnityEngine.UI;
 public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public HomeController controller;
+    [Tooltip("대문 터치 시 창고 더미가 있으면 비행 수거")]
+    public CollectionManager collectionManager;
 
     Coroutine _holdCoroutine;
     float _holdStartTime;
@@ -20,6 +22,7 @@ public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
         controller.OnGateClick();
+        collectionManager?.TryCollectFromGate();
         _holdStartTime = Time.time;
         if (_holdCoroutine != null) StopCoroutine(_holdCoroutine);
         _holdCoroutine = StartCoroutine(HoldLoop());

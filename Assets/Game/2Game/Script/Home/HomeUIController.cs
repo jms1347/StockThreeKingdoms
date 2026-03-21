@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// 본영 화면 담당. GameManager.OnGoldChanged/OnGrainChanged 구독, 코루틴으로 창고 UI 갱신.
@@ -40,12 +41,32 @@ public class HomeUIController : MonoBehaviour
     [Header("대문 터치")]
     public Button gateButton;
 
+    [Header("만보기")]
+    public Image pedometerGaugeFill;
+    public TextMeshProUGUI pedometerStepsText;
+    [Tooltip("2k, 5k, 7k, 10k 순서")]
+    public Button[] stepRewardButtons = new Button[4];
+    public TextMeshProUGUI[] stepRewardLabels = new TextMeshProUGUI[4];
+
+    [Header("창고 연출")]
+    public CollectionManager collectionManager;
+
+    [Header("숫자 롤링")]
+    public float resourceRollDuration = 0.42f;
+
     private HomeController _controller;
+    long _displayGold;
+    long _displayGrain;
+    Tweener _goldRollTween;
+    Tweener _grainRollTween;
 
     void Start()
     {
         _controller = GetComponent<HomeController>();
         if (_controller == null) return;
+
+        if (collectionManager == null)
+            collectionManager = GetComponent<CollectionManager>();
 
         // gateButton 참조가 Inspector에서 빠진 경우 자동 탐색
         if (gateButton == null)
@@ -56,6 +77,12 @@ public class HomeUIController : MonoBehaviour
         BindButtons();
 
         StartCoroutine(UpdateAccumulateUICoroutine());
+    }
+
+    void OnDestroy()
+    {
+        _goldRollTween?.Kill();
+        _grainRollTween?.Kill();
     }
 
     void OnDisable()
@@ -81,13 +108,13 @@ public class HomeUIController : MonoBehaviour
 
     void OnGoldChangedHandler(long gold)
     {
-        UpdateGoldUI(gold);
+        RollGoldDisplay(gold);
         UpdateSupplyUI();
     }
 
     void OnGrainChangedHandler(long grain)
     {
-        UpdateGrainUI(grain);
+        RollGrainDisplay(grain);
     }
 
     System.Collections.IEnumerator UpdateAccumulateUICoroutine()
@@ -116,6 +143,8 @@ public class HomeUIController : MonoBehaviour
             }
             if (farmAccumulateSlider != null && fMax > 0)
                 farmAccumulateSlider.value = (float)Math.Min(1.0, fAcc / fMax);
+
+            RefreshPedometerUI();
         }
     }
 
@@ -130,6 +159,7 @@ public class HomeUIController : MonoBehaviour
             var hold = gateButton.GetComponent<GateButtonHold>();
             if (hold == null) hold = gateButton.gameObject.AddComponent<GateButtonHold>();
             hold.controller = _controller;
+            hold.collectionManager = collectionManager;
         }
         if (laborUpgradeButton != null)
             laborUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeLabor(); UpdateLaborUI(); });
@@ -145,29 +175,128 @@ public class HomeUIController : MonoBehaviour
             hireFarmWorkerButton.onClick.AddListener(() => { _controller?.HireFarmWorkers(1); UpdateFarmWorkersUI(GameManager.InstanceOrNull?.currentUser?.soldierCount ?? 0); });
         if (buyGrainButton != null)
             buyGrainButton.onClick.AddListener(() => _controller?.BuyGrain(1));
+
+        if (stepRewardButtons != null && _controller != null)
+        {
+            for (int i = 0; i < stepRewardButtons.Length; i++)
+            {
+                if (stepRewardButtons[i] == null) continue;
+                int idx = i;
+                stepRewardButtons[i].onClick.AddListener(() =>
+                {
+                    if (_controller.ClaimStepReward(idx))
+                    {
+                        RefreshPedometerUI();
+                        UpdateGrainUI(GameManager.InstanceOrNull?.currentGrain ?? 0, instant: true);
+                    }
+                });
+            }
+        }
     }
 
     void RefreshAllUI()
     {
         var gm = GameManager.InstanceOrNull;
         if (gm == null) return;
-        UpdateGoldUI(gm.currentGold);
-        UpdateGrainUI(gm.currentGrain);
+        UpdateGoldUI(gm.currentGold, instant: true);
+        UpdateGrainUI(gm.currentGrain, instant: true);
         UpdateFarmWorkersUI(gm.currentUser?.soldierCount ?? 0);
         UpdateLaborUI();
         UpdateMarketUI();
         UpdateFarmUI();
         UpdateSupplyUI();
+        RefreshPedometerUI();
     }
 
-    void UpdateGoldUI(long gold)
+    void RollGoldDisplay(long target)
     {
-        if (goldText != null) goldText.text = gold.ToString("N0");
+        if (goldText == null) return;
+        _goldRollTween?.Kill();
+        long start = _displayGold;
+        float p = 0f;
+        _goldRollTween = DOTween.To(() => p, x =>
+        {
+            p = x;
+            float u = Mathf.Clamp01(x);
+            _displayGold = (long)(start + (target - start) * (double)u);
+            goldText.text = _displayGold.ToString("N0");
+        }, 1f, resourceRollDuration)
+            .SetEase(Ease.OutCubic)
+            .SetUpdate(true);
     }
 
-    void UpdateGrainUI(long grain)
+    void RollGrainDisplay(long target)
     {
-        if (grainText != null) grainText.text = grain.ToString("N0");
+        if (grainText == null) return;
+        _grainRollTween?.Kill();
+        long start = _displayGrain;
+        float p = 0f;
+        _grainRollTween = DOTween.To(() => p, x =>
+        {
+            p = x;
+            float u = Mathf.Clamp01(x);
+            _displayGrain = (long)(start + (target - start) * (double)u);
+            grainText.text = _displayGrain.ToString("N0");
+        }, 1f, resourceRollDuration)
+            .SetEase(Ease.OutCubic)
+            .SetUpdate(true);
+    }
+
+    void UpdateGoldUI(long gold, bool instant)
+    {
+        if (goldText == null) return;
+        if (instant)
+        {
+            _goldRollTween?.Kill();
+            _displayGold = gold;
+            goldText.text = gold.ToString("N0");
+        }
+        else
+            RollGoldDisplay(gold);
+    }
+
+    void UpdateGrainUI(long grain, bool instant)
+    {
+        if (grainText == null) return;
+        if (instant)
+        {
+            _grainRollTween?.Kill();
+            _displayGrain = grain;
+            grainText.text = grain.ToString("N0");
+        }
+        else
+            RollGrainDisplay(grain);
+    }
+
+    void RefreshPedometerUI()
+    {
+        var u = GameManager.InstanceOrNull?.currentUser;
+        if (u == null) return;
+
+        int steps = u.stepsToday;
+        if (pedometerGaugeFill != null)
+            pedometerGaugeFill.fillAmount = Mathf.Clamp01(steps / 10000f);
+        if (pedometerStepsText != null)
+            pedometerStepsText.text = $"{steps:N0} / 10,000";
+
+        if (u.stepRewardsClaimed == null || u.stepRewardsClaimed.Length != HomeController.StepMilestones.Length)
+            u.stepRewardsClaimed = new bool[HomeController.StepMilestones.Length];
+
+        for (int i = 0; i < HomeController.StepMilestones.Length && i < stepRewardButtons.Length; i++)
+        {
+            var btn = stepRewardButtons[i];
+            if (btn == null) continue;
+            bool claimed = u.stepRewardsClaimed[i];
+            bool canClaim = steps >= HomeController.StepMilestones[i] && !claimed;
+            btn.interactable = canClaim;
+
+            if (i < stepRewardLabels.Length && stepRewardLabels[i] != null)
+            {
+                int grain = i < HomeController.StepRewardGrain.Length ? HomeController.StepRewardGrain[i] : 0;
+                string state = claimed ? "(수령완료)" : canClaim ? "탭하여 수령" : "(미달성)";
+                stepRewardLabels[i].text = $"{HomeController.StepMilestones[i]:N0}보\n+{grain} 식량\n{state}";
+            }
+        }
     }
 
     void UpdateFarmWorkersUI(long farmWorkers)

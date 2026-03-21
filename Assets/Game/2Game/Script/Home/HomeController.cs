@@ -16,6 +16,12 @@ public class HomeController : MonoBehaviour
     public const double MarketBaseCost = 100;
     public const double FarmBaseCost = 80;
 
+    /// <summary>만보기 목표 걸음 수 (2k, 5k, 7k, 10k)</summary>
+    public static readonly int[] StepMilestones = { 2000, 5000, 7000, 10000 };
+
+    /// <summary>목표별 식량 보상</summary>
+    public static readonly int[] StepRewardGrain = { 100, 250, 400, 600 };
+
     static double GetUnixTime() => DateTime.UtcNow.Subtract(DateTime.UnixEpoch).TotalSeconds;
 
     /// <summary> 길게 누르기 시 소수 금화 누적 (프레임마다 정수로 전환) </summary>
@@ -235,4 +241,77 @@ public class HomeController : MonoBehaviour
         gm.AddGrain((long)acc);
         gm.currentUser.lastFarmCollectTime = GetUnixTime();
     }
+
+    /// <summary>
+    /// 창고(시장 금화 + 농장 식량) 수거를 비행 연출 후 입금으로 처리.
+    /// requireActivePiles: true면 CollectionManager에 켜진 더미가 1개 이상 있어야 함 (대문).
+    /// </summary>
+    public bool TryFlyCollectFromWarehouse(CollectionManager cm, bool requireActivePiles)
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null || cm == null) return false;
+        if (cm.IsFlyBusy) return false;
+
+        if (requireActivePiles && !cm.HasActivePileVisual()) return false;
+
+        long totalGold = (long)CurrentMarketAccumulated;
+        long totalGrain = (long)CurrentFarmAccumulated;
+        if (totalGold <= 0 && totalGrain <= 0) return false;
+
+        double now = GetUnixTime();
+        gm.currentUser.lastMarketCollectTime = now;
+        gm.currentUser.lastFarmCollectTime = now;
+
+        cm.PlayFlyEffect(totalGold, totalGrain);
+        return true;
+    }
+
+    /// <summary>
+    /// 만보기 분기 보상. 해당 목표 걸음을 넘었고 미수령이면 식량 지급.
+    /// </summary>
+    public bool ClaimStepReward(int milestoneIndex)
+    {
+        if (milestoneIndex < 0 || milestoneIndex >= StepMilestones.Length) return false;
+
+        var gm = GameManager.InstanceOrNull;
+        var u = gm?.currentUser;
+        if (gm == null || u == null) return false;
+
+        if (u.stepRewardsClaimed == null || u.stepRewardsClaimed.Length != StepMilestones.Length)
+            u.stepRewardsClaimed = new bool[StepMilestones.Length];
+
+        int need = StepMilestones[milestoneIndex];
+        if (u.stepsToday < need) return false;
+        if (u.stepRewardsClaimed[milestoneIndex]) return false;
+
+        gm.AddGrain(StepRewardGrain[milestoneIndex]);
+        u.stepRewardsClaimed[milestoneIndex] = true;
+        gm.SaveUserData();
+        return true;
+    }
+
+#if UNITY_EDITOR
+    void Update()
+    {
+        // 에디터에서 만보기 테스트: F9 +500, F10 +2000
+        if (Input.GetKeyDown(KeyCode.F9))
+        {
+            var gm = GameManager.InstanceOrNull;
+            if (gm?.currentUser != null)
+            {
+                gm.currentUser.stepsToday += 500;
+                gm.currentUser.dailyStepCount = gm.currentUser.stepsToday;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            var gm = GameManager.InstanceOrNull;
+            if (gm?.currentUser != null)
+            {
+                gm.currentUser.stepsToday += 2000;
+                gm.currentUser.dailyStepCount = gm.currentUser.stepsToday;
+            }
+        }
+    }
+#endif
 }

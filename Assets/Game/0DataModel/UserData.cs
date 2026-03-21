@@ -25,7 +25,9 @@ public class UserData
     public double lastFarmCollectTime;     // 농장 마지막 수거 시점
 
     // [M2E 데이터]
-    public int dailyStepCount;      // 오늘 걸음 수 [cite: 13, 180]
+    public int dailyStepCount;      // 레거시 호환 (구 세이브)
+    public int stepsToday;          // 오늘 걸음 수 (만보기 UI/보상)
+    public bool[] stepRewardsClaimed = new bool[4]; // 2k/5k/7k/10k 보급 수령 여부
     public float walkCurrency;      // 만보기 재화 [cite: 130]
 
     // [생성자: 초기값 설정]
@@ -42,6 +44,8 @@ public class UserData
         farmLevel = 0;
         soldierGradeLevel = 1;
         dailyStepCount = 0;
+        stepsToday = 0;
+        stepRewardsClaimed = new bool[4];
         lastMarketCollectTime = 0;
         lastFarmCollectTime = 0;
     }
