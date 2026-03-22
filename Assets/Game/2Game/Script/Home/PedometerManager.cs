@@ -1,4 +1,7 @@
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+// Kinkelin Pedometer 에셋이 프로젝트에 있을 때만:
+// Edit → Project Settings → Player → Scripting Define Symbols 에
+// STOCK_USE_KINKELIN_PEDOMETER 를 추가하세요. (없으면 모바일 빌드에서 네이티브 만보기 비활성, 빌드는 성공)
+#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
 using PedometerU;
 #endif
 #if UNITY_ANDROID
@@ -9,13 +12,14 @@ using UnityEngine;
 
 /// <summary>
 /// Kinkelin Pedometer 플러그인과 OS 만보기 센서 연동. 오늘 걸음 = (OS 누적 걸음) − baselineSteps.
+/// <para>네이티브 연동: Player Settings에 심볼 <b>STOCK_USE_KINKELIN_PEDOMETER</b> 추가 후 빌드.</para>
 /// DontDestroyOnLoad 단일 인스턴스를 권장합니다.
 /// </summary>
 public class PedometerManager : MonoBehaviour
 {
     public static PedometerManager InstanceOrNull { get; private set; }
 
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
     Pedometer _pedometer;
 #endif
 
@@ -63,8 +67,7 @@ public class PedometerManager : MonoBehaviour
 #else
         FlushPendingStepsIfAny();
 #if UNITY_ANDROID
-        if (_pedometer == null &&
-            Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
+        if (Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
             TryStartPedometer();
 #endif
 #endif
@@ -91,9 +94,9 @@ public class PedometerManager : MonoBehaviour
         ApplyRawStepCount(s);
     }
 
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
     void TryStartPedometer()
     {
+#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
         if (_pedometer != null) return;
         try
         {
@@ -103,8 +106,10 @@ public class PedometerManager : MonoBehaviour
         {
             Debug.LogError($"[PedometerManager] Pedometer 시작 실패: {e.Message}");
         }
+#endif
     }
 
+#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
     void OnStepNative(int steps, double distance)
     {
         _pendingRawSteps = steps;
@@ -125,7 +130,7 @@ public class PedometerManager : MonoBehaviour
 
     void DisposePedometer()
     {
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
         if (_pedometer == null) return;
         try
         {
