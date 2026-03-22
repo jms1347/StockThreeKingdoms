@@ -1,30 +1,51 @@
-// Kinkelin Pedometer 에셋이 프로젝트에 있을 때만:
-// Edit → Project Settings → Player → Scripting Define Symbols 에
-// STOCK_USE_KINKELIN_PEDOMETER 를 추가하세요. (없으면 모바일 빌드에서 네이티브 만보기 비활성, 빌드는 성공)
-#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-using PedometerU;
-#endif
 #if UNITY_ANDROID
 using UnityEngine.Android;
+#endif
+#if UNITY_IOS && !UNITY_EDITOR
+using System.Runtime.InteropServices;
+using UnityEngine.Scripting;
 #endif
 using System;
 using UnityEngine;
 
 /// <summary>
-/// Kinkelin Pedometer 플러그인과 OS 만보기 센서 연동. 오늘 걸음 = (OS 누적 걸음) − baselineSteps.
-/// <para>네이티브 연동: Player Settings에 심볼 <b>STOCK_USE_KINKELIN_PEDOMETER</b> 추가 후 빌드.</para>
-/// DontDestroyOnLoad 단일 인스턴스를 권장합니다.
+/// 만보기: Android <see cref="Sensor.TYPE_STEP_COUNTER"/> (누적), iOS CoreMotion CMPedometer (당일 0시~현재).
+/// Kinkelin 등 외부 패키지 없음. DontDestroyOnLoad 단일 인스턴스 권장.
 /// </summary>
 public class PedometerManager : MonoBehaviour
 {
     public static PedometerManager InstanceOrNull { get; private set; }
 
-#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-    Pedometer _pedometer;
+    volatile int _pendingRawSteps = -1;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    AndroidJavaObject _androidSensorManager;
+    StepCounterListener _androidListener;
+    bool _androidRegistered;
 #endif
 
-    /// <summary>네이티브 콜백이 워커 스레드일 수 있어 메인 스레드에서 처리할 최신 raw 걸음.</summary>
-    volatile int _pendingRawSteps = -1;
+#if UNITY_IOS && !UNITY_EDITOR
+    const float IosPollIntervalSeconds = 0.5f;
+    float _iosPollAccum;
+
+    delegate void IosStepsNativeDelegate(int steps);
+
+    [DllImport("__Internal")]
+    static extern void NativePedometer_SetCallback(IosStepsNativeDelegate callback);
+
+    [DllImport("__Internal")]
+    static extern void NativePedometer_QueryTodaySteps();
+
+    [DllImport("__Internal")]
+    static extern void NativePedometer_Release();
+
+    [MonoPInvokeCallback(typeof(IosStepsNativeDelegate))]
+    static void IosStepsFromNative(int steps)
+    {
+        if (InstanceOrNull != null)
+            InstanceOrNull._pendingRawSteps = steps;
+    }
+#endif
 
     void Awake()
     {
@@ -45,7 +66,15 @@ public class PedometerManager : MonoBehaviour
         if (!Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
             Permission.RequestUserPermission("android.permission.ACTIVITY_RECOGNITION");
 #elif UNITY_IOS
-        TryStartPedometer();
+        try
+        {
+            NativePedometer_SetCallback(IosStepsFromNative);
+            NativePedometer_QueryTodaySteps();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[PedometerManager] iOS 네이티브 초기화 실패: {e.Message}");
+        }
 #endif
     }
 
@@ -55,7 +84,7 @@ public class PedometerManager : MonoBehaviour
         return;
 #elif UNITY_ANDROID
         if (hasFocus)
-            TryStartPedometer();
+            TryStartAndroidSensor();
 #endif
     }
 
@@ -67,8 +96,21 @@ public class PedometerManager : MonoBehaviour
 #else
         FlushPendingStepsIfAny();
 #if UNITY_ANDROID
-        if (Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
-            TryStartPedometer();
+        TryStartAndroidSensor();
+#elif UNITY_IOS
+        _iosPollAccum += Time.unscaledDeltaTime;
+        if (_iosPollAccum >= IosPollIntervalSeconds)
+        {
+            _iosPollAccum = 0f;
+            try
+            {
+                NativePedometer_QueryTodaySteps();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[PedometerManager] iOS Query: {e.Message}");
+            }
+        }
 #endif
 #endif
         CheckCalendarDayRollover();
@@ -91,62 +133,138 @@ public class PedometerManager : MonoBehaviour
         int s = _pendingRawSteps;
         if (s < 0) return;
         _pendingRawSteps = -1;
-        ApplyRawStepCount(s);
-    }
 
-    void TryStartPedometer()
-    {
-#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-        if (_pedometer != null) return;
-        try
-        {
-            _pedometer = new Pedometer(OnStepNative);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[PedometerManager] Pedometer 시작 실패: {e.Message}");
-        }
+#if UNITY_IOS && !UNITY_EDITOR
+        ApplyTodayStepsFromIos(s);
+#else
+        ApplyRawStepCount(s);
 #endif
     }
 
-#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-    void OnStepNative(int steps, double distance)
+#if UNITY_ANDROID && !UNITY_EDITOR
+    /// <summary>Sensor.TYPE_STEP_COUNTER 콜백 (메인 스레드).</summary>
+    class StepCounterListener : AndroidJavaProxy
     {
-        _pendingRawSteps = steps;
+        readonly PedometerManager _owner;
+
+        public StepCounterListener(PedometerManager owner) : base("android.hardware.SensorEventListener")
+        {
+            _owner = owner;
+        }
+
+        public void onSensorChanged(AndroidJavaObject sensorEvent)
+        {
+            if (sensorEvent == null || _owner == null) return;
+            float[] vals = null;
+            try
+            {
+                vals = sensorEvent.Call<float[]>("values");
+            }
+            catch (Exception)
+            {
+                // 일부 기기/버전에서 시그니처 차이
+            }
+            if (vals == null || vals.Length == 0) return;
+            int steps = (int)vals[0];
+            _owner._pendingRawSteps = steps;
+        }
+
+        public void onAccuracyChanged(AndroidJavaObject sensor, int accuracy) { }
+    }
+
+    void TryStartAndroidSensor()
+    {
+        if (_androidRegistered) return;
+        if (!Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
+            return;
+
+        try
+        {
+            using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+                if (activity == null) return;
+
+                _androidSensorManager = activity.Call<AndroidJavaObject>("getSystemService", "sensor");
+                if (_androidSensorManager == null) return;
+
+                using (var sensorClass = new AndroidJavaClass("android.hardware.Sensor"))
+                {
+                    int typeStepCounter = sensorClass.GetStatic<int>("TYPE_STEP_COUNTER");
+                    AndroidJavaObject sensor = _androidSensorManager.Call<AndroidJavaObject>("getDefaultSensor", typeStepCounter);
+                    if (sensor == null)
+                    {
+                        Debug.LogWarning("[PedometerManager] TYPE_STEP_COUNTER 기본 센서 없음");
+                        return;
+                    }
+
+                    using (var smClass = new AndroidJavaClass("android.hardware.SensorManager"))
+                    {
+                        int rate = smClass.GetStatic<int>("SENSOR_DELAY_UI");
+                        _androidListener = new StepCounterListener(this);
+                        _androidSensorManager.Call("registerListener", _androidListener, sensor, rate);
+                        _androidRegistered = true;
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[PedometerManager] Android 센서 등록 실패: {e.Message}");
+        }
+    }
+
+    void StopAndroidSensor()
+    {
+        if (!_androidRegistered || _androidSensorManager == null || _androidListener == null)
+        {
+            _androidListener = null;
+            _androidSensorManager = null;
+            _androidRegistered = false;
+            return;
+        }
+        try
+        {
+            _androidSensorManager.Call("unregisterListener", _androidListener);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[PedometerManager] unregisterListener: {e.Message}");
+        }
+        _androidListener = null;
+        _androidSensorManager = null;
+        _androidRegistered = false;
     }
 #endif
 
     void OnDisable()
     {
-        DisposePedometer();
+        DisposeNativePedometer();
     }
 
     void OnDestroy()
     {
-        DisposePedometer();
+        DisposeNativePedometer();
         if (InstanceOrNull == this)
             InstanceOrNull = null;
     }
 
-    void DisposePedometer()
+    void DisposeNativePedometer()
     {
-#if STOCK_USE_KINKELIN_PEDOMETER && !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-        if (_pedometer == null) return;
+#if UNITY_ANDROID && !UNITY_EDITOR
+        StopAndroidSensor();
+#elif UNITY_IOS && !UNITY_EDITOR
         try
         {
-            _pedometer.Dispose();
+            NativePedometer_Release();
         }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[PedometerManager] Dispose: {e.Message}");
-        }
-        _pedometer = null;
+        catch (Exception) { /* 에디터 스텁 없음 */ }
 #endif
     }
 
     static string GetLocalCalendarKey() => DateTime.Now.ToString("yyyy-MM-dd");
 
-    /// <summary>OS에서 온 누적 걸음 수로 오늘 걸음·저장·이벤트 반영.</summary>
+    /// <summary>Android STEP_COUNTER: 부팅 이후 누적 → baseline 차감으로 오늘 걸음.</summary>
     void ApplyRawStepCount(int rawSteps)
     {
         var gm = GameManager.InstanceOrNull;
@@ -195,6 +313,49 @@ public class PedometerManager : MonoBehaviour
         gm.OnStepsChanged?.Invoke(u.stepsToday);
     }
 
+#if UNITY_IOS && !UNITY_EDITOR
+    /// <summary>iOS CMPedometer: 이미 '오늘 0시~현재' 걸음 수.</summary>
+    void ApplyTodayStepsFromIos(int osTodaySteps)
+    {
+        osTodaySteps = Mathf.Max(0, osTodaySteps);
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return;
+
+        var u = gm.currentUser;
+        string today = GetLocalCalendarKey();
+
+        if (string.IsNullOrEmpty(u.stepCalendarDate))
+            u.stepCalendarDate = today;
+
+        if (u.stepCalendarDate != today)
+        {
+            u.stepCalendarDate = today;
+            if (u.stepRewardsClaimed != null)
+            {
+                for (int i = 0; i < u.stepRewardsClaimed.Length; i++)
+                    u.stepRewardsClaimed[i] = false;
+            }
+            u.baselineSteps = 0;
+            u.pedometerBaselineInitialized = true;
+            u.stepsToday = osTodaySteps;
+            u.dailyStepCount = osTodaySteps;
+            gm.SaveUserData();
+            gm.OnStepsChanged?.Invoke(u.stepsToday);
+            return;
+        }
+
+        if (u.stepsToday == osTodaySteps)
+            return;
+
+        u.stepsToday = osTodaySteps;
+        u.dailyStepCount = osTodaySteps;
+        u.pedometerBaselineInitialized = true;
+        u.baselineSteps = 0;
+        gm.SaveUserData();
+        gm.OnStepsChanged?.Invoke(u.stepsToday);
+    }
+#endif
+
     void ResetForNewCalendarDay(GameManager gm, UserData u, int currentRawSteps, string today)
     {
         u.stepCalendarDate = today;
@@ -211,7 +372,6 @@ public class PedometerManager : MonoBehaviour
         gm.OnStepsChanged?.Invoke(0);
     }
 
-    /// <summary>앱이 켜진 채 자정이 지났거나, 재실행 시 날짜만 먼저 바뀐 경우. 다음 OnStep 전까지 baseline은 미설정.</summary>
     void CheckCalendarDayRollover()
     {
 #if UNITY_EDITOR
