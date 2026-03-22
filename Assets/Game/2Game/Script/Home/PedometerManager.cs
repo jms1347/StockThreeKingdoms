@@ -7,6 +7,7 @@ using UnityEngine.Scripting;
 #endif
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 /// <summary>
 /// 만보기: Android <see cref="Sensor.TYPE_STEP_COUNTER"/> (누적), iOS CoreMotion CMPedometer (당일 0시~현재).
@@ -19,6 +20,7 @@ public class PedometerManager : MonoBehaviour
     volatile int _pendingRawSteps = -1;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+    const string ActivityRecognitionPermission = "android.permission.ACTIVITY_RECOGNITION";
     AndroidJavaObject _androidSensorManager;
     StepCounterListener _androidListener;
     bool _androidRegistered;
@@ -63,8 +65,18 @@ public class PedometerManager : MonoBehaviour
 #if UNITY_EDITOR
         return;
 #elif UNITY_ANDROID
-        if (!Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
-            Permission.RequestUserPermission("android.permission.ACTIVITY_RECOGNITION");
+        if (!Permission.HasUserAuthorizedPermission(ActivityRecognitionPermission))
+        {
+            var cb = new PermissionCallbacks();
+            cb.PermissionGranted += name =>
+            {
+                if (name == ActivityRecognitionPermission)
+                    TryStartAndroidSensor();
+            };
+            Permission.RequestUserPermission(ActivityRecognitionPermission, cb);
+        }
+        else
+            TryStartAndroidSensor();
 #elif UNITY_IOS
         try
         {
@@ -143,39 +155,51 @@ public class PedometerManager : MonoBehaviour
 
 #if UNITY_ANDROID && !UNITY_EDITOR
     /// <summary>Sensor.TYPE_STEP_COUNTER 콜백 (메인 스레드).</summary>
+    [Preserve]
     class StepCounterListener : AndroidJavaProxy
     {
         readonly PedometerManager _owner;
 
+        [Preserve]
         public StepCounterListener(PedometerManager owner) : base("android.hardware.SensorEventListener")
         {
             _owner = owner;
         }
 
+        [Preserve]
         public void onSensorChanged(AndroidJavaObject sensorEvent)
         {
             if (sensorEvent == null || _owner == null) return;
             float[] vals = null;
             try
             {
-                vals = sensorEvent.Call<float[]>("values");
+                // SensorEvent.values 는 Java "필드" — Call 이 아니라 Get 사용 (Call 은 항상 실패)
+                vals = sensorEvent.Get<float[]>("values");
             }
             catch (Exception)
             {
-                // 일부 기기/버전에서 시그니처 차이
+                try
+                {
+                    vals = sensorEvent.Call<float[]>("getValues");
+                }
+                catch (Exception)
+                {
+                    // 기기별 예외
+                }
             }
             if (vals == null || vals.Length == 0) return;
             int steps = (int)vals[0];
             _owner._pendingRawSteps = steps;
         }
 
+        [Preserve]
         public void onAccuracyChanged(AndroidJavaObject sensor, int accuracy) { }
     }
 
     void TryStartAndroidSensor()
     {
         if (_androidRegistered) return;
-        if (!Permission.HasUserAuthorizedPermission("android.permission.ACTIVITY_RECOGNITION"))
+        if (!Permission.HasUserAuthorizedPermission(ActivityRecognitionPermission))
             return;
 
         try

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Unity가 메인 매니페스트와 병합합니다. 걸음 센서(ACTIVITY_RECOGNITION) 런타임 권한 선언 필수. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+</manifest>
