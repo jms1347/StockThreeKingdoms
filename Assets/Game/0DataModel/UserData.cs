@@ -30,6 +30,13 @@ public class UserData
     public bool[] stepRewardsClaimed = new bool[4]; // 2k/5k/7k/10k 보급 수령 여부
     public float walkCurrency;      // 만보기 재화 [cite: 130]
 
+    /// <summary>OS 누적 걸음(앱/기기 기준)에서 오늘분을 빼기 위한 기준값. PedometerManager가 관리.</summary>
+    public int baselineSteps;
+    /// <summary>만보기 일자 추적용 로컬 달력 키 (yyyy-MM-dd).</summary>
+    public string stepCalendarDate;
+    /// <summary>baselineSteps가 현재 일자에 대해 유효하게 설정되었는지.</summary>
+    public bool pedometerBaselineInitialized;
+
     // [생성자: 초기값 설정]
     public UserData()
     {

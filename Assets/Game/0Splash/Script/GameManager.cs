@@ -35,6 +35,8 @@ public class GameManager : Singleton<GameManager>
 
     public Action<long> OnGoldChanged;
     public Action<long> OnGrainChanged;
+    /// <summary>만보기 stepsToday 갱신 시 (PedometerManager 등)</summary>
+    public Action<int> OnStepsChanged;
 
     private string savePath;
 

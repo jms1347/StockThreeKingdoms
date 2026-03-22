@@ -73,6 +73,7 @@ public class HomeUIController : MonoBehaviour
             gateButton = transform.Find("GateButton")?.GetComponent<Button>();
 
         SubscribeEvents();
+        SubscribeStepEvents();
         RefreshAllUI();
         BindButtons();
 
@@ -87,6 +88,7 @@ public class HomeUIController : MonoBehaviour
 
     void OnDisable()
     {
+        UnsubscribeStepEvents();
         UnsubscribeEvents();
     }
 
@@ -105,6 +107,22 @@ public class HomeUIController : MonoBehaviour
         gm.OnGoldChanged -= OnGoldChangedHandler;
         gm.OnGrainChanged -= OnGrainChangedHandler;
     }
+
+    void SubscribeStepEvents()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        gm.OnStepsChanged += OnStepsTodayChangedHandler;
+    }
+
+    void UnsubscribeStepEvents()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null) return;
+        gm.OnStepsChanged -= OnStepsTodayChangedHandler;
+    }
+
+    void OnStepsTodayChangedHandler(int _) => RefreshPedometerNow();
 
     void OnGoldChangedHandler(long gold)
     {
@@ -161,20 +179,39 @@ public class HomeUIController : MonoBehaviour
             hold.controller = _controller;
             hold.collectionManager = collectionManager;
         }
-        if (laborUpgradeButton != null)
-            laborUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeLabor(); UpdateLaborUI(); });
-        if (marketUpgradeButton != null)
-            marketUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeMarket(); UpdateMarketUI(); });
+        WireHoldRepeat(laborUpgradeButton, () =>
+        {
+            _controller?.UpgradeLabor();
+            UpdateLaborUI();
+            UpdateSupplyUI();
+        });
+        WireHoldRepeat(marketUpgradeButton, () =>
+        {
+            _controller?.UpgradeMarket();
+            UpdateMarketUI();
+            UpdateSupplyUI();
+        });
         if (collectMarketButton != null)
             collectMarketButton.onClick.AddListener(() => _controller?.CollectMarketGold());
-        if (farmUpgradeButton != null)
-            farmUpgradeButton.onClick.AddListener(() => { _controller?.UpgradeFarm(); UpdateFarmUI(); });
+        WireHoldRepeat(farmUpgradeButton, () =>
+        {
+            _controller?.UpgradeFarm();
+            UpdateFarmUI();
+            UpdateSupplyUI();
+        });
         if (collectFarmButton != null)
             collectFarmButton.onClick.AddListener(() => _controller?.CollectFarmGrain());
-        if (hireFarmWorkerButton != null)
-            hireFarmWorkerButton.onClick.AddListener(() => { _controller?.HireFarmWorkers(1); UpdateFarmWorkersUI(GameManager.InstanceOrNull?.currentUser?.soldierCount ?? 0); });
-        if (buyGrainButton != null)
-            buyGrainButton.onClick.AddListener(() => _controller?.BuyGrain(1));
+        WireHoldRepeat(hireFarmWorkerButton, () =>
+        {
+            _controller?.HireFarmWorkers(1);
+            UpdateFarmWorkersUI(GameManager.InstanceOrNull?.currentUser?.soldierCount ?? 0);
+            UpdateSupplyUI();
+        });
+        WireHoldRepeat(buyGrainButton, () =>
+        {
+            _controller?.BuyGrain(1);
+            UpdateSupplyUI();
+        });
 
         if (stepRewardButtons != null && _controller != null)
         {
@@ -192,6 +229,15 @@ public class HomeUIController : MonoBehaviour
                 });
             }
         }
+    }
+
+    /// <summary>탭 1회 + 길게 누르면 재화가 될 때까지 반복 (대문 홀드와 유사 UX).</summary>
+    void WireHoldRepeat(Button btn, Action tick)
+    {
+        if (btn == null || tick == null) return;
+        btn.onClick.RemoveAllListeners();
+        var hr = btn.GetComponent<ButtonHoldRepeat>() ?? btn.gameObject.AddComponent<ButtonHoldRepeat>();
+        hr.Configure(tick);
     }
 
     void RefreshAllUI()
