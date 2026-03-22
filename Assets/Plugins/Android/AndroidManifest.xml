@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Unity 메인 매니페스트와 병합만 합니다. <application>을 넣지 마세요(런처 액티비티가 사라질 수 있음). -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-  <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" tools:node="merge" />
-</manifest>
