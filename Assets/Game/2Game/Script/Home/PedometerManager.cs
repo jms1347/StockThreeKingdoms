@@ -1,6 +1,9 @@
 #if UNITY_ANDROID
 using UnityEngine.Android;
 #endif
+#if UNITY_ANDROID && !UNITY_EDITOR
+using System.Collections;
+#endif
 #if UNITY_IOS && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 using UnityEngine.Scripting;
@@ -57,7 +60,8 @@ public class PedometerManager : MonoBehaviour
             return;
         }
         InstanceOrNull = this;
-        DontDestroyOnLoad(gameObject);
+        // 부모 GameManager(Singleton)가 이미 transform.root 에 DontDestroyOnLoad 적용.
+        // 자식에 또 DDOL 하면 Unity가 자식을 DDOL 씬 루트로 분리해 계층이 깨질 수 있음.
     }
 
     void Start()
@@ -65,18 +69,7 @@ public class PedometerManager : MonoBehaviour
 #if UNITY_EDITOR
         return;
 #elif UNITY_ANDROID
-        if (!Permission.HasUserAuthorizedPermission(ActivityRecognitionPermission))
-        {
-            var cb = new PermissionCallbacks();
-            cb.PermissionGranted += name =>
-            {
-                if (name == ActivityRecognitionPermission)
-                    TryStartAndroidSensor();
-            };
-            Permission.RequestUserPermission(ActivityRecognitionPermission, cb);
-        }
-        else
-            TryStartAndroidSensor();
+        StartCoroutine(AndroidInitWhenReady());
 #elif UNITY_IOS
         try
         {
@@ -144,6 +137,12 @@ public class PedometerManager : MonoBehaviour
     {
         int s = _pendingRawSteps;
         if (s < 0) return;
+
+        // 스플래시 직후 등 GameManager/유저 로드 전에 센서가 먼저 오면 값이 날아가지 않게 대기
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null)
+            return;
+
         _pendingRawSteps = -1;
 
 #if UNITY_IOS && !UNITY_EDITOR
@@ -154,6 +153,85 @@ public class PedometerManager : MonoBehaviour
     }
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+    IEnumerator AndroidInitWhenReady()
+    {
+        // Activity 완전 resume 이후 권한 다이얼로그가 더 안정적으로 뜸
+        yield return null;
+        yield return null;
+
+        if (!Permission.HasUserAuthorizedPermission(ActivityRecognitionPermission))
+        {
+            var cb = new PermissionCallbacks();
+            cb.PermissionGranted += name =>
+            {
+                if (name == ActivityRecognitionPermission)
+                    TryStartAndroidSensor();
+            };
+            cb.PermissionDenied += name =>
+            {
+                if (name == ActivityRecognitionPermission)
+                    Debug.LogWarning("[PedometerManager] ACTIVITY_RECOGNITION 거부됨 — 설정에서 신체 활동 권한을 켜 주세요.");
+            };
+            cb.PermissionDeniedAndDontAskAgain += name =>
+            {
+                if (name == ActivityRecognitionPermission)
+                    Debug.LogWarning("[PedometerManager] ACTIVITY_RECOGNITION '다시 묻지 않음' — 앱 설정에서 권한을 허용해 주세요.");
+            };
+            Permission.RequestUserPermission(ActivityRecognitionPermission, cb);
+        }
+        else
+            TryStartAndroidSensor();
+
+        // 권한 직후 한동안 재시도 (일부 기기에서 지연)
+        for (int i = 0; i < 8; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            if (!_androidRegistered && Permission.HasUserAuthorizedPermission(ActivityRecognitionPermission))
+                TryStartAndroidSensor();
+        }
+    }
+
+    static float[] ReadSensorEventValues(AndroidJavaObject sensorEvent)
+    {
+        if (sensorEvent == null) return null;
+        try
+        {
+            return sensorEvent.Get<float[]>("values");
+        }
+        catch (Exception) { /* fall through */ }
+
+        // 일부 IL2CPP/기기에서 Get<float[]> 실패 시 JNI로 필드 values ([F) 직접 읽기
+        try
+        {
+            IntPtr raw = sensorEvent.GetRawObject();
+            IntPtr clazz = AndroidJNI.FindClass("android/hardware/SensorEvent");
+            try
+            {
+                IntPtr fid = AndroidJNI.GetFieldID(clazz, "values", "[F");
+                if (fid == IntPtr.Zero) return null;
+                IntPtr arr = AndroidJNI.GetObjectField(raw, fid);
+                if (arr == IntPtr.Zero) return null;
+                try
+                {
+                    return AndroidJNI.FromFloatArray(arr);
+                }
+                finally
+                {
+                    AndroidJNI.DeleteLocalRef(arr);
+                }
+            }
+            finally
+            {
+                if (clazz != IntPtr.Zero)
+                    AndroidJNI.DeleteLocalRef(clazz);
+            }
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     /// <summary>Sensor.TYPE_STEP_COUNTER 콜백 (메인 스레드).</summary>
     [Preserve]
     class StepCounterListener : AndroidJavaProxy
@@ -170,23 +248,7 @@ public class PedometerManager : MonoBehaviour
         public void onSensorChanged(AndroidJavaObject sensorEvent)
         {
             if (sensorEvent == null || _owner == null) return;
-            float[] vals = null;
-            try
-            {
-                // SensorEvent.values 는 Java "필드" — Call 이 아니라 Get 사용 (Call 은 항상 실패)
-                vals = sensorEvent.Get<float[]>("values");
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    vals = sensorEvent.Call<float[]>("getValues");
-                }
-                catch (Exception)
-                {
-                    // 기기별 예외
-                }
-            }
+            float[] vals = ReadSensorEventValues(sensorEvent);
             if (vals == null || vals.Length == 0) return;
             int steps = (int)vals[0];
             _owner._pendingRawSteps = steps;
@@ -226,8 +288,14 @@ public class PedometerManager : MonoBehaviour
                     {
                         int rate = smClass.GetStatic<int>("SENSOR_DELAY_UI");
                         _androidListener = new StepCounterListener(this);
-                        _androidSensorManager.Call("registerListener", _androidListener, sensor, rate);
+                        bool ok = _androidSensorManager.Call<bool>("registerListener", _androidListener, sensor, rate);
+                        if (!ok)
+                        {
+                            Debug.LogError("[PedometerManager] registerListener(TYPE_STEP_COUNTER) 가 false 를 반환했습니다.");
+                            return;
+                        }
                         _androidRegistered = true;
+                        Debug.Log("[PedometerManager] TYPE_STEP_COUNTER 리스너 등록 완료");
                     }
                 }
             }
