@@ -6,11 +6,11 @@ using UnityEditor;
 
 /// <summary>
 /// 본영 탭용 LaborPanel, MarketPanel, FarmPanel, SupplyPanel 자동 생성.
-/// 메뉴: Tools > 주식삼국지 > 본영 패널 생성
+/// 메뉴: StockThreeKingdoms/Home/홈패널 만들기
 /// </summary>
 public static class HomePanelCreator
 {
-    [MenuItem("Tools/주식삼국지/본영 패널 생성")]
+    [MenuItem("StockThreeKingdoms/Home/홈패널 만들기", false, 0)]
     public static void CreateHomePanels()
     {
         Canvas canvas = Object.FindObjectOfType<Canvas>();

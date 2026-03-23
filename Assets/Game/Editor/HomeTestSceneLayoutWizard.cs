@@ -18,7 +18,7 @@ public static class HomeTestSceneLayoutWizard
     const float ButtonMinHeight = 120f;
     const string MenuPath = "StockThreeKingdoms/Home/Setup TestScene Layout (HomePanels)";
 
-    [MenuItem(MenuPath)]
+    [MenuItem(MenuPath, false, 20)]
     static void Run()
     {
         var hp = GameObject.Find("HomePanels");
