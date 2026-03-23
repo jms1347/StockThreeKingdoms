@@ -137,4 +137,5 @@ CityDetailOverlay
    - `Assets/Prefabs/CityNode.prefab`, `CityDetailOverlay.prefab` 생성  
    - `Assets/Game/WorldMap/Resources/WorldMap/` 에 동일 프리팹 복사 → `WorldMapManager`가 `Resources.Load`로 로드
 2. (선택) **StockThreeKingdoms → 천하 → City Database 에셋 생성** — `CityDatabase` ScriptableObject + 50개 기본 데이터
-3. 빈 씬에 빈 GameObject 생성 후 **`WorldMapManager`** 부착, Play — `autoBootstrap`이 캔버스·스크롤·카메라·이벤트 시스템을 구성하고 지도를 채움
+3. **StockThreeKingdoms → 천하 → 씬에 천하 맵 자동 배치** — `WorldMap` 오브젝트와 `WorldMapManager`·프리팹(및 DB) 연결을 한 번에 처리  
+4. **Play** — `autoBootstrap`이 캔버스·스크롤·카메라·이벤트 시스템을 만들고, 50개 노드·연결선·오버레이를 **런타임에** 자동 배치합니다. (에디터 모드 씬 뷰에는 플레이 전 UI가 없을 수 있음)

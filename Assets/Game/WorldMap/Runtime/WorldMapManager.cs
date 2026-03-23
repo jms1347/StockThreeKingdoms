@@ -58,7 +58,7 @@ namespace ThreeKingdoms.WorldMap
 
             if (mapContent == null || cityNodePrefab == null)
             {
-                Debug.LogError("[WorldMapManager] mapContent 또는 CityNode 프리팹이 없습니다. Tools 메뉴로 프리팹을 생성하고 Resources에 복사했는지 확인하세요.");
+                Debug.LogError("[WorldMapManager] mapContent 또는 CityNode 프리팹이 없습니다. StockThreeKingdoms → 천하 → 성 노드·오버레이 프리팹 생성 후, 필요하면 씬에 천하 맵 자동 배치를 실행하세요.");
                 return;
             }
 

@@ -1,0 +1,714 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CityDatabase
+  m_EditorClassIdentifier: Assembly-CSharp:ThreeKingdoms.WorldMap:CityDatabase
+  cities:
+  - Id: 0
+    CityName: "\uD5C8\uCC3D"
+    GovernorName: "\uC870\uC870"
+    Population: 12000
+    PublicSentiment: 35
+    ChangeRatePercent: -2.8
+    Faction: 0
+    IsWar: 1
+    MapPosition: {x: 120, y: 140}
+  - Id: 1
+    CityName: "\uB099\uC591"
+    GovernorName: "\uC0AC\uB9C8\uC758"
+    Population: 12137
+    PublicSentiment: 46
+    ChangeRatePercent: -0.35
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 320, y: 140}
+  - Id: 2
+    CityName: "\uC5C5"
+    GovernorName: "\uC6D0\uC18C"
+    Population: 12274
+    PublicSentiment: 57
+    ChangeRatePercent: 2.1
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 520, y: 140}
+  - Id: 3
+    CityName: "\uC131\uB3C4"
+    GovernorName: "\uC720\uBE44"
+    Population: 12411
+    PublicSentiment: 68
+    ChangeRatePercent: -1.4
+    Faction: 3
+    IsWar: 1
+    MapPosition: {x: 720, y: 140}
+  - Id: 4
+    CityName: "\uAC74\uC5C5"
+    GovernorName: "\uC190\uAD8C"
+    Population: 12548
+    PublicSentiment: 79
+    ChangeRatePercent: 1.05
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 920, y: 140}
+  - Id: 5
+    CityName: "\uD328\uC591"
+    GovernorName: "\uC804\uC608"
+    Population: 12685
+    PublicSentiment: 35
+    ChangeRatePercent: -2.45
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 160, y: 300}
+  - Id: 6
+    CityName: "\uD55C\uC911"
+    GovernorName: "\uD558\uD6C4\uC5F0"
+    Population: 12822
+    PublicSentiment: 46
+    ChangeRatePercent: 0
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 360, y: 300}
+  - Id: 7
+    CityName: "\uC815\uC548"
+    GovernorName: "\uC0AC\uB9C8\uC0AC"
+    Population: 12959
+    PublicSentiment: 57
+    ChangeRatePercent: 2.45
+    Faction: 3
+    IsWar: 1
+    MapPosition: {x: 560, y: 300}
+  - Id: 8
+    CityName: "\uD5C8\uBE44"
+    GovernorName: "\uC804\uC6B1"
+    Population: 13096
+    PublicSentiment: 68
+    ChangeRatePercent: -1.05
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 760, y: 300}
+  - Id: 9
+    CityName: "\uAD11\uB989"
+    GovernorName: "\uC721\uC190"
+    Population: 13233
+    PublicSentiment: 79
+    ChangeRatePercent: 1.4
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 960, y: 300}
+  - Id: 10
+    CityName: "\uAC15\uB989"
+    GovernorName: "\uC8FC\uC720"
+    Population: 13370
+    PublicSentiment: 35
+    ChangeRatePercent: -2.1
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 120, y: 460}
+  - Id: 11
+    CityName: "\uD55C\uB2E8"
+    GovernorName: "\uACF5\uC190\uCC2C"
+    Population: 13507
+    PublicSentiment: 46
+    ChangeRatePercent: 0.35
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 320, y: 460}
+  - Id: 12
+    CityName: "\uC5C5\uACBD"
+    GovernorName: "\uC7A5\uB8CC"
+    Population: 13644
+    PublicSentiment: 57
+    ChangeRatePercent: 2.8
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 520, y: 460}
+  - Id: 13
+    CityName: "\uBD81\uD3C9"
+    GovernorName: "\uACF5\uC190\uB3C4"
+    Population: 13781
+    PublicSentiment: 68
+    ChangeRatePercent: -0.7
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 720, y: 460}
+  - Id: 14
+    CityName: "\uC11C\uC8FC"
+    GovernorName: "\uC870\uBE44"
+    Population: 13918
+    PublicSentiment: 79
+    ChangeRatePercent: 1.75
+    Faction: 2
+    IsWar: 1
+    MapPosition: {x: 920, y: 460}
+  - Id: 15
+    CityName: "\uB0A8\uAD70"
+    GovernorName: "\uC720\uD45C"
+    Population: 14055
+    PublicSentiment: 35
+    ChangeRatePercent: -1.75
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 160, y: 620}
+  - Id: 16
+    CityName: "\uBB34\uB989"
+    GovernorName: "\uC190\uCC45"
+    Population: 14192
+    PublicSentiment: 46
+    ChangeRatePercent: 0.7
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 360, y: 620}
+  - Id: 17
+    CityName: "\uC7A5\uC0AC"
+    GovernorName: "\uD669\uCDA9"
+    Population: 14329
+    PublicSentiment: 57
+    ChangeRatePercent: -2.8
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 560, y: 620}
+  - Id: 18
+    CityName: "\uACC4\uB9BC"
+    GovernorName: "\uC0AC\uB9C8\uC18C"
+    Population: 14466
+    PublicSentiment: 68
+    ChangeRatePercent: -0.35
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 760, y: 620}
+  - Id: 19
+    CityName: "\uAD50\uC9C0"
+    GovernorName: "\uC0AC\uB9C8\uC5FC"
+    Population: 14603
+    PublicSentiment: 79
+    ChangeRatePercent: 2.1
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 960, y: 620}
+  - Id: 20
+    CityName: "\uD569\uBE44"
+    GovernorName: "\uD558\uD6C4\uB3C8"
+    Population: 14740
+    PublicSentiment: 35
+    ChangeRatePercent: -1.4
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 120, y: 780}
+  - Id: 21
+    CityName: "\uC218\uCD98"
+    GovernorName: "\uC870\uC778"
+    Population: 14877
+    PublicSentiment: 46
+    ChangeRatePercent: 1.05
+    Faction: 1
+    IsWar: 1
+    MapPosition: {x: 320, y: 780}
+  - Id: 22
+    CityName: "\uC9C4\uB958"
+    GovernorName: "\uC7A5\uD569"
+    Population: 15014
+    PublicSentiment: 57
+    ChangeRatePercent: -2.45
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 520, y: 780}
+  - Id: 23
+    CityName: "\uD558\uBE44"
+    GovernorName: "\uC0AC\uB9C8\uC5FC"
+    Population: 15151
+    PublicSentiment: 68
+    ChangeRatePercent: 0
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 720, y: 780}
+  - Id: 24
+    CityName: "\uC591\uC8FC"
+    GovernorName: "\uB4F1\uC560"
+    Population: 15288
+    PublicSentiment: 79
+    ChangeRatePercent: 2.45
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 920, y: 780}
+  - Id: 25
+    CityName: "\uC5EC\uB0A8"
+    GovernorName: "\uAC15\uC720"
+    Population: 15425
+    PublicSentiment: 35
+    ChangeRatePercent: -1.05
+    Faction: 1
+    IsWar: 1
+    MapPosition: {x: 160, y: 940}
+  - Id: 26
+    CityName: "\uC774\uB3C4"
+    GovernorName: "\uC81C\uAC08\uB7C9"
+    Population: 15562
+    PublicSentiment: 46
+    ChangeRatePercent: 1.4
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 360, y: 940}
+  - Id: 27
+    CityName: "\uC131\uC870"
+    GovernorName: "\uAD00\uC6B0"
+    Population: 15699
+    PublicSentiment: 57
+    ChangeRatePercent: -2.1
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 560, y: 940}
+  - Id: 28
+    CityName: "\uAC15\uD558"
+    GovernorName: "\uC7A5\uBE44"
+    Population: 15836
+    PublicSentiment: 68
+    ChangeRatePercent: 0.35
+    Faction: 0
+    IsWar: 1
+    MapPosition: {x: 760, y: 940}
+  - Id: 29
+    CityName: "\uBB34\uAD00"
+    GovernorName: "\uC870\uC6B4"
+    Population: 15973
+    PublicSentiment: 79
+    ChangeRatePercent: 2.8
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 960, y: 940}
+  - Id: 30
+    CityName: "\uC5F0\uAD50"
+    GovernorName: "\uB9C8\uCD08"
+    Population: 16110
+    PublicSentiment: 35
+    ChangeRatePercent: -0.7
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 120, y: 1100}
+  - Id: 31
+    CityName: "\uC11C\uB7C9"
+    GovernorName: "\uC704\uC5F0"
+    Population: 16247
+    PublicSentiment: 46
+    ChangeRatePercent: 1.75
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 320, y: 1100}
+  - Id: 32
+    CityName: "\uCC9C\uC218"
+    GovernorName: "\uBC29\uD1B5"
+    Population: 16384
+    PublicSentiment: 57
+    ChangeRatePercent: -1.75
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 520, y: 1100}
+  - Id: 33
+    CityName: "\uC548\uC815"
+    GovernorName: "\uC11C\uC11C"
+    Population: 16521
+    PublicSentiment: 68
+    ChangeRatePercent: 0.7
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 720, y: 1100}
+  - Id: 34
+    CityName: "\uC0C1\uC6A9"
+    GovernorName: "\uBC95\uC815"
+    Population: 16658
+    PublicSentiment: 79
+    ChangeRatePercent: -2.8
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 920, y: 1100}
+  - Id: 35
+    CityName: "\uD55C\uD765"
+    GovernorName: "\uD669\uC6D4\uC601"
+    Population: 16795
+    PublicSentiment: 35
+    ChangeRatePercent: -0.35
+    Faction: 3
+    IsWar: 1
+    MapPosition: {x: 160, y: 1260}
+  - Id: 36
+    CityName: "\uD310\uAD70"
+    GovernorName: "\uD3EC\uD1B5"
+    Population: 16932
+    PublicSentiment: 46
+    ChangeRatePercent: 2.1
+    Faction: 0
+    IsWar: 1
+    MapPosition: {x: 360, y: 1260}
+  - Id: 37
+    CityName: "\uC808\uD604"
+    GovernorName: "\uBBF8\uCD95"
+    Population: 17069
+    PublicSentiment: 57
+    ChangeRatePercent: -1.4
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 560, y: 1260}
+  - Id: 38
+    CityName: "\uD574\uB9BC"
+    GovernorName: "\uC655\uD3C9"
+    Population: 17206
+    PublicSentiment: 68
+    ChangeRatePercent: 1.05
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 760, y: 1260}
+  - Id: 39
+    CityName: "\uC591\uCC45"
+    GovernorName: "\uBE44\uC2DC"
+    Population: 17343
+    PublicSentiment: 79
+    ChangeRatePercent: -2.45
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 960, y: 1260}
+  - Id: 40
+    CityName: "\uC800"
+    GovernorName: "\uBE44\uD64D"
+    Population: 17480
+    PublicSentiment: 35
+    ChangeRatePercent: 0
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 120, y: 1420}
+  - Id: 41
+    CityName: "\uC989\uBB35"
+    GovernorName: "\uC774\uC5C4"
+    Population: 17617
+    PublicSentiment: 46
+    ChangeRatePercent: 2.45
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 320, y: 1420}
+  - Id: 42
+    CityName: "\uACC4\uC591"
+    GovernorName: "\uC624\uBC18"
+    Population: 17754
+    PublicSentiment: 57
+    ChangeRatePercent: -1.05
+    Faction: 2
+    IsWar: 1
+    MapPosition: {x: 520, y: 1420}
+  - Id: 43
+    CityName: "\uC784\uD574"
+    GovernorName: "\uC7A5\uC758"
+    Population: 17891
+    PublicSentiment: 68
+    ChangeRatePercent: 1.4
+    Faction: 3
+    IsWar: 0
+    MapPosition: {x: 720, y: 1420}
+  - Id: 44
+    CityName: "\uB178\uAD6D"
+    GovernorName: "\uC0AC\uB9C8\uD718"
+    Population: 18028
+    PublicSentiment: 79
+    ChangeRatePercent: -2.1
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 920, y: 1420}
+  - Id: 45
+    CityName: "\uC720\uAD6C"
+    GovernorName: "\uC0AC\uB9C8\uC0AC"
+    Population: 18165
+    PublicSentiment: 35
+    ChangeRatePercent: 0.35
+    Faction: 1
+    IsWar: 0
+    MapPosition: {x: 160, y: 1580}
+  - Id: 46
+    CityName: "\uC194\uB77C"
+    GovernorName: "\uC0AC\uB9C8\uC18C"
+    Population: 18302
+    PublicSentiment: 46
+    ChangeRatePercent: 2.8
+    Faction: 2
+    IsWar: 0
+    MapPosition: {x: 360, y: 1580}
+  - Id: 47
+    CityName: "\uD0D0\uB77C"
+    GovernorName: "\uC0AC\uB9C8\uC5FC"
+    Population: 18439
+    PublicSentiment: 57
+    ChangeRatePercent: -0.7
+    Faction: 3
+    IsWar: 1
+    MapPosition: {x: 560, y: 1580}
+  - Id: 48
+    CityName: "\uC624\uD658"
+    GovernorName: "\uACF5\uC190\uC5F0"
+    Population: 18576
+    PublicSentiment: 68
+    ChangeRatePercent: 1.75
+    Faction: 0
+    IsWar: 0
+    MapPosition: {x: 760, y: 1580}
+  - Id: 49
+    CityName: "\uD568\uC591"
+    GovernorName: "\uD55C\uB9F9"
+    Population: 18713
+    PublicSentiment: 79
+    ChangeRatePercent: -1.75
+    Faction: 1
+    IsWar: 1
+    MapPosition: {x: 960, y: 1580}
+  edges:
+  - CityA: 0
+    CityB: 1
+  - CityA: 0
+    CityB: 5
+  - CityA: 0
+    CityB: 6
+  - CityA: 1
+    CityB: 2
+  - CityA: 1
+    CityB: 6
+  - CityA: 1
+    CityB: 7
+  - CityA: 2
+    CityB: 3
+  - CityA: 2
+    CityB: 7
+  - CityA: 2
+    CityB: 8
+  - CityA: 3
+    CityB: 4
+  - CityA: 3
+    CityB: 8
+  - CityA: 3
+    CityB: 9
+  - CityA: 4
+    CityB: 9
+  - CityA: 5
+    CityB: 6
+  - CityA: 5
+    CityB: 10
+  - CityA: 5
+    CityB: 11
+  - CityA: 6
+    CityB: 7
+  - CityA: 6
+    CityB: 11
+  - CityA: 6
+    CityB: 12
+  - CityA: 7
+    CityB: 8
+  - CityA: 7
+    CityB: 12
+  - CityA: 7
+    CityB: 13
+  - CityA: 8
+    CityB: 9
+  - CityA: 8
+    CityB: 13
+  - CityA: 8
+    CityB: 14
+  - CityA: 9
+    CityB: 14
+  - CityA: 10
+    CityB: 11
+  - CityA: 10
+    CityB: 15
+  - CityA: 10
+    CityB: 16
+  - CityA: 11
+    CityB: 12
+  - CityA: 11
+    CityB: 16
+  - CityA: 11
+    CityB: 17
+  - CityA: 12
+    CityB: 13
+  - CityA: 12
+    CityB: 17
+  - CityA: 12
+    CityB: 18
+  - CityA: 13
+    CityB: 14
+  - CityA: 13
+    CityB: 18
+  - CityA: 13
+    CityB: 19
+  - CityA: 14
+    CityB: 19
+  - CityA: 15
+    CityB: 16
+  - CityA: 15
+    CityB: 20
+  - CityA: 15
+    CityB: 21
+  - CityA: 16
+    CityB: 17
+  - CityA: 16
+    CityB: 21
+  - CityA: 16
+    CityB: 22
+  - CityA: 17
+    CityB: 18
+  - CityA: 17
+    CityB: 22
+  - CityA: 17
+    CityB: 23
+  - CityA: 18
+    CityB: 19
+  - CityA: 18
+    CityB: 23
+  - CityA: 18
+    CityB: 24
+  - CityA: 19
+    CityB: 24
+  - CityA: 20
+    CityB: 21
+  - CityA: 20
+    CityB: 25
+  - CityA: 20
+    CityB: 26
+  - CityA: 21
+    CityB: 22
+  - CityA: 21
+    CityB: 26
+  - CityA: 21
+    CityB: 27
+  - CityA: 22
+    CityB: 23
+  - CityA: 22
+    CityB: 27
+  - CityA: 22
+    CityB: 28
+  - CityA: 23
+    CityB: 24
+  - CityA: 23
+    CityB: 28
+  - CityA: 23
+    CityB: 29
+  - CityA: 24
+    CityB: 29
+  - CityA: 25
+    CityB: 26
+  - CityA: 25
+    CityB: 30
+  - CityA: 25
+    CityB: 31
+  - CityA: 26
+    CityB: 27
+  - CityA: 26
+    CityB: 31
+  - CityA: 26
+    CityB: 32
+  - CityA: 27
+    CityB: 28
+  - CityA: 27
+    CityB: 32
+  - CityA: 27
+    CityB: 33
+  - CityA: 28
+    CityB: 29
+  - CityA: 28
+    CityB: 33
+  - CityA: 28
+    CityB: 34
+  - CityA: 29
+    CityB: 34
+  - CityA: 30
+    CityB: 31
+  - CityA: 30
+    CityB: 35
+  - CityA: 30
+    CityB: 36
+  - CityA: 31
+    CityB: 32
+  - CityA: 31
+    CityB: 36
+  - CityA: 31
+    CityB: 37
+  - CityA: 32
+    CityB: 33
+  - CityA: 32
+    CityB: 37
+  - CityA: 32
+    CityB: 38
+  - CityA: 33
+    CityB: 34
+  - CityA: 33
+    CityB: 38
+  - CityA: 33
+    CityB: 39
+  - CityA: 34
+    CityB: 39
+  - CityA: 35
+    CityB: 36
+  - CityA: 35
+    CityB: 40
+  - CityA: 35
+    CityB: 41
+  - CityA: 36
+    CityB: 37
+  - CityA: 36
+    CityB: 41
+  - CityA: 36
+    CityB: 42
+  - CityA: 37
+    CityB: 38
+  - CityA: 37
+    CityB: 42
+  - CityA: 37
+    CityB: 43
+  - CityA: 38
+    CityB: 39
+  - CityA: 38
+    CityB: 43
+  - CityA: 38
+    CityB: 44
+  - CityA: 39
+    CityB: 44
+  - CityA: 40
+    CityB: 41
+  - CityA: 40
+    CityB: 45
+  - CityA: 40
+    CityB: 46
+  - CityA: 41
+    CityB: 42
+  - CityA: 41
+    CityB: 46
+  - CityA: 41
+    CityB: 47
+  - CityA: 42
+    CityB: 43
+  - CityA: 42
+    CityB: 47
+  - CityA: 42
+    CityB: 48
+  - CityA: 43
+    CityB: 44
+  - CityA: 43
+    CityB: 48
+  - CityA: 43
+    CityB: 49
+  - CityA: 44
+    CityB: 49
+  - CityA: 45
+    CityB: 46
+  - CityA: 46
+    CityB: 47
+  - CityA: 47
+    CityB: 48
+  - CityA: 48
+    CityB: 49
+  - CityA: 0
+    CityB: 14
+  - CityA: 4
+    CityB: 19
+  - CityA: 24
+    CityB: 35
