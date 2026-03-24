@@ -10,6 +10,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 {
     // ★ 구글 시트 URL (웹에 게시 -> TSV 형식으로 추출한 URL을 넣으세요)
     const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:I";
+    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:G";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -26,10 +27,15 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         Debug.Log("[GoogleSheetManager] 밸런스 데이터 다운로드 시작...");
 
         // 1. 구글 시트 긁어오기
-        string result = await GetGSDataToURL(levelRuleDataURL);
+        string levelRuleResult = await GetGSDataToURL(levelRuleDataURL);
+        string castleMasterResult = await GetGSDataToURL(castleMasterDataURL);
 
         // 2. 백그라운드 스레드에서 파싱 (게임 렉 방지)
-        await Task.Run(() => SetLevelRuleData(result));
+        await Task.Run(() =>
+        {
+            SetLevelRuleData(levelRuleResult);
+            SetCastleMasterData(castleMasterResult);
+        });
 
         // 3. 메인 스레드에서 DataManager 레디 상태로 변경
         DataManager.Instance.InitializeAllData();
@@ -101,6 +107,52 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
                 rule.farmMaxCapacity = rule.farmValuePerSec * 28800;
 
             DataManager.Instance.levelRuleMap[rule.level] = rule;
+        }
+    }
+
+    void SetCastleMasterData(string data)
+    {
+        if (string.IsNullOrEmpty(data)) return;
+
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] CastleMaster TSV가 아닌 HTML이 반환되었습니다. 시트가 '웹에 게시' 상태인지, URL이 정확한지 확인해 주세요.");
+            return;
+        }
+
+        DataManager.Instance.castleMasterDataMap.Clear();
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 7) continue;
+
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            CastleMasterData castleData = new CastleMasterData
+            {
+                id = id,
+                region = cells[1].Trim(),
+                name = cells[2].Trim()
+            };
+
+            string gradeRaw = cells[3].Trim();
+            if (int.TryParse(gradeRaw, out int gradeInt) && Enum.IsDefined(typeof(Grade), gradeInt))
+            {
+                castleData.grade = (Grade)gradeInt;
+            }
+            else if (!Enum.TryParse(gradeRaw, true, out castleData.grade))
+            {
+                castleData.grade = Grade.D;
+            }
+
+            float.TryParse(cells[4].Trim(), out castleData.baseValue);
+            int.TryParse(cells[5].Trim(), out castleData.maxGarrison);
+            int.TryParse(cells[6].Trim(), out castleData.initPopulation);
+
+            DataManager.Instance.castleMasterDataMap[castleData.id] = castleData;
         }
     }
 }

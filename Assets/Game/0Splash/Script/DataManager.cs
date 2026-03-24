@@ -15,6 +15,10 @@ public class DataManager : Singleton<DataManager>
     [DictionaryDrawerSettings(KeyLabel = "레벨", ValueLabel = "밸런스 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
     public Dictionary<int, LevelRuleData> levelRuleMap = new Dictionary<int, LevelRuleData>();
 
+    [ShowInInspector]
+    [DictionaryDrawerSettings(KeyLabel = "성 ID", ValueLabel = "성 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+    public Dictionary<string, CastleMasterData> castleMasterDataMap = new Dictionary<string, CastleMasterData>();
+
     public bool IsReady { get; private set; } = false;
 
     protected override void Awake()
@@ -26,12 +30,19 @@ public class DataManager : Singleton<DataManager>
     {
         IsReady = true;
         OnDataReady?.Invoke(); // 구독 중인 UI(UpgradeButton 등)가 초기화되도록 호출
-        Debug.Log($"[DataManager] 데이터 세팅 완료! 총 {levelRuleMap.Count}개의 데이터를 로드했습니다.");
+        Debug.Log($"[DataManager] 데이터 세팅 완료! 레벨룰 {levelRuleMap.Count}개, 성 마스터 {castleMasterDataMap.Count}개를 로드했습니다.");
     }
 
     public LevelRuleData GetLevelData(int level)
     {
         if (levelRuleMap.TryGetValue(level, out LevelRuleData data)) return data;
+        return null;
+    }
+
+    public CastleMasterData GetCastleMasterData(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id)) return null;
+        if (castleMasterDataMap.TryGetValue(id.Trim(), out CastleMasterData data)) return data;
         return null;
     }
 }
