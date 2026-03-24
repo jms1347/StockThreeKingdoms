@@ -45,3 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
   levelRuleDataSo: {fileID: 11400000, guid: 83d847c7921cdc643addafd8c615fc7c, type: 2}
+  castleMasterDataSo: {fileID: 11400000, guid: cd27aa09cb3f02541bf3cf7883c66663, type: 2}
+  generalMasterDataSo: {fileID: 11400000, guid: be3b6826230f7614c8a24a3dc655983a, type: 2}
+  buffMasterDataSo: {fileID: 11400000, guid: f5580141b7387d6488d5e698d11373f9, type: 2}

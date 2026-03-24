@@ -1,0 +1,1815 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2027691a9d95ceb42982722e1dbb9454, type: 3}
+  m_Name: LevelRuleDataSo
+  m_EditorClassIdentifier: Assembly-CSharp::LevelRuleDataSo
+  list:
+  - level: 1
+    laborCost: 100
+    laborValue: 5
+    marketCost: 500
+    marketValuePerSec: 15
+    marketMaxCapacity: 432000
+    farmCost: 1000
+    farmValuePerSec: 10
+    farmMaxCapacity: 288000
+  - level: 2
+    laborCost: 107
+    laborValue: 10
+    marketCost: 540
+    marketValuePerSec: 30
+    marketMaxCapacity: 864000
+    farmCost: 1080
+    farmValuePerSec: 20
+    farmMaxCapacity: 576000
+  - level: 3
+    laborCost: 114
+    laborValue: 15
+    marketCost: 583
+    marketValuePerSec: 45
+    marketMaxCapacity: 1296000
+    farmCost: 1166
+    farmValuePerSec: 30
+    farmMaxCapacity: 864000
+  - level: 4
+    laborCost: 123
+    laborValue: 20
+    marketCost: 630
+    marketValuePerSec: 60
+    marketMaxCapacity: 1728000
+    farmCost: 1260
+    farmValuePerSec: 40
+    farmMaxCapacity: 1152000
+  - level: 5
+    laborCost: 131
+    laborValue: 25
+    marketCost: 680
+    marketValuePerSec: 75
+    marketMaxCapacity: 2160000
+    farmCost: 1360
+    farmValuePerSec: 50
+    farmMaxCapacity: 1440000
+  - level: 6
+    laborCost: 140
+    laborValue: 30
+    marketCost: 735
+    marketValuePerSec: 90
+    marketMaxCapacity: 2592000
+    farmCost: 1469
+    farmValuePerSec: 60
+    farmMaxCapacity: 1728000
+  - level: 7
+    laborCost: 150
+    laborValue: 35
+    marketCost: 793
+    marketValuePerSec: 105
+    marketMaxCapacity: 3024000
+    farmCost: 1587
+    farmValuePerSec: 70
+    farmMaxCapacity: 2016000
+  - level: 8
+    laborCost: 161
+    laborValue: 40
+    marketCost: 857
+    marketValuePerSec: 120
+    marketMaxCapacity: 3456000
+    farmCost: 1714
+    farmValuePerSec: 80
+    farmMaxCapacity: 2304000
+  - level: 9
+    laborCost: 172
+    laborValue: 45
+    marketCost: 925
+    marketValuePerSec: 135
+    marketMaxCapacity: 3888000
+    farmCost: 1851
+    farmValuePerSec: 90
+    farmMaxCapacity: 2592000
+  - level: 10
+    laborCost: 184
+    laborValue: 50
+    marketCost: 1000
+    marketValuePerSec: 150
+    marketMaxCapacity: 4320000
+    farmCost: 1999
+    farmValuePerSec: 100
+    farmMaxCapacity: 2880000
+  - level: 11
+    laborCost: 197
+    laborValue: 55
+    marketCost: 1079
+    marketValuePerSec: 165
+    marketMaxCapacity: 4752000
+    farmCost: 2159
+    farmValuePerSec: 110
+    farmMaxCapacity: 3168000
+  - level: 12
+    laborCost: 210
+    laborValue: 60
+    marketCost: 1166
+    marketValuePerSec: 180
+    marketMaxCapacity: 5184000
+    farmCost: 2332
+    farmValuePerSec: 120
+    farmMaxCapacity: 3456000
+  - level: 13
+    laborCost: 225
+    laborValue: 65
+    marketCost: 1259
+    marketValuePerSec: 195
+    marketMaxCapacity: 5616000
+    farmCost: 2518
+    farmValuePerSec: 130
+    farmMaxCapacity: 3744000
+  - level: 14
+    laborCost: 241
+    laborValue: 70
+    marketCost: 1360
+    marketValuePerSec: 210
+    marketMaxCapacity: 6048000
+    farmCost: 2720
+    farmValuePerSec: 140
+    farmMaxCapacity: 4032000
+  - level: 15
+    laborCost: 258
+    laborValue: 75
+    marketCost: 1469
+    marketValuePerSec: 225
+    marketMaxCapacity: 6480000
+    farmCost: 2937
+    farmValuePerSec: 150
+    farmMaxCapacity: 4320000
+  - level: 16
+    laborCost: 276
+    laborValue: 80
+    marketCost: 1586
+    marketValuePerSec: 240
+    marketMaxCapacity: 6912000
+    farmCost: 3172
+    farmValuePerSec: 160
+    farmMaxCapacity: 4608000
+  - level: 17
+    laborCost: 295
+    laborValue: 85
+    marketCost: 1713
+    marketValuePerSec: 255
+    marketMaxCapacity: 7344000
+    farmCost: 3426
+    farmValuePerSec: 170
+    farmMaxCapacity: 4896000
+  - level: 18
+    laborCost: 316
+    laborValue: 90
+    marketCost: 1850
+    marketValuePerSec: 270
+    marketMaxCapacity: 7776000
+    farmCost: 3700
+    farmValuePerSec: 180
+    farmMaxCapacity: 5184000
+  - level: 19
+    laborCost: 338
+    laborValue: 95
+    marketCost: 1998
+    marketValuePerSec: 285
+    marketMaxCapacity: 8208000
+    farmCost: 3996
+    farmValuePerSec: 190
+    farmMaxCapacity: 5472000
+  - level: 20
+    laborCost: 362
+    laborValue: 100
+    marketCost: 2158
+    marketValuePerSec: 300
+    marketMaxCapacity: 8640000
+    farmCost: 4316
+    farmValuePerSec: 200
+    farmMaxCapacity: 5760000
+  - level: 21
+    laborCost: 387
+    laborValue: 105
+    marketCost: 2330
+    marketValuePerSec: 315
+    marketMaxCapacity: 9072000
+    farmCost: 4661
+    farmValuePerSec: 210
+    farmMaxCapacity: 6048000
+  - level: 22
+    laborCost: 414
+    laborValue: 110
+    marketCost: 2517
+    marketValuePerSec: 330
+    marketMaxCapacity: 9504000
+    farmCost: 5034
+    farmValuePerSec: 220
+    farmMaxCapacity: 6336000
+  - level: 23
+    laborCost: 443
+    laborValue: 115
+    marketCost: 2718
+    marketValuePerSec: 345
+    marketMaxCapacity: 9936000
+    farmCost: 5437
+    farmValuePerSec: 230
+    farmMaxCapacity: 6624000
+  - level: 24
+    laborCost: 474
+    laborValue: 120
+    marketCost: 2936
+    marketValuePerSec: 360
+    marketMaxCapacity: 10368000
+    farmCost: 5871
+    farmValuePerSec: 240
+    farmMaxCapacity: 6912000
+  - level: 25
+    laborCost: 507
+    laborValue: 125
+    marketCost: 3171
+    marketValuePerSec: 375
+    marketMaxCapacity: 10800000
+    farmCost: 6341
+    farmValuePerSec: 250
+    farmMaxCapacity: 7200000
+  - level: 26
+    laborCost: 543
+    laborValue: 130
+    marketCost: 3424
+    marketValuePerSec: 390
+    marketMaxCapacity: 11232000
+    farmCost: 6848
+    farmValuePerSec: 260
+    farmMaxCapacity: 7488000
+  - level: 27
+    laborCost: 581
+    laborValue: 135
+    marketCost: 3698
+    marketValuePerSec: 405
+    marketMaxCapacity: 11664000
+    farmCost: 7396
+    farmValuePerSec: 270
+    farmMaxCapacity: 7776000
+  - level: 28
+    laborCost: 621
+    laborValue: 140
+    marketCost: 3994
+    marketValuePerSec: 420
+    marketMaxCapacity: 12096000
+    farmCost: 7988
+    farmValuePerSec: 280
+    farmMaxCapacity: 8064000
+  - level: 29
+    laborCost: 665
+    laborValue: 145
+    marketCost: 4314
+    marketValuePerSec: 435
+    marketMaxCapacity: 12528000
+    farmCost: 8627
+    farmValuePerSec: 290
+    farmMaxCapacity: 8352000
+  - level: 30
+    laborCost: 711
+    laborValue: 150
+    marketCost: 4659
+    marketValuePerSec: 450
+    marketMaxCapacity: 12960000
+    farmCost: 9317
+    farmValuePerSec: 300
+    farmMaxCapacity: 8640000
+  - level: 31
+    laborCost: 761
+    laborValue: 155
+    marketCost: 5031
+    marketValuePerSec: 465
+    marketMaxCapacity: 13392000
+    farmCost: 10063
+    farmValuePerSec: 310
+    farmMaxCapacity: 8928000
+  - level: 32
+    laborCost: 815
+    laborValue: 160
+    marketCost: 5434
+    marketValuePerSec: 480
+    marketMaxCapacity: 13824000
+    farmCost: 10868
+    farmValuePerSec: 320
+    farmMaxCapacity: 9216000
+  - level: 33
+    laborCost: 872
+    laborValue: 165
+    marketCost: 5869
+    marketValuePerSec: 495
+    marketMaxCapacity: 14256000
+    farmCost: 11737
+    farmValuePerSec: 330
+    farmMaxCapacity: 9504000
+  - level: 34
+    laborCost: 933
+    laborValue: 170
+    marketCost: 6338
+    marketValuePerSec: 510
+    marketMaxCapacity: 14688000
+    farmCost: 12676
+    farmValuePerSec: 340
+    farmMaxCapacity: 9792000
+  - level: 35
+    laborCost: 998
+    laborValue: 175
+    marketCost: 6845
+    marketValuePerSec: 525
+    marketMaxCapacity: 15120000
+    farmCost: 13690
+    farmValuePerSec: 350
+    farmMaxCapacity: 10080000
+  - level: 36
+    laborCost: 1068
+    laborValue: 180
+    marketCost: 7393
+    marketValuePerSec: 540
+    marketMaxCapacity: 15552000
+    farmCost: 14785
+    farmValuePerSec: 360
+    farmMaxCapacity: 10368000
+  - level: 37
+    laborCost: 1142
+    laborValue: 185
+    marketCost: 7984
+    marketValuePerSec: 555
+    marketMaxCapacity: 15984000
+    farmCost: 15968
+    farmValuePerSec: 370
+    farmMaxCapacity: 10656000
+  - level: 38
+    laborCost: 1222
+    laborValue: 190
+    marketCost: 8623
+    marketValuePerSec: 570
+    marketMaxCapacity: 16416000
+    farmCost: 17246
+    farmValuePerSec: 380
+    farmMaxCapacity: 10944000
+  - level: 39
+    laborCost: 1308
+    laborValue: 195
+    marketCost: 9313
+    marketValuePerSec: 585
+    marketMaxCapacity: 16848000
+    farmCost: 18625
+    farmValuePerSec: 390
+    farmMaxCapacity: 11232000
+  - level: 40
+    laborCost: 1399
+    laborValue: 200
+    marketCost: 10058
+    marketValuePerSec: 600
+    marketMaxCapacity: 17280000
+    farmCost: 20115
+    farmValuePerSec: 400
+    farmMaxCapacity: 11520000
+  - level: 41
+    laborCost: 1497
+    laborValue: 205
+    marketCost: 10862
+    marketValuePerSec: 615
+    marketMaxCapacity: 17712000
+    farmCost: 21725
+    farmValuePerSec: 410
+    farmMaxCapacity: 11808000
+  - level: 42
+    laborCost: 1602
+    laborValue: 210
+    marketCost: 11731
+    marketValuePerSec: 630
+    marketMaxCapacity: 18144000
+    farmCost: 23462
+    farmValuePerSec: 420
+    farmMaxCapacity: 12096000
+  - level: 43
+    laborCost: 1714
+    laborValue: 215
+    marketCost: 12670
+    marketValuePerSec: 645
+    marketMaxCapacity: 18576000
+    farmCost: 25339
+    farmValuePerSec: 430
+    farmMaxCapacity: 12384000
+  - level: 44
+    laborCost: 1834
+    laborValue: 220
+    marketCost: 13683
+    marketValuePerSec: 660
+    marketMaxCapacity: 19008000
+    farmCost: 27367
+    farmValuePerSec: 440
+    farmMaxCapacity: 12672000
+  - level: 45
+    laborCost: 1963
+    laborValue: 225
+    marketCost: 14778
+    marketValuePerSec: 675
+    marketMaxCapacity: 19440000
+    farmCost: 29556
+    farmValuePerSec: 450
+    farmMaxCapacity: 12960000
+  - level: 46
+    laborCost: 2100
+    laborValue: 230
+    marketCost: 15960
+    marketValuePerSec: 690
+    marketMaxCapacity: 19872000
+    farmCost: 31920
+    farmValuePerSec: 460
+    farmMaxCapacity: 13248000
+  - level: 47
+    laborCost: 2247
+    laborValue: 235
+    marketCost: 17237
+    marketValuePerSec: 705
+    marketMaxCapacity: 20304000
+    farmCost: 34474
+    farmValuePerSec: 470
+    farmMaxCapacity: 13536000
+  - level: 48
+    laborCost: 2405
+    laborValue: 240
+    marketCost: 18616
+    marketValuePerSec: 720
+    marketMaxCapacity: 20736000
+    farmCost: 37232
+    farmValuePerSec: 480
+    farmMaxCapacity: 13824000
+  - level: 49
+    laborCost: 2573
+    laborValue: 245
+    marketCost: 20105
+    marketValuePerSec: 735
+    marketMaxCapacity: 21168000
+    farmCost: 40211
+    farmValuePerSec: 490
+    farmMaxCapacity: 14112000
+  - level: 50
+    laborCost: 2753
+    laborValue: 250
+    marketCost: 21714
+    marketValuePerSec: 750
+    marketMaxCapacity: 21600000
+    farmCost: 43427
+    farmValuePerSec: 500
+    farmMaxCapacity: 14400000
+  - level: 51
+    laborCost: 2946
+    laborValue: 255
+    marketCost: 23451
+    marketValuePerSec: 765
+    marketMaxCapacity: 22032000
+    farmCost: 46902
+    farmValuePerSec: 510
+    farmMaxCapacity: 14688000
+  - level: 52
+    laborCost: 3152
+    laborValue: 260
+    marketCost: 25327
+    marketValuePerSec: 780
+    marketMaxCapacity: 22464000
+    farmCost: 50654
+    farmValuePerSec: 520
+    farmMaxCapacity: 14976000
+  - level: 53
+    laborCost: 3373
+    laborValue: 265
+    marketCost: 27353
+    marketValuePerSec: 795
+    marketMaxCapacity: 22896000
+    farmCost: 54706
+    farmValuePerSec: 530
+    farmMaxCapacity: 15264000
+  - level: 54
+    laborCost: 3609
+    laborValue: 270
+    marketCost: 29541
+    marketValuePerSec: 810
+    marketMaxCapacity: 23328000
+    farmCost: 59083
+    farmValuePerSec: 540
+    farmMaxCapacity: 15552000
+  - level: 55
+    laborCost: 3861
+    laborValue: 275
+    marketCost: 31905
+    marketValuePerSec: 825
+    marketMaxCapacity: 23760000
+    farmCost: 63809
+    farmValuePerSec: 550
+    farmMaxCapacity: 15840000
+  - level: 56
+    laborCost: 4132
+    laborValue: 280
+    marketCost: 34457
+    marketValuePerSec: 840
+    marketMaxCapacity: 24192000
+    farmCost: 68914
+    farmValuePerSec: 560
+    farmMaxCapacity: 16128000
+  - level: 57
+    laborCost: 4421
+    laborValue: 285
+    marketCost: 37213
+    marketValuePerSec: 855
+    marketMaxCapacity: 24624000
+    farmCost: 74427
+    farmValuePerSec: 570
+    farmMaxCapacity: 16416000
+  - level: 58
+    laborCost: 4730
+    laborValue: 290
+    marketCost: 40191
+    marketValuePerSec: 870
+    marketMaxCapacity: 25056000
+    farmCost: 80381
+    farmValuePerSec: 580
+    farmMaxCapacity: 16704000
+  - level: 59
+    laborCost: 5061
+    laborValue: 295
+    marketCost: 43406
+    marketValuePerSec: 885
+    marketMaxCapacity: 25488000
+    farmCost: 86812
+    farmValuePerSec: 590
+    farmMaxCapacity: 16992000
+  - level: 60
+    laborCost: 5416
+    laborValue: 300
+    marketCost: 46878
+    marketValuePerSec: 900
+    marketMaxCapacity: 25920000
+    farmCost: 93757
+    farmValuePerSec: 600
+    farmMaxCapacity: 17280000
+  - level: 61
+    laborCost: 5795
+    laborValue: 305
+    marketCost: 50629
+    marketValuePerSec: 915
+    marketMaxCapacity: 26352000
+    farmCost: 101257
+    farmValuePerSec: 610
+    farmMaxCapacity: 17568000
+  - level: 62
+    laborCost: 6200
+    laborValue: 310
+    marketCost: 54679
+    marketValuePerSec: 930
+    marketMaxCapacity: 26784000
+    farmCost: 109358
+    farmValuePerSec: 620
+    farmMaxCapacity: 17856000
+  - level: 63
+    laborCost: 6634
+    laborValue: 315
+    marketCost: 59053
+    marketValuePerSec: 945
+    marketMaxCapacity: 27216000
+    farmCost: 118106
+    farmValuePerSec: 630
+    farmMaxCapacity: 18144000
+  - level: 64
+    laborCost: 7099
+    laborValue: 320
+    marketCost: 63777
+    marketValuePerSec: 960
+    marketMaxCapacity: 27648000
+    farmCost: 127555
+    farmValuePerSec: 640
+    farmMaxCapacity: 18432000
+  - level: 65
+    laborCost: 7596
+    laborValue: 325
+    marketCost: 68880
+    marketValuePerSec: 975
+    marketMaxCapacity: 28080000
+    farmCost: 137759
+    farmValuePerSec: 650
+    farmMaxCapacity: 18720000
+  - level: 66
+    laborCost: 8127
+    laborValue: 330
+    marketCost: 74390
+    marketValuePerSec: 990
+    marketMaxCapacity: 28512000
+    farmCost: 148780
+    farmValuePerSec: 660
+    farmMaxCapacity: 19008000
+  - level: 67
+    laborCost: 8696
+    laborValue: 335
+    marketCost: 80341
+    marketValuePerSec: 1005
+    marketMaxCapacity: 28944000
+    farmCost: 160682
+    farmValuePerSec: 670
+    farmMaxCapacity: 19296000
+  - level: 68
+    laborCost: 9305
+    laborValue: 340
+    marketCost: 86768
+    marketValuePerSec: 1020
+    marketMaxCapacity: 29376000
+    farmCost: 173537
+    farmValuePerSec: 680
+    farmMaxCapacity: 19584000
+  - level: 69
+    laborCost: 9956
+    laborValue: 345
+    marketCost: 93710
+    marketValuePerSec: 1035
+    marketMaxCapacity: 29808000
+    farmCost: 187420
+    farmValuePerSec: 690
+    farmMaxCapacity: 19872000
+  - level: 70
+    laborCost: 10653
+    laborValue: 350
+    marketCost: 101207
+    marketValuePerSec: 1050
+    marketMaxCapacity: 30240000
+    farmCost: 202413
+    farmValuePerSec: 700
+    farmMaxCapacity: 20160000
+  - level: 71
+    laborCost: 11399
+    laborValue: 355
+    marketCost: 109303
+    marketValuePerSec: 1065
+    marketMaxCapacity: 30672000
+    farmCost: 218606
+    farmValuePerSec: 710
+    farmMaxCapacity: 20448000
+  - level: 72
+    laborCost: 12197
+    laborValue: 360
+    marketCost: 118047
+    marketValuePerSec: 1080
+    marketMaxCapacity: 31104000
+    farmCost: 236095
+    farmValuePerSec: 720
+    farmMaxCapacity: 20736000
+  - level: 73
+    laborCost: 13051
+    laborValue: 365
+    marketCost: 127491
+    marketValuePerSec: 1095
+    marketMaxCapacity: 31536000
+    farmCost: 254983
+    farmValuePerSec: 730
+    farmMaxCapacity: 21024000
+  - level: 74
+    laborCost: 13964
+    laborValue: 370
+    marketCost: 137691
+    marketValuePerSec: 1110
+    marketMaxCapacity: 31968000
+    farmCost: 275381
+    farmValuePerSec: 740
+    farmMaxCapacity: 21312000
+  - level: 75
+    laborCost: 14942
+    laborValue: 375
+    marketCost: 148706
+    marketValuePerSec: 1125
+    marketMaxCapacity: 32400000
+    farmCost: 297412
+    farmValuePerSec: 750
+    farmMaxCapacity: 21600000
+  - level: 76
+    laborCost: 15988
+    laborValue: 380
+    marketCost: 160602
+    marketValuePerSec: 1140
+    marketMaxCapacity: 32832000
+    farmCost: 321205
+    farmValuePerSec: 760
+    farmMaxCapacity: 21888000
+  - level: 77
+    laborCost: 17107
+    laborValue: 385
+    marketCost: 173450
+    marketValuePerSec: 1155
+    marketMaxCapacity: 33264000
+    farmCost: 346901
+    farmValuePerSec: 770
+    farmMaxCapacity: 22176000
+  - level: 78
+    laborCost: 18304
+    laborValue: 390
+    marketCost: 187326
+    marketValuePerSec: 1170
+    marketMaxCapacity: 33696000
+    farmCost: 374653
+    farmValuePerSec: 780
+    farmMaxCapacity: 22464000
+  - level: 79
+    laborCost: 19585
+    laborValue: 395
+    marketCost: 202313
+    marketValuePerSec: 1185
+    marketMaxCapacity: 34128000
+    farmCost: 404625
+    farmValuePerSec: 790
+    farmMaxCapacity: 22752000
+  - level: 80
+    laborCost: 20956
+    laborValue: 400
+    marketCost: 218498
+    marketValuePerSec: 1200
+    marketMaxCapacity: 34560000
+    farmCost: 436995
+    farmValuePerSec: 800
+    farmMaxCapacity: 23040000
+  - level: 81
+    laborCost: 22423
+    laborValue: 405
+    marketCost: 235977
+    marketValuePerSec: 1215
+    marketMaxCapacity: 34992000
+    farmCost: 471955
+    farmValuePerSec: 810
+    farmMaxCapacity: 23328000
+  - level: 82
+    laborCost: 23993
+    laborValue: 410
+    marketCost: 254856
+    marketValuePerSec: 1230
+    marketMaxCapacity: 35424000
+    farmCost: 509711
+    farmValuePerSec: 820
+    farmMaxCapacity: 23616000
+  - level: 83
+    laborCost: 25673
+    laborValue: 415
+    marketCost: 275244
+    marketValuePerSec: 1245
+    marketMaxCapacity: 35856000
+    farmCost: 550488
+    farmValuePerSec: 830
+    farmMaxCapacity: 23904000
+  - level: 84
+    laborCost: 27470
+    laborValue: 420
+    marketCost: 297264
+    marketValuePerSec: 1260
+    marketMaxCapacity: 36288000
+    farmCost: 594527
+    farmValuePerSec: 840
+    farmMaxCapacity: 24192000
+  - level: 85
+    laborCost: 29393
+    laborValue: 425
+    marketCost: 321045
+    marketValuePerSec: 1275
+    marketMaxCapacity: 36720000
+    farmCost: 642089
+    farmValuePerSec: 850
+    farmMaxCapacity: 24480000
+  - level: 86
+    laborCost: 31450
+    laborValue: 430
+    marketCost: 346728
+    marketValuePerSec: 1290
+    marketMaxCapacity: 37152000
+    farmCost: 693456
+    farmValuePerSec: 860
+    farmMaxCapacity: 24768000
+  - level: 87
+    laborCost: 33652
+    laborValue: 435
+    marketCost: 374467
+    marketValuePerSec: 1305
+    marketMaxCapacity: 37584000
+    farmCost: 748933
+    farmValuePerSec: 870
+    farmMaxCapacity: 25056000
+  - level: 88
+    laborCost: 36007
+    laborValue: 440
+    marketCost: 404424
+    marketValuePerSec: 1320
+    marketMaxCapacity: 38016000
+    farmCost: 808848
+    farmValuePerSec: 880
+    farmMaxCapacity: 25344000
+  - level: 89
+    laborCost: 38528
+    laborValue: 445
+    marketCost: 436778
+    marketValuePerSec: 1335
+    marketMaxCapacity: 38448000
+    farmCost: 873555
+    farmValuePerSec: 890
+    farmMaxCapacity: 25632000
+  - level: 90
+    laborCost: 41225
+    laborValue: 450
+    marketCost: 471720
+    marketValuePerSec: 1350
+    marketMaxCapacity: 38880000
+    farmCost: 943440
+    farmValuePerSec: 900
+    farmMaxCapacity: 25920000
+  - level: 91
+    laborCost: 44110
+    laborValue: 455
+    marketCost: 509458
+    marketValuePerSec: 1365
+    marketMaxCapacity: 39312000
+    farmCost: 1018915
+    farmValuePerSec: 910
+    farmMaxCapacity: 26208000
+  - level: 92
+    laborCost: 47198
+    laborValue: 460
+    marketCost: 550214
+    marketValuePerSec: 1380
+    marketMaxCapacity: 39744000
+    farmCost: 1100428
+    farmValuePerSec: 920
+    farmMaxCapacity: 26496000
+  - level: 93
+    laborCost: 50502
+    laborValue: 465
+    marketCost: 594231
+    marketValuePerSec: 1395
+    marketMaxCapacity: 40176000
+    farmCost: 1188463
+    farmValuePerSec: 930
+    farmMaxCapacity: 26784000
+  - level: 94
+    laborCost: 54037
+    laborValue: 470
+    marketCost: 641770
+    marketValuePerSec: 1410
+    marketMaxCapacity: 40608000
+    farmCost: 1283540
+    farmValuePerSec: 940
+    farmMaxCapacity: 27072000
+  - level: 95
+    laborCost: 57820
+    laborValue: 475
+    marketCost: 693111
+    marketValuePerSec: 1425
+    marketMaxCapacity: 41040000
+    farmCost: 1386223
+    farmValuePerSec: 950
+    farmMaxCapacity: 27360000
+  - level: 96
+    laborCost: 61867
+    laborValue: 480
+    marketCost: 748560
+    marketValuePerSec: 1440
+    marketMaxCapacity: 41472000
+    farmCost: 1497121
+    farmValuePerSec: 960
+    farmMaxCapacity: 27648000
+  - level: 97
+    laborCost: 66198
+    laborValue: 485
+    marketCost: 808445
+    marketValuePerSec: 1455
+    marketMaxCapacity: 41904000
+    farmCost: 1616890
+    farmValuePerSec: 970
+    farmMaxCapacity: 27936000
+  - level: 98
+    laborCost: 70831
+    laborValue: 490
+    marketCost: 873121
+    marketValuePerSec: 1470
+    marketMaxCapacity: 42336000
+    farmCost: 1746241
+    farmValuePerSec: 980
+    farmMaxCapacity: 28224000
+  - level: 99
+    laborCost: 75790
+    laborValue: 495
+    marketCost: 942970
+    marketValuePerSec: 1485
+    marketMaxCapacity: 42768000
+    farmCost: 1885941
+    farmValuePerSec: 990
+    farmMaxCapacity: 28512000
+  - level: 100
+    laborCost: 81095
+    laborValue: 500
+    marketCost: 1018408
+    marketValuePerSec: 1500
+    marketMaxCapacity: 43200000
+    farmCost: 2036816
+    farmValuePerSec: 1000
+    farmMaxCapacity: 28800000
+  - level: 101
+    laborCost: 86772
+    laborValue: 505
+    marketCost: 1099881
+    marketValuePerSec: 1515
+    marketMaxCapacity: 43632000
+    farmCost: 2199761
+    farmValuePerSec: 1010
+    farmMaxCapacity: 29088000
+  - level: 102
+    laborCost: 92846
+    laborValue: 510
+    marketCost: 1187871
+    marketValuePerSec: 1530
+    marketMaxCapacity: 44064000
+    farmCost: 2375742
+    farmValuePerSec: 1020
+    farmMaxCapacity: 29376000
+  - level: 103
+    laborCost: 99345
+    laborValue: 515
+    marketCost: 1282901
+    marketValuePerSec: 1545
+    marketMaxCapacity: 44496000
+    farmCost: 2565802
+    farmValuePerSec: 1030
+    farmMaxCapacity: 29664000
+  - level: 104
+    laborCost: 106299
+    laborValue: 520
+    marketCost: 1385533
+    marketValuePerSec: 1560
+    marketMaxCapacity: 44928000
+    farmCost: 2771066
+    farmValuePerSec: 1040
+    farmMaxCapacity: 29952000
+  - level: 105
+    laborCost: 113740
+    laborValue: 525
+    marketCost: 1496375
+    marketValuePerSec: 1575
+    marketMaxCapacity: 45360000
+    farmCost: 2992751
+    farmValuePerSec: 1050
+    farmMaxCapacity: 30240000
+  - level: 106
+    laborCost: 121702
+    laborValue: 530
+    marketCost: 1616085
+    marketValuePerSec: 1590
+    marketMaxCapacity: 45792000
+    farmCost: 3232171
+    farmValuePerSec: 1060
+    farmMaxCapacity: 30528000
+  - level: 107
+    laborCost: 130221
+    laborValue: 535
+    marketCost: 1745372
+    marketValuePerSec: 1605
+    marketMaxCapacity: 46224000
+    farmCost: 3490745
+    farmValuePerSec: 1070
+    farmMaxCapacity: 30816000
+  - level: 108
+    laborCost: 139336
+    laborValue: 540
+    marketCost: 1885002
+    marketValuePerSec: 1620
+    marketMaxCapacity: 46656000
+    farmCost: 3770004
+    farmValuePerSec: 1080
+    farmMaxCapacity: 31104000
+  - level: 109
+    laborCost: 149090
+    laborValue: 545
+    marketCost: 2035802
+    marketValuePerSec: 1635
+    marketMaxCapacity: 47088000
+    farmCost: 4071605
+    farmValuePerSec: 1090
+    farmMaxCapacity: 31392000
+  - level: 110
+    laborCost: 159526
+    laborValue: 550
+    marketCost: 2198666
+    marketValuePerSec: 1650
+    marketMaxCapacity: 47520000
+    farmCost: 4397333
+    farmValuePerSec: 1100
+    farmMaxCapacity: 31680000
+  - level: 111
+    laborCost: 170693
+    laborValue: 555
+    marketCost: 2374560
+    marketValuePerSec: 1665
+    marketMaxCapacity: 47952000
+    farmCost: 4749120
+    farmValuePerSec: 1110
+    farmMaxCapacity: 31968000
+  - level: 112
+    laborCost: 182641
+    laborValue: 560
+    marketCost: 2564525
+    marketValuePerSec: 1680
+    marketMaxCapacity: 48384000
+    farmCost: 5129049
+    farmValuePerSec: 1120
+    farmMaxCapacity: 32256000
+  - level: 113
+    laborCost: 195426
+    laborValue: 565
+    marketCost: 2769687
+    marketValuePerSec: 1695
+    marketMaxCapacity: 48816000
+    farmCost: 5539373
+    farmValuePerSec: 1130
+    farmMaxCapacity: 32544000
+  - level: 114
+    laborCost: 209106
+    laborValue: 570
+    marketCost: 2991261
+    marketValuePerSec: 1710
+    marketMaxCapacity: 49248000
+    farmCost: 5982523
+    farmValuePerSec: 1140
+    farmMaxCapacity: 32832000
+  - level: 115
+    laborCost: 223744
+    laborValue: 575
+    marketCost: 3230562
+    marketValuePerSec: 1725
+    marketMaxCapacity: 49680000
+    farmCost: 6461125
+    farmValuePerSec: 1150
+    farmMaxCapacity: 33120000
+  - level: 116
+    laborCost: 239406
+    laborValue: 580
+    marketCost: 3489007
+    marketValuePerSec: 1740
+    marketMaxCapacity: 50112000
+    farmCost: 6978015
+    farmValuePerSec: 1160
+    farmMaxCapacity: 33408000
+  - level: 117
+    laborCost: 256164
+    laborValue: 585
+    marketCost: 3768128
+    marketValuePerSec: 1755
+    marketMaxCapacity: 50544000
+    farmCost: 7536256
+    farmValuePerSec: 1170
+    farmMaxCapacity: 33696000
+  - level: 118
+    laborCost: 274096
+    laborValue: 590
+    marketCost: 4069578
+    marketValuePerSec: 1770
+    marketMaxCapacity: 50976000
+    farmCost: 8139156
+    farmValuePerSec: 1180
+    farmMaxCapacity: 33984000
+  - level: 119
+    laborCost: 293282
+    laborValue: 595
+    marketCost: 4395144
+    marketValuePerSec: 1785
+    marketMaxCapacity: 51408000
+    farmCost: 8790289
+    farmValuePerSec: 1190
+    farmMaxCapacity: 34272000
+  - level: 120
+    laborCost: 313812
+    laborValue: 600
+    marketCost: 4746756
+    marketValuePerSec: 1800
+    marketMaxCapacity: 51840000
+    farmCost: 9493512
+    farmValuePerSec: 1200
+    farmMaxCapacity: 34560000
+  - level: 121
+    laborCost: 335779
+    laborValue: 605
+    marketCost: 5126496
+    marketValuePerSec: 1815
+    marketMaxCapacity: 52272000
+    farmCost: 10252993
+    farmValuePerSec: 1210
+    farmMaxCapacity: 34848000
+  - level: 122
+    laborCost: 359283
+    laborValue: 610
+    marketCost: 5536616
+    marketValuePerSec: 1830
+    marketMaxCapacity: 52704000
+    farmCost: 11073232
+    farmValuePerSec: 1220
+    farmMaxCapacity: 35136000
+  - level: 123
+    laborCost: 384433
+    laborValue: 615
+    marketCost: 5979545
+    marketValuePerSec: 1845
+    marketMaxCapacity: 53136000
+    farmCost: 11959091
+    farmValuePerSec: 1230
+    farmMaxCapacity: 35424000
+  - level: 124
+    laborCost: 411344
+    laborValue: 620
+    marketCost: 6457909
+    marketValuePerSec: 1860
+    marketMaxCapacity: 53568000
+    farmCost: 12915818
+    farmValuePerSec: 1240
+    farmMaxCapacity: 35712000
+  - level: 125
+    laborCost: 440138
+    laborValue: 625
+    marketCost: 6974542
+    marketValuePerSec: 1875
+    marketMaxCapacity: 54000000
+    farmCost: 13949084
+    farmValuePerSec: 1250
+    farmMaxCapacity: 36000000
+  - level: 126
+    laborCost: 470947
+    laborValue: 630
+    marketCost: 7532505
+    marketValuePerSec: 1890
+    marketMaxCapacity: 54432000
+    farmCost: 15065010
+    farmValuePerSec: 1260
+    farmMaxCapacity: 36288000
+  - level: 127
+    laborCost: 503913
+    laborValue: 635
+    marketCost: 8135106
+    marketValuePerSec: 1905
+    marketMaxCapacity: 54864000
+    farmCost: 16270211
+    farmValuePerSec: 1270
+    farmMaxCapacity: 36576000
+  - level: 128
+    laborCost: 539187
+    laborValue: 640
+    marketCost: 8785914
+    marketValuePerSec: 1920
+    marketMaxCapacity: 55296000
+    farmCost: 17571828
+    farmValuePerSec: 1280
+    farmMaxCapacity: 36864000
+  - level: 129
+    laborCost: 576931
+    laborValue: 645
+    marketCost: 9488787
+    marketValuePerSec: 1935
+    marketMaxCapacity: 55728000
+    farmCost: 18977574
+    farmValuePerSec: 1290
+    farmMaxCapacity: 37152000
+  - level: 130
+    laborCost: 617316
+    laborValue: 650
+    marketCost: 10247890
+    marketValuePerSec: 1950
+    marketMaxCapacity: 56160000
+    farmCost: 20495780
+    farmValuePerSec: 1300
+    farmMaxCapacity: 37440000
+  - level: 131
+    laborCost: 660528
+    laborValue: 655
+    marketCost: 11067721
+    marketValuePerSec: 1965
+    marketMaxCapacity: 56592000
+    farmCost: 22135443
+    farmValuePerSec: 1310
+    farmMaxCapacity: 37728000
+  - level: 132
+    laborCost: 706765
+    laborValue: 660
+    marketCost: 11953139
+    marketValuePerSec: 1980
+    marketMaxCapacity: 57024000
+    farmCost: 23906278
+    farmValuePerSec: 1320
+    farmMaxCapacity: 38016000
+  - level: 133
+    laborCost: 756238
+    laborValue: 665
+    marketCost: 12909390
+    marketValuePerSec: 1995
+    marketMaxCapacity: 57456000
+    farmCost: 25818780
+    farmValuePerSec: 1330
+    farmMaxCapacity: 38304000
+  - level: 134
+    laborCost: 809175
+    laborValue: 670
+    marketCost: 13942141
+    marketValuePerSec: 2010
+    marketMaxCapacity: 57888000
+    farmCost: 27884283
+    farmValuePerSec: 1340
+    farmMaxCapacity: 38592000
+  - level: 135
+    laborCost: 865817
+    laborValue: 675
+    marketCost: 15057513
+    marketValuePerSec: 2025
+    marketMaxCapacity: 58320000
+    farmCost: 30115026
+    farmValuePerSec: 1350
+    farmMaxCapacity: 38880000
+  - level: 136
+    laborCost: 926424
+    laborValue: 680
+    marketCost: 16262114
+    marketValuePerSec: 2040
+    marketMaxCapacity: 58752000
+    farmCost: 32524228
+    farmValuePerSec: 1360
+    farmMaxCapacity: 39168000
+  - level: 137
+    laborCost: 991274
+    laborValue: 685
+    marketCost: 17563083
+    marketValuePerSec: 2055
+    marketMaxCapacity: 59184000
+    farmCost: 35126166
+    farmValuePerSec: 1370
+    farmMaxCapacity: 39456000
+  - level: 138
+    laborCost: 1060663
+    laborValue: 690
+    marketCost: 18968130
+    marketValuePerSec: 2070
+    marketMaxCapacity: 59616000
+    farmCost: 37936259
+    farmValuePerSec: 1380
+    farmMaxCapacity: 39744000
+  - level: 139
+    laborCost: 1134910
+    laborValue: 695
+    marketCost: 20485580
+    marketValuePerSec: 2085
+    marketMaxCapacity: 60048000
+    farmCost: 40971160
+    farmValuePerSec: 1390
+    farmMaxCapacity: 40032000
+  - level: 140
+    laborCost: 1214353
+    laborValue: 700
+    marketCost: 22124426
+    marketValuePerSec: 2100
+    marketMaxCapacity: 60480000
+    farmCost: 44248853
+    farmValuePerSec: 1400
+    farmMaxCapacity: 40320000
+  - level: 141
+    laborCost: 1299358
+    laborValue: 705
+    marketCost: 23894380
+    marketValuePerSec: 2115
+    marketMaxCapacity: 60912000
+    farmCost: 47788761
+    farmValuePerSec: 1410
+    farmMaxCapacity: 40608000
+  - level: 142
+    laborCost: 1390313
+    laborValue: 710
+    marketCost: 25805931
+    marketValuePerSec: 2130
+    marketMaxCapacity: 61344000
+    farmCost: 51611862
+    farmValuePerSec: 1420
+    farmMaxCapacity: 40896000
+  - level: 143
+    laborCost: 1487635
+    laborValue: 715
+    marketCost: 27870405
+    marketValuePerSec: 2145
+    marketMaxCapacity: 61776000
+    farmCost: 55740810
+    farmValuePerSec: 1430
+    farmMaxCapacity: 41184000
+  - level: 144
+    laborCost: 1591770
+    laborValue: 720
+    marketCost: 30100038
+    marketValuePerSec: 2160
+    marketMaxCapacity: 62208000
+    farmCost: 60200075
+    farmValuePerSec: 1440
+    farmMaxCapacity: 41472000
+  - level: 145
+    laborCost: 1703193
+    laborValue: 725
+    marketCost: 32508041
+    marketValuePerSec: 2175
+    marketMaxCapacity: 62640000
+    farmCost: 65016081
+    farmValuePerSec: 1450
+    farmMaxCapacity: 41760000
+  - level: 146
+    laborCost: 1822417
+    laborValue: 730
+    marketCost: 35108684
+    marketValuePerSec: 2190
+    marketMaxCapacity: 63072000
+    farmCost: 70217368
+    farmValuePerSec: 1460
+    farmMaxCapacity: 42048000
+  - level: 147
+    laborCost: 1949986
+    laborValue: 735
+    marketCost: 37917379
+    marketValuePerSec: 2205
+    marketMaxCapacity: 63504000
+    farmCost: 75834757
+    farmValuePerSec: 1470
+    farmMaxCapacity: 42336000
+  - level: 148
+    laborCost: 2086485
+    laborValue: 740
+    marketCost: 40950769
+    marketValuePerSec: 2220
+    marketMaxCapacity: 63936000
+    farmCost: 81901538
+    farmValuePerSec: 1480
+    farmMaxCapacity: 42624000
+  - level: 149
+    laborCost: 2232539
+    laborValue: 745
+    marketCost: 44226830
+    marketValuePerSec: 2235
+    marketMaxCapacity: 64368000
+    farmCost: 88453661
+    farmValuePerSec: 1490
+    farmMaxCapacity: 42912000
+  - level: 150
+    laborCost: 2388817
+    laborValue: 750
+    marketCost: 47764977
+    marketValuePerSec: 2250
+    marketMaxCapacity: 64800000
+    farmCost: 95529954
+    farmValuePerSec: 1500
+    farmMaxCapacity: 43200000
+  - level: 151
+    laborCost: 2556034
+    laborValue: 755
+    marketCost: 51586175
+    marketValuePerSec: 2265
+    marketMaxCapacity: 65232000
+    farmCost: 103172350
+    farmValuePerSec: 1510
+    farmMaxCapacity: 43488000
+  - level: 152
+    laborCost: 2734957
+    laborValue: 760
+    marketCost: 55713069
+    marketValuePerSec: 2280
+    marketMaxCapacity: 65664000
+    farmCost: 111426138
+    farmValuePerSec: 1520
+    farmMaxCapacity: 43776000
+  - level: 153
+    laborCost: 2926404
+    laborValue: 765
+    marketCost: 60170115
+    marketValuePerSec: 2295
+    marketMaxCapacity: 66096000
+    farmCost: 120340229
+    farmValuePerSec: 1530
+    farmMaxCapacity: 44064000
+  - level: 154
+    laborCost: 3131252
+    laborValue: 770
+    marketCost: 64983724
+    marketValuePerSec: 2310
+    marketMaxCapacity: 66528000
+    farmCost: 129967447
+    farmValuePerSec: 1540
+    farmMaxCapacity: 44352000
+  - level: 155
+    laborCost: 3350439
+    laborValue: 775
+    marketCost: 70182422
+    marketValuePerSec: 2325
+    marketMaxCapacity: 66960000
+    farmCost: 140364843
+    farmValuePerSec: 1550
+    farmMaxCapacity: 44640000
+  - level: 156
+    laborCost: 3584970
+    laborValue: 780
+    marketCost: 75797015
+    marketValuePerSec: 2340
+    marketMaxCapacity: 67392000
+    farmCost: 151594031
+    farmValuePerSec: 1560
+    farmMaxCapacity: 44928000
+  - level: 157
+    laborCost: 3835918
+    laborValue: 785
+    marketCost: 81860777
+    marketValuePerSec: 2355
+    marketMaxCapacity: 67824000
+    farmCost: 163721553
+    farmValuePerSec: 1570
+    farmMaxCapacity: 45216000
+  - level: 158
+    laborCost: 4104432
+    laborValue: 790
+    marketCost: 88409639
+    marketValuePerSec: 2370
+    marketMaxCapacity: 68256000
+    farmCost: 176819277
+    farmValuePerSec: 1580
+    farmMaxCapacity: 45504000
+  - level: 159
+    laborCost: 4391743
+    laborValue: 795
+    marketCost: 95482410
+    marketValuePerSec: 2385
+    marketMaxCapacity: 68688000
+    farmCost: 190964820
+    farmValuePerSec: 1590
+    farmMaxCapacity: 45792000
+  - level: 160
+    laborCost: 4699165
+    laborValue: 800
+    marketCost: 103121003
+    marketValuePerSec: 2400
+    marketMaxCapacity: 69120000
+    farmCost: 206242005
+    farmValuePerSec: 1600
+    farmMaxCapacity: 46080000
+  - level: 161
+    laborCost: 5028106
+    laborValue: 805
+    marketCost: 111370683
+    marketValuePerSec: 2415
+    marketMaxCapacity: 69552000
+    farmCost: 222741366
+    farmValuePerSec: 1610
+    farmMaxCapacity: 46368000
+  - level: 162
+    laborCost: 5380073
+    laborValue: 810
+    marketCost: 120280337
+    marketValuePerSec: 2430
+    marketMaxCapacity: 69984000
+    farmCost: 240560675
+    farmValuePerSec: 1620
+    farmMaxCapacity: 46656000
+  - level: 163
+    laborCost: 5756679
+    laborValue: 815
+    marketCost: 129902764
+    marketValuePerSec: 2445
+    marketMaxCapacity: 70416000
+    farmCost: 259805529
+    farmValuePerSec: 1630
+    farmMaxCapacity: 46944000
+  - level: 164
+    laborCost: 6159646
+    laborValue: 820
+    marketCost: 140294986
+    marketValuePerSec: 2460
+    marketMaxCapacity: 70848000
+    farmCost: 280589971
+    farmValuePerSec: 1640
+    farmMaxCapacity: 47232000
+  - level: 165
+    laborCost: 6590821
+    laborValue: 825
+    marketCost: 151518584
+    marketValuePerSec: 2475
+    marketMaxCapacity: 71280000
+    farmCost: 303037169
+    farmValuePerSec: 1650
+    farmMaxCapacity: 47520000
+  - level: 166
+    laborCost: 7052179
+    laborValue: 830
+    marketCost: 163640071
+    marketValuePerSec: 2490
+    marketMaxCapacity: 71712000
+    farmCost: 327280142
+    farmValuePerSec: 1660
+    farmMaxCapacity: 47808000
+  - level: 167
+    laborCost: 7545831
+    laborValue: 835
+    marketCost: 176731277
+    marketValuePerSec: 2505
+    marketMaxCapacity: 72144000
+    farmCost: 353462554
+    farmValuePerSec: 1670
+    farmMaxCapacity: 48096000
+  - level: 168
+    laborCost: 8074040
+    laborValue: 840
+    marketCost: 190869779
+    marketValuePerSec: 2520
+    marketMaxCapacity: 72576000
+    farmCost: 381739558
+    farmValuePerSec: 1680
+    farmMaxCapacity: 48384000
+  - level: 169
+    laborCost: 8639222
+    laborValue: 845
+    marketCost: 206139361
+    marketValuePerSec: 2535
+    marketMaxCapacity: 73008000
+    farmCost: 412278723
+    farmValuePerSec: 1690
+    farmMaxCapacity: 48672000
+  - level: 170
+    laborCost: 9243968
+    laborValue: 850
+    marketCost: 222630510
+    marketValuePerSec: 2550
+    marketMaxCapacity: 73440000
+    farmCost: 445261020
+    farmValuePerSec: 1700
+    farmMaxCapacity: 48960000
+  - level: 171
+    laborCost: 9891046
+    laborValue: 855
+    marketCost: 240440951
+    marketValuePerSec: 2565
+    marketMaxCapacity: 73872000
+    farmCost: 480881902
+    farmValuePerSec: 1710
+    farmMaxCapacity: 49248000
+  - level: 172
+    laborCost: 10583419
+    laborValue: 860
+    marketCost: 259676227
+    marketValuePerSec: 2580
+    marketMaxCapacity: 74304000
+    farmCost: 519352454
+    farmValuePerSec: 1720
+    farmMaxCapacity: 49536000
+  - level: 173
+    laborCost: 11324258
+    laborValue: 865
+    marketCost: 280450325
+    marketValuePerSec: 2595
+    marketMaxCapacity: 74736000
+    farmCost: 560900651
+    farmValuePerSec: 1730
+    farmMaxCapacity: 49824000
+  - level: 174
+    laborCost: 12116956
+    laborValue: 870
+    marketCost: 302886351
+    marketValuePerSec: 2610
+    marketMaxCapacity: 75168000
+    farmCost: 605772703
+    farmValuePerSec: 1740
+    farmMaxCapacity: 50112000
+  - level: 175
+    laborCost: 12965143
+    laborValue: 875
+    marketCost: 327117259
+    marketValuePerSec: 2625
+    marketMaxCapacity: 75600000
+    farmCost: 654234519
+    farmValuePerSec: 1750
+    farmMaxCapacity: 50400000
+  - level: 176
+    laborCost: 13872703
+    laborValue: 880
+    marketCost: 353286640
+    marketValuePerSec: 2640
+    marketMaxCapacity: 76032000
+    farmCost: 706573280
+    farmValuePerSec: 1760
+    farmMaxCapacity: 50688000
+  - level: 177
+    laborCost: 14843792
+    laborValue: 885
+    marketCost: 381549571
+    marketValuePerSec: 2655
+    marketMaxCapacity: 76464000
+    farmCost: 763099143
+    farmValuePerSec: 1770
+    farmMaxCapacity: 50976000
+  - level: 178
+    laborCost: 15882858
+    laborValue: 890
+    marketCost: 412073537
+    marketValuePerSec: 2670
+    marketMaxCapacity: 76896000
+    farmCost: 824147074
+    farmValuePerSec: 1780
+    farmMaxCapacity: 51264000
+  - level: 179
+    laborCost: 16994658
+    laborValue: 895
+    marketCost: 445039420
+    marketValuePerSec: 2685
+    marketMaxCapacity: 77328000
+    farmCost: 890078840
+    farmValuePerSec: 1790
+    farmMaxCapacity: 51552000
+  - level: 180
+    laborCost: 18184284
+    laborValue: 900
+    marketCost: 480642574
+    marketValuePerSec: 2700
+    marketMaxCapacity: 77760000
+    farmCost: 961285147
+    farmValuePerSec: 1800
+    farmMaxCapacity: 51840000
+  - level: 181
+    laborCost: 19457184
+    laborValue: 905
+    marketCost: 519093980
+    marketValuePerSec: 2715
+    marketMaxCapacity: 78192000
+    farmCost: 1038187959
+    farmValuePerSec: 1810
+    farmMaxCapacity: 52128000
+  - level: 182
+    laborCost: 20819187
+    laborValue: 910
+    marketCost: 560621498
+    marketValuePerSec: 2730
+    marketMaxCapacity: 78624000
+    farmCost: 1121242996
+    farmValuePerSec: 1820
+    farmMaxCapacity: 52416000
+  - level: 183
+    laborCost: 22276530
+    laborValue: 915
+    marketCost: 605471218
+    marketValuePerSec: 2745
+    marketMaxCapacity: 79056000
+    farmCost: 1210942436
+    farmValuePerSec: 1830
+    farmMaxCapacity: 52704000
+  - level: 184
+    laborCost: 23835887
+    laborValue: 920
+    marketCost: 653908915
+    marketValuePerSec: 2760
+    marketMaxCapacity: 79488000
+    farmCost: 1307817830
+    farmValuePerSec: 1840
+    farmMaxCapacity: 52992000
+  - level: 185
+    laborCost: 25504399
+    laborValue: 925
+    marketCost: 706221628
+    marketValuePerSec: 2775
+    marketMaxCapacity: 79920000
+    farmCost: 1412443257
+    farmValuePerSec: 1850
+    farmMaxCapacity: 53280000
+  - level: 186
+    laborCost: 27289707
+    laborValue: 930
+    marketCost: 762719359
+    marketValuePerSec: 2790
+    marketMaxCapacity: 80352000
+    farmCost: 1525438717
+    farmValuePerSec: 1860
+    farmMaxCapacity: 53568000
+  - level: 187
+    laborCost: 29199986
+    laborValue: 935
+    marketCost: 823736907
+    marketValuePerSec: 2805
+    marketMaxCapacity: 80784000
+    farmCost: 1647473815
+    farmValuePerSec: 1870
+    farmMaxCapacity: 53856000
+  - level: 188
+    laborCost: 31243985
+    laborValue: 940
+    marketCost: 889635860
+    marketValuePerSec: 2820
+    marketMaxCapacity: 81216000
+    farmCost: 1779271720
+    farmValuePerSec: 1880
+    farmMaxCapacity: 54144000
+  - level: 189
+    laborCost: 33431064
+    laborValue: 945
+    marketCost: 960806729
+    marketValuePerSec: 2835
+    marketMaxCapacity: 81648000
+    farmCost: 1921613458
+    farmValuePerSec: 1890
+    farmMaxCapacity: 54432000
+  - level: 190
+    laborCost: 35771239
+    laborValue: 950
+    marketCost: 1037671267
+    marketValuePerSec: 2850
+    marketMaxCapacity: 82080000
+    farmCost: 2075342534
+    farmValuePerSec: 1900
+    farmMaxCapacity: 54720000
+  - level: 191
+    laborCost: 38275226
+    laborValue: 955
+    marketCost: 1120684968
+    marketValuePerSec: 2865
+    marketMaxCapacity: 82512000
+    farmCost: 2241369937
+    farmValuePerSec: 1910
+    farmMaxCapacity: 55008000
+  - level: 192
+    laborCost: 40954491
+    laborValue: 960
+    marketCost: 1210339766
+    marketValuePerSec: 2880
+    marketMaxCapacity: 82944000
+    farmCost: 2420679532
+    farmValuePerSec: 1920
+    farmMaxCapacity: 55296000
+  - level: 193
+    laborCost: 43821306
+    laborValue: 965
+    marketCost: 1307166947
+    marketValuePerSec: 2895
+    marketMaxCapacity: 83376000
+    farmCost: 2614333894
+    farmValuePerSec: 1930
+    farmMaxCapacity: 55584000
+  - level: 194
+    laborCost: 46888797
+    laborValue: 970
+    marketCost: 1411740303
+    marketValuePerSec: 2910
+    marketMaxCapacity: 83808000
+    farmCost: 2823480606
+    farmValuePerSec: 1940
+    farmMaxCapacity: 55872000
+  - level: 195
+    laborCost: 50171013
+    laborValue: 975
+    marketCost: 1524679527
+    marketValuePerSec: 2925
+    marketMaxCapacity: 84240000
+    farmCost: 3049359054
+    farmValuePerSec: 1950
+    farmMaxCapacity: 56160000
+  - level: 196
+    laborCost: 53682984
+    laborValue: 980
+    marketCost: 1646653889
+    marketValuePerSec: 2940
+    marketMaxCapacity: 84672000
+    farmCost: 3293307779
+    farmValuePerSec: 1960
+    farmMaxCapacity: 56448000
+  - level: 197
+    laborCost: 57440793
+    laborValue: 985
+    marketCost: 1778386201
+    marketValuePerSec: 2955
+    marketMaxCapacity: 85104000
+    farmCost: 3556772401
+    farmValuePerSec: 1970
+    farmMaxCapacity: 56736000
+  - level: 198
+    laborCost: 61461648
+    laborValue: 990
+    marketCost: 1920657097
+    marketValuePerSec: 2970
+    marketMaxCapacity: 85536000
+    farmCost: 3841314193
+    farmValuePerSec: 1980
+    farmMaxCapacity: 57024000
+  - level: 199
+    laborCost: 65763964
+    laborValue: 995
+    marketCost: 2074309664
+    marketValuePerSec: 2985
+    marketMaxCapacity: 85968000
+    farmCost: 4148619329
+    farmValuePerSec: 1990
+    farmMaxCapacity: 57312000
+  - level: 200
+    laborCost: 70367441
+    laborValue: 1000
+    marketCost: 2240254437
+    marketValuePerSec: 3000
+    marketMaxCapacity: 86400000
+    farmCost: 4480508875
+    farmValuePerSec: 2000
+    farmMaxCapacity: 57600000

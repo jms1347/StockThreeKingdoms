@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09fd38e9ae09534da4efb9bb8e6bb87, type: 3}
+  m_Name: BuffMasterDataSo
+  m_EditorClassIdentifier: Assembly-CSharp::BuffMasterDataSo
+  list:
+  - id: B01
+    name: "\uD669\uAE08 \uC0AC\uACFC"
+    type: 0
+    value: 0.2
+    description: "\uC131 \uAC00\uCE58 \uBC30\uC728(Value Multiplier) \uC99D\uAC00"
+  - id: B02
+    name: "\uCCA0\uBCBD \uBC29\uC5B4"
+    type: 0
+    value: -0.3
+    description: "\uC804\uC7C1 \uC2DC \uBCD1\uC0AC \uC190\uC2E4\uB960(Slipage) \uAC10\uC18C"
+  - id: B03
+    name: "\uBBFC\uC2EC \uB2EC\uB798\uAE30"
+    type: 0
+    value: 5
+    description: "\uB9E4 \uD2F1(Tick)\uB9C8\uB2E4 \uBBFC\uC2EC \uC790\uB3D9 \uD68C\uBCF5\uB7C9
+      \uC99D\uAC00"
+  - id: B04
+    name: "\uACE0\uC218\uC775 \uBC30\uB2F9"
+    type: 0
+    value: 0.15
+    description: "\uC720\uC800\uB4E4\uC5D0\uAC8C \uC9C0\uAE09\uB418\uB294 \uBC30\uB2F9\uAE08
+      \uBCF4\uB108\uC2A4"
+  - id: B05
+    name: "\uAE09\uD589 \uC5F4\uCC28"
+    type: 0
+    value: -0.2
+    description: "\uD574\uB2F9 \uC131\uC73C\uB85C \uD30C\uBCD1/\uC774\uB3D9 \uC2DC
+      \uC2DD\uB7C9 \uC18C\uBAA8 \uAC10\uC18C"
+  - id: B06
+    name: "\uAC70\uD488 \uC81C\uC870\uAE30"
+    type: 0
+    value: 0.5
+    description: "\uBBFC\uC2EC \uC0C1\uC2B9 \uC2DC \uAC00\uD3ED \uC0C1\uC2B9(\uD558\uC774\uB9AC\uC2A4\uD06C
+      \uD558\uC774\uB9AC\uD134)"

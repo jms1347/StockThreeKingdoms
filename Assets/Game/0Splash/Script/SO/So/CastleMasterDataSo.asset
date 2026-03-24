@@ -1,0 +1,365 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c7d164325ca45449645c0b1793cbf1, type: 3}
+  m_Name: CastleMasterDataSo
+  m_EditorClassIdentifier: Assembly-CSharp::CastleMasterDataSo
+  list:
+  - id: C01
+    region: "\uC911\uC6D0"
+    name: "\uB099\uC591"
+    grade: 0
+    baseValue: 1000
+    maxGarrison: 500000
+    initPopulation: 100000
+  - id: C02
+    region: "\uC911\uC6D0"
+    name: "\uD5C8\uCC3D"
+    grade: 1
+    baseValue: 800
+    maxGarrison: 350000
+    initPopulation: 70000
+  - id: C03
+    region: "\uC911\uC6D0"
+    name: "\uC9C4\uB958"
+    grade: 2
+    baseValue: 500
+    maxGarrison: 200000
+    initPopulation: 40000
+  - id: C04
+    region: "\uD558\uBD81"
+    name: "\uC5C5\uC131"
+    grade: 1
+    baseValue: 750
+    maxGarrison: 400000
+    initPopulation: 80000
+  - id: C05
+    region: "\uD558\uBD81"
+    name: "\uBD81\uD3C9"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C06
+    region: "\uD558\uBD81"
+    name: "\uC591\uD3C9"
+    grade: 4
+    baseValue: 300
+    maxGarrison: 100000
+    initPopulation: 20000
+  - id: C07
+    region: "\uC11C\uBD81"
+    name: "\uC7A5\uC548"
+    grade: 0
+    baseValue: 900
+    maxGarrison: 450000
+    initPopulation: 90000
+  - id: C08
+    region: "\uC11C\uBD81"
+    name: "\uC11C\uB7C9"
+    grade: 3
+    baseValue: 350
+    maxGarrison: 120000
+    initPopulation: 25000
+  - id: C09
+    region: "\uC11C\uBD81"
+    name: "\uCC9C\uC218"
+    grade: 3
+    baseValue: 300
+    maxGarrison: 100000
+    initPopulation: 20000
+  - id: C10
+    region: "\uD615\uC8FC"
+    name: "\uC591\uC591"
+    grade: 1
+    baseValue: 600
+    maxGarrison: 250000
+    initPopulation: 50000
+  - id: C11
+    region: "\uD615\uC8FC"
+    name: "\uAC15\uB989"
+    grade: 1
+    baseValue: 550
+    maxGarrison: 220000
+    initPopulation: 45000
+  - id: C12
+    region: "\uD615\uC8FC"
+    name: "\uBB34\uB989"
+    grade: 4
+    baseValue: 250
+    maxGarrison: 80000
+    initPopulation: 15000
+  - id: C13
+    region: "\uC624\uAC15"
+    name: "\uAC74\uC5C5"
+    grade: 0
+    baseValue: 850
+    maxGarrison: 420000
+    initPopulation: 85000
+  - id: C14
+    region: "\uC624\uAC15"
+    name: "\uC624\uAD70"
+    grade: 1
+    baseValue: 650
+    maxGarrison: 300000
+    initPopulation: 60000
+  - id: C15
+    region: "\uC624\uAC15"
+    name: "\uC2DC\uC0C1"
+    grade: 2
+    baseValue: 450
+    maxGarrison: 180000
+    initPopulation: 35000
+  - id: C16
+    region: "\uC11C\uB0A8"
+    name: "\uC131\uB3C4"
+    grade: 1
+    baseValue: 700
+    maxGarrison: 380000
+    initPopulation: 75000
+  - id: C17
+    region: "\uC11C\uB0A8"
+    name: "\uAC15\uC8FC"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C18
+    region: "\uC11C\uB0A8"
+    name: "\uAC74\uB155"
+    grade: 4
+    baseValue: 200
+    maxGarrison: 50000
+    initPopulation: 10000
+  - id: C19
+    region: "\uAE30\uD0C0"
+    name: "\uC11C\uC8FC"
+    grade: 2
+    baseValue: 500
+    maxGarrison: 200000
+    initPopulation: 45000
+  - id: C20
+    region: "\uAE30\uD0C0"
+    name: "\uC18C\uD328"
+    grade: 5
+    baseValue: 150
+    maxGarrison: 30000
+    initPopulation: 5000
+  - id: C21
+    region: "\uC911\uC6D0"
+    name: "\uD638\uB85C\uAD00"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 100000
+    initPopulation: 15000
+  - id: C22
+    region: "\uC911\uC6D0"
+    name: "\uC644"
+    grade: 3
+    baseValue: 450
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C23
+    region: "\uC911\uC6D0"
+    name: "\uC5EC\uB0A8"
+    grade: 3
+    baseValue: 350
+    maxGarrison: 120000
+    initPopulation: 25000
+  - id: C24
+    region: "\uC911\uC6D0"
+    name: "\uBCF5\uC591"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C25
+    region: "\uC911\uC6D0"
+    name: "\uC2E0\uC57C"
+    grade: 4
+    baseValue: 300
+    maxGarrison: 100000
+    initPopulation: 20000
+  - id: C26
+    region: "\uC911\uC6D0"
+    name: "\uC218\uCD98"
+    grade: 2
+    baseValue: 450
+    maxGarrison: 180000
+    initPopulation: 35000
+  - id: C27
+    region: "\uD558\uBD81"
+    name: "\uB0A8\uD53C"
+    grade: 2
+    baseValue: 500
+    maxGarrison: 200000
+    initPopulation: 40000
+  - id: C28
+    region: "\uD558\uBD81"
+    name: "\uACC4"
+    grade: 3
+    baseValue: 350
+    maxGarrison: 100000
+    initPopulation: 20000
+  - id: C29
+    region: "\uD558\uBD81"
+    name: "\uB099\uB791"
+    grade: 5
+    baseValue: 200
+    maxGarrison: 50000
+    initPopulation: 10000
+  - id: C30
+    region: "\uD558\uBD81"
+    name: "\uD3C9\uC6D0"
+    grade: 2
+    baseValue: 450
+    maxGarrison: 180000
+    initPopulation: 35000
+  - id: C31
+    region: "\uC11C\uBD81"
+    name: "\uC548\uC815"
+    grade: 3
+    baseValue: 350
+    maxGarrison: 120000
+    initPopulation: 25000
+  - id: C32
+    region: "\uC11C\uBD81"
+    name: "\uBB34\uC704"
+    grade: 4
+    baseValue: 250
+    maxGarrison: 80000
+    initPopulation: 15000
+  - id: C33
+    region: "\uC11C\uBD81"
+    name: "\uB3C8\uD669"
+    grade: 4
+    baseValue: 300
+    maxGarrison: 70000
+    initPopulation: 12000
+  - id: C34
+    region: "\uC11C\uBD81"
+    name: "\uBB34\uB3C4"
+    grade: 4
+    baseValue: 300
+    maxGarrison: 100000
+    initPopulation: 20000
+  - id: C35
+    region: "\uD615\uC8FC"
+    name: "\uAC15\uD558"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C36
+    region: "\uD615\uC8FC"
+    name: "\uC7A5\uC0AC"
+    grade: 2
+    baseValue: 500
+    maxGarrison: 200000
+    initPopulation: 40000
+  - id: C37
+    region: "\uD615\uC8FC"
+    name: "\uC601\uB989"
+    grade: 5
+    baseValue: 200
+    maxGarrison: 60000
+    initPopulation: 12000
+  - id: C38
+    region: "\uD615\uC8FC"
+    name: "\uACC4\uC591"
+    grade: 4
+    baseValue: 250
+    maxGarrison: 80000
+    initPopulation: 15000
+  - id: C39
+    region: "\uC624\uAC15"
+    name: "\uD68C\uACC4"
+    grade: 3
+    baseValue: 450
+    maxGarrison: 180000
+    initPopulation: 35000
+  - id: C40
+    region: "\uC624\uAC15"
+    name: "\uAC74\uC548"
+    grade: 4
+    baseValue: 300
+    maxGarrison: 100000
+    initPopulation: 20000
+  - id: C41
+    region: "\uC624\uAC15"
+    name: "\uC608\uC7A5"
+    grade: 4
+    baseValue: 250
+    maxGarrison: 80000
+    initPopulation: 15000
+  - id: C42
+    region: "\uC11C\uB0A8"
+    name: "\uC790\uB3D9"
+    grade: 3
+    baseValue: 350
+    maxGarrison: 120000
+    initPopulation: 25000
+  - id: C43
+    region: "\uC11C\uB0A8"
+    name: "\uAC15\uC591"
+    grade: 5
+    baseValue: 200
+    maxGarrison: 60000
+    initPopulation: 12000
+  - id: C44
+    region: "\uC11C\uB0A8"
+    name: "\uC601\uC548"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C45
+    region: "\uC11C\uB0A8"
+    name: "\uC6B4\uB0A8"
+    grade: 5
+    baseValue: 200
+    maxGarrison: 50000
+    initPopulation: 10000
+  - id: C46
+    region: "\uAE30\uD0C0"
+    name: "\uD558\uBE44"
+    grade: 1
+    baseValue: 550
+    maxGarrison: 220000
+    initPopulation: 45000
+  - id: C47
+    region: "\uAE30\uD0C0"
+    name: "\uBD81\uD574"
+    grade: 3
+    baseValue: 400
+    maxGarrison: 150000
+    initPopulation: 30000
+  - id: C48
+    region: "\uAE30\uD0C0"
+    name: "\uAD11\uB989"
+    grade: 3
+    baseValue: 350
+    maxGarrison: 120000
+    initPopulation: 25000
+  - id: C49
+    region: "\uAE30\uD0C0"
+    name: "\uD569\uBE44"
+    grade: 2
+    baseValue: 450
+    maxGarrison: 180000
+    initPopulation: 35000
+  - id: C50
+    region: "\uAE30\uD0C0"
+    name: "\uB0AD\uC57C"
+    grade: 5
+    baseValue: 150
+    maxGarrison: 30000
+    initPopulation: 5000
