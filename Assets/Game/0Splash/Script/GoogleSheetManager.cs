@@ -12,7 +12,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 {
     // ★ 구글 시트 URL (웹에 게시 -> TSV 형식으로 추출한 URL을 넣으세요)
     const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:I";
-    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:G";
+    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:H";
     const string generalMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1008843975&range=A2:H";
     const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:E";
 
@@ -157,7 +157,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 7) continue;
+            if (cells.Length < 7) continue; // H(initialLord)는 옵션
 
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
@@ -183,8 +183,22 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             int.TryParse(cells[5].Trim(), out castleData.maxGarrison);
             int.TryParse(cells[6].Trim(), out castleData.initPopulation);
 
+            // H: initialLord (옵션) - 숫자(0~) 또는 문자열(WEI/SHU/WU/OTHERS/NONE)
+            castleData.initialLord = cells.Length > 7 ? ParseFaction(cells[7]) : Faction.NONE;
+
             dm.castleMasterDataMap[castleData.id] = castleData;
         }
+    }
+
+    static Faction ParseFaction(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return Faction.NONE;
+        raw = raw.Trim();
+        if (int.TryParse(raw, out int n) && Enum.IsDefined(typeof(Faction), n))
+            return (Faction)n;
+        if (Enum.TryParse(raw, true, out Faction f))
+            return f;
+        return Faction.NONE;
     }
 
     void SetGeneralMasterData(DataManager dm, string data)
@@ -355,6 +369,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             float.TryParse(cells[4].Trim(), out item.baseValue);
             int.TryParse(cells[5].Trim(), out item.maxGarrison);
             int.TryParse(cells[6].Trim(), out item.initPopulation);
+            item.initialLord = cells.Length > 7 ? ParseFaction(cells[7]) : Faction.NONE;
             list.Add(item);
         }
         return list;

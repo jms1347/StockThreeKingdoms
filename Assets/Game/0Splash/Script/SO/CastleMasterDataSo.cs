@@ -21,6 +21,7 @@ public class CastleMasterData
     public float baseValue;
     public int maxGarrison;
     public int initPopulation;
+    public Faction initialLord;
 }
 
 [CreateAssetMenu(fileName = "CastleMasterDataSo", menuName = "ScriptableObject/CastleMasterDataSo")]
