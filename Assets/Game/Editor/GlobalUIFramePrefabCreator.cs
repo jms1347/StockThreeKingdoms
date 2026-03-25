@@ -80,26 +80,61 @@ public static class GlobalUIFramePrefabCreator
         topLayout.childControlHeight = true;
         topLayout.childForceExpandWidth = true;
 
-        var userBox = new GameObject("UserBox", typeof(RectTransform));
-        userBox.transform.SetParent(topBar.transform, false);
-        userBox.AddComponent<LayoutElement>().preferredWidth = 380f;
-        var userTmp = CreateTMP(userBox.transform, "UserNameText", font, 30, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
-        userTmp.text = "User: ZhugeMaster01";
+        // 좌측: 프로필(절반)
+        var profileBox = new GameObject("ProfileBox", typeof(RectTransform));
+        profileBox.transform.SetParent(topBar.transform, false);
+        var profileLe = profileBox.AddComponent<LayoutElement>();
+        profileLe.flexibleWidth = 1f;
+        profileLe.minWidth = 320f;
 
-        var statBox = new GameObject("StatBox", typeof(RectTransform));
-        statBox.transform.SetParent(topBar.transform, false);
-        statBox.AddComponent<LayoutElement>().flexibleWidth = 1f;
-        var statLayout = statBox.AddComponent<HorizontalLayoutGroup>();
-        statLayout.spacing = 24f;
-        statLayout.childAlignment = TextAnchor.MiddleCenter;
-        statLayout.childControlWidth = false;
-        statLayout.childControlHeight = true;
-        statLayout.childForceExpandWidth = false;
+        var profileLayout = profileBox.AddComponent<HorizontalLayoutGroup>();
+        profileLayout.spacing = 12f;
+        profileLayout.childAlignment = TextAnchor.MiddleLeft;
+        profileLayout.childControlWidth = false;
+        profileLayout.childControlHeight = true;
+        profileLayout.childForceExpandWidth = false;
 
-        var assetsTmp = CreateTMP(statBox.transform, "TotalAssetsText", font, 28, FontStyles.Bold, TextAlignmentOptions.Center, new Color(0.96f, 0.88f, 0.35f, 1f));
-        assetsTmp.text = "Total Assets: 1,500,000 Gold";
-        var foodTmp = CreateTMP(statBox.transform, "FoodText", font, 28, FontStyles.Bold, TextAlignmentOptions.Center, new Color(0.85f, 0.90f, 1f, 1f));
-        foodTmp.text = "Food: 80,000";
+        var avatar = new GameObject("AvatarIcon", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        avatar.transform.SetParent(profileBox.transform, false);
+        var avatarImg = avatar.GetComponent<Image>();
+        avatarImg.sprite = uiSprite;
+        avatarImg.type = Image.Type.Sliced;
+        avatarImg.color = new Color(0.20f, 0.24f, 0.32f, 0.95f);
+        var avatarLe = avatar.GetComponent<LayoutElement>();
+        avatarLe.preferredWidth = 84f;
+        avatarLe.preferredHeight = 84f;
+
+        var userTmp = CreateTMP(profileBox.transform, "UserNameText", font, 30, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
+        userTmp.text = "ZhugeMaster01";
+        userTmp.enableAutoSizing = true;
+        userTmp.fontSizeMin = 18;
+        userTmp.fontSizeMax = 30;
+        userTmp.overflowMode = TextOverflowModes.Ellipsis;
+        var userLe = userTmp.gameObject.AddComponent<LayoutElement>();
+        userLe.flexibleWidth = 1f;
+        userLe.minWidth = 140f;
+
+        // 우측: 자원 3개(세로), 각 항목은 아이콘 + 값(라벨 텍스트 없음)
+        var resourceBox = new GameObject("ResourceBox", typeof(RectTransform));
+        resourceBox.transform.SetParent(topBar.transform, false);
+        var resLe = resourceBox.AddComponent<LayoutElement>();
+        resLe.flexibleWidth = 1f;
+        resLe.minWidth = 320f;
+
+        var resV = resourceBox.AddComponent<VerticalLayoutGroup>();
+        resV.spacing = 8f;
+        resV.childAlignment = TextAnchor.MiddleRight;
+        resV.childControlWidth = true;
+        resV.childControlHeight = true;
+        resV.childForceExpandWidth = true;
+        resV.childForceExpandHeight = true;
+
+        var assetsRow = CreateIconValueRow(resourceBox.transform, "AssetsRow", uiSprite, font, new Color(0.96f, 0.88f, 0.35f, 1f), out var assetsTmp);
+        assetsTmp.text = "1.5M";
+        var foodRow = CreateIconValueRow(resourceBox.transform, "FoodRow", uiSprite, font, new Color(0.85f, 0.90f, 1f, 1f), out var foodTmp);
+        foodTmp.text = "80K";
+        var soldiersRow = CreateIconValueRow(resourceBox.transform, "SoldiersRow", uiSprite, font, new Color(0.70f, 1f, 0.75f, 1f), out var soldiersTmp);
+        soldiersTmp.text = "0명";
 
         // BottomTabBar
         var bottom = new GameObject("BottomTabBar", typeof(RectTransform), typeof(Image));
@@ -137,6 +172,7 @@ public static class GlobalUIFramePrefabCreator
         so.FindProperty("userNameText").objectReferenceValue = userTmp;
         so.FindProperty("totalAssetsText").objectReferenceValue = assetsTmp;
         so.FindProperty("foodText").objectReferenceValue = foodTmp;
+        so.FindProperty("soldiersText").objectReferenceValue = soldiersTmp;
         so.FindProperty("bottomTabRoot").objectReferenceValue = bRt;
         so.FindProperty("homeButton").objectReferenceValue = homeBtn;
         so.FindProperty("marketButton").objectReferenceValue = marketBtn;
@@ -146,6 +182,43 @@ public static class GlobalUIFramePrefabCreator
         so.ApplyModifiedPropertiesWithoutUndo();
 
         return go;
+    }
+
+    static GameObject CreateIconValueRow(Transform parent, string name, Sprite uiSprite, TMP_FontAsset font, Color valueColor, out TextMeshProUGUI valueTmp)
+    {
+        var row = new GameObject(name, typeof(RectTransform));
+        row.transform.SetParent(parent, false);
+        var h = row.AddComponent<HorizontalLayoutGroup>();
+        h.spacing = 10f;
+        h.padding = new RectOffset(0, 0, 0, 0);
+        h.childAlignment = TextAnchor.MiddleRight;
+        h.childControlWidth = false;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = false;
+
+        var icon = new GameObject("Icon", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        icon.transform.SetParent(row.transform, false);
+        var img = icon.GetComponent<Image>();
+        img.sprite = uiSprite;
+        img.type = Image.Type.Sliced;
+        img.color = new Color(0.18f, 0.22f, 0.30f, 0.95f);
+        var le = icon.GetComponent<LayoutElement>();
+        le.preferredWidth = 34f;
+        le.preferredHeight = 34f;
+
+        valueTmp = CreateTMP(row.transform, "ValueText", font, 28, FontStyles.Bold, TextAlignmentOptions.Right, valueColor);
+        valueTmp.text = "0";
+        valueTmp.enableAutoSizing = true;
+        valueTmp.fontSizeMin = 16;
+        valueTmp.fontSizeMax = 28;
+        valueTmp.overflowMode = TextOverflowModes.Ellipsis;
+        valueTmp.raycastTarget = false;
+
+        var vLe = valueTmp.gameObject.AddComponent<LayoutElement>();
+        vLe.minWidth = 140f;
+        vLe.flexibleWidth = 1f;
+
+        return row;
     }
 
     static Button CreateTabButton(Transform parent, string name, string label, TMP_FontAsset font, Sprite uiSprite)

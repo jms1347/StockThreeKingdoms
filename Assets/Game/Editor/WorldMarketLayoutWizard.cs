@@ -15,6 +15,8 @@ using TMPro;
 public static class WorldMarketLayoutWizard
 {
     const string MenuPath = "StockThreeKingdoms/천하/천하탭 만들기 (MTS Layout)";
+    const float ContentTopInset = 160f;    // GlobalUI TopBar(140) + 여유
+    const float ContentBottomInset = 180f; // GlobalUI BottomTabBar(160) + 여유
 
     [MenuItem(MenuPath, false, 0)]
     public static void CreateWorldMarketLayout()
@@ -37,6 +39,7 @@ public static class WorldMarketLayoutWizard
         }
 
         RectTransform parent = canvas.transform as RectTransform;
+        parent = EnsureContentRoot(parent);
 
         var existing = GameObject.Find("WorldMarketRoot");
         if (existing != null)
@@ -66,7 +69,6 @@ public static class WorldMarketLayoutWizard
         vlg.childForceExpandWidth = true;
         vlg.childForceExpandHeight = false;
 
-        CreateTopBar(root.transform);
         CreateFactionMarketSharePanel(root.transform);
         CreateCastleStocksPanel(root.transform);
         CreateCityDetailPanel(root.transform);
@@ -75,43 +77,23 @@ public static class WorldMarketLayoutWizard
         Debug.Log("[WorldMarketLayoutWizard] 천하탭(MTS) 레이아웃 생성 완료. 씬 저장 후 런타임 바인딩 스크립트를 연결하세요.");
     }
 
-    static void CreateTopBar(Transform parent)
+    static RectTransform EnsureContentRoot(RectTransform canvasRoot)
     {
-        GameObject bar = new GameObject("TopBar", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        bar.transform.SetParent(parent, false);
-        bar.GetComponent<Image>().color = new Color(0.10f, 0.12f, 0.16f, 0.92f);
-        var le = bar.GetComponent<LayoutElement>();
-        le.minHeight = 96f;
-        le.preferredHeight = 112f;
+        var t = canvasRoot.Find("ContentRoot");
+        RectTransform rt;
+        if (t == null)
+        {
+            var go = new GameObject("ContentRoot", typeof(RectTransform));
+            go.transform.SetParent(canvasRoot, false);
+            rt = go.GetComponent<RectTransform>();
+            StretchFull(rt);
+            rt.offsetMin = new Vector2(20f, ContentBottomInset);
+            rt.offsetMax = new Vector2(-20f, -ContentTopInset);
+        }
+        else
+            rt = t as RectTransform;
 
-        var hlg = bar.AddComponent<HorizontalLayoutGroup>();
-        hlg.padding = new RectOffset(18, 18, 10, 10);
-        hlg.spacing = 12f;
-        hlg.childAlignment = TextAnchor.MiddleLeft;
-        hlg.childControlWidth = false;
-        hlg.childControlHeight = true;
-        hlg.childForceExpandWidth = false;
-
-        var userBox = new GameObject("UserBox", typeof(RectTransform));
-        userBox.transform.SetParent(bar.transform, false);
-        var userLe = userBox.AddComponent<LayoutElement>();
-        userLe.preferredWidth = 420f;
-
-        CreateTMP(userBox.transform, "UserLabel", "User: ZhugeMaster01", 28, FontStyles.Bold, TextAlignmentOptions.Left);
-
-        var assetsBox = new GameObject("AssetsBox", typeof(RectTransform));
-        assetsBox.transform.SetParent(bar.transform, false);
-        var assetsLe = assetsBox.AddComponent<LayoutElement>();
-        assetsLe.flexibleWidth = 1f;
-
-        var assetsH = assetsBox.AddComponent<HorizontalLayoutGroup>();
-        assetsH.childAlignment = TextAnchor.MiddleCenter;
-        assetsH.spacing = 24f;
-        assetsH.childControlWidth = false;
-        assetsH.childForceExpandWidth = false;
-
-        CreateTMP(assetsBox.transform, "TotalAssets", "Total Assets: 1,500,000 Gold", 26, FontStyles.Bold, TextAlignmentOptions.Center);
-        CreateTMP(assetsBox.transform, "Food", "Food: 80,000", 26, FontStyles.Bold, TextAlignmentOptions.Center);
+        return rt;
     }
 
     static void CreateFactionMarketSharePanel(Transform parent)

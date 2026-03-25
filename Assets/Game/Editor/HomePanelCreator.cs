@@ -10,6 +10,9 @@ using UnityEditor;
 /// </summary>
 public static class HomePanelCreator
 {
+    const float ContentTopInset = 160f;    // GlobalUI TopBar(140) + 여유
+    const float ContentBottomInset = 180f; // GlobalUI BottomTabBar(160) + 여유
+
     [MenuItem("StockThreeKingdoms/Home/홈패널 만들기", false, 0)]
     public static void CreateHomePanels()
     {
@@ -29,7 +32,7 @@ public static class HomePanelCreator
             }
         }
 
-        RectTransform parent = canvas.transform as RectTransform;
+        RectTransform parent = EnsureContentRoot(canvas);
         GameObject root = new GameObject("HomePanels");
         root.transform.SetParent(parent, false);
 
@@ -40,8 +43,8 @@ public static class HomePanelCreator
         {
             rootRect.anchorMin = new Vector2(0, 0);
             rootRect.anchorMax = new Vector2(1, 1);
-            rootRect.offsetMin = new Vector2(20, 20);
-            rootRect.offsetMax = new Vector2(-20, -20);
+            rootRect.offsetMin = Vector2.zero;
+            rootRect.offsetMax = Vector2.zero;
         }
 
         VerticalLayoutGroup rootLayout = root.AddComponent<VerticalLayoutGroup>();
@@ -52,7 +55,8 @@ public static class HomePanelCreator
         rootLayout.childForceExpandHeight = false;
         rootLayout.childForceExpandWidth = true;
 
-        CreateResourceBar(root.transform);
+        // ResourceBar는 GlobalUIManager 탑바로 대체합니다.
+        CreateButton(root.transform, "GateButton", "대문 터치 (금화 획득)");
         CreateLaborPanel(root.transform);
         CreateMarketPanel(root.transform);
         CreateFarmPanel(root.transform);
@@ -66,15 +70,36 @@ public static class HomePanelCreator
         Debug.Log("[HomePanelCreator] 본영 패널 생성 완료. 씬 저장 후 플레이해보세요.");
     }
 
+    static RectTransform EnsureContentRoot(Canvas canvas)
+    {
+        var parent = canvas.transform as RectTransform;
+        var t = parent.Find("ContentRoot");
+        RectTransform rt;
+        if (t == null)
+        {
+            var go = new GameObject("ContentRoot", typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = new Vector2(20f, ContentBottomInset);
+            rt.offsetMax = new Vector2(-20f, -ContentTopInset);
+        }
+        else
+            rt = t as RectTransform;
+
+        return rt;
+    }
+
     static void AddScriptsAndWireReferences(GameObject root)
     {
         root.AddComponent<HomeController>();
         HomeUIController ui = root.AddComponent<HomeUIController>();
 
         Transform t = root.transform;
-        ui.goldText = t.Find("ResourceBar/GoldText")?.GetComponent<TextMeshProUGUI>();
-        ui.grainText = t.Find("ResourceBar/GrainText")?.GetComponent<TextMeshProUGUI>();
-        ui.farmWorkersText = t.Find("ResourceBar/FarmWorkersText")?.GetComponent<TextMeshProUGUI>();
+        ui.goldText = null;
+        ui.grainText = null;
+        ui.farmWorkersText = null;
         ui.gateButton = t.Find("GateButton")?.GetComponent<Button>();
 
         ui.laborLabelText = t.Find("LaborPanel/LaborLabelText")?.GetComponent<TextMeshProUGUI>();
@@ -227,30 +252,7 @@ public static class HomePanelCreator
         return slider;
     }
 
-    static void CreateResourceBar(Transform parent)
-    {
-        GameObject bar = new GameObject("ResourceBar");
-        bar.transform.SetParent(parent, false);
-
-        Image barBg = bar.AddComponent<Image>();
-        barBg.color = new Color(0.15f, 0.15f, 0.2f, 0.9f);
-        RectTransform rect = bar.transform as RectTransform;
-        if (rect != null) rect.sizeDelta = new Vector2(0, 60);
-
-        HorizontalLayoutGroup hlg = bar.AddComponent<HorizontalLayoutGroup>();
-        hlg.spacing = 16;
-        hlg.padding = new RectOffset(0, 0, 0, 0);
-        hlg.childForceExpandWidth = true;
-
-        CreateText(bar.transform, "GoldText", "금화: 0", 16);
-        CreateText(bar.transform, "GrainText", "식량: 0", 16);
-        CreateText(bar.transform, "FarmWorkersText", "농장인력: 0", 16);
-
-        LayoutElement le = bar.AddComponent<LayoutElement>();
-        le.preferredHeight = 60;
-
-        CreateButton(parent, "GateButton", "대문 터치 (금화 획득)");
-    }
+    // ResourceBar는 GlobalUIManager 탑바로 대체합니다.
 
     static void CreateLaborPanel(Transform parent)
     {

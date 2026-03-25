@@ -15,7 +15,7 @@ public class SingletonLoader : MonoBehaviour
 
     [Header("Scene Transition")]
     [Tooltip("매니저 로드 완료 후 이동할 다음 씬의 이름입니다.")]
-    public string nextSceneName = "TestScene";
+    public string nextSceneName = "HomeScene";
 
     private void Awake()
     {

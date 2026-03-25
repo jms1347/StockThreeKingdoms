@@ -64,6 +64,7 @@ public class CollectionManager : MonoBehaviour
     void Start()
     {
         WarmFlyPoolsIfPossible();
+        TryResolveFlyTargetsFromGlobalUI();
     }
 
     void OnDestroy()
@@ -199,6 +200,7 @@ public class CollectionManager : MonoBehaviour
     void Update()
     {
         UpdatePileVisuals();
+        TryResolveFlyTargetsFromGlobalUI();
 
         if (Time.unscaledTime < _shakeCooldownUntil) return;
         if (homeController == null) return;
@@ -227,20 +229,57 @@ public class CollectionManager : MonoBehaviour
 #endif
     }
 
+    void TryResolveFlyTargetsFromGlobalUI()
+    {
+        // HomeScene에서 ResourceBar를 없애고 GlobalUI 탑바를 도착지로 쓰는 경우,
+        // GlobalUIManager가 늦게 로드되면 Start 시점엔 target이 null일 수 있음 → 매 프레임 가볍게 보강.
+        if (goldFlyTarget != null && grainFlyTarget != null) return;
+        var gui = GlobalUIManager.InstanceOrNull;
+        if (gui == null) return;
+        if (goldFlyTarget == null) goldFlyTarget = gui.AssetsTarget;
+        if (grainFlyTarget == null) grainFlyTarget = gui.FoodTarget;
+    }
+
     public void UpdatePileVisuals()
     {
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
 
-        long now = TimeManager.GetUnixNow();
-        long mLast = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
-        long fLast = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
+        // "수거할 자원이 있으면 더미도 반드시 쌓여있어야 함"
+        // → 시간 경과 기준이 아니라 실제 누적량(창고) 기반으로 더미를 켬.
+        int goldOn = 0;
+        int grainOn = 0;
+        if (homeController != null)
+        {
+            double mAcc = homeController.CurrentMarketAccumulated;
+            double mMax = homeController.GetMarketMaxCapacity();
+            double fAcc = homeController.CurrentFarmAccumulated;
+            double fMax = homeController.GetFarmMaxCapacity();
 
-        int goldOn = PileCountFromElapsedHours(now - mLast);
-        int grainOn = PileCountFromElapsedHours(now - fLast);
+            goldOn = PileCountFromAccumulation(mAcc, mMax);
+            grainOn = PileCountFromAccumulation(fAcc, fMax);
+        }
+        else
+        {
+            long now = TimeManager.GetUnixNow();
+            long mLast = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
+            long fLast = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
+            goldOn = PileCountFromElapsedHours(now - mLast);
+            grainOn = PileCountFromElapsedHours(now - fLast);
+        }
 
         SetPileArray(goldPiles, goldOn);
         SetPileArray(grainPiles, grainOn);
+    }
+
+    static int PileCountFromAccumulation(double acc, double max)
+    {
+        if (acc <= 0) return 0;
+        if (max <= 0) return 1;
+        double r = Mathf.Clamp01((float)(acc / max));
+        // 1~8로 매핑 (조금만 쌓여도 1개는 보이게)
+        int n = Mathf.Clamp(Mathf.CeilToInt((float)(r * 8.0)), 1, 8);
+        return n;
     }
 
     static int PileCountFromElapsedHours(long elapsedSeconds)
@@ -286,12 +325,9 @@ public class CollectionManager : MonoBehaviour
 
     public void PlayFlyEffect(long totalGold, long totalGrain)
     {
-        if (flyIconsRoot == null)
-        {
-            Debug.LogWarning("[CollectionManager] flyIconsRoot 미할당 — 즉시 입금으로 폴백");
-            ApplyImmediateFallback(totalGold, totalGrain);
-            return;
-        }
+        // "수거하면 무조건 애니메이션": flyIconsRoot가 없으면 런타임으로 생성해도 된다.
+        EnsureFlyRootIfNeeded();
+        TryResolveFlyTargetsFromGlobalUI();
 
         WarmFlyPoolsIfPossible();
 
@@ -302,6 +338,51 @@ public class CollectionManager : MonoBehaviour
             SpawnFliesForResource(totalGold, gVis, goldPiles, goldFlyTarget, true);
         if (totalGrain > 0)
             SpawnFliesForResource(totalGrain, grVis, grainPiles, grainFlyTarget, false);
+    }
+
+    void EnsureFlyRootIfNeeded()
+    {
+        if (flyIconsRoot != null) return;
+        var canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) canvas = UnityEngine.Object.FindObjectOfType<Canvas>();
+        if (canvas == null) return;
+
+        var t = canvas.transform.Find("FlyIconsRoot");
+        if (t != null)
+        {
+            flyIconsRoot = t as RectTransform;
+            EnsureFlyRootOverlayCanvas(flyIconsRoot);
+            return;
+        }
+
+        // GlobalUIManager가 별도 Canvas(sortingOrder=1000)를 쓰므로,
+        // 비행 아이콘은 그 위에 보이도록 오버레이 캔버스를 따로 둡니다.
+        var go = new GameObject("FlyIconsRoot", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+        var rt = go.GetComponent<RectTransform>();
+        go.transform.SetParent(canvas.transform, false);
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+        go.transform.SetAsLastSibling();
+        flyIconsRoot = rt;
+
+        EnsureFlyRootOverlayCanvas(flyIconsRoot);
+    }
+
+    static void EnsureFlyRootOverlayCanvas(RectTransform root)
+    {
+        if (root == null) return;
+        var c = root.GetComponent<Canvas>();
+        if (c == null) c = root.gameObject.AddComponent<Canvas>();
+        c.renderMode = RenderMode.ScreenSpaceOverlay;
+        c.overrideSorting = true;
+        c.sortingOrder = 1500;
+        var scaler = root.GetComponent<CanvasScaler>();
+        if (scaler == null) scaler = root.gameObject.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        if (root.GetComponent<GraphicRaycaster>() == null)
+            root.gameObject.AddComponent<GraphicRaycaster>();
     }
 
     void ApplyImmediateFallback(long totalGold, long totalGrain)

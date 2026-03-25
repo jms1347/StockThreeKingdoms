@@ -51,4 +51,5 @@ MonoBehaviour:
   fadeManagerPrefab: {fileID: 0}
   popupManagerPrefab: {fileID: 0}
   gameManagerPrefab: {fileID: 5719332064251454405, guid: 1bb95b5090c57eb45a6fd760dad7ccc2, type: 3}
+  globalUiManagerPrefab: {fileID: 4692649057593829185, guid: 49eea28b87867b04ea90f705a6333100, type: 3}
   nextSceneName: TestScene

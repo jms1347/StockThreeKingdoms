@@ -127,12 +127,14 @@ public class HomeUIController : MonoBehaviour
     void OnGoldChangedHandler(long gold)
     {
         RollGoldDisplay(gold);
+        PushGlobalTopBar();
         UpdateSupplyUI();
     }
 
     void OnGrainChangedHandler(long grain)
     {
         RollGrainDisplay(grain);
+        PushGlobalTopBar();
     }
 
     System.Collections.IEnumerator UpdateAccumulateUICoroutine()
@@ -192,7 +194,8 @@ public class HomeUIController : MonoBehaviour
             UpdateSupplyUI();
         });
         if (collectMarketButton != null)
-            collectMarketButton.onClick.AddListener(() => _controller?.CollectMarketGold());
+            collectMarketButton.onClick.AddListener(() =>
+                _controller?.TryFlyCollectFromWarehouse(collectionManager, requireActivePiles: false));
         WireHoldRepeat(farmUpgradeButton, () =>
         {
             _controller?.UpgradeFarm();
@@ -200,7 +203,8 @@ public class HomeUIController : MonoBehaviour
             UpdateSupplyUI();
         });
         if (collectFarmButton != null)
-            collectFarmButton.onClick.AddListener(() => _controller?.CollectFarmGrain());
+            collectFarmButton.onClick.AddListener(() =>
+                _controller?.TryFlyCollectFromWarehouse(collectionManager, requireActivePiles: false));
         WireHoldRepeat(hireFarmWorkerButton, () =>
         {
             _controller?.HireFarmWorkers(1);
@@ -247,6 +251,7 @@ public class HomeUIController : MonoBehaviour
         UpdateGoldUI(gm.currentGold, instant: true);
         UpdateGrainUI(gm.currentGrain, instant: true);
         UpdateFarmWorkersUI(gm.currentUser?.soldierCount ?? 0);
+        PushGlobalTopBar();
         UpdateLaborUI();
         UpdateMarketUI();
         UpdateFarmUI();
@@ -256,7 +261,7 @@ public class HomeUIController : MonoBehaviour
 
     void RollGoldDisplay(long target)
     {
-        if (goldText == null) return;
+        if (goldText == null) return; // 로컬 ResourceBar를 쓰는 씬에서만
         _goldRollTween?.Kill();
         long start = _displayGold;
         float p = 0f;
@@ -273,7 +278,7 @@ public class HomeUIController : MonoBehaviour
 
     void RollGrainDisplay(long target)
     {
-        if (grainText == null) return;
+        if (grainText == null) return; // 로컬 ResourceBar를 쓰는 씬에서만
         _grainRollTween?.Kill();
         long start = _displayGrain;
         float p = 0f;
@@ -290,7 +295,7 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateGoldUI(long gold, bool instant)
     {
-        if (goldText == null) return;
+        if (goldText == null) return; // 로컬 ResourceBar를 쓰는 씬에서만
         if (instant)
         {
             _goldRollTween?.Kill();
@@ -303,7 +308,7 @@ public class HomeUIController : MonoBehaviour
 
     void UpdateGrainUI(long grain, bool instant)
     {
-        if (grainText == null) return;
+        if (grainText == null) return; // 로컬 ResourceBar를 쓰는 씬에서만
         if (instant)
         {
             _grainRollTween?.Kill();
@@ -342,15 +347,29 @@ public class HomeUIController : MonoBehaviour
             if (i < stepRewardLabels.Length && stepRewardLabels[i] != null)
             {
                 int grain = i < HomeController.StepRewardGrain.Length ? HomeController.StepRewardGrain[i] : 0;
-                string state = claimed ? "(수령완료)" : canClaim ? "탭하여 수령" : "(미달성)";
-                stepRewardLabels[i].text = $"{HomeController.StepMilestones[i]:N0}보\n+{grain} 식량\n{state}";
+                // 텍스트는 짧게(레이아웃 깨짐 방지). 라벨은 아이콘으로 대체 예정이므로 군더더기 제거.
+                string state = claimed ? "완료" : canClaim ? "수령" : "";
+                stepRewardLabels[i].text = state.Length > 0
+                    ? $"{HomeController.StepMilestones[i]:N0}\n+{grain}\n{state}"
+                    : $"{HomeController.StepMilestones[i]:N0}\n+{grain}";
             }
         }
     }
 
     void UpdateFarmWorkersUI(long farmWorkers)
     {
-        if (farmWorkersText != null) farmWorkersText.text = farmWorkers.ToString("N0");
+        if (farmWorkersText != null) farmWorkersText.text = farmWorkers.ToString("N0"); // 구 로컬 표시용(선택)
+    }
+
+    void PushGlobalTopBar()
+    {
+        var gm = GameManager.InstanceOrNull;
+        var gui = GlobalUIManager.InstanceOrNull;
+        if (gm?.currentUser == null || gui == null) return;
+
+        // 홈탭은 로컬 ResourceBar 대신 GlobalUI 탑바에 표시
+        string userName = gm.currentUser.userName;
+        gui.SetTopBarNumbers(userName, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
     }
 
     void UpdateLaborUI()
