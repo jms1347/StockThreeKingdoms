@@ -8,15 +8,6 @@ public class DataModel : MonoBehaviour
 }
 
 
-public class CastleData {
-    public int castleId;           // 성 고유 ID (낙양, 장안 등) [cite: 14]
-    public string castleName;      // 성 이름 [cite: 14]
-    public long population;        // 현재 인구수 (생산량의 기초) [cite: 18]
-    public long goldStorage;       // 성 금고 보유 금화 [cite: 9, 18]
-    public long grainStorage;      // 성 창고 보유 식량 [cite: 18]
-    public float baseYieldRate;    // 기본 수익률 [cite: 14]
-    public int governorId;         // 현재 태수(대주주) ID [cite: 10, 18]
-}
 
 public class UserInvestment {
     public int castleId;
