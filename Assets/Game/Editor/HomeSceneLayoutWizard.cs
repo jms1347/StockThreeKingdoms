@@ -170,6 +170,7 @@ public static class HomeSceneLayoutWizard
 
         EnsureCenterRow(hp.transform);
         EnsureWarehouseRowPlacement(hp.transform);
+        EnsurePileDockPlacement(hp.transform);
         var ped = EnsurePedometerPanel(hp.transform);
         var pileDock = EnsurePileDock(hp.transform);
         var flyRoot = EnsureFlyIconsRoot(hp.transform);
@@ -219,6 +220,15 @@ public static class HomeSceneLayoutWizard
         var center = homeRoot.Find("CenterPanelsRow");
         if (center != null)
             row.SetSiblingIndex(center.GetSiblingIndex() + 1);
+    }
+
+    static void EnsurePileDockPlacement(Transform homeRoot)
+    {
+        var dock = homeRoot.Find("PileDock");
+        if (dock == null) return;
+        var gate = homeRoot.Find("GateButton");
+        if (gate != null)
+            dock.SetSiblingIndex(gate.GetSiblingIndex() + 1);
     }
 
     // ---- 아래부터는 기존 HomePanelCreator / HomeTestSceneLayoutWizard 로직 통합(필요 최소만) ----
@@ -346,8 +356,18 @@ public static class HomeSceneLayoutWizard
         GameObject btnRow = new GameObject("MarketButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
         Undo.RegisterCreatedObjectUndo(btnRow, "MarketButtons");
         btnRow.transform.SetParent(panel.transform, false);
-        btnRow.GetComponent<HorizontalLayoutGroup>().spacing = 8;
-        CreateButton(btnRow.transform, "MarketUpgradeButton", "업그레이드");
+        var hlg = btnRow.GetComponent<HorizontalLayoutGroup>();
+        hlg.spacing = 8;
+        hlg.childControlWidth = true;
+        hlg.childControlHeight = true;
+        hlg.childForceExpandWidth = true;
+        hlg.childForceExpandHeight = true;
+
+        var upgrade = CreateButton(btnRow.transform, "MarketUpgradeButton", "업그레이드");
+        var ule = upgrade.GetComponent<LayoutElement>() ?? upgrade.gameObject.AddComponent<LayoutElement>();
+        ule.minHeight = 140f;
+        ule.preferredHeight = 160f;
+        ule.flexibleHeight = 1f;
     }
 
     static void CreateFarmPanel(Transform parent)
@@ -357,8 +377,18 @@ public static class HomeSceneLayoutWizard
         GameObject btnRow = new GameObject("FarmButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
         Undo.RegisterCreatedObjectUndo(btnRow, "FarmButtons");
         btnRow.transform.SetParent(panel.transform, false);
-        btnRow.GetComponent<HorizontalLayoutGroup>().spacing = 8;
-        CreateButton(btnRow.transform, "FarmUpgradeButton", "업그레이드");
+        var hlg = btnRow.GetComponent<HorizontalLayoutGroup>();
+        hlg.spacing = 8;
+        hlg.childControlWidth = true;
+        hlg.childControlHeight = true;
+        hlg.childForceExpandWidth = true;
+        hlg.childForceExpandHeight = true;
+
+        var upgrade = CreateButton(btnRow.transform, "FarmUpgradeButton", "업그레이드");
+        var ule = upgrade.GetComponent<LayoutElement>() ?? upgrade.gameObject.AddComponent<LayoutElement>();
+        ule.minHeight = 140f;
+        ule.preferredHeight = 160f;
+        ule.flexibleHeight = 1f;
     }
 
     static void CreateWarehouseRow(Transform parent)
@@ -678,14 +708,29 @@ public static class HomeSceneLayoutWizard
     {
         Transform dock = homeRoot.Find("PileDock");
         if (dock != null) return dock as RectTransform;
-        var go = new GameObject("PileDock", typeof(RectTransform));
+        var go = new GameObject("PileDock", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
         Undo.RegisterCreatedObjectUndo(go, "PileDock");
         go.transform.SetParent(homeRoot, false);
         var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = new Vector2(520, 140);
-        rt.anchoredPosition = new Vector2(0, -40f);
+        rt.anchorMin = new Vector2(0, 1);
+        rt.anchorMax = new Vector2(1, 1);
+        rt.pivot = new Vector2(0.5f, 1f);
+        rt.sizeDelta = new Vector2(0, 0);
+
+        var le = go.GetComponent<LayoutElement>();
+        le.minHeight = 44f;
+        le.preferredHeight = 56f;
+        le.flexibleWidth = 1f;
+
+        var v = go.GetComponent<VerticalLayoutGroup>();
+        v.padding = new RectOffset(10, 10, 6, 6);
+        v.spacing = 6f;
+        v.childAlignment = TextAnchor.UpperCenter;
+        v.childControlWidth = true;
+        v.childControlHeight = true;
+        v.childForceExpandWidth = true;
+        v.childForceExpandHeight = false;
+
         return rt;
     }
 
@@ -754,6 +799,13 @@ public static class HomeSceneLayoutWizard
             goldRow = new GameObject("GoldPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
             Undo.RegisterCreatedObjectUndo(goldRow.gameObject, "GoldPilesRow");
             goldRow.SetParent(dock, false);
+            var h = goldRow.GetComponent<HorizontalLayoutGroup>();
+            h.spacing = 6f;
+            h.childAlignment = TextAnchor.MiddleCenter;
+            h.childControlWidth = false;
+            h.childControlHeight = false;
+            h.childForceExpandWidth = false;
+            h.childForceExpandHeight = false;
         }
         var grainRow = dock.Find("GrainPilesRow");
         if (grainRow == null)
@@ -761,6 +813,13 @@ public static class HomeSceneLayoutWizard
             grainRow = new GameObject("GrainPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
             Undo.RegisterCreatedObjectUndo(grainRow.gameObject, "GrainPilesRow");
             grainRow.SetParent(dock, false);
+            var h = grainRow.GetComponent<HorizontalLayoutGroup>();
+            h.spacing = 6f;
+            h.childAlignment = TextAnchor.MiddleCenter;
+            h.childControlWidth = false;
+            h.childControlHeight = false;
+            h.childForceExpandWidth = false;
+            h.childForceExpandHeight = false;
         }
         cm.goldPiles = EnsurePileIcons(goldRow, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
         cm.grainPiles = EnsurePileIcons(grainRow, "GrainPile", new Color(0.45f, 0.75f, 0.25f, 1f));
@@ -780,7 +839,7 @@ public static class HomeSceneLayoutWizard
                 Undo.RegisterCreatedObjectUndo(go, "Pile");
                 go.transform.SetParent(row, false);
                 go.GetComponent<Image>().color = c;
-                go.GetComponent<RectTransform>().sizeDelta = new Vector2(52, 52);
+                go.GetComponent<RectTransform>().sizeDelta = new Vector2(18, 18);
             }
             else go = ch.gameObject;
             go.SetActive(false);
