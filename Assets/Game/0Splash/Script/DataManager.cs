@@ -312,11 +312,40 @@ public class DataManager : Singleton<DataManager>
     /// </summary>
     public List<string> GetOrderedWorldCastleIds()
     {
+        return GetOrderedWorldCastleIds(WorldMarketCastleListFilter.All);
+    }
+
+    /// <summary>
+    /// 천하 탭 성 리스트 정렬 (필터 적용).
+    /// 우선순위: 위기(전쟁·재해) → 내 병력 투자 → 등급(SS→D) → CastleID 오름차순.
+    /// <see cref="WorldMarketCastleListFilter.ByGradeOnly"/>는 등급→ID만 사용.
+    /// </summary>
+    public List<string> GetOrderedWorldCastleIds(WorldMarketCastleListFilter filter)
+    {
         if (castleStateDataMap == null || castleStateDataMap.Count == 0)
             return new List<string>();
 
-        return castleStateDataMap.Values
-            .Where(s => s != null)
+        IEnumerable<CastleStateData> q = castleStateDataMap.Values.Where(s => s != null);
+        switch (filter)
+        {
+            case WorldMarketCastleListFilter.MyInvestments:
+                q = q.Where(s => s.userDeployedTroops > 0);
+                break;
+            case WorldMarketCastleListFilter.WarOrDisaster:
+                q = q.Where(s => s.isWar || s.isDisaster);
+                break;
+        }
+
+        if (filter == WorldMarketCastleListFilter.ByGradeOnly)
+        {
+            return q
+                .OrderBy(s => GetCastleGradeSortKey(s.id))
+                .ThenBy(s => s.id, StringComparer.Ordinal)
+                .Select(s => s.id)
+                .ToList();
+        }
+
+        return q
             .OrderByDescending(s => s.isWar || s.isDisaster)
             .ThenByDescending(s => s.userDeployedTroops > 0)
             .ThenBy(s => GetCastleGradeSortKey(s.id))
@@ -352,6 +381,7 @@ public class DataManager : Singleton<DataManager>
 
         s.userDeployedTroops = (int)newTotal;
         _stateDirty = true;
+        OnStateTicked?.Invoke();
     }
 
     // ========================================================================
@@ -423,6 +453,7 @@ public class DataManager : Singleton<DataManager>
         }
 
         _stateDirty = true;
+        OnStateTicked?.Invoke();
     }
 
     static Faction RandomOtherFaction(Faction old)
@@ -457,6 +488,101 @@ public class DataManager : Singleton<DataManager>
             s.currentBuyPrice = CalculateBuyPrice(s);
             s.currentSellPrice = CalculateSellPrice(s);
         }
+    }
+
+    /// <summary>
+    /// 월드/천하 UI 미리보기용: 모든 성 상태와 소식을 무작위로 채운 뒤 가격 재계산 및 UI 갱신 이벤트를 보냅니다.
+    /// <see cref="InitializeAllData"/> 이후(<see cref="IsReady"/>, <see cref="IsStateReady"/>)에 호출하세요.
+    /// </summary>
+    public void ApplyRandomWorldStatePreview()
+    {
+        if (!IsReady || !IsStateReady)
+        {
+            Debug.LogWarning("[DataManager] ApplyRandomWorldStatePreview: IsReady/IsStateReady가 아닙니다. 먼저 InitializeAllData()를 실행하세요.");
+            return;
+        }
+
+        if (castleStateDataMap == null || castleStateDataMap.Count == 0)
+        {
+            Debug.LogWarning("[DataManager] ApplyRandomWorldStatePreview: 성 상태 데이터가 없습니다. Castle 마스터(SO)를 확인하세요.");
+            return;
+        }
+
+        List<string> generalIds = null;
+        if (generalMasterDataMap != null && generalMasterDataMap.Count > 0)
+            generalIds = new List<string>(generalMasterDataMap.Keys);
+
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null || string.IsNullOrWhiteSpace(s.id)) continue;
+
+            var master = GetCastleMasterData(s.id);
+            int basePop = master != null ? master.initPopulation : 1000;
+            float popJitter = UnityEngine.Random.Range(0.75f, 1.25f);
+            s.currentPopulation = Mathf.Max(100, Mathf.RoundToInt(basePop * popJitter));
+
+            s.currentLord = RandomPreviewLordFaction();
+            s.currentSentiment = UnityEngine.Random.Range(18f, 100f);
+            s.isWar = UnityEngine.Random.value < 0.18f;
+            s.isDisaster = UnityEngine.Random.value < 0.12f;
+
+            if (generalIds != null && generalIds.Count > 0 && UnityEngine.Random.value < 0.35f)
+                s.currentGovernorId = generalIds[UnityEngine.Random.Range(0, generalIds.Count)];
+            else
+                s.currentGovernorId = "";
+
+            if (UnityEngine.Random.value < 0.25f)
+            {
+                s.userDeployedTroops = UnityEngine.Random.Range(200, 8000);
+                s.averagePurchasePrice = UnityEngine.Random.Range(5f, 120f);
+            }
+            else
+            {
+                s.userDeployedTroops = 0;
+                s.averagePurchasePrice = 0f;
+            }
+
+            if (s.sentimentHistory == null)
+                s.sentimentHistory = new List<float>(7);
+            s.sentimentHistory.Clear();
+            float sent = s.currentSentiment;
+            for (int i = 0; i < 7; i++)
+            {
+                s.sentimentHistory.Add(Mathf.Clamp(sent, 0f, 100f));
+                sent += UnityEngine.Random.Range(-8f, 8f);
+            }
+        }
+
+        if (worldNews == null)
+            worldNews = new List<WorldNewsItem>();
+        worldNews.Clear();
+
+        AddNews("[PREVIEW] 에디터 랜덤 스냅샷 적용됨.");
+        for (int i = 0; i < 6; i++)
+        {
+            int idx = UnityEngine.Random.Range(0, castleStateDataMap.Count);
+            var sample = castleStateDataMap.Values.ElementAt(idx);
+            if (sample == null) continue;
+            string name = GetCastleNameOrId(sample.id);
+            float r = UnityEngine.Random.value;
+            if (r < 0.33f)
+                AddNews($"[RUMOR] {name} 인근에서 군사 움직임이 포착되었습니다.");
+            else if (r < 0.66f)
+                AddNews($"[MARKET] {name} 민심이 들쭉날쭉합니다. (센티 {sample.currentSentiment:0}대)");
+            else
+                AddNews($"[INFO] {name} 인구 약 {sample.currentPopulation:N0}명 구간.");
+        }
+
+        RecalculateAllPrices();
+        _stateDirty = true;
+        OnStateTicked?.Invoke();
+    }
+
+    static Faction RandomPreviewLordFaction()
+    {
+        var pool = new[] { Faction.WEI, Faction.SHU, Faction.WU, Faction.OTHERS, Faction.NONE };
+        return pool[UnityEngine.Random.Range(0, pool.Length)];
     }
 
     float CalculateBuyPrice(CastleStateData s)

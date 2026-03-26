@@ -8,7 +8,7 @@ using TMPro;
 /// <summary>
 /// 천하탭(MTS) 레이아웃 자동 생성.
 /// 메뉴: StockThreeKingdoms/천하/천하탭 만들기 (MTS Layout)
-/// - 상단: Faction Market Share(파이 차트 자리)
+/// - 상단: Faction Market Share(가로 스택 막대)
 /// - 중단: NewsTicker + Castle Stocks 리스트(ScrollRect + 템플릿 2종)
 /// - 팝업: CityDetailPanel(기본 비활성)
 /// </summary>
@@ -99,59 +99,61 @@ public static class WorldMarketLayoutWizard
     static void CreateFactionMarketSharePanel(Transform parent)
     {
         GameObject panel = CreatePanel(parent, "FactionMarketSharePanel", "Faction Market Share");
-        panel.GetComponent<LayoutElement>().minHeight = 260f;
+        panel.GetComponent<LayoutElement>().minHeight = 132f;
 
         var body = new GameObject("Body", typeof(RectTransform));
         body.transform.SetParent(panel.transform, false);
-        var bodyH = body.AddComponent<HorizontalLayoutGroup>();
-        bodyH.spacing = 16f;
-        bodyH.childAlignment = TextAnchor.MiddleLeft;
-        bodyH.childControlWidth = true;
-        bodyH.childControlHeight = true;
-        bodyH.childForceExpandWidth = true;
+        var bodyV = body.AddComponent<VerticalLayoutGroup>();
+        bodyV.spacing = 8f;
+        bodyV.childAlignment = TextAnchor.UpperLeft;
+        bodyV.childControlWidth = true;
+        bodyV.childControlHeight = true;
+        bodyV.childForceExpandWidth = true;
+        bodyV.childForceExpandHeight = false;
 
         Sprite knob = TryGetUiKnobSprite();
 
-        // 파이: fillAmount(Radial360) 세그먼트 4개 + 도넛 홀
-        var pie = new GameObject("PieChart", typeof(RectTransform), typeof(LayoutElement));
-        Undo.RegisterCreatedObjectUndo(pie, "PieChart");
-        pie.transform.SetParent(body.transform, false);
-        var pieLe = pie.GetComponent<LayoutElement>();
-        pieLe.preferredWidth = 220f;
-        pieLe.preferredHeight = 220f;
+        // 가로 100% 스택 막대 + Segments(앵커는 런타임에서 비율로 설정)
+        var barRoot = new GameObject("FactionShareBar", typeof(RectTransform), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(barRoot, "FactionShareBar");
+        barRoot.transform.SetParent(body.transform, false);
+        var barLe = barRoot.GetComponent<LayoutElement>();
+        barLe.minHeight = 36f;
+        barLe.preferredHeight = 36f;
+        barLe.flexibleWidth = 1f;
 
         var segments = new GameObject("Segments", typeof(RectTransform));
-        Undo.RegisterCreatedObjectUndo(segments, "PieSegments");
-        segments.transform.SetParent(pie.transform, false);
+        Undo.RegisterCreatedObjectUndo(segments, "BarSegments");
+        segments.transform.SetParent(barRoot.transform, false);
         StretchFull(segments.GetComponent<RectTransform>());
 
-        Image imgWei = CreatePieSegment(segments.transform, "SegmentWei", new Color(0.20f, 0.55f, 0.90f), knob);
-        Image imgShu = CreatePieSegment(segments.transform, "SegmentShu", new Color(0.35f, 0.80f, 0.55f), knob);
-        Image imgWu = CreatePieSegment(segments.transform, "SegmentWu", new Color(0.95f, 0.40f, 0.35f), knob);
-        Image imgOth = CreatePieSegment(segments.transform, "SegmentOthers", new Color(0.55f, 0.58f, 0.66f), knob);
+        Image imgWei = CreateBarStackSegment(segments.transform, "SegmentWei", new Color(0.20f, 0.55f, 0.90f), knob);
+        Image imgShu = CreateBarStackSegment(segments.transform, "SegmentShu", new Color(0.35f, 0.80f, 0.55f), knob);
+        Image imgWu = CreateBarStackSegment(segments.transform, "SegmentWu", new Color(0.95f, 0.40f, 0.35f), knob);
+        Image imgOth = CreateBarStackSegment(segments.transform, "SegmentOthers", new Color(0.55f, 0.58f, 0.66f), knob);
 
-        CreateDonutHole(pie.transform, knob);
-
-        // Legend
+        // Legend — 막대 바로 아래 한 줄
         var legend = new GameObject("Legend", typeof(RectTransform), typeof(LayoutElement));
         Undo.RegisterCreatedObjectUndo(legend, "Legend");
         legend.transform.SetParent(body.transform, false);
         var legendLe = legend.GetComponent<LayoutElement>();
+        legendLe.minHeight = 40f;
         legendLe.flexibleWidth = 1f;
 
-        var v = legend.AddComponent<VerticalLayoutGroup>();
-        v.spacing = 10f;
-        v.childAlignment = TextAnchor.UpperLeft;
-        v.childControlWidth = true;
-        v.childForceExpandWidth = true;
-        v.childForceExpandHeight = false;
+        var legendH = legend.AddComponent<HorizontalLayoutGroup>();
+        legendH.spacing = 6f;
+        legendH.childAlignment = TextAnchor.MiddleLeft;
+        legendH.childControlWidth = true;
+        legendH.childControlHeight = true;
+        legendH.childForceExpandWidth = true;
+        legendH.childForceExpandHeight = true;
 
         CreateLegendRow(legend.transform, "WEI", new Color(0.20f, 0.55f, 0.90f));
         CreateLegendRow(legend.transform, "SHU", new Color(0.35f, 0.80f, 0.55f));
         CreateLegendRow(legend.transform, "WU", new Color(0.95f, 0.40f, 0.35f));
         CreateLegendRow(legend.transform, "OTHERS", new Color(0.55f, 0.58f, 0.66f));
 
-        WireWorldMarketPieChartUI(pie, legend.transform, imgWei, imgShu, imgWu, imgOth);
+        WireWorldMarketPieChartUI(barRoot, legend.transform, imgWei, imgShu, imgWu, imgOth);
     }
 
     static Sprite TryGetUiKnobSprite()
@@ -161,7 +163,7 @@ public static class WorldMarketLayoutWizard
         return Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
     }
 
-    static Image CreatePieSegment(Transform parent, string name, Color color, Sprite sprite)
+    static Image CreateBarStackSegment(Transform parent, string name, Color color, Sprite sprite)
     {
         var go = new GameObject(name, typeof(RectTransform), typeof(Image));
         Undo.RegisterCreatedObjectUndo(go, name);
@@ -170,31 +172,9 @@ public static class WorldMarketLayoutWizard
         var img = go.GetComponent<Image>();
         img.sprite = sprite;
         img.color = color;
-        img.type = Image.Type.Filled;
-        img.fillMethod = Image.FillMethod.Radial360;
-        img.fillOrigin = 2; // Top
-        img.fillClockwise = true;
-        img.fillAmount = 0f;
-        img.raycastTarget = false;
-        return img;
-    }
-
-    static void CreateDonutHole(Transform parent, Sprite sprite)
-    {
-        var go = new GameObject("DonutHole", typeof(RectTransform), typeof(Image));
-        Undo.RegisterCreatedObjectUndo(go, "DonutHole");
-        go.transform.SetParent(parent, false);
-        go.transform.SetAsLastSibling();
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = new Vector2(112f, 112f);
-        rt.anchoredPosition = Vector2.zero;
-        var img = go.GetComponent<Image>();
-        img.sprite = sprite;
-        img.color = Color.black;
         img.type = Image.Type.Simple;
         img.raycastTarget = false;
+        return img;
     }
 
     static void WireWorldMarketPieChartUI(GameObject pieRoot, Transform legend, Image wei, Image shu, Image wu, Image oth)
@@ -217,7 +197,9 @@ public static class WorldMarketLayoutWizard
     {
         var row = new GameObject($"{label}Row", typeof(RectTransform), typeof(LayoutElement));
         row.transform.SetParent(parent, false);
-        row.GetComponent<LayoutElement>().minHeight = 34f;
+        var rowLe = row.GetComponent<LayoutElement>();
+        rowLe.minHeight = 34f;
+        rowLe.flexibleWidth = 1f;
         var h = row.AddComponent<HorizontalLayoutGroup>();
         h.spacing = 10f;
         h.childAlignment = TextAnchor.MiddleLeft;
@@ -237,9 +219,9 @@ public static class WorldMarketLayoutWizard
 
     static void CreateCastleStocksPanel(Transform parent)
     {
-        GameObject panel = CreatePanel(parent, "CastleStocksPanel", "Castle Stocks (0/50 Active)");
+        GameObject panel = CreatePanel(parent, "CastleStocksPanel", "Castle Stocks");
         panel.GetComponent<LayoutElement>().flexibleHeight = 1f;
-        panel.GetComponent<LayoutElement>().minHeight = 700f;
+        panel.GetComponent<LayoutElement>().minHeight = 520f;
 
         // News ticker placeholder
         var ticker = new GameObject("NewsTicker", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
@@ -249,6 +231,21 @@ public static class WorldMarketLayoutWizard
         tLe.minHeight = 72f;
         tLe.preferredHeight = 84f;
         CreateTMP(ticker.transform, "TickerText", "[NEWS] 이벤트/점령/급등락 텍스트가 여기로 흐릅니다.", 24, FontStyles.Normal, TextAlignmentOptions.Left, pad: new Vector4(18, 0, 0, 0));
+
+        // 필터 칩(전체 / 내 투자 / 전쟁 중 / 등급순) UI 연결용 자리
+        var filterRow = new GameObject("FilterChipsReserved", typeof(RectTransform), typeof(LayoutElement), typeof(HorizontalLayoutGroup));
+        filterRow.transform.SetParent(panel.transform, false);
+        var filterLe = filterRow.GetComponent<LayoutElement>();
+        filterLe.minHeight = 48f;
+        filterLe.preferredHeight = 52f;
+        var filterH = filterRow.GetComponent<HorizontalLayoutGroup>();
+        filterH.spacing = 10f;
+        filterH.padding = new RectOffset(4, 4, 4, 4);
+        filterH.childAlignment = TextAnchor.MiddleLeft;
+        filterH.childControlWidth = false;
+        filterH.childForceExpandWidth = false;
+        Color hintCol = new Color(0.48f, 0.52f, 0.58f, 1f);
+        CreateTMP(filterRow.transform, "FilterHint", "필터 칩: 전체 · 내 투자 · 전쟁 중 · 등급순 (버튼 연결 예정)", 20, FontStyles.Italic, TextAlignmentOptions.Left, color: hintCol);
 
         // ScrollRect list
         var scrollGo = new GameObject("CastleStocksScroll", typeof(RectTransform), typeof(Image), typeof(ScrollRect), typeof(LayoutElement));
@@ -302,6 +299,8 @@ public static class WorldMarketLayoutWizard
         vso.FindProperty("content").objectReferenceValue = contentRt;
         vso.FindProperty("cellTemplate").objectReferenceValue = template;
         vso.FindProperty("cellStride").floatValue = 188f;
+        vso.FindProperty("filterChipsReservedArea").objectReferenceValue = filterRow.GetComponent<RectTransform>();
+        vso.FindProperty("listHeaderText").objectReferenceValue = panel.transform.Find("Title")?.GetComponent<TextMeshProUGUI>();
         vso.ApplyModifiedPropertiesWithoutUndo();
 
         Object.DestroyImmediate(csf);
@@ -323,12 +322,23 @@ public static class WorldMarketLayoutWizard
         outline.useGraphicAlpha = false;
         outline.enabled = false;
 
+        var gloss = new GameObject("GlossOverlay", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        gloss.transform.SetParent(card.transform, false);
+        gloss.transform.SetAsFirstSibling();
+        var glossRt = gloss.GetComponent<RectTransform>();
+        StretchFull(glossRt);
+        var gImg = gloss.GetComponent<Image>();
+        gImg.color = new Color(1f, 0.94f, 0.78f, 0.09f);
+        gImg.raycastTarget = false;
+        gloss.GetComponent<LayoutElement>().ignoreLayout = true;
+        gloss.SetActive(false);
+
         var h = card.AddComponent<HorizontalLayoutGroup>();
         h.padding = new RectOffset(14, 14, 12, 12);
         h.spacing = 12f;
         h.childAlignment = TextAnchor.MiddleLeft;
         h.childControlWidth = true;
-        h.childControlHeight = true;
+        h.childControlHeight = false;
         h.childForceExpandWidth = true;
         h.childForceExpandHeight = false;
 
