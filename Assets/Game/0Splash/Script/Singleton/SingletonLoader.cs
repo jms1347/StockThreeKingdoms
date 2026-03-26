@@ -15,7 +15,7 @@ public class SingletonLoader : MonoBehaviour
 
     [Header("Scene Transition")]
     [Tooltip("매니저 로드 완료 후 이동할 다음 씬의 이름입니다.")]
-    public string nextSceneName = "HomeScene";
+    public string nextSceneName = "WorldScene";
 
     private void Awake()
     {
@@ -41,21 +41,60 @@ public class SingletonLoader : MonoBehaviour
 
     private void LoadNextScene()
     {
-        if (string.IsNullOrEmpty(nextSceneName))
-        {
-            Debug.LogWarning("[SingletonLoader] 이동할 다음 씬의 이름이 설정되지 않았습니다.");
-            return;
-        }
-
         // 이미 목표 씬에 있는 경우에는 씬을 다시 로드하지 않는다.
-        // (예: TestScene 안에도 SingletonLoader 프리팹이 있는 경우
-        //  TestScene → TestScene 무한 로드를 방지)
+        // (예: 동일 씬 내 SingletonLoader가 있는 경우 무한 로드 방지)
         var currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name == nextSceneName)
+        string target = ResolveNextSceneName();
+        if (string.IsNullOrEmpty(target))
+        {
+            Debug.LogWarning("[SingletonLoader] 빌드 프로필에서 로드 가능한 씬을 찾지 못해 씬 전환을 건너뜁니다.");
+            return;
+        }
+
+        if (currentScene.name == target)
         {
             return;
         }
 
-        SceneManager.LoadScene(nextSceneName);
+        SceneManager.LoadScene(target);
+    }
+
+    string ResolveNextSceneName()
+    {
+        // 1) Inspector에서 지정한 씬 우선
+        if (IsSceneInBuildByName(nextSceneName))
+            return nextSceneName;
+
+        // 2) 월드 탭 기본 씬
+        if (IsSceneInBuildByName("WorldScene"))
+            return "WorldScene";
+
+        // 3) 홈 씬 fallback
+        if (IsSceneInBuildByName("HomeScene"))
+            return "HomeScene";
+
+        // 4) 마지막 fallback: 빌드 설정 첫 씬
+        if (SceneManager.sceneCountInBuildSettings > 0)
+        {
+            string path = SceneUtility.GetScenePathByBuildIndex(0);
+            if (!string.IsNullOrEmpty(path))
+                return System.IO.Path.GetFileNameWithoutExtension(path);
+        }
+
+        return string.Empty;
+    }
+
+    static bool IsSceneInBuildByName(string sceneName)
+    {
+        if (string.IsNullOrWhiteSpace(sceneName)) return false;
+        int count = SceneManager.sceneCountInBuildSettings;
+        for (int i = 0; i < count; i++)
+        {
+            string path = SceneUtility.GetScenePathByBuildIndex(i);
+            if (string.IsNullOrEmpty(path)) continue;
+            string name = System.IO.Path.GetFileNameWithoutExtension(path);
+            if (name == sceneName) return true;
+        }
+        return false;
     }
 }

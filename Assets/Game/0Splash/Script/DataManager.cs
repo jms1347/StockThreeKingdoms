@@ -175,6 +175,9 @@ public class DataManager : Singleton<DataManager>
             s.currentSentiment = 100f;
             s.currentGovernorId = "";
             s.isWar = false;
+            s.isDisaster = false;
+            s.userDeployedTroops = 0;
+            s.averagePurchasePrice = 0f;
             s.sentimentHistory = new List<float>(7) { s.currentSentiment };
             castleStateDataMap[s.id] = s;
         }
@@ -230,6 +233,9 @@ public class DataManager : Singleton<DataManager>
                         currentSentiment = 100f,
                         currentGovernorId = "",
                         isWar = false,
+                        isDisaster = false,
+                        userDeployedTroops = 0,
+                        averagePurchasePrice = 0f,
                         sentimentHistory = new List<float>(7) { 100f }
                     };
                     castleStateDataMap[id] = s;
@@ -268,6 +274,86 @@ public class DataManager : Singleton<DataManager>
         }
     }
 
+    /// <summary>
+    /// <see cref="castleStateDataMap"/> 전수: 위(WEI)·촉(SHU)·오(WU)·기타(NONE/OTHERS 등) 점령 성 비율 (각 0~1, 합계 1).
+    /// </summary>
+    public FactionCastleShare GetFactionCastleOwnershipShare()
+    {
+        var share = new FactionCastleShare();
+        if (castleStateDataMap == null || castleStateDataMap.Count == 0)
+            return share;
+
+        int cWei = 0, cShu = 0, cWu = 0, cOth = 0;
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null) continue;
+            switch (s.currentLord)
+            {
+                case Faction.WEI: cWei++; break;
+                case Faction.SHU: cShu++; break;
+                case Faction.WU: cWu++; break;
+                default: cOth++; break; // NONE, OTHERS
+            }
+        }
+
+        int n = cWei + cShu + cWu + cOth;
+        if (n <= 0) return share;
+
+        share.wei = cWei / (float)n;
+        share.shu = cShu / (float)n;
+        share.wu = cWu / (float)n;
+        share.others = cOth / (float)n;
+        return share;
+    }
+
+    /// <summary>
+    /// 천하 탭 성 리스트: 이슈(전쟁·재해) → 내 투자 성 → 등급(SS→D) → id.
+    /// </summary>
+    public List<string> GetOrderedWorldCastleIds()
+    {
+        if (castleStateDataMap == null || castleStateDataMap.Count == 0)
+            return new List<string>();
+
+        return castleStateDataMap.Values
+            .Where(s => s != null)
+            .OrderByDescending(s => s.isWar || s.isDisaster)
+            .ThenByDescending(s => s.userDeployedTroops > 0)
+            .ThenBy(s => GetCastleGradeSortKey(s.id))
+            .ThenBy(s => s.id, StringComparer.Ordinal)
+            .Select(s => s.id)
+            .ToList();
+    }
+
+    int GetCastleGradeSortKey(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return 99;
+        if (!castleMasterDataMap.TryGetValue(castleId.Trim(), out var m) || m == null) return 99;
+        return (int)m.grade;
+    }
+
+    /// <summary> 병력 추가 시 가중 평균으로 averagePurchasePrice 갱신. </summary>
+    public void AddUserCastleDeployment(string castleId, int additionalTroops, float pricePerTroop)
+    {
+        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || additionalTroops <= 0) return;
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null) return;
+
+        long newTotal = (long)s.userDeployedTroops + additionalTroops;
+        if (newTotal > int.MaxValue) newTotal = int.MaxValue;
+
+        if (s.userDeployedTroops <= 0)
+            s.averagePurchasePrice = pricePerTroop;
+        else
+        {
+            double sumCost = s.averagePurchasePrice * s.userDeployedTroops + pricePerTroop * additionalTroops;
+            s.averagePurchasePrice = (float)(sumCost / newTotal);
+        }
+
+        s.userDeployedTroops = (int)newTotal;
+        _stateDirty = true;
+    }
+
     // ========================================================================
     // Economy Engine (client-side emulator)
     // ========================================================================
@@ -294,6 +380,9 @@ public class DataManager : Singleton<DataManager>
 
             s.currentSentiment = Mathf.Clamp(s.currentSentiment + delta, 0f, 100f);
             PushSentimentHistory(s);
+
+            if (s.isDisaster && UnityEngine.Random.value < 0.04f)
+                s.isDisaster = false;
         }
 
         RecalculateAllPrices();
@@ -311,19 +400,26 @@ public class DataManager : Singleton<DataManager>
         var s = castleStateDataMap.Values.ElementAt(idx);
         if (s == null) return;
 
-        // 50%: 점령 변경 / 50%: 전쟁 토글
-        if (UnityEngine.Random.value < 0.5f)
+        float roll = UnityEngine.Random.value;
+        if (roll < 0.34f)
         {
             Faction old = s.currentLord;
             s.currentLord = RandomOtherFaction(old);
             AddNews($"[WAR] {s.currentLord}가(이) {GetCastleNameOrId(s.id)}을(를) 점령했습니다! (from {old})");
         }
-        else
+        else if (roll < 0.67f)
         {
             s.isWar = !s.isWar;
             AddNews(s.isWar
                 ? $"[URGENT] {GetCastleNameOrId(s.id)}에서 전쟁 발생!"
                 : $"[INFO] {GetCastleNameOrId(s.id)} 전쟁 종료.");
+        }
+        else
+        {
+            s.isDisaster = !s.isDisaster;
+            AddNews(s.isDisaster
+                ? $"[DISASTER] {GetCastleNameOrId(s.id)}에 재해·병충이 확산합니다!"
+                : $"[RECOVER] {GetCastleNameOrId(s.id)} 재해가 진정되었습니다.");
         }
 
         _stateDirty = true;

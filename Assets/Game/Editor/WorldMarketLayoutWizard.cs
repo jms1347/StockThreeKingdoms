@@ -110,18 +110,31 @@ public static class WorldMarketLayoutWizard
         bodyH.childControlHeight = true;
         bodyH.childForceExpandWidth = true;
 
-        // Pie chart placeholder
-        var pie = new GameObject("PieChart", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        Sprite knob = TryGetUiKnobSprite();
+
+        // 파이: fillAmount(Radial360) 세그먼트 4개 + 도넛 홀
+        var pie = new GameObject("PieChart", typeof(RectTransform), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(pie, "PieChart");
         pie.transform.SetParent(body.transform, false);
-        var pieImg = pie.GetComponent<Image>();
-        pieImg.color = new Color(0.20f, 0.24f, 0.32f, 1f);
-        pieImg.raycastTarget = false;
         var pieLe = pie.GetComponent<LayoutElement>();
         pieLe.preferredWidth = 220f;
         pieLe.preferredHeight = 220f;
 
-        // Legend placeholder
+        var segments = new GameObject("Segments", typeof(RectTransform));
+        Undo.RegisterCreatedObjectUndo(segments, "PieSegments");
+        segments.transform.SetParent(pie.transform, false);
+        StretchFull(segments.GetComponent<RectTransform>());
+
+        Image imgWei = CreatePieSegment(segments.transform, "SegmentWei", new Color(0.20f, 0.55f, 0.90f), knob);
+        Image imgShu = CreatePieSegment(segments.transform, "SegmentShu", new Color(0.35f, 0.80f, 0.55f), knob);
+        Image imgWu = CreatePieSegment(segments.transform, "SegmentWu", new Color(0.95f, 0.40f, 0.35f), knob);
+        Image imgOth = CreatePieSegment(segments.transform, "SegmentOthers", new Color(0.55f, 0.58f, 0.66f), knob);
+
+        CreateDonutHole(pie.transform, knob);
+
+        // Legend
         var legend = new GameObject("Legend", typeof(RectTransform), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(legend, "Legend");
         legend.transform.SetParent(body.transform, false);
         var legendLe = legend.GetComponent<LayoutElement>();
         legendLe.flexibleWidth = 1f;
@@ -137,6 +150,67 @@ public static class WorldMarketLayoutWizard
         CreateLegendRow(legend.transform, "SHU", new Color(0.35f, 0.80f, 0.55f));
         CreateLegendRow(legend.transform, "WU", new Color(0.95f, 0.40f, 0.35f));
         CreateLegendRow(legend.transform, "OTHERS", new Color(0.55f, 0.58f, 0.66f));
+
+        WireWorldMarketPieChartUI(pie, legend.transform, imgWei, imgShu, imgWu, imgOth);
+    }
+
+    static Sprite TryGetUiKnobSprite()
+    {
+        var s = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+        if (s != null) return s;
+        return Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
+    }
+
+    static Image CreatePieSegment(Transform parent, string name, Color color, Sprite sprite)
+    {
+        var go = new GameObject(name, typeof(RectTransform), typeof(Image));
+        Undo.RegisterCreatedObjectUndo(go, name);
+        go.transform.SetParent(parent, false);
+        StretchFull(go.GetComponent<RectTransform>());
+        var img = go.GetComponent<Image>();
+        img.sprite = sprite;
+        img.color = color;
+        img.type = Image.Type.Filled;
+        img.fillMethod = Image.FillMethod.Radial360;
+        img.fillOrigin = 2; // Top
+        img.fillClockwise = true;
+        img.fillAmount = 0f;
+        img.raycastTarget = false;
+        return img;
+    }
+
+    static void CreateDonutHole(Transform parent, Sprite sprite)
+    {
+        var go = new GameObject("DonutHole", typeof(RectTransform), typeof(Image));
+        Undo.RegisterCreatedObjectUndo(go, "DonutHole");
+        go.transform.SetParent(parent, false);
+        go.transform.SetAsLastSibling();
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = new Vector2(112f, 112f);
+        rt.anchoredPosition = Vector2.zero;
+        var img = go.GetComponent<Image>();
+        img.sprite = sprite;
+        img.color = Color.black;
+        img.type = Image.Type.Simple;
+        img.raycastTarget = false;
+    }
+
+    static void WireWorldMarketPieChartUI(GameObject pieRoot, Transform legend, Image wei, Image shu, Image wu, Image oth)
+    {
+        var ui = pieRoot.GetComponent<WorldMarketPieChartUI>();
+        if (ui == null) ui = pieRoot.AddComponent<WorldMarketPieChartUI>();
+        var so = new SerializedObject(ui);
+        so.FindProperty("segmentWei").objectReferenceValue = wei;
+        so.FindProperty("segmentShu").objectReferenceValue = shu;
+        so.FindProperty("segmentWu").objectReferenceValue = wu;
+        so.FindProperty("segmentOthers").objectReferenceValue = oth;
+        so.FindProperty("textWei").objectReferenceValue = legend.Find("WEIRow/Label")?.GetComponent<TextMeshProUGUI>();
+        so.FindProperty("textShu").objectReferenceValue = legend.Find("SHURow/Label")?.GetComponent<TextMeshProUGUI>();
+        so.FindProperty("textWu").objectReferenceValue = legend.Find("WURow/Label")?.GetComponent<TextMeshProUGUI>();
+        so.FindProperty("textOthers").objectReferenceValue = legend.Find("OTHERSRow/Label")?.GetComponent<TextMeshProUGUI>();
+        so.ApplyModifiedPropertiesWithoutUndo();
     }
 
     static void CreateLegendRow(Transform parent, string label, Color c)
@@ -208,7 +282,8 @@ public static class WorldMarketLayoutWizard
         contentV.childForceExpandWidth = true;
         contentV.childForceExpandHeight = false;
 
-        content.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        var csf = content.AddComponent<ContentSizeFitter>();
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         var sr = scrollGo.GetComponent<ScrollRect>();
         sr.viewport = vpRt;
@@ -217,52 +292,130 @@ public static class WorldMarketLayoutWizard
         sr.vertical = true;
         sr.movementType = ScrollRect.MovementType.Clamped;
 
-        // Templates (inactive)
-        CreateCastleStockCardTemplate(content.transform);
+        // 카드 템플릿(비활성) → 런타임 WorldMarketCastleVirtualList가 풀링
+        GameObject template = CreateCastleStockCardTemplate(content.transform);
         CreateNewsRowTemplate(content.transform);
+
+        var vlist = scrollGo.AddComponent<WorldMarketCastleVirtualList>();
+        var vso = new SerializedObject(vlist);
+        vso.FindProperty("scrollRect").objectReferenceValue = sr;
+        vso.FindProperty("content").objectReferenceValue = contentRt;
+        vso.FindProperty("cellTemplate").objectReferenceValue = template;
+        vso.FindProperty("cellStride").floatValue = 188f;
+        vso.ApplyModifiedPropertiesWithoutUndo();
+
+        Object.DestroyImmediate(csf);
+        Object.DestroyImmediate(contentV);
     }
 
-    static void CreateCastleStockCardTemplate(Transform parent)
+    static GameObject CreateCastleStockCardTemplate(Transform parent)
     {
-        var card = new GameObject("CastleStockCardTemplate", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+        var card = new GameObject("CastleStockCardTemplate", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement), typeof(WorldMarketCastleCardView), typeof(Outline));
         card.transform.SetParent(parent, false);
         var img = card.GetComponent<Image>();
-        img.color = new Color(0.12f, 0.15f, 0.20f, 0.98f);
+        img.color = new Color(0.10f, 0.12f, 0.16f, 0.98f);
         var le = card.GetComponent<LayoutElement>();
-        le.minHeight = 164f;
+        le.minHeight = 172f;
+
+        var outline = card.GetComponent<Outline>();
+        outline.effectColor = new Color(1f, 0.78f, 0.22f, 0.92f);
+        outline.effectDistance = new Vector2(4f, -4f);
+        outline.useGraphicAlpha = false;
+        outline.enabled = false;
 
         var h = card.AddComponent<HorizontalLayoutGroup>();
-        h.padding = new RectOffset(16, 16, 14, 14);
-        h.spacing = 14f;
+        h.padding = new RectOffset(14, 14, 12, 12);
+        h.spacing = 12f;
         h.childAlignment = TextAnchor.MiddleLeft;
-        h.childControlWidth = false;
-        h.childForceExpandWidth = false;
+        h.childControlWidth = true;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = true;
+        h.childForceExpandHeight = false;
 
-        // Left: rank badge + name
         var left = new GameObject("Left", typeof(RectTransform), typeof(LayoutElement));
         left.transform.SetParent(card.transform, false);
-        left.GetComponent<LayoutElement>().preferredWidth = 520f;
+        left.GetComponent<LayoutElement>().flexibleWidth = 1f;
         var leftV = left.AddComponent<VerticalLayoutGroup>();
-        leftV.spacing = 6f;
-        leftV.childAlignment = TextAnchor.MiddleLeft;
+        leftV.spacing = 5f;
+        leftV.childAlignment = TextAnchor.UpperLeft;
         leftV.childControlWidth = true;
         leftV.childForceExpandWidth = true;
         leftV.childForceExpandHeight = false;
 
-        CreateTMP(left.transform, "CastleName", "1  SS  Luoyang  洛陽", 30, FontStyles.Bold, TextAlignmentOptions.Left);
-        CreateTMP(left.transform, "PriceLine", "1,250 Gold  ▲ 1.8%   Market Cap: 6.25M   Dividend: 5%", 24, FontStyles.Normal, TextAlignmentOptions.Left, color: new Color(0.80f, 0.90f, 1f));
+        CreateTMP(left.transform, "GradeBadge", "SS", 26, FontStyles.Bold, TextAlignmentOptions.Left, color: new Color(1f, 0.82f, 0.35f, 1f));
 
-        // Right: governor portrait placeholder
-        var right = new GameObject("Governor", typeof(RectTransform), typeof(LayoutElement));
-        right.transform.SetParent(card.transform, false);
-        right.GetComponent<LayoutElement>().preferredWidth = 140f;
+        CreateTMP(left.transform, "CastleName", "Luoyang (C01)", 28, FontStyles.Bold, TextAlignmentOptions.Left);
+        Color sub = new Color(0.55f, 0.58f, 0.64f, 1f);
+        CreateTMP(left.transform, "CastleIdLine", "Region", 20, FontStyles.Normal, TextAlignmentOptions.Left, color: sub);
+
+        var buyRow = new GameObject("BuyRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        buyRow.transform.SetParent(left.transform, false);
+        var br = buyRow.GetComponent<HorizontalLayoutGroup>();
+        br.spacing = 10f;
+        br.childAlignment = TextAnchor.MiddleLeft;
+        br.childControlWidth = false;
+        br.childForceExpandWidth = false;
+        buyRow.GetComponent<LayoutElement>().minHeight = 46f;
+
+        CreateTMP(buyRow.transform, "BuyLabel", "매수", 22, FontStyles.Normal, TextAlignmentOptions.Left, color: sub);
+
+        var buyBg = new GameObject("BuyPriceBg", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        buyBg.transform.SetParent(buyRow.transform, false);
+        buyBg.GetComponent<Image>().color = new Color(0.18f, 0.42f, 0.28f, 0.95f);
+        buyBg.GetComponent<Image>().raycastTarget = false;
+        buyBg.GetComponent<LayoutElement>().minWidth = 168f;
+        buyBg.GetComponent<LayoutElement>().preferredHeight = 42f;
+        var bgrt = buyBg.GetComponent<RectTransform>();
+        bgrt.sizeDelta = new Vector2(200f, 42f);
+
+        var buyTmp = CreateTMP(buyBg.transform, "BuyPrice", "1,250", 26, FontStyles.Bold, TextAlignmentOptions.Center);
+        buyTmp.margin = Vector4.zero;
+
+        var sentRow = new GameObject("SentRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        sentRow.transform.SetParent(left.transform, false);
+        var srH = sentRow.GetComponent<HorizontalLayoutGroup>();
+        srH.spacing = 8f;
+        srH.childAlignment = TextAnchor.MiddleLeft;
+        CreateTMP(sentRow.transform, "Arrow", "▲", 24, FontStyles.Bold, TextAlignmentOptions.Left);
+        CreateTMP(sentRow.transform, "ChangePct", "심리 +0.0 pts", 22, FontStyles.Normal, TextAlignmentOptions.Left);
+
+        var invRow = new GameObject("InvestRow", typeof(RectTransform), typeof(VerticalLayoutGroup));
+        invRow.transform.SetParent(left.transform, false);
+        var iv = invRow.GetComponent<VerticalLayoutGroup>();
+        iv.spacing = 2f;
+        iv.childAlignment = TextAnchor.UpperLeft;
+        iv.childControlWidth = true;
+        iv.childForceExpandWidth = true;
+        CreateTMP(invRow.transform, "TroopsLine", "내 병력: —", 22, FontStyles.Normal, TextAlignmentOptions.Left, color: new Color(0.85f, 0.88f, 0.93f, 1f));
+        CreateTMP(invRow.transform, "RoiLine", "수익률: —", 22, FontStyles.Normal, TextAlignmentOptions.Left);
+        CreateTMP(invRow.transform, "StakeLine", "", 20, FontStyles.Normal, TextAlignmentOptions.Left, color: sub);
+
+        var gov = new GameObject("Governor", typeof(RectTransform), typeof(LayoutElement));
+        gov.transform.SetParent(card.transform, false);
+        gov.GetComponent<LayoutElement>().preferredWidth = 112f;
+
         var portrait = new GameObject("Portrait", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        portrait.transform.SetParent(right.transform, false);
-        portrait.GetComponent<Image>().color = new Color(0.22f, 0.24f, 0.30f, 1f);
+        portrait.transform.SetParent(gov.transform, false);
+        portrait.GetComponent<Image>().color = new Color(0.16f, 0.18f, 0.24f, 1f);
         portrait.GetComponent<Image>().raycastTarget = false;
-        portrait.GetComponent<LayoutElement>().preferredHeight = 140f;
+        portrait.GetComponent<LayoutElement>().preferredWidth = 100f;
+        portrait.GetComponent<LayoutElement>().preferredHeight = 120f;
+        var prt = portrait.GetComponent<RectTransform>();
+        prt.sizeDelta = new Vector2(100f, 120f);
+
+        var pIni = new GameObject("PortraitInitial", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        pIni.transform.SetParent(gov.transform, false);
+        StretchFull(pIni.GetComponent<RectTransform>());
+        var pit = pIni.GetComponent<TextMeshProUGUI>();
+        pit.text = "조";
+        pit.fontSize = 34;
+        pit.fontStyle = FontStyles.Bold;
+        pit.alignment = TextAlignmentOptions.Center;
+        pit.color = new Color(0.88f, 0.90f, 0.94f, 1f);
+        pit.raycastTarget = false;
 
         card.SetActive(false);
+        return card;
     }
 
     static void CreateNewsRowTemplate(Transform parent)

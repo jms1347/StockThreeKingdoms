@@ -18,6 +18,6 @@ public class SplashController : MonoBehaviour
     private void SetAllGoogleData()
     {
         Debug.Log("·Îºñ¾À ÀÌµ¿");
-        //LoadingSceneManager.LoadScene("SelectStoryScene");
+        LoadingSceneManager.LoadScene("WorldScene");
     }
 }
