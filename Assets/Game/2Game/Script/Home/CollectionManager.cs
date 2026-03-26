@@ -44,13 +44,14 @@ public class CollectionManager : MonoBehaviour
     [Header("비행 연출")]
     public float flyDuration = 0.85f;
     public float bezierArc = 180f;
-    [Range(0.02f, 0.3f)] public float flyStagger = 0.06f;
+    [Range(0.02f, 0.3f)] public float flyStagger = 0.05f;
     [Tooltip("풀 인스턴스 기본 크기 (프리팹에 RectTransform이 있으면 생략 가능)")]
     public Vector2 flyIconSize = new Vector2(48f, 48f);
 
     float _shakeCooldownUntil;
     int _pendingFlyTweens;
     bool _poolsWarmed;
+    bool _hidePilesWhileFlying;
 
     GameObject _runtimeGoldProto;
     GameObject _runtimeGrainProto;
@@ -58,7 +59,7 @@ public class CollectionManager : MonoBehaviour
     void Awake()
     {
         if (homeController == null)
-            homeController = GetComponentInParent<HomeController>();
+            homeController = GetComponent<HomeController>() ?? GetComponentInParent<HomeController>();
     }
 
     void Start()
@@ -182,6 +183,7 @@ public class CollectionManager : MonoBehaviour
     {
         if (go == null) return;
         DOTween.Kill(go.transform, true);
+        DOTween.Kill(go, true);
         go.SetActive(false);
         go.transform.SetParent(flyIconsRoot, false);
         (isGold ? goldIconPool : grainIconPool).Enqueue(go);
@@ -245,50 +247,45 @@ public class CollectionManager : MonoBehaviour
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
 
-        // "수거할 자원이 있으면 더미도 반드시 쌓여있어야 함"
-        // → 시간 경과 기준이 아니라 실제 누적량(창고) 기반으로 더미를 켬.
-        int goldOn = 0;
-        int grainOn = 0;
+        // 비행 중엔 출발 순간부터 더미를 숨긴 상태 유지
+        if (HidePilesWhileFlying)
+        {
+            SetPileArray(goldPiles, 0);
+            SetPileArray(grainPiles, 0);
+            return;
+        }
+
+        long mElapsed;
+        long fElapsed;
         if (homeController != null)
         {
-            double mAcc = homeController.CurrentMarketAccumulated;
-            double mMax = homeController.GetMarketMaxCapacity();
-            double fAcc = homeController.CurrentFarmAccumulated;
-            double fMax = homeController.GetFarmMaxCapacity();
-
-            goldOn = PileCountFromAccumulation(mAcc, mMax);
-            grainOn = PileCountFromAccumulation(fAcc, fMax);
+            mElapsed = homeController.GetMarketElapsedSeconds();
+            fElapsed = homeController.GetFarmElapsedSeconds();
         }
         else
         {
-            long now = TimeManager.GetUnixNow();
-            long mLast = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
-            long fLast = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
-            goldOn = PileCountFromElapsedHours(now - mLast);
-            grainOn = PileCountFromElapsedHours(now - fLast);
+            // HomeController 없으면 생산/기준시각 해석 불가 → 더미 표시 안 함 (잘못된 아이콘 방지)
+            mElapsed = 0;
+            fElapsed = 0;
         }
+
+        int goldOn = PileCountFromElapsedTiered(mElapsed);
+        int grainOn = PileCountFromElapsedTiered(fElapsed);
 
         SetPileArray(goldPiles, goldOn);
         SetPileArray(grainPiles, grainOn);
     }
 
-    static int PileCountFromAccumulation(double acc, double max)
+    /// <summary>
+    /// T &lt; 1분: 0 / 1분~1시간 미만: 1 / 이후 1시간마다 +1 (최대 8).
+    /// 7시간 이상은 8개 고정.
+    /// </summary>
+    public static int PileCountFromElapsedTiered(long elapsedSec)
     {
-        if (acc <= 0) return 0;
-        if (max <= 0) return 1;
-        double r = Mathf.Clamp01((float)(acc / max));
-        // 1~8로 매핑 (조금만 쌓여도 1개는 보이게)
-        int n = Mathf.Clamp(Mathf.CeilToInt((float)(r * 8.0)), 1, 8);
-        return n;
-    }
-
-    static int PileCountFromElapsedHours(long elapsedSeconds)
-    {
-        if (elapsedSeconds <= 0) return 0;
-        double hours = elapsedSeconds / 3600.0d;
-        double ratio = (hours / 8.0) * 8.0;
-        int n = (int)Math.Floor(ratio);
-        return Mathf.Clamp(n, 0, 8);
+        if (elapsedSec < 60) return 0;
+        if (elapsedSec < 3600) return 1;
+        int extraHours = (int)(elapsedSec / 3600);
+        return Mathf.Clamp(1 + extraHours, 1, 8);
     }
 
     static void SetPileArray(GameObject[] piles, int activeCount)
@@ -306,6 +303,10 @@ public class CollectionManager : MonoBehaviour
         return CountActive(goldPiles) > 0 || CountActive(grainPiles) > 0;
     }
 
+    public int CountActiveGoldPiles() => CountActive(goldPiles);
+
+    public int CountActiveGrainPiles() => CountActive(grainPiles);
+
     static int CountActive(GameObject[] piles)
     {
         if (piles == null) return 0;
@@ -317,27 +318,71 @@ public class CollectionManager : MonoBehaviour
 
     public bool IsFlyBusy => _pendingFlyTweens > 0;
 
+    /// <summary>비행 시작과 동시에 더미를 숨겼는지(출발 순간 아이콘 즉시 제거용).</summary>
+    public bool HidePilesWhileFlying => _hidePilesWhileFlying && IsFlyBusy;
+
     public void TryCollectFromGate()
     {
         if (homeController == null) return;
         homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: true);
     }
 
-    public void PlayFlyEffect(long totalGold, long totalGrain)
+    /// <summary>
+    /// 활성 주머니 개수만큼 자원을 분할해 순차(스태거) 비행 후, 도착 시마다 입금+펀치.
+    /// 모든 비행이 끝나면 주머니 비활성화 및 onAllComplete 호출(lastCollectTime 갱신 등).
+    /// </summary>
+    public void PlayFlyEffect(long totalGold, long totalGrain, Action onAllComplete = null)
     {
-        // "수거하면 무조건 애니메이션": flyIconsRoot가 없으면 런타임으로 생성해도 된다.
         EnsureFlyRootIfNeeded();
         TryResolveFlyTargetsFromGlobalUI();
 
         WarmFlyPoolsIfPossible();
 
-        int gVis = Mathf.Clamp(CountActive(goldPiles), 1, 8);
-        int grVis = Mathf.Clamp(CountActive(grainPiles), 1, 8);
+        int gVis = CountActive(goldPiles);
+        int grVis = CountActive(grainPiles);
 
-        if (totalGold > 0)
-            SpawnFliesForResource(totalGold, gVis, goldPiles, goldFlyTarget, true);
-        if (totalGrain > 0)
-            SpawnFliesForResource(totalGrain, grVis, grainPiles, grainFlyTarget, false);
+        int goldFlies = totalGold > 0 && gVis > 0 ? gVis : 0;
+        int grainFlies = totalGrain > 0 && grVis > 0 ? grVis : 0;
+        int totalFlies = goldFlies + grainFlies;
+
+        if (totalFlies <= 0)
+        {
+            onAllComplete?.Invoke();
+            return;
+        }
+
+        // 출발 위치는 "숨기기 이전" 활성 더미 위치를 캐시 (숨김 후엔 activeSelf=false라 start가 한 곳으로 모임)
+        var canvas = flyIconsRoot != null ? flyIconsRoot.GetComponentInParent<Canvas>() : null;
+        Camera cam = null;
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            cam = canvas.worldCamera;
+
+        Vector2[] goldStarts = goldFlies > 0 ? CaptureStartAnchoredPositions(goldPiles, goldFlies, cam) : null;
+        Vector2[] grainStarts = grainFlies > 0 ? CaptureStartAnchoredPositions(grainPiles, grainFlies, cam) : null;
+
+        // 출발 순간: 창고에 남아있는 더미는 즉시 숨기고, 비행 아이콘만 보이게.
+        _hidePilesWhileFlying = true;
+        SetPileArray(goldPiles, 0);
+        SetPileArray(grainPiles, 0);
+
+        int completed = 0;
+        void OnOneFlyDone()
+        {
+            completed++;
+            if (completed < totalFlies) return;
+            _hidePilesWhileFlying = false;
+            onAllComplete?.Invoke();
+        }
+
+        int globalIndex = 0;
+        if (goldFlies > 0)
+        {
+            SpawnFliesForResource(totalGold, goldFlies, goldStarts, goldFlyTarget, true, ref globalIndex, OnOneFlyDone);
+        }
+        if (grainFlies > 0)
+        {
+            SpawnFliesForResource(totalGrain, grainFlies, grainStarts, grainFlyTarget, false, ref globalIndex, OnOneFlyDone);
+        }
     }
 
     void EnsureFlyRootIfNeeded()
@@ -377,7 +422,8 @@ public class CollectionManager : MonoBehaviour
         if (c == null) c = root.gameObject.AddComponent<Canvas>();
         c.renderMode = RenderMode.ScreenSpaceOverlay;
         c.overrideSorting = true;
-        c.sortingOrder = 1500;
+        // 어떤 UI보다 위에 보이도록 충분히 높게
+        c.sortingOrder = 32767;
         var scaler = root.GetComponent<CanvasScaler>();
         if (scaler == null) scaler = root.gameObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -385,41 +431,48 @@ public class CollectionManager : MonoBehaviour
             root.gameObject.AddComponent<GraphicRaycaster>();
     }
 
-    void ApplyImmediateFallback(long totalGold, long totalGrain)
+    void SpawnFliesForResource(long total, int flyCount, Vector2[] startAnchoredPositions, RectTransform target, bool isGold, ref int globalFlyIndex, Action onSingleFlyComplete)
     {
-        var gm = GameManager.InstanceOrNull;
-        if (gm == null) return;
-        if (totalGold > 0) gm.AddGold(totalGold);
-        if (totalGrain > 0) gm.AddGrain(totalGrain);
-    }
-
-    void SpawnFliesForResource(long total, int flyCount, GameObject[] piles, RectTransform target, bool isGold)
-    {
-        if (total <= 0 || piles == null || flyCount <= 0) return;
+        if (total <= 0 || flyCount <= 0) return;
 
         long baseChunk = total / flyCount;
         long remainder = total % flyCount;
 
-        var canvas = flyIconsRoot.GetComponentInParent<Canvas>();
+        var canvas = flyIconsRoot != null ? flyIconsRoot.GetComponentInParent<Canvas>() : null;
         Camera cam = null;
         if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
             cam = canvas.worldCamera;
 
-        int activePiles = CountActive(piles);
-
         for (int i = 0; i < flyCount; i++)
         {
-            int pileIndex = activePiles > 0 ? Mathf.Min(i, activePiles - 1) : 0;
-            GameObject pileGo = (activePiles > 0) ? GetIthActivePile(piles, pileIndex) : null;
-            RectTransform startRt = pileGo != null ? pileGo.GetComponent<RectTransform>() : null;
-            Vector2 startAnchored = GetFlyStartAnchoredPosition(startRt, cam);
+            Vector2 startAnchored = (startAnchoredPositions != null && i >= 0 && i < startAnchoredPositions.Length)
+                ? startAnchoredPositions[i]
+                : GetFlyStartAnchoredPosition(null, cam);
 
             long chunk = baseChunk + (i < remainder ? 1 : 0);
             if (chunk <= 0) continue;
 
-            float delay = i * flyStagger;
-            RunPooledFly(startAnchored, target, cam, chunk, isGold, flyDuration, delay);
+            float delay = globalFlyIndex * flyStagger;
+            globalFlyIndex++;
+            RunPooledFly(startAnchored, target, cam, chunk, isGold, flyDuration, delay, onSingleFlyComplete);
         }
+    }
+
+    Vector2[] CaptureStartAnchoredPositions(GameObject[] piles, int flyCount, Camera cam)
+    {
+        if (flyCount <= 0) return Array.Empty<Vector2>();
+        int active = CountActive(piles);
+        if (active <= 0) return Array.Empty<Vector2>();
+
+        var result = new Vector2[flyCount];
+        for (int i = 0; i < flyCount; i++)
+        {
+            int pileIndex = Mathf.Min(i, active - 1);
+            GameObject pileGo = GetIthActivePile(piles, pileIndex);
+            RectTransform rt = pileGo != null ? pileGo.GetComponent<RectTransform>() : null;
+            result[i] = GetFlyStartAnchoredPosition(rt, cam);
+        }
+        return result;
     }
 
     static GameObject GetIthActivePile(GameObject[] piles, int activeIndex)
@@ -455,7 +508,7 @@ public class CollectionManager : MonoBehaviour
         return local;
     }
 
-    void RunPooledFly(Vector2 startAnchored, RectTransform target, Camera cam, long chunk, bool isGold, float duration, float delay)
+    void RunPooledFly(Vector2 startAnchored, RectTransform target, Camera cam, long chunk, bool isGold, float duration, float delay, Action onFlyComplete)
     {
         GameObject go = RentFlyIcon(isGold);
         if (go == null)
@@ -467,6 +520,7 @@ public class CollectionManager : MonoBehaviour
                 if (isGold) gm.AddGold(chunk);
                 else gm.AddGrain(chunk);
             }
+            onFlyComplete?.Invoke();
             return;
         }
 
@@ -474,47 +528,79 @@ public class CollectionManager : MonoBehaviour
         if (rt == null)
         {
             ReturnFlyIcon(go, isGold);
+            onFlyComplete?.Invoke();
             return;
         }
 
-        Vector2 size = flyIconSize;
-        var src = GetPrototype(isGold);
-        if (src != null)
-        {
-            var pr = src.GetComponent<RectTransform>();
-            if (pr != null) size = pr.sizeDelta;
-        }
+        // 창고 더미(18x18)와 비행 아이콘 크기를 동일하게 맞춤
+        Vector2 size = new Vector2(18f, 18f);
 
         ResetPooledRectTransform(rt, startAnchored, size);
+        // 풀 재사용 시 이전 상태(알파/스케일/회전)가 남는 잔상 방지
+        var img = go.GetComponent<UnityEngine.UI.Image>();
+        if (img != null)
+        {
+            var col = img.color;
+            col.a = 1f;
+            img.color = col;
+            img.enabled = true;
+        }
         go.SetActive(true);
 
+        // 출발 전에 1 스케일로 고정 (더미와 동일 스케일로 출발)
+        rt.localScale = Vector3.one;
+
         Vector2 endAnchored = target != null
-            ? WorldToAnchoredOnRoot(target.TransformPoint(target.rect.center), flyIconsRoot, cam)
+            // Text/레이아웃이 가로로 크게 늘어나는 경우 rect.center가 화면 밖으로 튈 수 있어 pivot(=position) 기준으로 계산
+            ? WorldToAnchoredOnRoot(target.position, flyIconsRoot, cam)
             : startAnchored + Vector2.up * 400f;
+
+        // 혹시라도 도착점이 레이아웃/스케일 이슈로 화면 밖으로 계산되면,
+        // flyIconsRoot 안으로 살짝 클램프해서 “오른쪽 화면 밖으로 이탈”을 방지
+        if (flyIconsRoot != null)
+        {
+            var r = flyIconsRoot.rect;
+            float pad = 30f;
+            endAnchored.x = Mathf.Clamp(endAnchored.x, r.xMin + pad, r.xMax - pad);
+            endAnchored.y = Mathf.Clamp(endAnchored.y, r.yMin + pad, r.yMax - pad);
+        }
 
         Vector2 mid = (startAnchored + endAnchored) * 0.5f + new Vector2(0f, bezierArc);
 
+        // 거리 기반으로 duration을 약간 보정(타겟이 멀리 튀면 “엄청 빠르게” 보이는 문제 완화)
+        float dist = Vector2.Distance(startAnchored, endAnchored);
+        float scaledDuration = Mathf.Clamp(duration * (dist / 700f), duration * 0.85f, duration * 1.8f);
+
         _pendingFlyTweens++;
         Sequence seq = DOTween.Sequence();
-        seq.SetTarget(rt);
+        // 아이콘 GameObject를 타겟으로 잡아, 반환/킬이 확실히 되게
+        seq.SetTarget(go);
         if (delay > 0) seq.AppendInterval(delay);
         seq.Append(DOTween.To(() => 0f, t =>
         {
             float u = t;
             Vector2 p = QuadraticBezier(startAnchored, mid, endAnchored, u);
             rt.anchoredPosition = p;
-        }, 1f, duration).SetEase(Ease.InOutQuad).SetTarget(rt));
+        }, 1f, scaledDuration).SetEase(Ease.InOutQuad).SetTarget(go));
         seq.OnComplete(() =>
         {
             var gm = GameManager.InstanceOrNull;
             if (gm != null)
             {
-                if (isGold) gm.AddGold(chunk);
-                else gm.AddGrain(chunk);
+                if (isGold)
+                {
+                    gm.AddGold(chunk);
+                    GlobalUIManager.InstanceOrNull?.PunchAssetsText();
+                }
+                else
+                {
+                    gm.AddGrain(chunk);
+                    GlobalUIManager.InstanceOrNull?.PunchFoodText();
+                }
             }
-            DOTween.Kill(rt, true);
             ReturnFlyIcon(go, isGold);
             _pendingFlyTweens--;
+            onFlyComplete?.Invoke();
         });
         seq.SetUpdate(true);
     }

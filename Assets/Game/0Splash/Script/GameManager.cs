@@ -147,9 +147,29 @@ public class GameManager : Singleton<GameManager>
             currentUser.stepsToday = currentUser.dailyStepCount;
 
         long now = TimeManager.GetUnixNow();
-        if (currentUser.lastMarketCollectTime <= 0)
+        // 생산 중인 창고만 기준 시각이 없을 때 현재 시각으로 초기화 (레벨 0이면 두지 않음 → 경과/주머니 0)
+        if (currentUser.marketLevel > 0 && currentUser.lastMarketCollectTime <= 0)
             currentUser.lastMarketCollectTime = now;
-        if (currentUser.lastFarmCollectTime <= 0)
+        if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime <= 0)
             currentUser.lastFarmCollectTime = now;
+    }
+
+    /// <summary>시장/농장이 가동 중인데 lastCollect가 0이면 지금 시각으로 보정 (구세이브 호환).</summary>
+    public void EnsureWarehouseBaselines()
+    {
+        if (currentUser == null) return;
+        long now = TimeManager.GetUnixNow();
+        bool dirty = false;
+        if (currentUser.marketLevel > 0 && currentUser.lastMarketCollectTime <= 0)
+        {
+            currentUser.lastMarketCollectTime = now;
+            dirty = true;
+        }
+        if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime <= 0)
+        {
+            currentUser.lastFarmCollectTime = now;
+            dirty = true;
+        }
+        if (dirty) SaveUserData();
     }
 }

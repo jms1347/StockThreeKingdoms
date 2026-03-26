@@ -122,5 +122,25 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     {
         gameObject.SetActive(visible);
     }
+
+    /// <summary>비행 수거 아이콘이 금화(자산) 텍스트에 도착했을 때 펀치 연출.</summary>
+    public void PunchAssetsText(float strength = 0.12f, float duration = 0.22f, int vibrato = 6)
+    {
+        if (totalAssetsText == null) return;
+        var rt = totalAssetsText.rectTransform;
+        rt.DOKill();
+        rt.localScale = Vector3.one; // 이전 펀치가 중단돼도 원상복구
+        rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
+    }
+
+    /// <summary>비행 수거 아이콘이 식량 텍스트에 도착했을 때 펀치 연출.</summary>
+    public void PunchFoodText(float strength = 0.12f, float duration = 0.22f, int vibrato = 6)
+    {
+        if (foodText == null) return;
+        var rt = foodText.rectTransform;
+        rt.DOKill();
+        rt.localScale = Vector3.one;
+        rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
+    }
 }
 

@@ -41,38 +41,76 @@ public class HomeController : MonoBehaviour
     public static double UpgradeCost(double baseCost, int level) =>
         baseCost * Math.Pow(UpgradeCostMult, level);
 
-    /// <summary> 시장 창고 현재 누적량 (Timestamp 기반 동적 계산) </summary>
+    /// <summary> 시장 창고 현재 누적량 (1분 단위 Floor × 분당 생산, MaxCap 한도) </summary>
     public double CurrentMarketAccumulated
     {
         get
         {
             var gm = GameManager.InstanceOrNull;
             if (gm?.currentUser == null) return 0;
-            double rate = GetMarketValuePerSec();
-            if (rate <= 0) return 0;
+            double ratePerSec = GetMarketValuePerSec();
+            if (ratePerSec <= 0) return 0;
+            gm.EnsureWarehouseBaselines();
             long now = NowUnixSeconds();
-            long last = gm.currentUser.lastMarketCollectTime <= 0 ? now : gm.currentUser.lastMarketCollectTime;
-            double elapsed = Math.Max(0, now - last);
+            long last = gm.currentUser.lastMarketCollectTime;
+            if (last <= 0) return 0;
+            long elapsedSec = Math.Max(0, now - last);
+            long wholeMinutes = elapsedSec / 60;
+            double perMinute = ratePerSec * 60.0;
+            double raw = wholeMinutes * perMinute;
             double maxCap = GetMarketMaxCapacity();
-            return Math.Min(elapsed * rate, maxCap > 0 ? maxCap : double.MaxValue);
+            return Math.Min(raw, maxCap > 0 ? maxCap : double.MaxValue);
         }
     }
 
-    /// <summary> 농장 창고 현재 누적량 </summary>
+    /// <summary> 농장 창고 현재 누적량 (1분 단위 Floor × 분당 생산, MaxCap 한도) </summary>
     public double CurrentFarmAccumulated
     {
         get
         {
             var gm = GameManager.InstanceOrNull;
             if (gm?.currentUser == null) return 0;
-            double rate = GetFarmValuePerSec();
-            if (rate <= 0) return 0;
+            double ratePerSec = GetFarmValuePerSec();
+            if (ratePerSec <= 0) return 0;
+            gm.EnsureWarehouseBaselines();
             long now = NowUnixSeconds();
-            long last = gm.currentUser.lastFarmCollectTime <= 0 ? now : gm.currentUser.lastFarmCollectTime;
-            double elapsed = Math.Max(0, now - last);
+            long last = gm.currentUser.lastFarmCollectTime;
+            if (last <= 0) return 0;
+            long elapsedSec = Math.Max(0, now - last);
+            long wholeMinutes = elapsedSec / 60;
+            double perMinute = ratePerSec * 60.0;
+            double raw = wholeMinutes * perMinute;
             double maxCap = GetFarmMaxCapacity();
-            return Math.Min(elapsed * rate, maxCap > 0 ? maxCap : double.MaxValue);
+            return Math.Min(raw, maxCap > 0 ? maxCap : double.MaxValue);
         }
+    }
+
+    public bool IsMarketProducing() => GetMarketValuePerSec() > 0;
+
+    public bool IsFarmProducing() => GetFarmValuePerSec() > 0;
+
+    /// <summary>시장 창고 기준 마지막 수거 이후 경과 초 (주머니 단계용).</summary>
+    public long GetMarketElapsedSeconds()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null || !IsMarketProducing()) return 0;
+        gm.EnsureWarehouseBaselines();
+        long now = NowUnixSeconds();
+        long last = gm.currentUser.lastMarketCollectTime;
+        if (last <= 0) return 0;
+        return Math.Max(0, now - last);
+    }
+
+    /// <summary>농장 창고 기준 마지막 수거 이후 경과 초 (주머니 단계용).</summary>
+    public long GetFarmElapsedSeconds()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null || !IsFarmProducing()) return 0;
+        gm.EnsureWarehouseBaselines();
+        long now = NowUnixSeconds();
+        long last = gm.currentUser.lastFarmCollectTime;
+        if (last <= 0) return 0;
+        return Math.Max(0, now - last);
     }
 
     double GetMarketValuePerSec()
@@ -205,25 +243,34 @@ public class HomeController : MonoBehaviour
         }
     }
 
+    /// <summary>병사 모집 (금화 차감 후 병사 수 증가).</summary>
+    public void HireSoldiers(int count) => HireFarmWorkers(count);
+
     public void HireFarmWorkers(int count)
     {
         var gm = GameManager.InstanceOrNull;
-        if (gm == null || count <= 0) return;
+        if (gm == null || count <= 0 || gm.currentUser == null) return;
         int maxAfford = (int)(gm.currentGold / FarmWorkerCost);
         int actual = Mathf.Min(count, maxAfford);
-        if (actual > 0 && gm.UseGold(actual * FarmWorkerCost))
-            gm.currentUser.soldierCount += actual;
+        if (actual <= 0) return;
+        if (!gm.UseGold(actual * FarmWorkerCost)) return;
+        gm.currentUser.soldierCount += actual;
+        gm.SaveUserData();
     }
 
     public void BuyGrain(int count)
     {
         var gm = GameManager.InstanceOrNull;
-        if (gm == null || count <= 0) return;
+        if (gm == null || count <= 0 || gm.currentUser == null) return;
         int maxAfford = (int)(gm.currentGold / GrainCost);
         int actual = Mathf.Min(count, maxAfford);
-        if (actual > 0 && gm.UseGold(actual * GrainCost))
-            gm.AddGrain(actual);
+        if (actual <= 0) return;
+        if (!gm.UseGold(actual * GrainCost)) return;
+        gm.AddGrain(actual);
+        gm.SaveUserData();
     }
+
+    public int GetMaxAffordableSoldiers() => GetMaxAffordableFarmWorkers();
 
     public int GetMaxAffordableFarmWorkers()
     {
@@ -260,6 +307,7 @@ public class HomeController : MonoBehaviour
     /// <summary>
     /// 창고(시장 금화 + 농장 식량) 수거를 비행 연출 후 입금으로 처리.
     /// requireActivePiles: true면 CollectionManager에 켜진 더미가 1개 이상 있어야 함 (대문).
+    /// lastCollectTime은 모든 비행 OnComplete 후 갱신됩니다.
     /// </summary>
     public bool TryFlyCollectFromWarehouse(CollectionManager cm, bool requireActivePiles)
     {
@@ -273,11 +321,18 @@ public class HomeController : MonoBehaviour
         long totalGrain = (long)CurrentFarmAccumulated;
         if (totalGold <= 0 && totalGrain <= 0) return false;
 
-        long now = NowUnixSeconds();
-        gm.currentUser.lastMarketCollectTime = now;
-        gm.currentUser.lastFarmCollectTime = now;
+        int goldPiles = cm.CountActiveGoldPiles();
+        int grainPiles = cm.CountActiveGrainPiles();
+        if (totalGold > 0 && goldPiles <= 0) return false;
+        if (totalGrain > 0 && grainPiles <= 0) return false;
 
-        cm.PlayFlyEffect(totalGold, totalGrain);
+        cm.PlayFlyEffect(totalGold, totalGrain, () =>
+        {
+            long now = NowUnixSeconds();
+            if (totalGold > 0) gm.currentUser.lastMarketCollectTime = now;
+            if (totalGrain > 0) gm.currentUser.lastFarmCollectTime = now;
+            gm.SaveUserData();
+        });
         return true;
     }
 
@@ -310,6 +365,7 @@ public class HomeController : MonoBehaviour
     {
         // 에디터 전용 만보기 테스트 (Play 모드 + Game 뷰 포커스 권장)
         // F9: +500보, F10: +2000보, F11: 걸음·보상 상태 콘솔 로그
+        // F12: 시장+농장 창고 +1시간(빠른 시간여행)
         var gm = GameManager.InstanceOrNull;
 
         if (Input.GetKeyDown(KeyCode.F9) && gm?.currentUser != null)
@@ -334,6 +390,25 @@ public class HomeController : MonoBehaviour
                 ? $"{c[0]},{c[1]},{c[2]},{c[3]}"
                 : "(배열 없음)";
             Debug.Log($"[Editor 만보기] stepsToday={u.stepsToday}, 보상수령=[{r}]");
+        }
+
+        // --- 창고 누적 더미 아이콘 테스트용(빠른 시간여행) ---
+        // 누적량 계산은 now - lastCollectTime 기준이라,
+        // lastCollectTime을 3600초만 과거로 보내면 "1시간만큼" 누적/아이콘이 즉시 증가합니다.
+        if (Input.GetKeyDown(KeyCode.F12) && gm?.currentUser != null)
+        {
+            var u = gm.currentUser;
+            if (u.marketLevel <= 0 || u.farmLevel <= 0)
+                Debug.Log("[Editor 창고] 시장/농장 레벨이 0이면 해당 자원은 누적이 0으로 보일 수 있습니다. 레벨업 후 테스트하세요.");
+
+            long now = NowUnixSeconds();
+            if (u.lastFarmCollectTime <= 0) u.lastFarmCollectTime = now;
+            if (u.lastMarketCollectTime <= 0) u.lastMarketCollectTime = now;
+
+            u.lastMarketCollectTime -= 3600;
+            u.lastFarmCollectTime -= 3600;
+            gm.SaveUserData();
+            Debug.Log("[Editor 창고] 시장+농장 +1시간(=lastCollectTime - 3600s)");
         }
     }
 #endif

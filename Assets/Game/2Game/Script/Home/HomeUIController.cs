@@ -146,6 +146,7 @@ public class HomeUIController : MonoBehaviour
 
             double mAcc = _controller.CurrentMarketAccumulated;
             double mMax = _controller.GetMarketMaxCapacity();
+            if (collectionManager != null && collectionManager.IsFlyBusy) mAcc = 0;
             if (marketAccumulateText != null)
             {
                 marketAccumulateText.text = mMax > 0 ? $"{mAcc:F0} / {mMax:F0}" : "0 / 0";
@@ -156,6 +157,7 @@ public class HomeUIController : MonoBehaviour
 
             double fAcc = _controller.CurrentFarmAccumulated;
             double fMax = _controller.GetFarmMaxCapacity();
+            if (collectionManager != null && collectionManager.IsFlyBusy) fAcc = 0;
             if (farmAccumulateText != null)
             {
                 farmAccumulateText.text = fMax > 0 ? $"{fAcc:F0} / {fMax:F0}" : "0 / 0";
@@ -170,6 +172,11 @@ public class HomeUIController : MonoBehaviour
 
     void BindButtons()
     {
+        if (hireFarmWorkerButton == null)
+            hireFarmWorkerButton = transform.Find("SupplyPanel/SupplyButtons/HireFarmWorkerButton")?.GetComponent<Button>();
+        if (buyGrainButton == null)
+            buyGrainButton = transform.Find("SupplyPanel/SupplyButtons/BuyGrainButton")?.GetComponent<Button>();
+
         if (gateButton == null)
         {
             Debug.LogWarning("[HomeUIController] gateButton이 연결되지 않았습니다. Inspector에서 GateButton을 할당하세요.");
@@ -202,14 +209,13 @@ public class HomeUIController : MonoBehaviour
             UpdateFarmUI();
             UpdateSupplyUI();
         });
-        if (collectFarmButton != null)
-            collectFarmButton.onClick.AddListener(() =>
-                _controller?.TryFlyCollectFromWarehouse(collectionManager, requireActivePiles: false));
+        // 농장 수거는 창고 수거(단일 버튼)로 통합됨
         WireHoldRepeat(hireFarmWorkerButton, () =>
         {
             _controller?.HireFarmWorkers(1);
             UpdateFarmWorkersUI(GameManager.InstanceOrNull?.currentUser?.soldierCount ?? 0);
             UpdateSupplyUI();
+            PushGlobalTopBar();
         });
         WireHoldRepeat(buyGrainButton, () =>
         {
@@ -428,7 +434,7 @@ public class HomeUIController : MonoBehaviour
         int maxGrain = _controller.GetMaxAffordableGrain();
 
         supplyLabelText.text =
-            $"(농장 인력: 최대 {maxFarmWorkers}명 고용 가능)\n" +
+            $"(병사: 최대 {maxFarmWorkers}명 모집 가능)\n" +
             $"(식량: 최대 {maxGrain} 구매 가능)";
     }
 }

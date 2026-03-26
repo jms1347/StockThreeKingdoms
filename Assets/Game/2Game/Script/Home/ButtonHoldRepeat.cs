@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// 재화가 부족해져서 액션이 더 이상 효과가 없을 때까지 반복하는 용도(업그레이드·구매 등).
 /// </summary>
 [RequireComponent(typeof(Button))]
-public class ButtonHoldRepeat : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class ButtonHoldRepeat : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
     [Tooltip("첫 반복까지 대기 (초)")]
     public float firstRepeatDelay = 0.35f;
@@ -36,6 +36,11 @@ public class ButtonHoldRepeat : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     }
 
     public void OnPointerUp(PointerEventData eventData)
+    {
+        StopRepeat();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
     {
         StopRepeat();
     }

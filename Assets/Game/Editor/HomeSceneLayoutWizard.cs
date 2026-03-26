@@ -170,15 +170,12 @@ public static class HomeSceneLayoutWizard
 
         EnsureCenterRow(hp.transform);
         EnsureWarehouseRowPlacement(hp.transform);
-        EnsurePileDockPlacement(hp.transform);
         var ped = EnsurePedometerPanel(hp.transform);
-        var pileDock = EnsurePileDock(hp.transform);
         var flyRoot = EnsureFlyIconsRoot(hp.transform);
 
         var cm = hp.GetComponent<CollectionManager>() ?? hp.gameObject.AddComponent<CollectionManager>();
         cm.homeController = hc;
         cm.flyIconsRoot = flyRoot;
-        cm.pileArea = pileDock;
         EnsureFlyIconTemplates(cm, flyRoot);
         if (cm.poolSize < 10) cm.poolSize = 12;
 
@@ -188,7 +185,7 @@ public static class HomeSceneLayoutWizard
         cm.goldFlyTarget = goldRt;
         cm.grainFlyTarget = grainRt;
 
-        AssignPiles(cm, pileDock);
+        AssignPilesNearWarehouseLabels(cm, hp.transform);
         EditorUtility.SetDirty(cm);
 
         if (ui != null)
@@ -220,15 +217,6 @@ public static class HomeSceneLayoutWizard
         var center = homeRoot.Find("CenterPanelsRow");
         if (center != null)
             row.SetSiblingIndex(center.GetSiblingIndex() + 1);
-    }
-
-    static void EnsurePileDockPlacement(Transform homeRoot)
-    {
-        var dock = homeRoot.Find("PileDock");
-        if (dock == null) return;
-        var gate = homeRoot.Find("GateButton");
-        if (gate != null)
-            dock.SetSiblingIndex(gate.GetSiblingIndex() + 1);
     }
 
     // ---- 아래부터는 기존 HomePanelCreator / HomeTestSceneLayoutWizard 로직 통합(필요 최소만) ----
@@ -273,16 +261,16 @@ public static class HomeSceneLayoutWizard
         ui.laborUpgradeButton = t.Find("LaborPanel/LaborUpgradeButton")?.GetComponent<Button>();
 
         ui.marketLabelText = t.Find("MarketPanel/MarketLabelText")?.GetComponent<TextMeshProUGUI>();
-        ui.marketAccumulateText = t.Find("WarehouseRow/MarketWarehouse/MarketAccumulateText")?.GetComponent<TextMeshProUGUI>();
-        ui.marketAccumulateSlider = t.Find("WarehouseRow/MarketWarehouse/MarketAccumulateSlider")?.GetComponent<Slider>();
+        ui.marketAccumulateText = t.Find("WarehouseRow/WarehousePanelsRow/MarketWarehouse/MarketAccumulateText")?.GetComponent<TextMeshProUGUI>();
+        ui.marketAccumulateSlider = t.Find("WarehouseRow/WarehousePanelsRow/MarketWarehouse/MarketAccumulateSlider")?.GetComponent<Slider>();
         ui.marketUpgradeButton = t.Find("MarketPanel/MarketButtons/MarketUpgradeButton")?.GetComponent<Button>();
-        ui.collectMarketButton = t.Find("WarehouseRow/MarketWarehouse/CollectMarketButton")?.GetComponent<Button>();
+        ui.collectMarketButton = t.Find("WarehouseRow/CollectAllWarehouseButton")?.GetComponent<Button>();
 
         ui.farmLabelText = t.Find("FarmPanel/FarmLabelText")?.GetComponent<TextMeshProUGUI>();
-        ui.farmAccumulateText = t.Find("WarehouseRow/FarmWarehouse/FarmAccumulateText")?.GetComponent<TextMeshProUGUI>();
-        ui.farmAccumulateSlider = t.Find("WarehouseRow/FarmWarehouse/FarmAccumulateSlider")?.GetComponent<Slider>();
+        ui.farmAccumulateText = t.Find("WarehouseRow/WarehousePanelsRow/FarmWarehouse/FarmAccumulateText")?.GetComponent<TextMeshProUGUI>();
+        ui.farmAccumulateSlider = t.Find("WarehouseRow/WarehousePanelsRow/FarmWarehouse/FarmAccumulateSlider")?.GetComponent<Slider>();
         ui.farmUpgradeButton = t.Find("FarmPanel/FarmButtons/FarmUpgradeButton")?.GetComponent<Button>();
-        ui.collectFarmButton = t.Find("WarehouseRow/FarmWarehouse/CollectFarmButton")?.GetComponent<Button>();
+        ui.collectFarmButton = null;
 
         ui.supplyLabelText = t.Find("SupplyPanel/SupplyLabelText")?.GetComponent<TextMeshProUGUI>();
         ui.hireFarmWorkerButton = t.Find("SupplyPanel/SupplyButtons/HireFarmWorkerButton")?.GetComponent<Button>();
@@ -401,16 +389,33 @@ public static class HomeSceneLayoutWizard
         le.minHeight = 220f;
         le.flexibleWidth = 1f;
 
-        var h = row.AddComponent<HorizontalLayoutGroup>();
+        // 위: 시장/농장 2패널(가로), 아래: 회수버튼(전체폭)
+        var v = row.AddComponent<VerticalLayoutGroup>();
+        // 수거 버튼이 너무 아래로 떨어져 보이지 않게 간격을 줄임
+        v.spacing = 6f;
+        v.childAlignment = TextAnchor.UpperCenter;
+        v.childControlWidth = true;
+        v.childControlHeight = true;
+        v.childForceExpandWidth = true;
+        v.childForceExpandHeight = false;
+
+        // 수거 버튼은 1개만: 시장/농장 창고를 한 번에 수거
+        var panelsRow = new GameObject("WarehousePanelsRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(panelsRow, "WarehousePanelsRow");
+        panelsRow.transform.SetParent(row.transform, false);
+        var h = panelsRow.GetComponent<HorizontalLayoutGroup>();
         h.spacing = 16f;
         h.childAlignment = TextAnchor.UpperCenter;
         h.childControlWidth = true;
         h.childControlHeight = true;
         h.childForceExpandWidth = true;
         h.childForceExpandHeight = false;
+        var panelsLe = panelsRow.GetComponent<LayoutElement>();
+        panelsLe.flexibleWidth = 1f;
 
-        CreateWarehousePanel(row.transform, "MarketWarehouse", "시장 창고", "MarketAccumulateText", "MarketAccumulateSlider", "CollectMarketButton");
-        CreateWarehousePanel(row.transform, "FarmWarehouse", "농장 창고", "FarmAccumulateText", "FarmAccumulateSlider", "CollectFarmButton");
+        CreateWarehousePanel(panelsRow.transform, "MarketWarehouse", "시장 창고", "MarketAccumulateText", "MarketAccumulateSlider", null);
+        CreateWarehousePanel(panelsRow.transform, "FarmWarehouse", "농장 창고", "FarmAccumulateText", "FarmAccumulateSlider", null);
+        CreateWarehouseCollectAllButton(row.transform);
     }
 
     static void CreateWarehousePanel(Transform parent, string name, string title, string accTextName, string sliderName, string collectBtnName)
@@ -435,26 +440,76 @@ public static class HomeSceneLayoutWizard
         v.childForceExpandWidth = true;
         v.childForceExpandHeight = false;
 
-        CreateText(panel.transform, "Title", title, 16, FontStyles.Bold);
+        // 헤더: 라벨 + (라벨 옆 빈 공간에) 2열 더미 그리드
+        var header = new GameObject("HeaderRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(header, "HeaderRow");
+        header.transform.SetParent(panel.transform, false);
+        var h = header.GetComponent<HorizontalLayoutGroup>();
+        h.spacing = 10f;
+        h.childAlignment = TextAnchor.MiddleLeft;
+        h.childControlWidth = true;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = true;
+        h.childForceExpandHeight = false;
+        header.GetComponent<LayoutElement>().minHeight = 44f;
+
+        var titleTmp = CreateText(header.transform, "Title", title, 16, FontStyles.Bold);
+        var titleLe = titleTmp.GetComponent<LayoutElement>() ?? titleTmp.gameObject.AddComponent<LayoutElement>();
+        titleLe.flexibleWidth = 1f;
+        titleLe.minWidth = 120f;
+
+        EnsurePilesGrid(header.transform, "PilesGrid");
+
         CreateText(panel.transform, accTextName, "0 / 0", 14);
         CreateSlider(panel.transform, sliderName);
 
-        var btn = CreateButton(panel.transform, collectBtnName, "수거");
-        var btnLe = btn.GetComponent<LayoutElement>() ?? btn.gameObject.AddComponent<LayoutElement>();
-        btnLe.minHeight = 110f;
-        btnLe.preferredHeight = 120f;
+        if (!string.IsNullOrEmpty(collectBtnName))
+        {
+            var btn = CreateButton(panel.transform, collectBtnName, "수거");
+            var btnLe = btn.GetComponent<LayoutElement>() ?? btn.gameObject.AddComponent<LayoutElement>();
+            btnLe.minHeight = 110f;
+            btnLe.preferredHeight = 120f;
+        }
+    }
+
+    static void CreateWarehouseCollectAllButton(Transform warehouseRow)
+    {
+        if (warehouseRow == null) return;
+        var existing = warehouseRow.Find("CollectAllWarehouseButton")?.GetComponent<Button>();
+        if (existing != null) return;
+
+        var btn = CreateButton(warehouseRow, "CollectAllWarehouseButton", "창고 수거");
+        var le = btn.GetComponent<LayoutElement>() ?? btn.gameObject.AddComponent<LayoutElement>();
+        le.minHeight = 110f;
+        le.preferredHeight = 120f;
+        le.flexibleWidth = 1f;
     }
 
     static void CreateSupplyPanel(Transform parent)
     {
         GameObject panel = CreatePanel(parent, "SupplyPanel", "보급");
-        CreateText(panel.transform, "SupplyLabelText", "(농장 인력: 최대 0명 고용 가능)\n(식량: 최대 0 구매 가능)", 12);
+        CreateText(panel.transform, "SupplyLabelText", "(병사: 최대 0명 모집 가능)\n(식량: 최대 0 구매 가능)", 12);
         GameObject btnRow = new GameObject("SupplyButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
         Undo.RegisterCreatedObjectUndo(btnRow, "SupplyButtons");
         btnRow.transform.SetParent(panel.transform, false);
-        btnRow.GetComponent<HorizontalLayoutGroup>().spacing = 8;
-        CreateButton(btnRow.transform, "HireFarmWorkerButton", "농장 인력 고용 (100G)");
-        CreateButton(btnRow.transform, "BuyGrainButton", "식량 구매 (2G)");
+        var supplyHlg = btnRow.GetComponent<HorizontalLayoutGroup>();
+        supplyHlg.spacing = 8;
+        supplyHlg.childControlWidth = true;
+        supplyHlg.childControlHeight = true;
+        supplyHlg.childForceExpandWidth = true;
+        supplyHlg.childForceExpandHeight = false;
+        CreateSupplyActionButton(btnRow.transform, "HireFarmWorkerButton", "병사 모집 (100G)");
+        CreateSupplyActionButton(btnRow.transform, "BuyGrainButton", "식량 구매 (2G)");
+    }
+
+    static Button CreateSupplyActionButton(Transform parent, string name, string label)
+    {
+        Button btn = CreateButton(parent, name, label);
+        var le = btn.GetComponent<LayoutElement>() ?? btn.gameObject.AddComponent<LayoutElement>();
+        le.minHeight = 110f;
+        le.preferredHeight = 120f;
+        le.flexibleWidth = 1f;
+        return btn;
     }
 
     static GameObject CreateText(Transform parent, string name, string content, int fontSize, FontStyles style = FontStyles.Normal)
@@ -704,33 +759,37 @@ public static class HomeSceneLayoutWizard
         return tmp;
     }
 
-    static RectTransform EnsurePileDock(Transform homeRoot)
+    static RectTransform EnsurePilesGrid(Transform parent, string name)
     {
-        Transform dock = homeRoot.Find("PileDock");
-        if (dock != null) return dock as RectTransform;
-        var go = new GameObject("PileDock", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
-        Undo.RegisterCreatedObjectUndo(go, "PileDock");
-        go.transform.SetParent(homeRoot, false);
+        var existing = parent.Find(name) as RectTransform;
+        if (existing != null) return existing;
+
+        var go = new GameObject(name, typeof(RectTransform), typeof(UnityEngine.UI.GridLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(go, name);
+        go.transform.SetParent(parent, false);
         var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin = new Vector2(0, 1);
-        rt.anchorMax = new Vector2(1, 1);
-        rt.pivot = new Vector2(0.5f, 1f);
-        rt.sizeDelta = new Vector2(0, 0);
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        // 8개를 2행(가로 2줄)로 배치하려면 4열 폭이 필요
+        rt.sizeDelta = new Vector2(124f, 44f);
+
+        var grid = go.GetComponent<UnityEngine.UI.GridLayoutGroup>();
+        grid.cellSize = new Vector2(18f, 18f);
+        grid.spacing = new Vector2(6f, 6f);
+        grid.startCorner = UnityEngine.UI.GridLayoutGroup.Corner.UpperLeft;
+        grid.startAxis = UnityEngine.UI.GridLayoutGroup.Axis.Horizontal;
+        grid.childAlignment = TextAnchor.MiddleCenter;
+        // “2열”이 아니라 “2행”으로 보이게 (Row 2개 고정)
+        grid.constraint = UnityEngine.UI.GridLayoutGroup.Constraint.FixedRowCount;
+        grid.constraintCount = 2;
 
         var le = go.GetComponent<LayoutElement>();
+        le.minWidth = 124f;
         le.minHeight = 44f;
-        le.preferredHeight = 56f;
-        le.flexibleWidth = 1f;
-
-        var v = go.GetComponent<VerticalLayoutGroup>();
-        v.padding = new RectOffset(10, 10, 6, 6);
-        v.spacing = 6f;
-        v.childAlignment = TextAnchor.UpperCenter;
-        v.childControlWidth = true;
-        v.childControlHeight = true;
-        v.childForceExpandWidth = true;
-        v.childForceExpandHeight = false;
-
+        le.preferredWidth = 124f;
+        le.preferredHeight = 44f;
+        le.flexibleWidth = 0f;
+        le.flexibleHeight = 0f;
         return rt;
     }
 
@@ -783,46 +842,75 @@ public static class HomeSceneLayoutWizard
         var rt = go.GetComponent<RectTransform>();
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
         rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = new Vector2(48f, 48f);
+        // 창고 더미 아이콘(18x18)과 동일 크기로 통일
+        rt.sizeDelta = new Vector2(18f, 18f);
         var img = go.GetComponent<Image>();
         img.color = color;
         img.raycastTarget = false;
         go.SetActive(false);
     }
 
-    static void AssignPiles(CollectionManager cm, RectTransform dock)
+    static void AssignPilesNearWarehouseLabels(CollectionManager cm, Transform homeRoot)
     {
-        if (cm == null || dock == null) return;
-        var goldRow = dock.Find("GoldPilesRow");
-        if (goldRow == null)
+        if (cm == null || homeRoot == null) return;
+
+        // 시장 창고 헤더 옆: 금화 더미(2열)
+        var marketGrid = homeRoot.Find("WarehouseRow/WarehousePanelsRow/MarketWarehouse/HeaderRow/PilesGrid") as RectTransform;
+        if (marketGrid != null)
         {
-            goldRow = new GameObject("GoldPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
-            Undo.RegisterCreatedObjectUndo(goldRow.gameObject, "GoldPilesRow");
-            goldRow.SetParent(dock, false);
-            var h = goldRow.GetComponent<HorizontalLayoutGroup>();
-            h.spacing = 6f;
-            h.childAlignment = TextAnchor.MiddleCenter;
-            h.childControlWidth = false;
-            h.childControlHeight = false;
-            h.childForceExpandWidth = false;
-            h.childForceExpandHeight = false;
+            cm.goldPiles = EnsurePileIcons(marketGrid, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
+            cm.pileArea = marketGrid; // 시작 위치 기준도 시장 쪽으로
         }
-        var grainRow = dock.Find("GrainPilesRow");
-        if (grainRow == null)
+
+        // 농장 창고 헤더 옆: 식량 더미(2열)
+        var farmGrid = homeRoot.Find("WarehouseRow/WarehousePanelsRow/FarmWarehouse/HeaderRow/PilesGrid") as RectTransform;
+        if (farmGrid != null)
         {
-            grainRow = new GameObject("GrainPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
-            Undo.RegisterCreatedObjectUndo(grainRow.gameObject, "GrainPilesRow");
-            grainRow.SetParent(dock, false);
-            var h = grainRow.GetComponent<HorizontalLayoutGroup>();
-            h.spacing = 6f;
-            h.childAlignment = TextAnchor.MiddleCenter;
-            h.childControlWidth = false;
-            h.childControlHeight = false;
-            h.childForceExpandWidth = false;
-            h.childForceExpandHeight = false;
+            cm.grainPiles = EnsurePileIcons(farmGrid, "GrainPile", new Color(0.45f, 0.75f, 0.25f, 1f));
+            if (cm.pileArea == null) cm.pileArea = farmGrid;
         }
-        cm.goldPiles = EnsurePileIcons(goldRow, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
-        cm.grainPiles = EnsurePileIcons(grainRow, "GrainPile", new Color(0.45f, 0.75f, 0.25f, 1f));
+
+        // 구버전 씬 호환: 기존 PileDock이 남아있으면 거기서도 생성 가능
+        if ((cm.goldPiles == null || cm.goldPiles.Length == 0) || (cm.grainPiles == null || cm.grainPiles.Length == 0))
+        {
+            var legacyDock = homeRoot.Find("PileDock") as RectTransform;
+            if (legacyDock != null)
+            {
+                var goldRow = legacyDock.Find("GoldPilesRow");
+                if (goldRow == null)
+                {
+                    goldRow = new GameObject("GoldPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
+                    Undo.RegisterCreatedObjectUndo(goldRow.gameObject, "GoldPilesRow");
+                    goldRow.SetParent(legacyDock, false);
+                    var h = goldRow.GetComponent<HorizontalLayoutGroup>();
+                    h.spacing = 6f;
+                    h.childAlignment = TextAnchor.MiddleCenter;
+                    h.childControlWidth = false;
+                    h.childControlHeight = false;
+                    h.childForceExpandWidth = false;
+                    h.childForceExpandHeight = false;
+                }
+                var grainRow = legacyDock.Find("GrainPilesRow");
+                if (grainRow == null)
+                {
+                    grainRow = new GameObject("GrainPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
+                    Undo.RegisterCreatedObjectUndo(grainRow.gameObject, "GrainPilesRow");
+                    grainRow.SetParent(legacyDock, false);
+                    var h = grainRow.GetComponent<HorizontalLayoutGroup>();
+                    h.spacing = 6f;
+                    h.childAlignment = TextAnchor.MiddleCenter;
+                    h.childControlWidth = false;
+                    h.childControlHeight = false;
+                    h.childForceExpandWidth = false;
+                    h.childForceExpandHeight = false;
+                }
+                if (cm.goldPiles == null || cm.goldPiles.Length == 0)
+                    cm.goldPiles = EnsurePileIcons(goldRow, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
+                if (cm.grainPiles == null || cm.grainPiles.Length == 0)
+                    cm.grainPiles = EnsurePileIcons(grainRow, "GrainPile", new Color(0.45f, 0.75f, 0.25f, 1f));
+                if (cm.pileArea == null) cm.pileArea = legacyDock;
+            }
+        }
     }
 
     static GameObject[] EnsurePileIcons(Transform row, string baseName, Color c)
