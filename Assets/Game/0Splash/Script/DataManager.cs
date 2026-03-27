@@ -8,12 +8,15 @@ using Sirenix.OdinInspector; // Odin 네임스페이스 추가
 using UnityEditor;
 #endif
 
-public class DataManager : Singleton<DataManager>
+public partial class DataManager : Singleton<DataManager>
 {
     public Action OnDataReady;
     public Action OnStateDataReady;
     public Action<WorldNewsItem> OnNewsAdded;
     public Action OnStateTicked;
+
+    /// <summary>런타임 맵·SO를 갱신한 뒤 천하 UI만 즉시 다시 그릴 때 호출(가짜 틱 제거 후).</summary>
+    public void RequestWorldUiRefresh() => OnStateTicked?.Invoke();
 
     [Header("Master Data SO References")]
     [SerializeField] LevelRuleDataSo levelRuleDataSo;
@@ -22,6 +25,18 @@ public class DataManager : Singleton<DataManager>
     [SerializeField] BuffMasterDataSo buffMasterDataSo;
     [SerializeField] NationMasterDataSo nationMasterDataSo;
     [SerializeField] RegionMasterDataSo regionMasterDataSo;
+
+    [Header("경제 기본값 SO (선택)")]
+    [Tooltip("GlobalEconomy 정적 필드 초기화.")]
+    [SerializeField] GlobalEconomyDefaultsSo globalEconomyDefaultsSo;
+    [Tooltip("castle_state.json 이 없을 때만 BuildStateDataFromMaster 뒤에 적용되는 성별 초기 AI/상태 덮어쓰기.")]
+    [SerializeField] CastleWorldInitialScenarioSo castleWorldInitialScenarioSo;
+
+    [Header("실시간 SO 미러 (천하·에디터)")]
+    [Tooltip("전 성 실시간 상태. 런타임 갱신 시 에디터에서 SetDirty + 디바운스 SaveAssets.")]
+    [SerializeField] CastleStateSo castleStateLiveSo;
+    [Tooltip("유저 투자(성별 병력·평단) + 총 금화.")]
+    [SerializeField] UserPortfolioSo userPortfolioLiveSo;
 
     [Header("Runtime Dictionaries")]
 
@@ -65,19 +80,32 @@ public class DataManager : Singleton<DataManager>
     public bool IsReady { get; private set; } = false;
     public bool IsStateReady { get; private set; } = false;
 
-    [Header("Economy Engine (Emulator)")]
-    [SerializeField] float economyTickIntervalSec = 5f;
-    [SerializeField] float randomEventIntervalSec = 30f;
-    [SerializeField, Range(0f, 1f)] float randomEventChance = 0.10f;
-    [SerializeField, Range(0f, 0.05f)] float populationJitterPct = 0.005f; // ±0.5%
-    [SerializeField] float sentimentJitterMax = 0.5f; // ±0.5
-    [SerializeField, Range(0f, 0.5f)] float governorCharmBias = 0.15f; // 0이면 무시
+    [Header("시세 (매수/매도 스프레드)")]
     [SerializeField, Range(0f, 0.2f)] float tradeSpread = 0.03f; // 매수/매도 스프레드(기본 3%)
 
-    float _nextEconomyTickAt;
-    float _nextRandomEventAt;
     float _nextSaveAt;
     bool _stateDirty;
+
+    [Header("본영·이동 게이지 (UserPortfolioLiveSo와 동기화)")]
+    [SerializeField, Tooltip("지도 거리 100단위당 소모 포인트")]
+    float travelPointsPer100Distance = 5000f;
+    [SerializeField, Tooltip("실시간 1분당 자동 충전 포인트")]
+    float travelIdlePointsPerMinute = 10f;
+    [SerializeField, Tooltip("만보기 1걸음당 이동 게이지 포인트")]
+    float travelPointsPerStep = 1f;
+    [SerializeField, Tooltip("이동 게이지 바 시각화용 상한(실제 값은 무제한에 가깝게 누적)")]
+    float travelGaugeVisualCap = 25000f;
+
+    string _homeCastleId = "";
+    float _travelGaugePoints;
+    int _lastStepCountSyncedForGauge;
+    bool _gameManagerStepsHooked;
+    string _pendingHqMoveCastleId = "";
+    float _pendingHqMoveCost;
+
+#if UNITY_EDITOR
+    float _nextEditorLiveSoSaveTime;
+#endif
 
     const string StateSaveFileName = "castle_state.json";
 
@@ -88,6 +116,8 @@ public class DataManager : Singleton<DataManager>
 
     public void InitializeAllData()
     {
+        ApplyGlobalEconomyDefaultsFromSoIfPresent();
+
         // 시트 파싱 결과가 비어있을 때를 대비해 SO에서 딕셔너리를 보강합니다.
         SyncRuntimeMapsFromSo();
         IsReady = true;
@@ -101,19 +131,10 @@ public class DataManager : Singleton<DataManager>
     {
         if (!IsReady || !IsStateReady) return;
 
+        TickTravelGaugeIdle(Time.unscaledDeltaTime);
+        TickCastleDailyHistoryRollover();
+
         float now = Time.unscaledTime;
-        if (now >= _nextEconomyTickAt)
-        {
-            _nextEconomyTickAt = now + Mathf.Max(0.5f, economyTickIntervalSec);
-            UpdateEconomyTick();
-        }
-
-        if (now >= _nextRandomEventAt)
-        {
-            _nextRandomEventAt = now + Mathf.Max(2f, randomEventIntervalSec);
-            TryRandomEvent();
-        }
-
         if (_stateDirty && now >= _nextSaveAt)
         {
             _nextSaveAt = now + 15f;
@@ -178,6 +199,35 @@ public class DataManager : Singleton<DataManager>
         return regionMasterDataMap.TryGetValue(rid, out region) && region != null;
     }
 
+    /// <summary>UI·뉴스용 성 표시명 — R01/C01 같은 코드 대신 실제 성명·지역 문자열·섹터명을 우선합니다.</summary>
+    public string GetCastleDisplayName(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return "";
+        castleId = castleId.Trim();
+        if (!castleMasterDataMap.TryGetValue(castleId, out var m) || m == null) return "";
+        TryGetRegionByCastleId(castleId, out var byCastle);
+        RegionMasterData byRidField = null;
+        string rf = (m.regionId ?? "").Trim();
+        if (!string.IsNullOrEmpty(rf))
+            byRidField = GetRegionMasterData(rf);
+        return CastleDisplayLabels.GetCastleTitle(m, byCastle, byRidField);
+    }
+
+    /// <summary>천하 카드 부제 등 — 지역(섹터) 표시명. 제목과 같으면 빈 문자열.</summary>
+    public string GetCastleRegionSubtitle(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return "";
+        castleId = castleId.Trim();
+        if (!castleMasterDataMap.TryGetValue(castleId, out var m) || m == null) return "";
+        TryGetRegionByCastleId(castleId, out var byCastle);
+        RegionMasterData byRidField = null;
+        string rf = (m.regionId ?? "").Trim();
+        if (!string.IsNullOrEmpty(rf))
+            byRidField = GetRegionMasterData(rf);
+        string title = CastleDisplayLabels.GetCastleTitle(m, byCastle, byRidField);
+        return CastleDisplayLabels.GetRegionSubtitle(m, byCastle, byRidField, title);
+    }
+
     public void RebuildRegionCastleLookup()
     {
         castleIdToRegionIdMap.Clear();
@@ -208,14 +258,27 @@ public class DataManager : Singleton<DataManager>
 
         RecalculateAllPrices();
 
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null) continue;
+            castleMasterDataMap.TryGetValue(s.id, out var master);
+            EnsureCastleHistorySeeded(s, master);
+            if (s.buyPricePrevDayClose < 0.5f)
+                s.buyPricePrevDayClose = CalculateBuyPrice(s);
+        }
+
         IsStateReady = true;
+        LoadWorldPortfolioHqFromSo();
+        EnsureDefaultHomeCastleIfEmpty();
+        HookGameManagerStepsForTravelGauge();
+
         OnStateDataReady?.Invoke();
 
         float now = Time.unscaledTime;
-        _nextEconomyTickAt = now + Mathf.Max(0.5f, economyTickIntervalSec);
-        _nextRandomEventAt = now + Mathf.Max(2f, randomEventIntervalSec);
         _nextSaveAt = now + 10f;
         _stateDirty = true; // 첫 저장 보장
+        FlushLiveScriptableObjects();
     }
 
     void BuildStateDataFromMaster()
@@ -241,12 +304,261 @@ public class DataManager : Singleton<DataManager>
             s.averagePurchasePrice = 0f;
             s.sentimentHistory = new List<float>(10) { s.currentSentiment };
             s.populationHistory = new List<int>(10) { s.currentPopulation };
+            s.historyPopulation7Day = new List<float>();
+            s.historySentiment7Day = new List<float>();
+            s.buyPricePrevDayClose = 0f;
             castleStateDataMap[s.id] = s;
         }
+
+        ApplyInitialGovernorsFromGenerals();
+        ApplyCastleWorldInitialScenarioIfPresent();
 
         worldNews.Clear();
         AddNews($"[INIT] StateData 생성 완료 ({castleStateDataMap.Count}개 성).");
         _stateDirty = true;
+    }
+
+    /// <summary>
+    /// <see cref="userPortfolioLiveSo"/> 보유(없으면 런타임 맵) + 라이브 매도가 기준 수익률(%). 미보유·평단 0이면 false.
+    /// </summary>
+    public bool TryGetCastleRoiSellBasis(string castleId, out float roiPercent)
+    {
+        roiPercent = 0f;
+        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId)) return false;
+        castleId = castleId.Trim();
+
+        float avg = 0f;
+        if (TryGetUserCastleStock(castleId, out var stock) && stock != null && stock.troopCount > 0)
+            avg = stock.averagePurchasePrice;
+        else if (castleStateDataMap.TryGetValue(castleId, out var sm) && sm != null && sm.IsUserInvested)
+            avg = sm.averagePurchasePrice;
+        else
+            return false;
+
+        if (avg < 1e-4f) return false;
+
+        float sell = 0f;
+        if (TryGetLiveCastleState(castleId, out var live) && live != null)
+            sell = live.currentSellPrice;
+        else if (castleStateDataMap.TryGetValue(castleId, out var s) && s != null)
+            sell = s.currentSellPrice;
+        else
+            return false;
+
+        roiPercent = (sell - avg) / avg * 100f;
+        return true;
+    }
+
+    /// <summary><see cref="castleStateLiveSo"/>에서 성 라이브 엔트리 조회.</summary>
+    public bool TryGetLiveCastleState(string castleId, out CastleStateSo.CastleLiveStateEntry entry)
+    {
+        entry = null;
+        if (string.IsNullOrWhiteSpace(castleId) || castleStateLiveSo == null || castleStateLiveSo.castles == null)
+            return false;
+        castleId = castleId.Trim();
+        var list = castleStateLiveSo.castles;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var e = list[i];
+            if (e == null || string.IsNullOrWhiteSpace(e.castleId)) continue;
+            if (string.Equals(e.castleId.Trim(), castleId, StringComparison.Ordinal))
+            {
+                entry = e;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary><see cref="userPortfolioLiveSo"/>에서 성별 유저 보유 조회.</summary>
+    public bool TryGetUserCastleStock(string castleId, out UserPortfolioSo.UserCastleStock stock)
+    {
+        stock = null;
+        if (string.IsNullOrWhiteSpace(castleId) || userPortfolioLiveSo == null || userPortfolioLiveSo.holdings == null)
+            return false;
+        castleId = castleId.Trim();
+        var list = userPortfolioLiveSo.holdings;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var h = list[i];
+            if (h == null || string.IsNullOrWhiteSpace(h.castleId)) continue;
+            if (string.Equals(h.castleId.Trim(), castleId, StringComparison.Ordinal))
+            {
+                stock = h;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool HasUserStockInPortfolio(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return false;
+        castleId = castleId.Trim();
+        if (TryGetLiveCastleState(castleId, out var live) && live != null && live.userDeployedTroops > 0)
+            return true;
+        if (TryGetUserCastleStock(castleId, out var st) && st != null && st.troopCount > 0)
+            return true;
+        return castleStateDataMap.TryGetValue(castleId, out var s) && s != null && s.IsUserInvested;
+    }
+
+    bool HasLiveCastleSoListForWorldUi() =>
+        castleStateLiveSo != null && castleStateLiveSo.castles != null && castleStateLiveSo.castles.Count > 0;
+
+    /// <summary>천하 리스트 헤더 등 — <see cref="castleStateLiveSo"/> 행 수 우선, 없으면 런타임 맵.</summary>
+    public int GetWorldCastleUiTotalCount()
+    {
+        if (castleStateLiveSo != null && castleStateLiveSo.castles != null && castleStateLiveSo.castles.Count > 0)
+            return castleStateLiveSo.castles.Count;
+        return castleStateDataMap != null ? castleStateDataMap.Count : 0;
+    }
+
+    /// <summary>UI용 별칭. <see cref="TryGetCastleRoiSellBasis"/>.</summary>
+    public bool TryGetRoiPercent(string castleId, out float roiPercent) => TryGetCastleRoiSellBasis(castleId, out roiPercent);
+
+    /// <summary><see cref="castleStateLiveSo"/>·<see cref="userPortfolioLiveSo"/>에 런타임 맵을 반영. 에디터에서만 디스크 저장(디바운스).</summary>
+    public void FlushLiveScriptableObjects()
+    {
+        if (!IsStateReady || castleStateDataMap == null) return;
+
+        if (castleStateLiveSo != null)
+        {
+            if (castleStateLiveSo.castles == null)
+                castleStateLiveSo.castles = new List<CastleStateSo.CastleLiveStateEntry>();
+            castleStateLiveSo.castles.Clear();
+            var keys = new List<string>(castleStateDataMap.Keys);
+            keys.Sort(StringComparer.Ordinal);
+            for (int i = 0; i < keys.Count; i++)
+            {
+                if (!castleStateDataMap.TryGetValue(keys[i], out var s) || s == null) continue;
+                castleStateLiveSo.castles.Add(new CastleStateSo.CastleLiveStateEntry
+                {
+                    castleId = s.id,
+                    currentPopulation = s.currentPopulation,
+                    currentSentiment = s.currentSentiment,
+                    isWar = s.isWar,
+                    isDisaster = s.isDisaster,
+                    isFavorableEvent = s.isFavorableEvent,
+                    currentGovernorId = s.currentGovernorId ?? "",
+                    currentLord = s.currentLord,
+                    currentBuyPrice = s.currentBuyPrice,
+                    currentSellPrice = s.currentSellPrice,
+                    userDeployedTroops = s.userDeployedTroops,
+                    averagePurchasePrice = s.averagePurchasePrice,
+                    historyPopulation7Day = s.historyPopulation7Day != null ? new List<float>(s.historyPopulation7Day) : new List<float>(),
+                    historySentiment7Day = s.historySentiment7Day != null ? new List<float>(s.historySentiment7Day) : new List<float>(),
+                    buyPricePrevDayClose = s.buyPricePrevDayClose
+                });
+            }
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(castleStateLiveSo);
+#endif
+        }
+
+        if (userPortfolioLiveSo != null)
+        {
+            if (userPortfolioLiveSo.holdings == null)
+                userPortfolioLiveSo.holdings = new List<UserPortfolioSo.UserCastleStock>();
+            userPortfolioLiveSo.holdings.Clear();
+            foreach (var kv in castleStateDataMap)
+            {
+                var s = kv.Value;
+                if (s == null || s.userDeployedTroops <= 0) continue;
+                userPortfolioLiveSo.holdings.Add(new UserPortfolioSo.UserCastleStock
+                {
+                    castleId = s.id,
+                    troopCount = s.userDeployedTroops,
+                    averagePurchasePrice = s.averagePurchasePrice
+                });
+            }
+
+            var gm = GameManager.InstanceOrNull;
+            userPortfolioLiveSo.totalGold = gm != null && gm.currentUser != null ? gm.currentUser.gold : 0L;
+            userPortfolioLiveSo.homeCastleId = _homeCastleId ?? "";
+            userPortfolioLiveSo.travelGaugePoints = _travelGaugePoints;
+            userPortfolioLiveSo.currentStepCount = _lastStepCountSyncedForGauge;
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(userPortfolioLiveSo);
+#endif
+        }
+
+#if UNITY_EDITOR
+        if (castleStateLiveSo != null || userPortfolioLiveSo != null)
+        {
+            float t = Time.realtimeSinceStartup;
+            if (t >= _nextEditorLiveSoSaveTime)
+            {
+                _nextEditorLiveSoSaveTime = t + 0.65f;
+                AssetDatabase.SaveAssets();
+            }
+        }
+#endif
+    }
+
+    void ApplyGlobalEconomyDefaultsFromSoIfPresent()
+    {
+        if (globalEconomyDefaultsSo == null) return;
+        GlobalEconomy.totalServerSoldiers = globalEconomyDefaultsSo.initialTotalServerSoldiers;
+        GlobalEconomy.grainPriceIndex = globalEconomyDefaultsSo.initialGrainPriceIndex;
+    }
+
+    void ApplyCastleWorldInitialScenarioIfPresent()
+    {
+        if (castleWorldInitialScenarioSo == null || !castleWorldInitialScenarioSo.enabled) return;
+        if (castleWorldInitialScenarioSo.entries == null) return;
+
+        for (int i = 0; i < castleWorldInitialScenarioSo.entries.Count; i++)
+        {
+            var e = castleWorldInitialScenarioSo.entries[i];
+            if (e == null || string.IsNullOrWhiteSpace(e.castleId)) continue;
+            string id = e.castleId.Trim();
+            if (!castleStateDataMap.TryGetValue(id, out var st) || st == null) continue;
+            e.ApplyTo(st);
+        }
+    }
+
+    /// <summary>
+    /// 장수 마스터의 <see cref="GeneralMasterData.initialCastleId"/>를 기준으로 성마다 <see cref="CastleStateData.currentGovernorId"/>를 채웁니다.
+    /// 동일 성에 여러 장수가 있으면 등급(숫자 작을수록 상위) 우선, 동급이면 ID 순입니다.
+    /// </summary>
+    void ApplyInitialGovernorsFromGenerals()
+    {
+        var bestByCastle = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        foreach (var kv in generalMasterDataMap)
+        {
+            var g = kv.Value;
+            if (g == null || string.IsNullOrWhiteSpace(g.initialCastleId)) continue;
+            string cid = g.initialCastleId.Trim();
+            if (!castleStateDataMap.ContainsKey(cid)) continue;
+
+            if (!bestByCastle.TryGetValue(cid, out string bestId))
+            {
+                bestByCastle[cid] = g.id;
+                continue;
+            }
+
+            if (!generalMasterDataMap.TryGetValue(bestId, out var bestG) || bestG == null)
+            {
+                bestByCastle[cid] = g.id;
+                continue;
+            }
+
+            if (g.grade < bestG.grade)
+                bestByCastle[cid] = g.id;
+            else if (g.grade == bestG.grade && string.CompareOrdinal(g.id, bestId) < 0)
+                bestByCastle[cid] = g.id;
+        }
+
+        foreach (var kv in bestByCastle)
+        {
+            if (!castleStateDataMap.TryGetValue(kv.Key, out var st) || st == null) continue;
+            st.currentGovernorId = kv.Value;
+            st.lastDailyBuffGovernorId = "";
+            st.lastDailyBuffTime = 0;
+        }
     }
 
     string GetStateSavePath()
@@ -276,6 +588,8 @@ public class DataManager : Singleton<DataManager>
                 if (s.sentimentHistory == null) s.sentimentHistory = new List<float>();
                 if (s.populationHistory == null)
                     s.populationHistory = new List<int> { s.currentPopulation };
+                if (s.historyPopulation7Day == null) s.historyPopulation7Day = new List<float>();
+                if (s.historySentiment7Day == null) s.historySentiment7Day = new List<float>();
                 castleStateDataMap[s.id] = s;
             }
 
@@ -302,7 +616,10 @@ public class DataManager : Singleton<DataManager>
                         userDeployedTroops = 0,
                         averagePurchasePrice = 0f,
                         sentimentHistory = new List<float>(10) { 100f },
-                        populationHistory = new List<int>(10) { master.initPopulation }
+                        populationHistory = new List<int>(10) { master.initPopulation },
+                        historyPopulation7Day = new List<float>(),
+                        historySentiment7Day = new List<float>(),
+                        buyPricePrevDayClose = 0f
                     };
                     castleStateDataMap[id] = s;
                 }
@@ -333,6 +650,7 @@ public class DataManager : Singleton<DataManager>
             string path = GetStateSavePath();
             File.WriteAllText(path, json);
             _stateDirty = false;
+            FlushLiveScriptableObjects();
         }
         catch (Exception e)
         {
@@ -386,6 +704,9 @@ public class DataManager : Singleton<DataManager>
     /// </summary>
     public List<string> GetOrderedWorldCastleIds(WorldMarketCastleListFilter filter)
     {
+        if (HasLiveCastleSoListForWorldUi())
+            return GetOrderedWorldCastleIdsFromLiveSo(filter);
+
         if (castleStateDataMap == null || castleStateDataMap.Count == 0)
             return new List<string>();
 
@@ -410,11 +731,62 @@ public class DataManager : Singleton<DataManager>
         }
     }
 
-    /// <summary>요주의: B·C·D 등급 성만 (하이리스크·저평가 종목 필터).</summary>
-    bool IsAttentionCastle(CastleStateData s)
+    List<string> GetOrderedWorldCastleIdsFromLiveSo(WorldMarketCastleListFilter filter)
     {
-        if (s == null || string.IsNullOrWhiteSpace(s.id)) return false;
-        if (!castleMasterDataMap.TryGetValue(s.id.Trim(), out var m) || m == null) return false;
+        IEnumerable<CastleStateSo.CastleLiveStateEntry> q = castleStateLiveSo.castles
+            .Where(e => e != null && !string.IsNullOrWhiteSpace(e.castleId));
+
+        switch (filter)
+        {
+            case WorldMarketCastleListFilter.MyHoldings:
+                q = q.Where(e => HasUserStockInPortfolio(e.castleId));
+                break;
+            case WorldMarketCastleListFilter.War:
+                q = q.Where(e => e.isWar);
+                break;
+            case WorldMarketCastleListFilter.Event:
+                q = q.Where(e => e.isDisaster || e.isFavorableEvent);
+                break;
+            case WorldMarketCastleListFilter.Premium:
+                q = q.Where(e => IsPremiumCastleId(e.castleId));
+                break;
+            case WorldMarketCastleListFilter.Attention:
+                q = q.Where(e => IsAttentionCastleId(e.castleId));
+                break;
+        }
+
+        return OrderWorldCastle_LiveSo(q);
+    }
+
+    static int MtsIssueSortKeyLive(CastleStateSo.CastleLiveStateEntry e)
+    {
+        if (e == null) return 0;
+        if (e.isWar || e.isDisaster) return 2;
+        if (e.isFavorableEvent) return 1;
+        return 0;
+    }
+
+    List<string> OrderWorldCastle_LiveSo(IEnumerable<CastleStateSo.CastleLiveStateEntry> q)
+    {
+        string home = (_homeCastleId ?? "").Trim();
+        return q.OrderByDescending(MtsIssueSortKeyLive)
+            .ThenByDescending(e => !string.IsNullOrEmpty(home) &&
+                                   string.Equals(e.castleId.Trim(), home, StringComparison.Ordinal))
+            .ThenByDescending(e => HasUserStockInPortfolio(e.castleId))
+            .ThenBy(e => GetCastleGradeSortKey(e.castleId))
+            .ThenBy(e => e.castleId.Trim(), StringComparer.Ordinal)
+            .Select(e => e.castleId.Trim())
+            .ToList();
+    }
+
+    /// <summary>요주의: B·C·D 등급 성만 (하이리스크·저평가 종목 필터).</summary>
+    bool IsAttentionCastle(CastleStateData s) =>
+        s != null && IsAttentionCastleId(s.id);
+
+    bool IsAttentionCastleId(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return false;
+        if (!castleMasterDataMap.TryGetValue(castleId.Trim(), out var m) || m == null) return false;
         return m.grade >= Grade.B;
     }
 
@@ -469,6 +841,7 @@ public class DataManager : Singleton<DataManager>
 
         s.userDeployedTroops = (int)newTotal;
         _stateDirty = true;
+        FlushLiveScriptableObjects();
         OnStateTicked?.Invoke();
     }
 
@@ -482,122 +855,29 @@ public class DataManager : Singleton<DataManager>
         s.userDeployedTroops = 0;
         s.averagePurchasePrice = 0f;
         _stateDirty = true;
+        FlushLiveScriptableObjects();
         OnStateTicked?.Invoke();
     }
 
-    // ========================================================================
-    // Economy Engine (client-side emulator)
-    // ========================================================================
-    const long GovernorDailyBuffIntervalSec = 86400L;
-
-    public void UpdateEconomyTick()
+    /// <summary>
+    /// 모든 성의 유저 투입 병력·매수 평단을 0으로 초기화. 라이브 SO 반영·즉시 디스크 저장·UI 갱신.
+    /// (에디터 메뉴·테스트용)
+    /// </summary>
+    public void ClearAllUserCastleDeployments()
     {
-        if (!IsStateReady) return;
-
-        long nowUnix = TimeManager.GetUnixNow();
-
+        if (!IsStateReady || castleStateDataMap == null) return;
         foreach (var kv in castleStateDataMap)
         {
             var s = kv.Value;
             if (s == null) continue;
-
-            TryApplyGovernorDailyBuff(s, nowUnix);
-
-            // Population: ±0.5% (기본) — 태수 성장 버프는 일일 1회 <see cref="TryApplyGovernorDailyBuff"/>
-            float popMul = 1f + UnityEngine.Random.Range(-populationJitterPct, populationJitterPct);
-            int nextPop = Mathf.Max(0, Mathf.RoundToInt(s.currentPopulation * popMul));
-            s.currentPopulation = nextPop;
-            PushPopulationHistory(s);
-
-            // Sentiment: ±0.5 기본 + 태수 Charm 바이어스 — 민심 회복 버프는 일일 1회 TryApplyGovernorDailyBuff
-            float delta = UnityEngine.Random.Range(-sentimentJitterMax, sentimentJitterMax);
-            delta += GetGovernorCharmSentimentBias(s.currentGovernorId);
-
-            s.currentSentiment = Mathf.Clamp(s.currentSentiment + delta, 0f, 100f);
-            PushSentimentHistory(s);
-
-            if (s.isDisaster && UnityEngine.Random.value < 0.04f)
-                s.isDisaster = false;
-            if (s.isFavorableEvent && UnityEngine.Random.value < 0.04f)
-                s.isFavorableEvent = false;
-        }
-
-        RecalculateAllPrices();
-        _stateDirty = true;
-        OnStateTicked?.Invoke();
-    }
-
-    void TryRandomEvent()
-    {
-        if (castleStateDataMap.Count <= 0) return;
-        if (UnityEngine.Random.value > randomEventChance) return;
-
-        // 무작위 성 하나 선택
-        int idx = UnityEngine.Random.Range(0, castleStateDataMap.Count);
-        var s = castleStateDataMap.Values.ElementAt(idx);
-        if (s == null) return;
-
-        float roll = UnityEngine.Random.value;
-        if (roll < 0.34f)
-        {
-            Faction old = s.currentLord;
-            s.currentLord = RandomOtherFaction(old);
-            AddNews($"[WAR] {s.currentLord}가(이) {GetCastleNameOrId(s.id)}을(를) 점령했습니다! (from {old})");
-        }
-        else if (roll < 0.67f)
-        {
-            s.isWar = !s.isWar;
-            AddNews(s.isWar
-                ? $"[URGENT] {GetCastleNameOrId(s.id)}에서 전쟁 발생!"
-                : $"[INFO] {GetCastleNameOrId(s.id)} 전쟁 종료.");
-        }
-        else if (roll < 0.84f)
-        {
-            s.isDisaster = !s.isDisaster;
-            if (s.isDisaster) s.isFavorableEvent = false;
-            AddNews(s.isDisaster
-                ? $"[DISASTER] {GetCastleNameOrId(s.id)}에 재해·병충이 확산합니다!"
-                : $"[RECOVER] {GetCastleNameOrId(s.id)} 재해가 진정되었습니다.");
-        }
-        else
-        {
-            s.isFavorableEvent = !s.isFavorableEvent;
-            if (s.isFavorableEvent) s.isDisaster = false;
-            AddNews(s.isFavorableEvent
-                ? $"[BOOM] {GetCastleNameOrId(s.id)} 풍년·호재 소식!"
-                : $"[INFO] {GetCastleNameOrId(s.id)} 호재가 소강 상태입니다.");
+            s.userDeployedTroops = 0;
+            s.averagePurchasePrice = 0f;
         }
 
         _stateDirty = true;
+        FlushLiveScriptableObjects();
+        SaveStateDataToDisk();
         OnStateTicked?.Invoke();
-    }
-
-    static Faction RandomOtherFaction(Faction old)
-    {
-        // NONE 제외하고 3대 세력 + OTHERS 중 랜덤
-        Faction[] pool = { Faction.WEI, Faction.SHU, Faction.WU, Faction.OTHERS };
-        for (int i = 0; i < 8; i++)
-        {
-            var f = pool[UnityEngine.Random.Range(0, pool.Length)];
-            if (f != old) return f;
-        }
-        return old == Faction.WEI ? Faction.SHU : Faction.WEI;
-    }
-
-    void PushSentimentHistory(CastleStateData s)
-    {
-        if (s.sentimentHistory == null) s.sentimentHistory = new List<float>(10);
-        s.sentimentHistory.Add(s.currentSentiment);
-        while (s.sentimentHistory.Count > 10)
-            s.sentimentHistory.RemoveAt(0);
-    }
-
-    void PushPopulationHistory(CastleStateData s)
-    {
-        if (s.populationHistory == null) s.populationHistory = new List<int>(10);
-        s.populationHistory.Add(s.currentPopulation);
-        while (s.populationHistory.Count > 10)
-            s.populationHistory.RemoveAt(0);
     }
 
     // ========================================================================
@@ -612,124 +892,6 @@ public class DataManager : Singleton<DataManager>
             s.currentBuyPrice = CalculateBuyPrice(s);
             s.currentSellPrice = CalculateSellPrice(s);
         }
-    }
-
-    /// <summary>
-    /// 월드/천하 UI 미리보기용: 모든 성 상태와 소식을 무작위로 채운 뒤 가격 재계산 및 UI 갱신 이벤트를 보냅니다.
-    /// <see cref="InitializeAllData"/> 이후(<see cref="IsReady"/>, <see cref="IsStateReady"/>)에 호출하세요.
-    /// </summary>
-    public void ApplyRandomWorldStatePreview()
-    {
-        if (!IsReady || !IsStateReady)
-        {
-            Debug.LogWarning("[DataManager] ApplyRandomWorldStatePreview: IsReady/IsStateReady가 아닙니다. 먼저 InitializeAllData()를 실행하세요.");
-            return;
-        }
-
-        if (castleStateDataMap == null || castleStateDataMap.Count == 0)
-        {
-            Debug.LogWarning("[DataManager] ApplyRandomWorldStatePreview: 성 상태 데이터가 없습니다. Castle 마스터(SO)를 확인하세요.");
-            return;
-        }
-
-        List<string> generalIds = null;
-        if (generalMasterDataMap != null && generalMasterDataMap.Count > 0)
-            generalIds = new List<string>(generalMasterDataMap.Keys);
-
-        foreach (var kv in castleStateDataMap)
-        {
-            var s = kv.Value;
-            if (s == null || string.IsNullOrWhiteSpace(s.id)) continue;
-
-            var master = GetCastleMasterData(s.id);
-            int basePop = master != null ? master.initPopulation : 1000;
-            float popJitter = UnityEngine.Random.Range(0.75f, 1.25f);
-            s.currentPopulation = Mathf.Max(100, Mathf.RoundToInt(basePop * popJitter));
-
-            s.currentLord = RandomPreviewLordFaction();
-            s.currentSentiment = UnityEngine.Random.Range(18f, 100f);
-            s.isWar = UnityEngine.Random.value < 0.18f;
-            s.isDisaster = UnityEngine.Random.value < 0.12f;
-            if (s.isDisaster)
-                s.isFavorableEvent = false;
-            else
-                s.isFavorableEvent = UnityEngine.Random.value < 0.10f;
-
-            if (generalIds != null && generalIds.Count > 0 && UnityEngine.Random.value < 0.35f)
-            {
-                s.currentGovernorId = generalIds[UnityEngine.Random.Range(0, generalIds.Count)];
-                long previewNow = TimeManager.GetUnixNow();
-                s.lastDailyBuffGovernorId = s.currentGovernorId;
-                s.lastDailyBuffTime = previewNow;
-            }
-            else
-            {
-                s.currentGovernorId = "";
-                s.lastDailyBuffGovernorId = "";
-                s.lastDailyBuffTime = 0;
-            }
-
-            if (UnityEngine.Random.value < 0.25f)
-            {
-                s.userDeployedTroops = UnityEngine.Random.Range(200, 8000);
-                s.averagePurchasePrice = UnityEngine.Random.Range(5f, 120f);
-            }
-            else
-            {
-                s.userDeployedTroops = 0;
-                s.averagePurchasePrice = 0f;
-            }
-
-            if (s.sentimentHistory == null)
-                s.sentimentHistory = new List<float>(10);
-            s.sentimentHistory.Clear();
-            float sent = s.currentSentiment;
-            for (int i = 0; i < 10; i++)
-            {
-                s.sentimentHistory.Add(Mathf.Clamp(sent, 0f, 100f));
-                sent += UnityEngine.Random.Range(-8f, 8f);
-            }
-
-            if (s.populationHistory == null)
-                s.populationHistory = new List<int>(10);
-            s.populationHistory.Clear();
-            int pop = s.currentPopulation;
-            for (int i = 0; i < 10; i++)
-            {
-                s.populationHistory.Add(Mathf.Max(0, pop));
-                pop = Mathf.Max(0, Mathf.RoundToInt(pop * UnityEngine.Random.Range(0.97f, 1.03f)));
-            }
-        }
-
-        if (worldNews == null)
-            worldNews = new List<WorldNewsItem>();
-        worldNews.Clear();
-
-        AddNews("[PREVIEW] 에디터 랜덤 스냅샷 적용됨.");
-        for (int i = 0; i < 6; i++)
-        {
-            int idx = UnityEngine.Random.Range(0, castleStateDataMap.Count);
-            var sample = castleStateDataMap.Values.ElementAt(idx);
-            if (sample == null) continue;
-            string name = GetCastleNameOrId(sample.id);
-            float r = UnityEngine.Random.value;
-            if (r < 0.33f)
-                AddNews($"[RUMOR] {name} 인근에서 군사 움직임이 포착되었습니다.");
-            else if (r < 0.66f)
-                AddNews($"[MARKET] {name} 민심이 들쭉날쭉합니다. (센티 {sample.currentSentiment:0}대)");
-            else
-                AddNews($"[INFO] {name} 인구 약 {sample.currentPopulation:N0}명 구간.");
-        }
-
-        RecalculateAllPrices();
-        _stateDirty = true;
-        OnStateTicked?.Invoke();
-    }
-
-    static Faction RandomPreviewLordFaction()
-    {
-        var pool = new[] { Faction.WEI, Faction.SHU, Faction.WU, Faction.OTHERS, Faction.NONE };
-        return pool[UnityEngine.Random.Range(0, pool.Length)];
     }
 
     float CalculateBuyPrice(CastleStateData s)
@@ -769,87 +931,6 @@ public class DataManager : Singleton<DataManager>
             case Grade.D: return 0.90f;
             default: return 1.00f;
         }
-    }
-
-    /// <summary>S급·SS급 + <see cref="GeneralMasterData.HasBuff"/>인 태수만. 86400초마다 버프 1회 반영(오프라인 포함, Unix 시각).</summary>
-    void TryApplyGovernorDailyBuff(CastleStateData s, long nowUnix)
-    {
-        if (s == null) return;
-
-        if (string.IsNullOrWhiteSpace(s.currentGovernorId))
-        {
-            s.lastDailyBuffGovernorId = "";
-            s.lastDailyBuffTime = 0;
-            return;
-        }
-
-        string govId = s.currentGovernorId.Trim();
-        if (!generalMasterDataMap.TryGetValue(govId, out var gen) || gen == null)
-            return;
-
-        if (s.lastDailyBuffGovernorId != govId)
-        {
-            if (!string.IsNullOrEmpty(s.lastDailyBuffGovernorId))
-                s.lastDailyBuffTime = nowUnix;
-            s.lastDailyBuffGovernorId = govId;
-        }
-
-        if (!gen.HasBuff || gen.grade > Grade.S)
-            return;
-
-        var buff = GetGovernorBuff(govId);
-        if (buff == null || buff.type == BuffType.None)
-            return;
-
-        if (s.lastDailyBuffTime <= 0)
-        {
-            s.lastDailyBuffTime = nowUnix;
-            return;
-        }
-
-        if (nowUnix - s.lastDailyBuffTime < GovernorDailyBuffIntervalSec)
-            return;
-
-        string genName = string.IsNullOrWhiteSpace(gen.name) ? gen.id : gen.name.Trim();
-
-        switch (buff.type)
-        {
-            case BuffType.PopulationGrowth:
-            {
-                int addPop = buff.value >= 1f
-                    ? Mathf.RoundToInt(buff.value)
-                    : Mathf.Max(1, Mathf.RoundToInt(s.currentPopulation * buff.value));
-                s.currentPopulation = Mathf.Max(0, s.currentPopulation + addPop);
-                PushPopulationHistory(s);
-                AddNews($"[배당] 태수 {genName}의 효과로 인구가 {addPop:N0}명 증가했습니다!");
-                break;
-            }
-            case BuffType.SentimentRecovery:
-            {
-                float before = s.currentSentiment;
-                s.currentSentiment = Mathf.Clamp(s.currentSentiment + buff.value, 0f, 100f);
-                PushSentimentHistory(s);
-                float gained = s.currentSentiment - before;
-                AddNews(gained > 0.01f
-                    ? $"[배당] 태수 {genName}의 효과로 민심이 {gained:0.#}p 회복했습니다!"
-                    : $"[배당] 태수 {genName}의 효과로 민심이 크게 회복했습니다!");
-                break;
-            }
-            default:
-                // 가치·전쟁·배당 등 틱 외 패시브 버프는 여기서 수치 변경 없음(가격 등은 별도 경로).
-                break;
-        }
-
-        s.lastDailyBuffTime = nowUnix;
-    }
-
-    float GetGovernorCharmSentimentBias(string governorId)
-    {
-        if (string.IsNullOrWhiteSpace(governorId) || governorCharmBias <= 0f) return 0f;
-        if (!generalMasterDataMap.TryGetValue(governorId.Trim(), out var g) || g == null) return 0f;
-        // charm 0~100 기준: 최대 +governorCharmBias * sentimentJitterMax 정도까지 편향
-        float t = Mathf.Clamp01(g.charm / 100f);
-        return sentimentJitterMax * governorCharmBias * t;
     }
 
     float GetGovernorValueBonus(string governorId, bool isBuy)
@@ -897,8 +978,8 @@ public class DataManager : Singleton<DataManager>
     string GetCastleNameOrId(string id)
     {
         if (string.IsNullOrWhiteSpace(id)) return "(unknown)";
-        if (castleMasterDataMap.TryGetValue(id.Trim(), out var m) && m != null && !string.IsNullOrWhiteSpace(m.name))
-            return m.name;
+        string d = GetCastleDisplayName(id.Trim());
+        if (!string.IsNullOrEmpty(d) && d != "성") return d;
         return id.Trim();
     }
 

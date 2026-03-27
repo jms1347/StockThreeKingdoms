@@ -17,6 +17,10 @@ public class GeneralMasterData
     public string initialNationId;   // 초기 소속 국가 (WEI, SHU, WU, OTHERS)
     public string initialCastleId;   // 초기 배치 성 ID (C01 ~ C50)
 
+    [Header("UI")]
+    [Tooltip("성 상세 태수 초상화(없으면 이니셜 표시).")]
+    public Sprite governorPortrait;
+
     public bool HasBuff => !string.IsNullOrEmpty(buffId);
 }
 

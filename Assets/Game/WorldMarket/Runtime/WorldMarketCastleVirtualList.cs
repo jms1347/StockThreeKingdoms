@@ -7,7 +7,7 @@ using TMPro;
 
 /// <summary>
 /// 천하 탭 성 카드 가상 스크롤(오브젝트 풀). 화면에 보이는 행 수 + 소량 버퍼만 인스턴스화.
-/// OnStateTicked 시 정렬 키가 같으면 보이는 셀만 Rebind, 순서가 바뀌면 콘텐츠 높이·스크롤만 갱신.
+/// <see cref="DataManager.OnStateTicked"/>마다 <see cref="RefreshData(bool)"/>로 목록·가시 셀 전부 갱신(스크롤 위치 유지).
 /// </summary>
 [DisallowMultipleComponent]
 public class WorldMarketCastleVirtualList : MonoBehaviour
@@ -46,7 +46,6 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     [SerializeField] bool deferPoolUntilViewportValid = true;
 
     readonly List<string> _orderedIds = new List<string>();
-    readonly List<string> _scratchOrder = new List<string>();
     readonly List<WorldMarketCastleCardView> _pool = new List<WorldMarketCastleCardView>();
 
     bool _inited;
@@ -134,6 +133,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     {
         _catchUpRefreshOnce = true;
         TrySubscribeDataManager();
+        TrySubscribeHomeCastleHeader();
         RefreshData();
         if (_lateRefreshRoutine != null)
             StopCoroutine(_lateRefreshRoutine);
@@ -165,6 +165,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         {
             dm.OnStateDataReady -= HandleStateDataReady;
             dm.OnStateTicked -= HandleStateTicked;
+            dm.OnHomeCastleChanged -= HandleHomeCastleChangedForHeader;
         }
     }
 
@@ -215,6 +216,20 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         }
     }
 
+    void TrySubscribeHomeCastleHeader()
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null) return;
+        dm.OnHomeCastleChanged -= HandleHomeCastleChangedForHeader;
+        dm.OnHomeCastleChanged += HandleHomeCastleChangedForHeader;
+    }
+
+    void HandleHomeCastleChangedForHeader()
+    {
+        EnsureListHeaderResolved();
+        UpdateListHeader(DataManager.InstanceOrNull);
+    }
+
     void HandleStateDataReady()
     {
         LogDiag("OnStateDataReady → RefreshData()");
@@ -227,38 +242,14 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         if (content == null || dm == null || !dm.IsStateReady)
             return;
 
+        // OnStateTicked마다 SO 기준 목록 전체 갱신(스크롤 위치 유지).
         if (!_inited)
         {
-            RefreshData();
+            RefreshData(false);
             return;
         }
 
-        BuildOrderedIds(dm, _scratchOrder);
-        if (SameSequence(_orderedIds, _scratchOrder))
-        {
-            UpdateVisible();
-            UpdateListHeader(dm);
-        }
-        else
-        {
-            bool hadData = _orderedIds.Count > 0;
-            float norm = hadData && scrollRect != null ? scrollRect.verticalNormalizedPosition : 1f;
-            _orderedIds.Clear();
-            _orderedIds.AddRange(_scratchOrder);
-            ApplyLayoutAfterOrderChange(dm, preserveScrollNorm: hadData, verticalNorm: norm);
-        }
-    }
-
-    static bool SameSequence(List<string> a, List<string> b)
-    {
-        if (a.Count != b.Count) return false;
-        for (int i = 0; i < a.Count; i++)
-        {
-            if (a[i] != b[i])
-                return false;
-        }
-
-        return true;
+        RefreshData(true);
     }
 
     void BuildOrderedIds(DataManager dm, List<string> into)
@@ -270,6 +261,15 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     void Start()
     {
+        Transform t = transform;
+        for (int i = 0; i < 16 && t != null; i++, t = t.parent)
+        {
+            if (t.name != "WorldMarketRoot") continue;
+            WorldHqTravelHud.EnsureUnderWorldMarketRoot(t);
+            WorldMarketCastleDetailPopup.EnsureUnderWorldMarketRoot(t);
+            break;
+        }
+
         TrySubscribeDataManager();
         InitPoolIfNeeded();
         RefreshData();
@@ -283,12 +283,44 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         var groups = content.GetComponents<LayoutGroup>();
         for (int i = 0; i < groups.Length; i++)
         {
-            if (groups[i] != null)
-                Destroy(groups[i]);
+            if (groups[i] == null) continue;
+            // Destroy()는 프레임 말에만 제거됨 → 같은 프레임 ForceRebuild 시 VLG가 살아 있어
+            // 모든 카드가 (0,0)에 겹치는 원인. 즉시 비활성화 후 제거.
+            groups[i].enabled = false;
+            Destroy(groups[i]);
         }
 
         var csf = content.GetComponent<ContentSizeFitter>();
-        if (csf != null) Destroy(csf);
+        if (csf != null)
+        {
+            csf.enabled = false;
+            Destroy(csf);
+        }
+    }
+
+    /// <summary>풀에 없는 CastleStockCardTemplate(Clone) 제거(디버그·중복 생성 잔여물).</summary>
+    void CullOrphanCardClonesUnderContent()
+    {
+        if (content == null || cellTemplate == null) return;
+
+        var keep = new HashSet<Transform>();
+        for (int i = 0; i < _pool.Count; i++)
+        {
+            if (_pool[i] != null)
+                keep.Add(_pool[i].transform);
+        }
+
+        for (int i = content.childCount - 1; i >= 0; i--)
+        {
+            var ch = content.GetChild(i);
+            if (ch == null) continue;
+            if (ch.gameObject == cellTemplate) continue;
+            if (keep.Contains(ch)) continue;
+            if (!ch.name.StartsWith("CastleStockCardTemplate", StringComparison.Ordinal))
+                continue;
+            LogDiag($"Cull orphan: {ch.name}");
+            Destroy(ch.gameObject);
+        }
     }
 
     /// <summary>
@@ -308,7 +340,8 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     }
 
     /// <summary>
-    /// 카드 루트 HorizontalLayoutGroup이 SetLayout에서 루트 높이를 자식 선호치(0)로 덮어쓰는 것을 완화합니다.
+    /// 카드 루트 LayoutGroup이 리빌드 시 <see cref="LayoutPoolRowAtIndex"/>로 준 sizeDelta를 덮어쓰지 않게 합니다.
+    /// (VerticalLayoutGroup + childControlHeight 가 흔한 '한 줄만 보임' 원인)
     /// </summary>
     void ConfigurePooledCellRoot(GameObject go)
     {
@@ -320,16 +353,43 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             hlg.childForceExpandHeight = false;
         }
 
-        float minH = Mathf.Max(40f, cellStride - 6f);
+        var vlg = go.GetComponent<VerticalLayoutGroup>();
+        if (vlg != null)
+        {
+            vlg.childControlHeight = false;
+            vlg.childForceExpandHeight = false;
+        }
+
+        float stride = GetEffectiveCellStride();
+        float minH = Mathf.Max(40f, stride);
         var le = go.GetComponent<LayoutElement>();
         if (le != null && le.minHeight < minH)
             le.minHeight = minH;
     }
 
-    /// <summary>가상 스크롤 행: 상단 기준, 명시적 너비(스트레치 금지로 width=0 버그 방지).</summary>
-    static void LayoutPoolRowAtIndex(RectTransform rt, int dataIndex, float rowWidth, float stride, float rowHeightMargin = 6f)
+    /// <summary>인스펙터 stride와 카드 템플릿 <see cref="LayoutElement"/> 높이 중 큰 값(행 간격).</summary>
+    float GetEffectiveCellStride()
     {
-        if (rt == null) return;
+        float s = Mathf.Max(80f, cellStride);
+        if (cellTemplate == null) return s;
+        var le = cellTemplate.GetComponent<LayoutElement>();
+        if (le != null)
+        {
+            float h = le.preferredHeight > 1f ? le.preferredHeight : le.minHeight;
+            if (h > 1f)
+                s = Mathf.Max(s, h + 8f);
+        }
+
+        return s;
+    }
+
+    /// <summary>가상 스크롤 행: Content 기준 상단에서 dataIndex만큼 아래로 배치.</summary>
+    void LayoutPoolRowAtIndex(RectTransform rt, int dataIndex, float rowWidth, float stride, float rowHeightMargin = 0f)
+    {
+        if (rt == null || content == null) return;
+        if (rt.parent != content)
+            rt.SetParent(content, false);
+
         float h = Mathf.Max(40f, stride - rowHeightMargin);
         rt.anchorMin = new Vector2(0f, 1f);
         rt.anchorMax = new Vector2(0f, 1f);
@@ -361,7 +421,8 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     void CreatePoolCells(float viewH)
     {
-        int visibleRows = Mathf.CeilToInt(viewH / Mathf.Max(40f, cellStride));
+        float stride = GetEffectiveCellStride();
+        int visibleRows = Mathf.CeilToInt(viewH / Mathf.Max(40f, stride));
         int need = visibleRows + Mathf.Max(0, poolBufferRows);
         need = Mathf.Clamp(need, PoolSizeMin, PoolSizeMax);
 
@@ -373,9 +434,11 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             go.SetActive(true);
             ConfigurePooledCellRoot(go);
             var view = EnsureCardViewComponent(go);
-            LayoutPoolRowAtIndex(go.GetComponent<RectTransform>(), 0, rowW, cellStride);
+            LayoutPoolRowAtIndex(go.GetComponent<RectTransform>(), 0, rowW, stride);
             _pool.Add(view);
         }
+
+        CullOrphanCardClonesUnderContent();
     }
 
     IEnumerator CoWaitViewportAndInitPool()
@@ -413,7 +476,8 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     }
 
     /// <summary>목록·콘텐츠 높이·스크롤 갱신 진입점 (PD: RefreshList에 해당)</summary>
-    public void RefreshData()
+    /// <param name="preserveScrollPosition">true면 스크롤 정규화 위치 유지(OnStateTicked 등).</param>
+    public void RefreshData(bool preserveScrollPosition = false)
     {
         ResolveScrollReferences();
         EnsureListHeaderResolved();
@@ -425,8 +489,12 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
         StripLegacyLayout();
         InitPoolIfNeeded();
+        CullOrphanCardClonesUnderContent();
 
         var dm = DataManager.InstanceOrNull;
+        float scrollNorm = !preserveScrollPosition || scrollRect == null ? 1f : scrollRect.verticalNormalizedPosition;
+        bool hadRows = _orderedIds.Count > 0;
+
         _orderedIds.Clear();
         BuildOrderedIds(dm, _orderedIds);
 
@@ -459,7 +527,8 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         }
 
         UpdateListHeader(dm);
-        ApplyLayoutAfterOrderChange(dm, preserveScrollNorm: false, verticalNorm: 1f);
+        bool preserveNorm = preserveScrollPosition && hadRows && _orderedIds.Count > 0;
+        ApplyLayoutAfterOrderChange(dm, preserveScrollNorm: preserveNorm, verticalNorm: scrollNorm);
     }
 
     void ApplyLayoutAfterOrderChange(DataManager dm, bool preserveScrollNorm, float verticalNorm)
@@ -467,15 +536,18 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         _contentWidth = content.rect.width;
 
+        float stride = GetEffectiveCellStride();
         float viewH = GetViewportHeight();
-        float contentH = _orderedIds.Count * cellStride + ContentHeightExtra;
+        float contentH = _orderedIds.Count * stride + ContentHeightExtra;
         float totalH = Mathf.Max(viewH, contentH);
 
         content.anchorMin = new Vector2(0f, 1f);
         content.anchorMax = new Vector2(1f, 1f);
         content.pivot = new Vector2(0.5f, 1f);
         content.sizeDelta = new Vector2(content.sizeDelta.x, totalH);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+        // Content에 LayoutGroup이 없음 — ForceRebuildLayoutImmediate(content)는 자식 레이아웃을 건드려
+        // 행 anchoredPosition이 덮이거나 한 점에 겹칠 수 있음. 뷰포트만 갱신.
+        Canvas.ForceUpdateCanvases();
 
         LogDiag($"Content 높이: sizeDelta.y={totalH:F0} (max viewport {viewH:F0}, items×stride {contentH:F0})");
 
@@ -495,10 +567,10 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
         if (_deferredVisibleRoutine != null)
             StopCoroutine(_deferredVisibleRoutine);
-        _deferredVisibleRoutine = StartCoroutine(CoDeferredUpdateVisible());
+        _deferredVisibleRoutine = StartCoroutine(CoDeferredUpdateVisible(!preserveScrollNorm));
     }
 
-    IEnumerator CoDeferredUpdateVisible()
+    IEnumerator CoDeferredUpdateVisible(bool healScrollToTopIfAtBottom)
     {
         for (int pass = 0; pass < 2; pass++)
         {
@@ -511,12 +583,22 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         {
             _contentWidth = Mathf.Max(_contentWidth, content.rect.width);
             float vh = GetViewportHeight();
-            float contentH = _orderedIds.Count * cellStride + ContentHeightExtra;
+            float stride = GetEffectiveCellStride();
+            float contentH = _orderedIds.Count * stride + ContentHeightExtra;
             float totalH = Mathf.Max(vh, contentH);
             content.sizeDelta = new Vector2(content.sizeDelta.x, totalH);
         }
 
         LogDiag($"지연 갱신 후 viewport.h={GetViewportHeight():F1} content.w={content.rect.width:F0}");
+
+        // 콘텐츠가 짧다가 길어진 직후 ScrollRect가 norm=0(하단)에 남으면 첫 행만 보임 → 상단으로 복구
+        if (healScrollToTopIfAtBottom && scrollRect != null && _orderedIds.Count > 4
+            && scrollRect.verticalNormalizedPosition < 0.02f)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+            Canvas.ForceUpdateCanvases();
+            RebuildViewportLayout();
+        }
 
         UpdateVisible();
         _deferredVisibleRoutine = null;
@@ -527,10 +609,44 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         if (listHeaderText == null) return;
         int listed = _orderedIds.Count;
         int total = 0;
-        if (dm != null && dm.castleStateDataMap != null)
-            total = dm.castleStateDataMap.Count;
+        total = dm != null ? dm.GetWorldCastleUiTotalCount() : 0;
         total = Mathf.Max(total, listed);
-        listHeaderText.text = $"Castle Stocks ({listed}/{total})";
+        string hqLabel = "—";
+        if (dm != null && dm.IsStateReady && !string.IsNullOrWhiteSpace(dm.HomeCastleId))
+        {
+            string hid = dm.HomeCastleId.Trim();
+            string disp = dm.GetCastleDisplayName(hid);
+            hqLabel = string.IsNullOrWhiteSpace(disp) ? hid : disp;
+        }
+
+        listHeaderText.text = $"천하 성 ({listed}/{total}) · 본영: {hqLabel}";
+    }
+
+    /// <summary>
+    /// ScrollRect가 실제로 쓰는 정규화 스크롤(1=맨 위)과 콘텐츠·뷰포트 높이로 첫 행 인덱스 계산.
+    /// <see cref="RectTransform.anchoredPosition"/>만 쓰면 바운드/피벗에 따라 first가 끝으로 밀려 한 줄만 보일 수 있음.
+    /// </summary>
+    int ComputeFirstVisibleRowIndex(float stride)
+    {
+        if (_orderedIds == null || _orderedIds.Count == 0)
+            return 0;
+        if (scrollRect == null || scrollRect.viewport == null || content == null)
+            return 0;
+
+        float vpH = Mathf.Max(1f, scrollRect.viewport.rect.height);
+        float contentH = Mathf.Max(
+            content.rect.height,
+            _orderedIds.Count * stride + ContentHeightExtra);
+
+        float scrollable = Mathf.Max(0f, contentH - vpH);
+        if (scrollable < 1f)
+            return 0;
+
+        // Unity: verticalNormalizedPosition 1 = 상단, 0 = 하단
+        float norm = Mathf.Clamp01(scrollRect.verticalNormalizedPosition);
+        float scrolledFromTop = (1f - norm) * scrollable;
+        int row = Mathf.FloorToInt(scrolledFromTop / Mathf.Max(1f, stride));
+        return Mathf.Max(0, row - 1);
     }
 
     void UpdateVisible()
@@ -545,10 +661,8 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             return;
         }
 
-        // Vertical ScrollRect: 스크롤에 따라 anchoredPosition.y 부호가 환경마다 달라질 수 있음
-        float scrolled = Mathf.Abs(content.anchoredPosition.y);
-        int first = Mathf.FloorToInt(scrolled / Mathf.Max(1f, cellStride));
-        first = Mathf.Max(0, first - 1);
+        float stride = GetEffectiveCellStride();
+        int first = ComputeFirstVisibleRowIndex(stride);
 
         float rowW = ResolveRowWidth();
         _contentWidth = Mathf.Max(_contentWidth, rowW);
@@ -568,7 +682,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
             cell.gameObject.SetActive(true);
             ConfigurePooledCellRoot(cell.gameObject);
-            LayoutPoolRowAtIndex(rt, idx, rowW, cellStride);
+            LayoutPoolRowAtIndex(rt, idx, rowW, stride);
             cell.Bind(_orderedIds[idx]);
         }
     }
@@ -600,6 +714,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             ? dm.GetOrderedWorldCastleIds(currentFilter)
             : new List<string>();
 
+        float stride = GetEffectiveCellStride();
         cellTemplate.SetActive(false);
         for (int i = 0; i < ids.Count; i++)
         {
@@ -608,11 +723,11 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             var view = EnsureCardViewComponent(go);
             var rt = go.GetComponent<RectTransform>();
             float rw = ResolveRowWidth();
-            LayoutPoolRowAtIndex(rt, i, rw, cellStride);
+            LayoutPoolRowAtIndex(rt, i, rw, stride);
             view.Bind(ids[i]);
         }
 
-        float totalH = Mathf.Max(GetViewportHeight(), ids.Count * cellStride + ContentHeightExtra);
+        float totalH = Mathf.Max(GetViewportHeight(), ids.Count * stride + ContentHeightExtra);
         content.sizeDelta = new Vector2(content.sizeDelta.x, totalH);
         Canvas.ForceUpdateCanvases();
         Debug.Log($"{LogPrefix} 테스트: {ids.Count}행 즉시 생성. 보이면 가상 스크롤 가시 범위 문제, 아니면 마스크·레이어 의심.");

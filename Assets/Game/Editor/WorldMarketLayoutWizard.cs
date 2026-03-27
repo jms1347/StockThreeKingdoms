@@ -62,8 +62,8 @@ public static class WorldMarketLayoutWizard
         rootRt.offsetMax = Vector2.zero;
 
         var vlg = root.AddComponent<VerticalLayoutGroup>();
-        vlg.spacing = 14f;
-        vlg.padding = new RectOffset(18, 18, 18, 18);
+        vlg.spacing = 24f;
+        vlg.padding = new RectOffset(18, 18, 22, 18);
         vlg.childControlWidth = true;
         vlg.childControlHeight = true;
         vlg.childForceExpandWidth = true;
@@ -276,7 +276,20 @@ public static class WorldMarketLayoutWizard
     {
         GameObject panel = CreatePanel(parent, "CastleStocksPanel", "Castle Stocks");
         panel.GetComponent<LayoutElement>().flexibleHeight = 1f;
-        panel.GetComponent<LayoutElement>().minHeight = 520f;
+        // 제목·필터 행 최소 높이 + 스크롤 최소 높이 합이 패널 min보다 커지면 VLG가 자식을 겹쳐 배치함.
+        panel.GetComponent<LayoutElement>().minHeight = 668f;
+        var stockPanelV = panel.GetComponent<VerticalLayoutGroup>();
+        stockPanelV.padding = new RectOffset(16, 16, 28, 16);
+        var headerTmp = panel.transform.Find("Title")?.GetComponent<TextMeshProUGUI>();
+        if (headerTmp != null)
+        {
+            headerTmp.verticalAlignment = VerticalAlignmentOptions.Top;
+            headerTmp.horizontalAlignment = HorizontalAlignmentOptions.Left;
+            headerTmp.margin = new Vector4(0f, 4f, 0f, 0f);
+            var hle = headerTmp.GetComponent<LayoutElement>();
+            if (hle != null)
+                hle.minHeight = 52f;
+        }
 
         // ScrollRect list
         var scrollGo = new GameObject("CastleStocksScroll", typeof(RectTransform), typeof(Image), typeof(ScrollRect), typeof(LayoutElement));
@@ -284,7 +297,7 @@ public static class WorldMarketLayoutWizard
         scrollGo.GetComponent<Image>().color = new Color(0, 0, 0, 0.08f);
         var sLe = scrollGo.GetComponent<LayoutElement>();
         sLe.flexibleHeight = 1f;
-        sLe.minHeight = 520f;
+        sLe.minHeight = 240f;
 
         var viewport = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(Mask));
         viewport.transform.SetParent(scrollGo.transform, false);
@@ -350,15 +363,17 @@ public static class WorldMarketLayoutWizard
         Undo.RegisterCreatedObjectUndo(filterRow, "FilterTabs");
         filterRow.transform.SetParent(castleStocksPanel, false);
         var filterLe = filterRow.GetComponent<LayoutElement>();
-        filterLe.minHeight = 32f;
-        filterLe.preferredHeight = 32f;
+        filterLe.minHeight = 36f;
+        filterLe.preferredHeight = 36f;
         filterLe.flexibleHeight = 0f;
         var filterH = filterRow.GetComponent<HorizontalLayoutGroup>();
         filterH.spacing = 3f;
-        filterH.padding = new RectOffset(2, 2, 0, 0);
+        filterH.padding = new RectOffset(2, 2, 3, 3);
         filterH.childAlignment = TextAnchor.MiddleCenter;
         filterH.childControlWidth = true;
+        filterH.childControlHeight = true;
         filterH.childForceExpandWidth = true;
+        filterH.childForceExpandHeight = false;
 
         var specs = new (string name, string label, WorldMarketCastleListFilter f)[]
         {
@@ -399,11 +414,13 @@ public static class WorldMarketLayoutWizard
         go.transform.SetParent(parent, false);
         var img = go.GetComponent<Image>();
         img.color = new Color(0.14f, 0.16f, 0.20f, 0.96f);
+        var rt = go.GetComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(0f, 0f);
         var le = go.GetComponent<LayoutElement>();
         le.minWidth = 0f;
         le.flexibleWidth = 1f;
-        le.minHeight = 30f;
-        le.preferredHeight = 30f;
+        le.minHeight = 28f;
+        le.preferredHeight = 28f;
         le.flexibleHeight = 0f;
         var btn = go.GetComponent<Button>();
         btn.transition = Selectable.Transition.ColorTint;
@@ -442,6 +459,14 @@ public static class WorldMarketLayoutWizard
         gLe.flexibleWidth = 0f;
         gLe.minWidth = 40f;
         gLe.preferredWidth = 44f;
+
+        var hqTmp = CreateTMP(nameRow.transform, "HqBadge", "HQ", 14, FontStyles.Bold, TextAlignmentOptions.Center,
+            color: new Color(0.95f, 0.82f, 0.35f, 1f));
+        var hqLe = hqTmp.GetComponent<LayoutElement>();
+        hqLe.flexibleWidth = 0f;
+        hqLe.minWidth = 32f;
+        hqLe.preferredWidth = 36f;
+        hqTmp.gameObject.SetActive(false);
 
         CreateTMP(nameRow.transform, "CastleName", "낙양", 28, FontStyles.Bold, TextAlignmentOptions.Left);
 
@@ -743,8 +768,8 @@ public static class WorldMarketLayoutWizard
         var z4 = new GameObject("Zone4Actions", typeof(RectTransform), typeof(LayoutElement), typeof(VerticalLayoutGroup));
         Undo.RegisterCreatedObjectUndo(z4, "Zone4Actions");
         z4.transform.SetParent(mainRow.transform, false);
-        z4.GetComponent<LayoutElement>().minWidth = 76f;
-        z4.GetComponent<LayoutElement>().preferredWidth = 82f;
+        z4.GetComponent<LayoutElement>().minWidth = 88f;
+        z4.GetComponent<LayoutElement>().preferredWidth = 94f;
         z4.GetComponent<LayoutElement>().flexibleWidth = 0f;
         var z4v = z4.GetComponent<VerticalLayoutGroup>();
         z4v.spacing = 8f;
@@ -755,6 +780,7 @@ public static class WorldMarketLayoutWizard
         z4v.childForceExpandHeight = true;
 
         CreateCastleCardActionButton(z4.transform, "DeployButton", "투입", new Color(0.16f, 0.48f, 0.32f, 0.98f));
+        CreateCastleCardActionButton(z4.transform, "HqMoveButton", "본영 이주", new Color(0.22f, 0.38f, 0.62f, 0.98f));
         var recallGo = CreateCastleCardActionButton(z4.transform, "RecallButton", "회수", new Color(0.82f, 0.42f, 0.22f, 0.98f));
         recallGo.SetActive(false);
 

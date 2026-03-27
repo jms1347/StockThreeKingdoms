@@ -47,6 +47,13 @@ public class CastleStateData
     /// <summary>미니 스파크라인용 인구 이력 (최근 7~10개).</summary>
     public List<int> populationHistory = new List<int>();
 
+    /// <summary>7일 일간 스냅샷(인구). 차트 X는 과거→현재.</summary>
+    public List<float> historyPopulation7Day = new List<float>();
+    /// <summary>7일 일간 스냅샷(민심 0~100).</summary>
+    public List<float> historySentiment7Day = new List<float>();
+    /// <summary>전일 종가에 가까운 매수가 앵커 — <see cref="DataManager.CalculateChangeRate24h"/>용.</summary>
+    public float buyPricePrevDayClose;
+
     // 매수가/매도가 분리
     public float currentBuyPrice;
     public float currentSellPrice;

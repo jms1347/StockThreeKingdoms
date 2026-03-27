@@ -347,13 +347,33 @@ public class WorldMarketPieChartUI : MonoBehaviour
         img.rectTransform.localEulerAngles = Vector3.zero;
     }
 
-    /// <summary>둥근 Knob 대신 직사각형 막대용 UI 스프라이트.</summary>
+    static Sprite _cachedUiBlockSprite;
+
+    /// <summary>
+    /// 직사각형 막대용 단색 스프라이트. 예전 <c>UI/Skin/UISprite.psd</c> 등 내장 리소스는 Unity 6+에서 없어져 런타임 생성으로 대체.
+    /// </summary>
     static Sprite ResolveSquareUiSprite()
     {
-        Sprite s = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
-        if (s != null) return s;
-        s = Resources.GetBuiltinResource<Sprite>("UI/Skin/Background.psd");
-        if (s != null) return s;
-        return Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
+        if (_cachedUiBlockSprite != null)
+            return _cachedUiBlockSprite;
+
+        var tex = new Texture2D(1, 1, TextureFormat.RGBA32, false)
+        {
+            name = "WorldMarketPieChartUI_WhiteBlock",
+            hideFlags = HideFlags.DontSave
+        };
+        tex.SetPixel(0, 0, Color.white);
+        tex.Apply(false, true);
+
+        _cachedUiBlockSprite = Sprite.Create(
+            tex,
+            new Rect(0f, 0f, 1f, 1f),
+            new Vector2(0.5f, 0.5f),
+            100f,
+            0,
+            SpriteMeshType.FullRect);
+
+        _cachedUiBlockSprite.name = "WorldMarketPieChartUI_WhiteBlockSprite";
+        return _cachedUiBlockSprite;
     }
 }

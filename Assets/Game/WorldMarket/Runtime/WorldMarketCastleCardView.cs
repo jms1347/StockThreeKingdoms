@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +16,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     static readonly Color BuyBoxUp = new Color(0.20f, 0.14f, 0.14f, 0.96f);
     static readonly Color BuyBoxDown = new Color(0.14f, 0.16f, 0.24f, 0.96f);
     static readonly Color InvestOutline = new Color(1f, 0.82f, 0.35f, 0.92f);
+    static readonly Color HqOutline = new Color(1f, 0.88f, 0.42f, 0.95f);
 
     [Header("1구역 · 식별")]
     [SerializeField] TextMeshProUGUI gradeBadgeText;
@@ -39,6 +42,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
     [Header("4구역 · 액션")]
     [SerializeField] Button deployButton;
+    [SerializeField] Button hqMoveButton;
     [SerializeField] Button recallButton;
 
     [Header("가격 롤링")]
@@ -55,21 +59,48 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [SerializeField] Image stakeGaugeFillImage;
     [SerializeField] Image disasterOverlayImage;
     [SerializeField] Image warTintImage;
+    [Tooltip("투자 구역 배경(없으면 Zone3 루트에서 Image 탐색). 수익/손실 틴트.")]
+    [SerializeField] Image roiZoneBackdropImage;
+    [Tooltip("전쟁 시 재생할 UI/월드 파티클(선택).")]
+    [SerializeField] ParticleSystem warBurstParticles;
 
     float _rollingBuyPrice = -1f;
+    string _lastBoundCastleForPrice;
+    float _lastBoundBuyPrice = -1f;
 
     string _boundCastleId;
     Outline _outline;
     Color _normalCardColor;
+    Color? _roiBackdropBaseColor;
     bool _cachedColors;
     Sequence _warPulseSeq;
+    Sequence _favorablePulseSeq;
+    Tweener _warShakeTweener;
+    GameObject _hqBadgeGo;
 
     void Awake()
     {
         _outline = GetComponent<Outline>();
         TryAutoWire();
+        EnsureHqMoveButtonUi();
+        EnsureHqBadgeUi();
         CacheDefaultColors();
         WireActionButtons();
+        WireCardOpenDetailButton();
+    }
+
+    void WireCardOpenDetailButton()
+    {
+        var openBtn = GetComponent<Button>();
+        if (openBtn == null) return;
+        openBtn.onClick.RemoveListener(OnCastleCardOpenDetail);
+        openBtn.onClick.AddListener(OnCastleCardOpenDetail);
+    }
+
+    void OnCastleCardOpenDetail()
+    {
+        if (string.IsNullOrWhiteSpace(_boundCastleId)) return;
+        WorldMarketCastleDetailPopup.OpenCastle(_boundCastleId.Trim());
     }
 
     void WireActionButtons()
@@ -80,11 +111,115 @@ public class WorldMarketCastleCardView : MonoBehaviour
             deployButton.onClick.AddListener(OnDeployClicked);
         }
 
+        if (hqMoveButton != null)
+        {
+            hqMoveButton.onClick.RemoveListener(OnHqMoveClicked);
+            hqMoveButton.onClick.AddListener(OnHqMoveClicked);
+        }
+
         if (recallButton != null)
         {
             recallButton.onClick.RemoveListener(OnRecallClicked);
             recallButton.onClick.AddListener(OnRecallClicked);
         }
+    }
+
+    void EnsureHqMoveButtonUi()
+    {
+        if (hqMoveButton != null) return;
+        var z4 = transform.Find("MainRow/Zone4Actions");
+        if (z4 == null) return;
+        var existing = z4.Find("HqMoveButton");
+        if (existing != null)
+        {
+            hqMoveButton = existing.GetComponent<Button>();
+            return;
+        }
+
+        var deployTf = z4.Find("DeployButton");
+        int insertIndex = deployTf != null ? deployTf.GetSiblingIndex() + 1 : 0;
+        var go = new GameObject("HqMoveButton", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+        go.transform.SetParent(z4, false);
+        go.transform.SetSiblingIndex(insertIndex);
+        go.GetComponent<Image>().color = new Color(0.22f, 0.38f, 0.62f, 0.98f);
+        var le = go.GetComponent<LayoutElement>();
+        le.minHeight = 42f;
+        le.preferredHeight = 46f;
+        le.flexibleWidth = 1f;
+        le.flexibleHeight = 0f;
+        var btn = go.GetComponent<Button>();
+        btn.transition = Selectable.Transition.ColorTint;
+
+        var lab = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
+        lab.transform.SetParent(go.transform, false);
+        var tmp = lab.GetComponent<TextMeshProUGUI>();
+        tmp.text = "본영 이주";
+        tmp.fontSize = 15;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = Color.white;
+        tmp.alignment = TextAlignmentOptions.Center;
+        var lrt = lab.GetComponent<RectTransform>();
+        lrt.anchorMin = Vector2.zero;
+        lrt.anchorMax = Vector2.one;
+        lrt.offsetMin = Vector2.zero;
+        lrt.offsetMax = Vector2.zero;
+
+        hqMoveButton = btn;
+    }
+
+    void OnHqMoveClicked()
+    {
+        if (string.IsNullOrWhiteSpace(_boundCastleId)) return;
+        bool ensured = false;
+        Transform t = transform;
+        for (int i = 0; i < 16 && t != null; i++, t = t.parent)
+        {
+            if (t.name != "WorldMarketRoot") continue;
+            WorldHqTravelHud.EnsureUnderWorldMarketRoot(t);
+            ensured = true;
+            break;
+        }
+
+        if (!ensured)
+            Debug.LogWarning("[WorldMarketCastleCardView] 부모에 WorldMarketRoot가 없어 이동 HUD를 생성하지 못했습니다.");
+
+        if (WorldHqTravelHud.InstanceOrNull == null)
+        {
+            Debug.LogWarning("[WorldMarketCastleCardView] WorldHqTravelHud가 없습니다. 천하 패널이 WorldMarketRoot 아래에 있는지 확인하세요.");
+            return;
+        }
+
+        WorldHqTravelHud.InstanceOrNull.TryBeginTravelTo(_boundCastleId.Trim());
+    }
+
+    void EnsureHqBadgeUi()
+    {
+        if (_hqBadgeGo != null) return;
+        var nr = transform.Find("MainRow/Zone1/Z1Row/NameColumn/NameRow") ?? transform.Find("Left/NameRow");
+        if (nr == null) return;
+        var existing = nr.Find("HqBadge");
+        if (existing != null)
+        {
+            _hqBadgeGo = existing.gameObject;
+            return;
+        }
+
+        var go = new GameObject("HqBadge", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(nr, false);
+        go.transform.SetSiblingIndex(1);
+        var le = go.GetComponent<LayoutElement>();
+        le.flexibleWidth = 0f;
+        le.minWidth = 32f;
+        le.preferredWidth = 36f;
+        le.preferredHeight = 22f;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        tmp.text = "HQ";
+        tmp.fontSize = 14;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = new Color(0.95f, 0.82f, 0.35f, 1f);
+        tmp.alignment = TextAlignmentOptions.Center;
+        go.SetActive(false);
+        _hqBadgeGo = go;
     }
 
     void OnDeployClicked()
@@ -124,18 +259,41 @@ public class WorldMarketCastleCardView : MonoBehaviour
     {
         _warPulseSeq?.Kill();
         _warPulseSeq = null;
+        _favorablePulseSeq?.Kill();
+        _favorablePulseSeq = null;
+        _warShakeTweener?.Kill();
+        _warShakeTweener = null;
+        // 카드 루트 anchoredPosition은 WorldMarketCastleVirtualList가 행 인덱스마다 설정함.
+        // 여기서 복원하면 매 Bind마다 (0,0)으로 덮여 전부 한곳에 겹침.
         if (warTintImage != null)
             warTintImage.gameObject.SetActive(false);
+        if (warBurstParticles != null)
+        {
+            warBurstParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            warBurstParticles.gameObject.SetActive(false);
+        }
+        if (statusIconFavorable != null)
+        {
+            statusIconFavorable.transform.DOKill();
+            statusIconFavorable.transform.localScale = Vector3.one;
+        }
     }
 
     void CacheDefaultColors()
     {
-        if (_cachedColors) return;
-        if (cardBackgroundImage == null)
-            cardBackgroundImage = GetComponent<Image>();
-        if (cardBackgroundImage != null)
-            _normalCardColor = cardBackgroundImage.color;
-        _cachedColors = cardBackgroundImage != null;
+        if (!_cachedColors)
+        {
+            if (cardBackgroundImage == null)
+                cardBackgroundImage = GetComponent<Image>();
+            if (cardBackgroundImage != null)
+            {
+                _normalCardColor = cardBackgroundImage.color;
+                _cachedColors = true;
+            }
+        }
+
+        if (roiZoneBackdropImage != null && !_roiBackdropBaseColor.HasValue)
+            _roiBackdropBaseColor = roiZoneBackdropImage.color;
     }
 
     void TryAutoWire()
@@ -181,6 +339,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (zone3PersonalRoot == null)
             zone3PersonalRoot = transform.Find(z3) as RectTransform ?? transform.Find("Left/MidRow/PersonalBlock") as RectTransform;
+        if (roiZoneBackdropImage == null && zone3PersonalRoot != null)
+            roiZoneBackdropImage = zone3PersonalRoot.GetComponent<Image>();
         if (roiText == null)
             roiText = Tmp($"{z3}/RoiBox/RoiText") ?? Tmp("Left/MidRow/PersonalBlock/RoiLine");
         if (troopsText == null)
@@ -192,6 +352,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
             deployButton = transform.Find($"{z4}/DeployButton")?.GetComponent<Button>()
                            ?? transform.Find("Governor/QuickDeploy")?.GetComponent<Button>()
                            ?? transform.Find("Left/MidRow/QuickDeploy")?.GetComponent<Button>();
+        if (hqMoveButton == null)
+            hqMoveButton = transform.Find($"{z4}/HqMoveButton")?.GetComponent<Button>();
+
         if (recallButton == null)
             recallButton = transform.Find($"{z4}/RecallButton")?.GetComponent<Button>();
 
@@ -216,6 +379,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
     {
         transform.DOKill(false);
         TryAutoWire();
+        EnsureHqMoveButtonUi();
+        EnsureHqBadgeUi();
         WireActionButtons();
         CacheDefaultColors();
 
@@ -224,11 +389,48 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         castleId = castleId.Trim();
         _boundCastleId = castleId;
-        if (!dm.castleStateDataMap.TryGetValue(castleId, out var st) || st == null) return;
 
         dm.castleMasterDataMap.TryGetValue(castleId, out var master);
+        dm.castleStateDataMap.TryGetValue(castleId, out var st);
+        bool hasLive = dm.TryGetLiveCastleState(castleId, out var live);
 
-        string dispName = master != null && !string.IsNullOrWhiteSpace(master.name) ? master.name : castleId;
+        if (!hasLive && st == null)
+        {
+            if (hqMoveButton != null)
+                hqMoveButton.gameObject.SetActive(false);
+            return;
+        }
+
+        int population = hasLive ? live.currentPopulation : st.currentPopulation;
+        float sentiment = hasLive ? live.currentSentiment : st.currentSentiment;
+        bool isWar = hasLive ? live.isWar : st.isWar;
+        bool isDisaster = hasLive ? live.isDisaster : st.isDisaster;
+        bool isFavorable = hasLive ? live.isFavorableEvent : st.isFavorableEvent;
+        float buyPrice = hasLive ? live.currentBuyPrice : st.currentBuyPrice;
+
+        dm.TryGetUserCastleStock(castleId, out var userStock);
+        bool hasStockFromSo = userStock != null && userStock.troopCount > 0;
+        bool hasStockFromMap = st != null && st.IsUserInvested;
+        bool hasStock = hasStockFromSo || hasStockFromMap;
+        int troopCount = hasStockFromSo ? userStock.troopCount : (st != null ? st.userDeployedTroops : 0);
+
+        string dispName = dm.GetCastleDisplayName(castleId);
+        if (string.IsNullOrEmpty(dispName) || dispName == "성")
+        {
+            if (master != null && !string.IsNullOrWhiteSpace(master.name) && !CastleDisplayLabels.LooksLikeRegionOrCastleCode(master.name))
+                dispName = master.name.Trim();
+            else if (master != null && !string.IsNullOrWhiteSpace(master.regionId) && !CastleDisplayLabels.LooksLikeRegionOrCastleCode(master.regionId))
+                dispName = master.regionId.Trim();
+            else
+                dispName = "성";
+        }
+        string regionLine = dm.GetCastleRegionSubtitle(castleId);
+        Faction lord = Faction.NONE;
+        if (hasLive && live != null) lord = live.currentLord;
+        else if (st != null) lord = st.currentLord;
+        string occLine = lord == Faction.NONE ? "중립" : $"{DataManager.GetFactionLordShortLabel(lord)} 점령";
+        bool isHqHome = !string.IsNullOrWhiteSpace(dm.HomeCastleId)
+                        && string.Equals(dm.HomeCastleId.Trim(), castleId, StringComparison.Ordinal);
         Grade g = master?.grade ?? Grade.D;
 
         if (castleNameText != null)
@@ -240,22 +442,16 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (castleIdText != null)
         {
-            string region = "";
-            if (master != null && !string.IsNullOrWhiteSpace(master.regionId))
-            {
-                var reg = dm.GetRegionMasterData(master.regionId.Trim());
-                region = reg != null && !string.IsNullOrWhiteSpace(reg.sectorName) ? reg.sectorName.Trim() : master.regionId.Trim();
-            }
-            castleIdText.text = string.IsNullOrEmpty(region) ? $"ID: {castleId}" : $"{region} · ID: {castleId}";
+            castleIdText.text = string.IsNullOrEmpty(regionLine) ? occLine : $"{regionLine} · {occLine}";
             castleIdText.color = new Color(0.55f, 0.58f, 0.64f, 1f);
         }
 
         if (statusIconWar != null)
-            statusIconWar.SetActive(st.isWar);
+            statusIconWar.SetActive(isWar);
         if (statusIconDisaster != null)
-            statusIconDisaster.SetActive(st.isDisaster);
+            statusIconDisaster.SetActive(isDisaster);
         if (statusIconFavorable != null)
-            statusIconFavorable.SetActive(st.isFavorableEvent);
+            statusIconFavorable.SetActive(isFavorable);
 
         if (gradeBadgeText != null)
         {
@@ -269,9 +465,12 @@ public class WorldMarketCastleCardView : MonoBehaviour
         if (buyLabelText != null)
             buyLabelText.text = "매수가";
 
-        SetBuyPriceAnimated(st.currentBuyPrice);
+        bool scrollRefreshSamePrice = !string.IsNullOrEmpty(_lastBoundCastleForPrice)
+                                      && string.Equals(_lastBoundCastleForPrice, castleId, StringComparison.Ordinal)
+                                      && Mathf.Abs(_lastBoundBuyPrice - buyPrice) < 0.5f;
+        SetBuyPriceAnimated(buyPrice, scrollRefreshSamePrice);
 
-        ResolveTrendUi(st, out bool trendUp, out bool trendFlat, out float pctDisplay, out bool riskDown);
+        ResolveTrendUiFromLive(live, st, out bool trendUp, out bool trendFlat, out float pctDisplay, out bool riskDown);
 
         if (sentimentArrowText != null)
         {
@@ -283,11 +482,11 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (sentimentChangeText != null)
         {
-            bool hasSent = TryComputeSentimentPercentChange(st, out _);
+            bool hasSent = st != null && TryComputeSentimentPercentChange(st, out _);
             if (riskDown && !hasSent)
-                sentimentChangeText.text = st.isWar ? "교전 리스크" : "재해 리스크";
+                sentimentChangeText.text = isWar ? "교전 리스크" : "재해 리스크";
             else if (!riskDown && trendFlat)
-                sentimentChangeText.text = "변동 —";
+                sentimentChangeText.text = $"민심 {sentiment:0.#}";
             else
                 sentimentChangeText.text = $"{(trendUp ? "+" : "")}{pctDisplay:F2}%";
             sentimentChangeText.color = !riskDown && trendFlat
@@ -301,63 +500,117 @@ public class WorldMarketCastleCardView : MonoBehaviour
                 : (trendUp ? BuyBoxUp : BuyBoxDown);
 
         if (sparklineGraphic != null)
-            sparklineGraphic.SetHistories(st.populationHistory, st.sentimentHistory);
+        {
+            if (st != null && st.populationHistory != null && st.sentimentHistory != null
+                         && st.populationHistory.Count > 0 && st.sentimentHistory.Count > 0)
+                sparklineGraphic.SetHistories(st.populationHistory, st.sentimentHistory);
+            else
+                sparklineGraphic.SetHistories(new List<int> { population }, new List<float> { sentiment });
+        }
 
-        bool invested = st.IsUserInvested;
         if (zone3PersonalRoot != null)
-            zone3PersonalRoot.gameObject.SetActive(invested);
+            zone3PersonalRoot.gameObject.SetActive(true);
 
         if (recallButton != null)
-            recallButton.gameObject.SetActive(invested);
+            recallButton.gameObject.SetActive(hasStock);
+
+        bool hqTravelBusy = dm.HasPendingHqMove
+                            || (WorldHqTravelHud.InstanceOrNull != null
+                                && WorldHqTravelHud.InstanceOrNull.IsHqTravelAnimating);
+        if (hqMoveButton != null)
+        {
+            hqMoveButton.gameObject.SetActive(!isHqHome && !hqTravelBusy);
+            var hqLbl = hqMoveButton.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (hqLbl != null)
+                hqLbl.text = "본영 이주";
+        }
 
         int maxG = master?.maxTroops ?? 0;
-        float stake = maxG > 0 ? Mathf.Clamp01(st.userDeployedTroops / (float)maxG) * 100f : 0f;
+        float stake = maxG > 0 ? Mathf.Clamp01(troopCount / (float)maxG) * 100f : 0f;
 
         if (troopsText != null)
         {
-            troopsText.text = invested ? $"{st.userDeployedTroops:N0}명" : "";
+            troopsText.text = hasStock ? $"{troopCount:N0}명" : "";
             troopsText.color = PersonalGold;
         }
 
         if (stakeText != null)
         {
-            stakeText.text = invested && maxG > 0 ? $"지분 {stake:F1}%" : "";
+            stakeText.text = hasStock && maxG > 0 ? $"지분 {stake:F1}%" : "";
             stakeText.color = PersonalGoldDim;
         }
 
         Transform stakeBarRoot = stakeGaugeFillImage != null ? stakeGaugeFillImage.transform.parent : null;
         if (stakeBarRoot != null)
-            stakeBarRoot.gameObject.SetActive(invested && maxG > 0);
+            stakeBarRoot.gameObject.SetActive(hasStock && maxG > 0);
 
-        if (stakeGaugeFillImage != null && invested && maxG > 0)
-            stakeGaugeFillImage.fillAmount = Mathf.Clamp01(st.userDeployedTroops / (float)maxG);
+        if (stakeGaugeFillImage != null && hasStock && maxG > 0)
+            stakeGaugeFillImage.fillAmount = Mathf.Clamp01(troopCount / (float)maxG);
 
         if (roiText != null)
         {
-            if (invested && st.averagePurchasePrice > 0.0001f)
+            if (!hasStock)
             {
-                float roi = (st.currentBuyPrice - st.averagePurchasePrice) / st.averagePurchasePrice * 100f;
-                roiText.text = $"{(roi >= 0 ? "+" : "")}{roi:F1}%";
-                roiText.color = roi >= 0f ? PersonalGold : RoiFallReadable;
-            }
-            else if (invested)
-            {
-                roiText.text = "—";
+                roiText.text = "미투자";
                 roiText.color = PersonalGoldDim;
+                ResetRoiZoneTint();
+            }
+            else if (dm.TryGetCastleRoiSellBasis(castleId, out float roiSell))
+            {
+                roiText.text = $"{(roiSell >= 0 ? "+" : "")}{roiSell:F1}%";
+                roiText.color = roiSell > 0.001f ? RiseColor : (roiSell < -0.001f ? FallColor : PersonalGoldDim);
+                ApplyRoiZoneTint(roiSell);
             }
             else
             {
-                roiText.text = "";
+                roiText.text = "—";
+                roiText.color = PersonalGoldDim;
+                ResetRoiZoneTint();
             }
         }
 
-        ApplyCardChrome(st, invested);
+        ApplyCardChrome(isWar, isDisaster, isFavorable, hasStock, isHqHome);
+
+        _lastBoundCastleForPrice = castleId;
+        _lastBoundBuyPrice = buyPrice;
     }
 
-    void SetBuyPriceAnimated(float buy)
+    void ApplyRoiZoneTint(float roiSell)
+    {
+        if (roiZoneBackdropImage == null) return;
+        if (!_roiBackdropBaseColor.HasValue)
+            _roiBackdropBaseColor = roiZoneBackdropImage.color;
+        var baseC = _roiBackdropBaseColor.Value;
+        if (roiSell > 0.001f)
+        {
+            roiZoneBackdropImage.color = Color.Lerp(baseC, new Color(0.42f, 0.14f, 0.12f, 0.55f), 0.55f);
+        }
+        else if (roiSell < -0.001f)
+        {
+            roiZoneBackdropImage.color = Color.Lerp(baseC, new Color(0.10f, 0.18f, 0.38f, 0.52f), 0.55f);
+        }
+        else
+            roiZoneBackdropImage.color = baseC;
+    }
+
+    void ResetRoiZoneTint()
+    {
+        if (roiZoneBackdropImage == null || !_roiBackdropBaseColor.HasValue) return;
+        roiZoneBackdropImage.color = _roiBackdropBaseColor.Value;
+    }
+
+    void SetBuyPriceAnimated(float buy, bool suppressTweenForScrollRefresh = false)
     {
         if (buyPriceText == null) return;
         buyPriceText.fontSize = largeBuyPriceFontSize;
+
+        if (suppressTweenForScrollRefresh)
+        {
+            _rollingBuyPrice = buy;
+            buyPriceText.text = $"{Mathf.RoundToInt(buy):N0} Gold";
+            return;
+        }
+
         if (_rollingBuyPrice < 0f)
         {
             _rollingBuyPrice = buy;
@@ -380,11 +633,14 @@ public class WorldMarketCastleCardView : MonoBehaviour
         }, buy, 0.22f).SetEase(Ease.OutQuad).SetTarget(this).OnComplete(() => _rollingBuyPrice = buy);
     }
 
-    void ResolveTrendUi(CastleStateData st, out bool up, out bool flat, out float pctOut, out bool riskDown)
+    void ResolveTrendUiFromLive(CastleStateSo.CastleLiveStateEntry live, CastleStateData st, out bool up, out bool flat, out float pctOut, out bool riskDown)
     {
-        riskDown = st.isWar || st.isDisaster;
+        bool war = live != null ? live.isWar : (st != null && st.isWar);
+        bool disaster = live != null ? live.isDisaster : (st != null && st.isDisaster);
+        riskDown = war || disaster;
         pctOut = 0f;
-        bool hasSent = TryComputeSentimentPercentChange(st, out float pctChg);
+        float pctChg = 0f;
+        bool hasSent = st != null && TryComputeSentimentPercentChange(st, out pctChg);
 
         if (riskDown)
         {
@@ -409,6 +665,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     static bool TryComputeSentimentPercentChange(CastleStateData st, out float pct)
     {
         pct = 0f;
+        if (st == null) return false;
         var h = st.sentimentHistory;
         if (h == null || h.Count < 2) return false;
         float prev = h[h.Count - 2];
@@ -419,12 +676,12 @@ public class WorldMarketCastleCardView : MonoBehaviour
         return true;
     }
 
-    void ApplyCardChrome(CastleStateData st, bool invested)
+    void ApplyCardChrome(bool war, bool disaster, bool favorableEvent, bool hasUserStock, bool isHqHome)
     {
-        bool war = st.isWar;
-        bool disaster = st.isDisaster;
-
         KillWarEffects();
+
+        if (_hqBadgeGo != null)
+            _hqBadgeGo.SetActive(isHqHome);
 
         if (disasterOverlayImage != null)
         {
@@ -435,7 +692,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (glossOverlayImage != null)
         {
-            bool glossOn = invested && !war && !disaster;
+            bool glossOn = hasUserStock && !war && !disaster;
             glossOverlayImage.gameObject.SetActive(glossOn);
             if (glossOn)
                 glossOverlayImage.color = new Color(1f, 0.94f, 0.78f, 0.09f);
@@ -443,7 +700,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (cardBackgroundImage != null)
         {
-            if (invested && !war && !disaster)
+            if (hasUserStock && !war && !disaster)
                 cardBackgroundImage.color = new Color(0.14f, 0.13f, 0.11f, 0.99f);
             else
                 cardBackgroundImage.color = _normalCardColor;
@@ -468,9 +725,36 @@ public class WorldMarketCastleCardView : MonoBehaviour
             }, 0f, 0.55f).SetEase(Ease.InOutSine));
             _warPulseSeq.SetLoops(-1);
             _warPulseSeq.SetTarget(gameObject);
+
+            var rt = transform as RectTransform;
+            if (rt != null)
+            {
+                _warShakeTweener = rt.DOShakeAnchorPos(1.05f, new Vector2(2.2f, 1.6f), 10, 90f, false, true)
+                    .SetLoops(-1)
+                    .SetUpdate(true)
+                    .SetTarget(gameObject);
+            }
+
+            if (warBurstParticles != null)
+            {
+                warBurstParticles.gameObject.SetActive(true);
+                warBurstParticles.Play(true);
+            }
         }
         else if (warTintImage != null)
             warTintImage.gameObject.SetActive(false);
+
+        if (!war && favorableEvent && statusIconFavorable != null && statusIconFavorable.activeSelf)
+        {
+            var tr = statusIconFavorable.transform;
+            tr.DOKill();
+            tr.localScale = Vector3.one;
+            _favorablePulseSeq = DOTween.Sequence();
+            _favorablePulseSeq.Append(tr.DOScale(1.12f, 0.38f).SetEase(Ease.InOutSine));
+            _favorablePulseSeq.Append(tr.DOScale(1f, 0.38f).SetEase(Ease.InOutSine));
+            _favorablePulseSeq.SetLoops(-1);
+            _favorablePulseSeq.SetTarget(gameObject);
+        }
 
         if (_outline == null) return;
 
@@ -487,7 +771,13 @@ public class WorldMarketCastleCardView : MonoBehaviour
             seq.SetLoops(-1);
             seq.SetTarget(gameObject);
         }
-        else if (invested)
+        else if (isHqHome)
+        {
+            _outline.enabled = true;
+            _outline.effectColor = HqOutline;
+            _outline.effectDistance = new Vector2(3.2f, -3.2f);
+        }
+        else if (hasUserStock)
         {
             _outline.enabled = true;
             _outline.effectColor = InvestOutline;

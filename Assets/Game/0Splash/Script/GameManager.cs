@@ -30,6 +30,12 @@ public class GameManager : Singleton<GameManager>
     [Header("밸런스 (유저 레벨 기반 계산)")]
     public BalanceConfig balance = new BalanceConfig();
 
+    [Header("SO 기본값 (선택)")]
+    [Tooltip("비어 있지 않으면 Awake 시 balance에 복사됩니다. 런타임에 SO 에셋은 수정되지 않습니다.")]
+    [SerializeField] BalanceConfigSo balanceConfigSo;
+    [Tooltip("세이브가 없을 때만 UserData 초기값으로 사용됩니다.")]
+    [SerializeField] UserDataDefaultsSo userDataDefaultsSo;
+
     [Header("유저 데이터")]
     public UserData currentUser;
 
@@ -45,6 +51,8 @@ public class GameManager : Singleton<GameManager>
         TimeManager.EnsureCreated();
         base.Awake();  // Singleton: _instance 설정 + DontDestroyOnLoad (씬 전환 시 유지)
         savePath = Path.Combine(Application.persistentDataPath, "userData.json");
+        if (balanceConfigSo != null)
+            balance = balanceConfigSo.CreateRuntimeCopy();
         LoadUserData();
     }
 
@@ -137,7 +145,10 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            currentUser = new UserData();
+            if (userDataDefaultsSo != null)
+                currentUser = userDataDefaultsSo.CreateRuntimeCopy();
+            else
+                currentUser = new UserData();
         }
 
         if (currentUser.stepRewardsClaimed == null || currentUser.stepRewardsClaimed.Length != 4)
