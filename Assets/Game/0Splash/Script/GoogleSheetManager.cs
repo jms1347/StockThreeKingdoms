@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks; // UniTask
 using UnityEngine;
 using UnityEngine.Networking;
 using UniRx;
+using static System.Net.WebRequestMethods;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -12,9 +15,15 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 {
     // ★ 구글 시트 URL (웹에 게시 -> TSV 형식으로 추출한 URL을 넣으세요)
     const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:I";
-    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:H";
-    const string generalMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1008843975&range=A2:H";
+    /// <summary>A:id, B:name, C:regionId, D:grade, E:initialNationId, F:baseValue, G:maxTroops, H:initPopulation, I:posX, J:posY, K:adjacentIdsRaw</summary>
+    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:K";
+    /// <summary>A:id, B:name, C:grade, D:power, E:intel, F:charm, G:buffId, H:initialNationId, I:initialCastleId</summary>
+    const string generalMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1008843975&range=A2:I";
     const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:E";
+    /// <summary>세력(Nation) 마스터 TSV URL. A:id, B:name, C:colorCode, D:capitalId, E:description (예: range=A2:E)</summary>
+    const string nationMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1621681501&range=A2:E";
+    /// <summary>지역(섹터) 마스터 TSV URL. A:지역코드, B:섹터명, C:특징, D:배정 성 예시 (낙양(C01) 형식, range=A2:D 등)</summary>
+    const string regionMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1716545491&range=A2:D";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -35,12 +44,14 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         string castleMasterResult = await GetGSDataToURL(castleMasterDataURL);
         string generalMasterResult = await GetGSDataToURL(generalMasterDataURL);
         string buffMasterResult = await GetGSDataToURL(buffMasterDataURL);
+        string nationMasterResult = await GetGSDataToURL(nationMasterDataURL);
+        string regionMasterResult = await GetGSDataToURL(regionMasterDataURL);
 
 #if UNITY_EDITOR
         // 에디터에서 수동 실행(비플레이) 시 DataManager가 없더라도 SO에 직접 반영
         if (!Application.isPlaying && DataManager.InstanceOrNull == null)
         {
-            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult);
+            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult);
             IsSetData.Value = saved;
             if (saved)
                 Debug.Log("[GoogleSheetManager] DataManager 없이 SO 저장 완료.");
@@ -62,6 +73,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         SetCastleMasterData(dm, castleMasterResult);
         SetGeneralMasterData(dm, generalMasterResult);
         SetBuffMasterData(dm, buffMasterResult);
+        SetNationMasterData(dm, nationMasterResult);
+        SetRegionMasterData(dm, regionMasterResult);
 
         // 3. 런타임 맵 내용을 SO 리스트에도 반영 (인스펙터에서 즉시 확인 가능)
         dm.SyncSoFromRuntimeMaps();
@@ -157,34 +170,31 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 7) continue; // H(initialLord)는 옵션
+            if (cells.Length < 8) continue;
 
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
 
-            CastleMasterData castleData = new CastleMasterData
+            var castleData = new CastleMasterData
             {
                 id = id,
-                region = cells[1].Trim(),
-                name = cells[2].Trim()
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                regionId = cells.Length > 2 ? cells[2].Trim() : "",
+                initialNationId = cells.Length > 4 ? cells[4].Trim() : ""
             };
 
-            string gradeRaw = cells[3].Trim();
+            string gradeRaw = cells.Length > 3 ? cells[3].Trim() : "";
             if (int.TryParse(gradeRaw, out int gradeInt) && Enum.IsDefined(typeof(Grade), gradeInt))
-            {
                 castleData.grade = (Grade)gradeInt;
-            }
             else if (!Enum.TryParse(gradeRaw, true, out castleData.grade))
-            {
                 castleData.grade = Grade.D;
-            }
 
-            float.TryParse(cells[4].Trim(), out castleData.baseValue);
-            int.TryParse(cells[5].Trim(), out castleData.maxGarrison);
-            int.TryParse(cells[6].Trim(), out castleData.initPopulation);
-
-            // H: initialLord (옵션) - 숫자(0~) 또는 문자열(WEI/SHU/WU/OTHERS/NONE)
-            castleData.initialLord = cells.Length > 7 ? ParseFaction(cells[7]) : Faction.NONE;
+            float.TryParse(cells[5].Trim(), out castleData.baseValue);
+            int.TryParse(cells[6].Trim(), out castleData.maxTroops);
+            int.TryParse(cells[7].Trim(), out castleData.initPopulation);
+            float.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out castleData.posX);
+            float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out castleData.posY);
+            castleData.adjacentIdsRaw = cells.Length > 10 ? cells[10].Trim() : "";
 
             dm.castleMasterDataMap[castleData.id] = castleData;
         }
@@ -227,7 +237,9 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                buffId = cells.Length > 6 ? cells[6].Trim() : ""
+                buffId = cells.Length > 6 ? cells[6].Trim() : "",
+                initialNationId = cells.Length > 7 ? cells[7].Trim() : "",
+                initialCastleId = cells.Length > 8 ? cells[8].Trim() : ""
             };
 
             string gradeRaw = cells.Length > 2 ? cells[2].Trim() : "";
@@ -274,9 +286,11 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             };
 
             string typeRaw = cells.Length > 2 ? cells[2].Trim() : "";
-            if (int.TryParse(typeRaw, out int typeInt) && Enum.IsDefined(typeof(BuffType), typeInt))
+            if (Enum.TryParse<BuffType>(typeRaw, true, out BuffType parsedType))
+                buff.type = parsedType;
+            else if (int.TryParse(typeRaw, out int typeInt) && Enum.IsDefined(typeof(BuffType), typeInt))
                 buff.type = (BuffType)typeInt;
-            else if (!Enum.TryParse(typeRaw, true, out buff.type))
+            else
                 buff.type = BuffType.None;
 
             float.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out buff.value);
@@ -285,17 +299,106 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         }
     }
 
+    void SetNationMasterData(DataManager dm, string data)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrEmpty(data)) return;
+
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] NationMaster TSV가 아닌 HTML이 반환되었습니다. 시트가 '웹에 게시' 상태인지, URL이 정확한지 확인해 주세요.");
+            return;
+        }
+
+        dm.nationMasterDataMap.Clear();
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 1) continue;
+
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            var nation = new NationMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                colorCode = cells.Length > 2 ? cells[2].Trim() : "",
+                capitalId = cells.Length > 3 ? cells[3].Trim() : "",
+                description = cells.Length > 4 ? cells[4].Trim() : ""
+            };
+
+            dm.nationMasterDataMap[nation.id] = nation;
+        }
+    }
+
+    void SetRegionMasterData(DataManager dm, string data)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrEmpty(data)) return;
+
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] RegionMaster TSV가 아닌 HTML이 반환되었습니다. 시트가 '웹에 게시' 상태인지, URL이 정확한지 확인해 주세요.");
+            return;
+        }
+
+        dm.regionMasterDataMap.Clear();
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            var region = ParseRegionMasterRow(cells);
+            if (region != null)
+                dm.regionMasterDataMap[region.id] = region;
+        }
+
+        dm.RebuildRegionCastleLookup();
+    }
+
+    /// <summary>"낙양(C01), 호로관(C21)" 등 괄호 안의 성 ID를 순서대로 추출.</summary>
+    static List<string> ParseCastleIdsFromAssignedExamplesCell(string cell)
+    {
+        var list = new List<string>();
+        if (string.IsNullOrWhiteSpace(cell)) return list;
+        foreach (Match m in Regex.Matches(cell, @"\(([A-Za-z0-9_]+)\)"))
+        {
+            if (m.Groups.Count > 1 && !string.IsNullOrWhiteSpace(m.Groups[1].Value))
+                list.Add(m.Groups[1].Value.Trim());
+        }
+        return list;
+    }
+
+    static RegionMasterData ParseRegionMasterRow(string[] cells)
+    {
+        if (cells == null || cells.Length < 1) return null;
+        string id = cells[0].Trim();
+        if (string.IsNullOrEmpty(id)) return null;
+        return new RegionMasterData
+        {
+            id = id,
+            sectorName = cells.Length > 1 ? cells[1].Trim() : "",
+            features = cells.Length > 2 ? cells[2].Trim() : "",
+            castleIds = ParseCastleIdsFromAssignedExamplesCell(cells.Length > 3 ? cells[3] : "")
+        };
+    }
+
 #if UNITY_EDITOR
-    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData)
+    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData)
     {
         var levelSo = FindAsset<LevelRuleDataSo>();
         var castleSo = FindAsset<CastleMasterDataSo>();
         var generalSo = FindAsset<GeneralMasterDataSo>();
         var buffSo = FindAsset<BuffMasterDataSo>();
+        var nationSo = FindAsset<NationMasterDataSo>();
+        var regionSo = FindAsset<RegionMasterDataSo>();
 
-        if (levelSo == null || castleSo == null || generalSo == null || buffSo == null)
+        if (levelSo == null || castleSo == null || generalSo == null || buffSo == null || nationSo == null || regionSo == null)
         {
-            Debug.LogError("[GoogleSheetManager] SO를 찾지 못했습니다. Level/Castle/General/Buff SO가 모두 프로젝트에 있어야 합니다.");
+            Debug.LogError("[GoogleSheetManager] SO를 찾지 못했습니다. Level/Castle/General/Buff/Nation/Region SO가 모두 프로젝트에 있어야 합니다.");
             return false;
         }
 
@@ -303,11 +406,19 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         castleSo.list = ParseCastleList(castleData);
         generalSo.list = ParseGeneralList(generalData);
         buffSo.list = ParseBuffList(buffData);
+        if (!string.IsNullOrWhiteSpace(nationData) && !nationData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            nationSo.list = ParseNationList(nationData);
+        if (!string.IsNullOrWhiteSpace(regionData) && !regionData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            regionSo.list = ParseRegionList(regionData);
 
         EditorUtility.SetDirty(levelSo);
         EditorUtility.SetDirty(castleSo);
         EditorUtility.SetDirty(generalSo);
         EditorUtility.SetDirty(buffSo);
+        if (!string.IsNullOrWhiteSpace(nationData) && !nationData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            EditorUtility.SetDirty(nationSo);
+        if (!string.IsNullOrWhiteSpace(regionData) && !regionData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            EditorUtility.SetDirty(regionSo);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         return true;
@@ -359,17 +470,25 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 7) continue;
+            if (cells.Length < 8) continue;
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
-            var item = new CastleMasterData { id = id, region = cells[1].Trim(), name = cells[2].Trim() };
-            string gradeRaw = cells[3].Trim();
+            var item = new CastleMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                regionId = cells.Length > 2 ? cells[2].Trim() : "",
+                initialNationId = cells.Length > 4 ? cells[4].Trim() : ""
+            };
+            string gradeRaw = cells.Length > 3 ? cells[3].Trim() : "";
             if (int.TryParse(gradeRaw, out int gi) && Enum.IsDefined(typeof(Grade), gi)) item.grade = (Grade)gi;
             else if (!Enum.TryParse(gradeRaw, true, out item.grade)) item.grade = Grade.D;
-            float.TryParse(cells[4].Trim(), out item.baseValue);
-            int.TryParse(cells[5].Trim(), out item.maxGarrison);
-            int.TryParse(cells[6].Trim(), out item.initPopulation);
-            item.initialLord = cells.Length > 7 ? ParseFaction(cells[7]) : Faction.NONE;
+            float.TryParse(cells[5].Trim(), out item.baseValue);
+            int.TryParse(cells[6].Trim(), out item.maxTroops);
+            int.TryParse(cells[7].Trim(), out item.initPopulation);
+            float.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out item.posX);
+            float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out item.posY);
+            item.adjacentIdsRaw = cells.Length > 10 ? cells[10].Trim() : "";
             list.Add(item);
         }
         return list;
@@ -388,7 +507,14 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             if (cells.Length < 6) continue;
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
-            var item = new GeneralMasterData { id = id, name = cells.Length > 1 ? cells[1].Trim() : "", buffId = cells.Length > 6 ? cells[6].Trim() : "" };
+            var item = new GeneralMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                buffId = cells.Length > 6 ? cells[6].Trim() : "",
+                initialNationId = cells.Length > 7 ? cells[7].Trim() : "",
+                initialCastleId = cells.Length > 8 ? cells[8].Trim() : ""
+            };
             string gradeRaw = cells.Length > 2 ? cells[2].Trim() : "";
             if (int.TryParse(gradeRaw, out int gi) && Enum.IsDefined(typeof(Grade), gi)) item.grade = (Grade)gi;
             else if (!Enum.TryParse(gradeRaw, true, out item.grade)) item.grade = Grade.D;
@@ -403,6 +529,62 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     List<BuffMasterData> ParseBuffList(string data)
     {
         var list = new List<BuffMasterData>();
+        // 구글 시트 오류(HTML 응답) 또는 데이터 없음 체크
+        if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[DataManager] 구글 시트 접근 실패 혹은 잘못된 데이터 형식입니다.");
+            return list;
+        }
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+        // i = 1부터 시작 (첫 줄이 컬럼 제목인 경우 스킵)
+        for (int i = 1; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 4) continue;
+
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            var item = new BuffMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                description = cells.Length > 4 ? cells[4].Trim() : ""
+            };
+
+            // --- 버프 타입(Enum) 파싱 로직 ---
+            string typeRaw = cells.Length > 2 ? cells[2].Trim() : "";
+
+            // 1. 문자열 이름으로 시도 (예: "ValueMultiplier", "ParValueModifier")
+            if (Enum.TryParse<BuffType>(typeRaw, true, out BuffType parsedEnum))
+            {
+                item.type = parsedEnum;
+            }
+            // 2. 만약 숫자로 입력되었을 경우 대비 (예: "1", "2")
+            else if (int.TryParse(typeRaw, out int ti) && Enum.IsDefined(typeof(BuffType), ti))
+            {
+                item.type = (BuffType)ti;
+            }
+            // 3. 둘 다 실패하면 기본값 None
+            else
+            {
+                item.type = BuffType.None;
+                Debug.LogWarning($"[DataManager] 알 수 없는 버프 타입 발견 (ID: {id}, Type: {typeRaw})");
+            }
+
+            // 수치 파싱
+            float.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out item.value);
+
+            list.Add(item);
+        }
+        return list;
+    }
+
+    List<NationMasterData> ParseNationList(string data)
+    {
+        var list = new List<NationMasterData>();
         if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
             return list;
 
@@ -410,15 +592,33 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 4) continue;
+            if (cells.Length < 1) continue;
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
-            var item = new BuffMasterData { id = id, name = cells.Length > 1 ? cells[1].Trim() : "", description = cells.Length > 4 ? cells[4].Trim() : "" };
-            string typeRaw = cells.Length > 2 ? cells[2].Trim() : "";
-            if (int.TryParse(typeRaw, out int ti) && Enum.IsDefined(typeof(BuffType), ti)) item.type = (BuffType)ti;
-            else if (!Enum.TryParse(typeRaw, true, out item.type)) item.type = BuffType.None;
-            float.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out item.value);
-            list.Add(item);
+            list.Add(new NationMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                colorCode = cells.Length > 2 ? cells[2].Trim() : "",
+                capitalId = cells.Length > 3 ? cells[3].Trim() : "",
+                description = cells.Length > 4 ? cells[4].Trim() : ""
+            });
+        }
+        return list;
+    }
+
+    List<RegionMasterData> ParseRegionList(string data)
+    {
+        var list = new List<RegionMasterData>();
+        if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            var item = ParseRegionMasterRow(rows[i].Split('\t'));
+            if (item != null)
+                list.Add(item);
         }
         return list;
     }

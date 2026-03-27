@@ -14,36 +14,179 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuffMasterDataSo
   list:
   - id: B01
-    name: "\uD669\uAE08 \uC0AC\uACFC"
-    type: 0
-    value: 0.2
-    description: "\uC131 \uAC00\uCE58 \uBC30\uC728(Value Multiplier) \uC99D\uAC00"
+    name: "\uD669\uAE08 \uBCF4\uB9AC"
+    type: 4
+    value: 0.03
+    description: "\uC131\uC758 \uBC31\uC131 \uC218 \uC99D\uAC00 \uC18D\uB3C4\uAC00
+      3% \uAC00\uC18D\uB429\uB2C8\uB2E4."
   - id: B02
-    name: "\uCCA0\uBCBD \uBC29\uC5B4"
-    type: 0
-    value: -0.3
-    description: "\uC804\uC7C1 \uC2DC \uBCD1\uC0AC \uC190\uC2E4\uB960(Slipage) \uAC10\uC18C"
+    name: "\uBE44\uB2E8\uAE38 \uD1B5\uD589\uAD8C"
+    type: 1
+    value: 1.15
+    description: "\uC131\uC758 \uAE30\uBCF8 \uAC00\uCE58\uB97C 15% \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
   - id: B03
-    name: "\uBBFC\uC2EC \uB2EC\uB798\uAE30"
-    type: 0
-    value: 5
-    description: "\uB9E4 \uD2F1(Tick)\uB9C8\uB2E4 \uBBFC\uC2EC \uC790\uB3D9 \uD68C\uBCF5\uB7C9
-      \uC99D\uAC00"
+    name: "\uACF5\uC790\uC758 \uACBD\uC804"
+    type: 3
+    value: 0.4
+    description: "\uB9E4 \uD2F1\uB2F9 \uBBFC\uC2EC \uD68C\uBCF5\uB7C9\uC774 0.4 \uCD94\uAC00\uB429\uB2C8\uB2E4."
   - id: B04
-    name: "\uACE0\uC218\uC775 \uBC30\uB2F9"
-    type: 0
-    value: 0.15
-    description: "\uC720\uC800\uB4E4\uC5D0\uAC8C \uC9C0\uAE09\uB418\uB294 \uBC30\uB2F9\uAE08
-      \uBCF4\uB108\uC2A4"
+    name: "\uC815\uC608\uBCD1\uC758 \uD22C\uAD6C"
+    type: 6
+    value: 0.2
+    description: "\uC804\uC7C1 \uC2DC \uBCD1\uC0AC \uC190\uC2E4(\uC2AC\uB9AC\uD53C\uC9C0)\uC744
+      20% \uBC29\uC5B4\uD569\uB2C8\uB2E4."
   - id: B05
-    name: "\uAE09\uD589 \uC5F4\uCC28"
-    type: 0
-    value: -0.2
-    description: "\uD574\uB2F9 \uC131\uC73C\uB85C \uD30C\uBCD1/\uC774\uB3D9 \uC2DC
-      \uC2DD\uB7C9 \uC18C\uBAA8 \uAC10\uC18C"
-  - id: B06
-    name: "\uAC70\uD488 \uC81C\uC870\uAE30"
-    type: 0
+    name: "\uD669\uC2E4\uC758 \uCE59\uB839"
+    type: 7
     value: 0.5
-    description: "\uBBFC\uC2EC \uC0C1\uC2B9 \uC2DC \uAC00\uD3ED \uC0C1\uC2B9(\uD558\uC774\uB9AC\uC2A4\uD06C
-      \uD558\uC774\uB9AC\uD134)"
+    description: "\uC720\uC800\uC5D0\uAC8C \uC9C0\uAE09\uB418\uB294 \uBC30\uB2F9\uAE08\uC774
+      50% \uCD94\uAC00\uB429\uB2C8\uB2E4."
+  - id: B06
+    name: "\uC0C1\uC778\uC5F0\uD569 \uC778\uC7A5"
+    type: 3
+    value: 0.1
+    description: "\uC131 \uD22C\uC785 \uC2DC \uBC1C\uC0DD\uD558\uB294 \uAC00\uC785\uBE44\uC6A9\uC774
+      10% \uD560\uC778\uB429\uB2C8\uB2E4."
+  - id: B07
+    name: "\uBCBD\uC625 \uBC18\uC9C0"
+    type: 1
+    value: 1.05
+    description: "\uC131\uC758 \uAC00\uCE58 \uBC30\uC728\uC774 5% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
+  - id: B08
+    name: "\uCE58\uC720\uC758 \uC57D\uCD08"
+    type: 3
+    value: 0.8
+    description: "\uC804\uC5FC\uBCD1 \uB4F1 \uC7AC\uD574 \uC2DC \uBBFC\uC2EC \uD558\uB77D\uC744
+      0.8 \uC0C1\uC1C4\uD569\uB2C8\uB2E4."
+  - id: B09
+    name: "\uB300\uC6B4\uD558 \uC124\uACC4\uB3C4"
+    type: 2
+    value: 0.08
+    description: "\uC218\uB85C \uC815\uBE44\uB85C \uC778\uAD6C \uC720\uC785\uC774
+      8% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - id: B10
+    name: "\uAC15\uCCA0 \uC131\uBB38"
+    type: 6
+    value: 0.4
+    description: "\uC801\uAD70 \uCE68\uACF5 \uC2DC \uD568\uB77D \uD655\uB960\uC744
+      40% \uB0AE\uCDA5\uB2C8\uB2E4."
+  - id: B11
+    name: "\uB454\uC804\uC81C \uC2DC\uD589\uB839"
+    type: 2
+    value: 0.05
+    description: "\uC790\uAE09\uC790\uC871 \uCCB4\uACC4\uB85C \uC778\uAD6C\uAC00
+      \uB9E4\uB2EC 5% \uB354 \uB298\uC5B4\uB0A9\uB2C8\uB2E4."
+  - id: B12
+    name: "\uBA85\uBB38\uC758 \uC871\uBCF4"
+    type: 1
+    value: 1.25
+    description: "\uBA85\uB9DD \uB192\uC740 \uAC00\uBB38\uC758 \uC9C0\uC9C0\uB85C
+      \uC131 \uAC00\uCE58\uAC00 25% \uD3ED\uB4F1\uD569\uB2C8\uB2E4."
+  - id: B13
+    name: "\uD0DC\uD3C9\uC694\uC220\uC11C"
+    type: 3
+    value: 1.2
+    description: "\uAE30\uB3C4\uB85C \uBBFC\uC2EC\uC744 \uB2E4\uC2A4\uB824 \uD68C\uBCF5\uB7C9\uC774
+      1.2 \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - id: B14
+    name: "\uC740\uAD11 \uCC44\uAD74\uAD8C"
+    type: 7
+    value: 0.25
+    description: "\uC740\uAD11 \uBC1C\uACAC\uC73C\uB85C \uBC30\uB2F9\uAE08\uC774
+      25% \uCD94\uAC00 \uC9C0\uAE09\uB429\uB2C8\uB2E4."
+  - id: B15
+    name: "\uAC70\uC0C1\uC758 \uC7A5\uBD80"
+    type: 3
+    value: 0.2
+    description: "\uB300\uADDC\uBAA8 \uAC70\uB798 \uB178\uD558\uC6B0\uB85C \uAC00\uC785\uBE44\uAC00
+      20% \uD560\uC778\uB429\uB2C8\uB2E4."
+  - id: B16
+    name: "\uCCA0\uBCBD\uC758 \uBC29\uD328"
+    type: 2
+    value: 0.15
+    description: "\uC804\uC7C1 \uC911\uC5D0\uB3C4 \uC720\uC800 \uC790\uC0B0\uC758
+      \uC548\uC804\uC131\uC744 15% \uBCF4\uC7A5\uD569\uB2C8\uB2E4."
+  - id: B17
+    name: "\uD48D\uB144\uC758 \uAE30\uC6D0\uD328"
+    type: 2
+    value: 0.1
+    description: "\uD48D\uC791 \uC18C\uC2DD\uC5D0 \uC720\uBBFC\uB4E4\uC774 \uBAB0\uB824\uC640
+      \uC778\uAD6C\uAC00 10% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  - id: B18
+    name: "\uCCAD\uB8E1\uC758 \uBCF4\uC8FC"
+    type: 1
+    value: 1.5
+    description: "\uC804\uC124\uC801\uC778 \uBCF4\uBB3C\uC758 \uAE30\uC6B4\uC73C\uB85C
+      \uC131 \uAC00\uCE58\uAC00 50% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
+  - id: B19
+    name: "\uC758\uC220 \uAD50\uBCF8"
+    type: 3
+    value: 0.3
+    description: "\uC758\uB8CC \uC2DC\uC124 \uD655\uCDA9\uC73C\uB85C \uBBFC\uC2EC\uC774
+      \uC548\uC815\uC801\uC73C\uB85C \uC720\uC9C0\uB429\uB2C8\uB2E4."
+  - id: B20
+    name: "\uBE44\uCD95 \uC2DD\uB7C9\uACE0"
+    type: 3
+    value: 0.5
+    description: "\uB18D\uC131\uC804 \uC2DC \uC790\uC0B0 \uAC00\uCE58 \uD558\uB77D\uC744
+      50% \uBC29\uC5B4\uD569\uB2C8\uB2E4."
+  - id: B21
+    name: "\uC18C\uAE08 \uC804\uB9E4\uAD8C"
+    type: 7
+    value: 0.35
+    description: "\uD544\uC218\uC7AC \uC804\uB9E4\uB97C \uD1B5\uD574 \uBC30\uB2F9\uAE08\uC774
+      35% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
+  - id: B22
+    name: "\uB099\uC591\uC758 \uBE44\uB2E8"
+    type: 1
+    value: 1.1
+    description: "\uACE0\uAE09 \uD2B9\uC0B0\uBB3C \uD6A8\uACFC\uB85C \uC131 \uAC00\uCE58\uAC00
+      10% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
+  - id: B23
+    name: "\uB4F1\uC6A9\uBB38 \uC11C\uC2E0"
+    type: 2
+    value: 0.04
+    description: "\uC778\uC7AC\uB4E4\uC774 \uBAA8\uC5EC\uB4E4\uBA70 \uC778\uAD6C
+      \uC131\uC7A5\uC138\uAC00 4% \uAC00\uC18D\uB429\uB2C8\uB2E4."
+  - id: B24
+    name: "\uC601\uC6C5\uC758 \uB3D9\uC0C1"
+    type: 3
+    value: 0.5
+    description: "\uC601\uC6C5\uC758 \uC704\uC5C4\uC73C\uB85C \uBBFC\uC2EC\uC774
+      \uB9E4 \uD2F1 0.5\uC529 \uC790\uB3D9 \uD68C\uBCF5\uB429\uB2C8\uB2E4."
+  - id: B25
+    name: "\uD669\uAE08 \uC5F4\uC1E0"
+    type: 2
+    value: 0.15
+    description: "\uBAA8\uB4E0 \uC131 \uC9C4\uC785 \uC2DC \uAC00\uC785\uBE44\uAC00
+      15% \uD560\uC778\uB429\uB2C8\uB2E4."
+  - id: B26
+    name: "\uC7A5\uAD70\uC758 \uAE43\uBC1C"
+    type: 2
+    value: 0.3
+    description: "\uAD70\uAE30 \uD655\uB9BD\uC73C\uB85C \uC804\uC7C1 \uB9AC\uC2A4\uD06C\uB97C
+      30% \uBC29\uC5B4\uD569\uB2C8\uB2E4."
+  - id: B27
+    name: "\uCC9C\uBB38 \uAD00\uCE21\uAE30"
+    type: 3
+    value: 0.2
+    description: "\uCC9C\uAE30\uB97C \uC77D\uC5B4 \uC7AC\uD574 \uC608\uBC29 \uBC0F
+      \uBBFC\uC2EC \uD68C\uBCF5\uC744 \uB3D5\uC2B5\uB2C8\uB2E4."
+  - id: B28
+    name: "\uBE44\uC625\uD55C \uD1F4\uBE44"
+    type: 4
+    value: 0.06
+    description: "\uB18D\uC9C0 \uAC1C\uB7C9\uC73C\uB85C \uC778\uAD6C \uC720\uC785
+      \uC18D\uB3C4\uAC00 6% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
+  - id: B29
+    name: "\uC5B4\uC0AC\uD328"
+    type: 7
+    value: 0.15
+    description: "\uD22C\uBA85\uD55C \uC138\uC815 \uAD00\uB9AC\uB85C \uBC30\uB2F9\uAE08\uC774
+      15% \uCD94\uAC00\uB429\uB2C8\uB2E4."
+  - id: B30
+    name: "\uCC9C\uD558 \uD1B5\uC77C\uBCF4"
+    type: 1
+    value: 2
+    description: "\uC0C1\uC9D5\uC801\uC778 \uAC00\uCE58\uB85C \uC778\uD574 \uC131
+      \uAC00\uCE58\uAC00 100% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."

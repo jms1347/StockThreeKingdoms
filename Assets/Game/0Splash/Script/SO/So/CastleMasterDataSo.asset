@@ -14,402 +14,541 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CastleMasterDataSo
   list:
   - id: C01
-    region: "\uC911\uC6D0"
-    name: "\uB099\uC591"
+    name: R01
+    regionId: "\uB099\uC591"
     grade: 0
+    initialNationId: WEI
     baseValue: 1000
-    maxGarrison: 500000
+    maxTroops: 500000
     initPopulation: 100000
-    initialLord: 0
+    posX: 500
+    posY: 500
+    adjacentIdsRaw: C21,C22,C04,C07,C10
   - id: C02
-    region: "\uC911\uC6D0"
-    name: "\uD5C8\uCC3D"
+    name: R02
+    regionId: "\uD5C8\uCC3D"
     grade: 1
+    initialNationId: WEI
     baseValue: 800
-    maxGarrison: 350000
+    maxTroops: 350000
     initPopulation: 70000
-    initialLord: 0
+    posX: 550
+    posY: 480
+    adjacentIdsRaw: C01,C22,C23,C26
   - id: C03
-    region: "\uC911\uC6D0"
-    name: "\uC9C4\uB958"
+    name: R02
+    regionId: "\uC9C4\uB958"
     grade: 2
+    initialNationId: WEI
     baseValue: 500
-    maxGarrison: 200000
+    maxTroops: 200000
     initPopulation: 40000
-    initialLord: 0
+    posX: 580
+    posY: 500
+    adjacentIdsRaw: C02,C24,C30,C49
   - id: C04
-    region: "\uD558\uBD81"
-    name: "\uC5C5\uC131"
+    name: R03
+    regionId: "\uC5C5\uC131"
     grade: 1
+    initialNationId: WEI
     baseValue: 750
-    maxGarrison: 400000
+    maxTroops: 400000
     initPopulation: 80000
-    initialLord: 0
+    posX: 550
+    posY: 650
+    adjacentIdsRaw: C01,C27,C30,C28
   - id: C05
-    region: "\uD558\uBD81"
-    name: "\uBD81\uD3C9"
+    name: R04
+    regionId: "\uBD81\uD3C9"
     grade: 3
+    initialNationId: OTHERS
     baseValue: 400
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 680
+    posY: 820
+    adjacentIdsRaw: C28,C06,C27
   - id: C06
-    region: "\uD558\uBD81"
-    name: "\uC591\uD3C9"
+    name: R04
+    regionId: "\uC591\uD3C9"
     grade: 4
+    initialNationId: OTHERS
     baseValue: 300
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 20000
-    initialLord: 0
+    posX: 800
+    posY: 880
+    adjacentIdsRaw: C05,C29
   - id: C07
-    region: "\uC11C\uBD81"
-    name: "\uC7A5\uC548"
+    name: R05
+    regionId: "\uC7A5\uC548"
     grade: 0
+    initialNationId: WEI
     baseValue: 900
-    maxGarrison: 450000
+    maxTroops: 450000
     initPopulation: 90000
-    initialLord: 0
+    posX: 350
+    posY: 520
+    adjacentIdsRaw: C01,C31,C34,C10,C08
   - id: C08
-    region: "\uC11C\uBD81"
-    name: "\uC11C\uB7C9"
+    name: R05
+    regionId: "\uC11C\uB7C9"
     grade: 3
+    initialNationId: OTHERS
     baseValue: 350
-    maxGarrison: 120000
+    maxTroops: 120000
     initPopulation: 25000
-    initialLord: 0
+    posX: 150
+    posY: 650
+    adjacentIdsRaw: C07,C09,C32
   - id: C09
-    region: "\uC11C\uBD81"
-    name: "\uCC9C\uC218"
+    name: R05
+    regionId: "\uCC9C\uC218"
     grade: 3
+    initialNationId: OTHERS
     baseValue: 300
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 20000
-    initialLord: 0
+    posX: 250
+    posY: 580
+    adjacentIdsRaw: C08,C31,C34
   - id: C10
-    region: "\uD615\uC8FC"
-    name: "\uC591\uC591"
+    name: R06
+    regionId: "\uC591\uC591"
     grade: 1
+    initialNationId: OTHERS
     baseValue: 600
-    maxGarrison: 250000
+    maxTroops: 250000
     initPopulation: 50000
-    initialLord: 0
+    posX: 450
+    posY: 350
+    adjacentIdsRaw: C01,C07,C11,C25,C35
   - id: C11
-    region: "\uD615\uC8FC"
-    name: "\uAC15\uB989"
+    name: R07
+    regionId: "\uAC15\uB989"
     grade: 1
+    initialNationId: SHU
     baseValue: 550
-    maxGarrison: 220000
+    maxTroops: 220000
     initPopulation: 45000
-    initialLord: 0
+    posX: 450
+    posY: 280
+    adjacentIdsRaw: C10,C35,C44,C12
   - id: C12
-    region: "\uD615\uC8FC"
-    name: "\uBB34\uB989"
+    name: R07
+    regionId: "\uBB34\uB989"
     grade: 4
+    initialNationId: SHU
     baseValue: 250
-    maxGarrison: 80000
+    maxTroops: 80000
     initPopulation: 15000
-    initialLord: 0
+    posX: 400
+    posY: 220
+    adjacentIdsRaw: C11,C37,C38
   - id: C13
-    region: "\uC624\uAC15"
-    name: "\uAC74\uC5C5"
+    name: R08
+    regionId: "\uAC74\uC5C5"
     grade: 0
+    initialNationId: WU
     baseValue: 850
-    maxGarrison: 420000
+    maxTroops: 420000
     initPopulation: 85000
-    initialLord: 0
+    posX: 800
+    posY: 300
+    adjacentIdsRaw: C14,C39,C41,C49,C35
   - id: C14
-    region: "\uC624\uAC15"
-    name: "\uC624\uAD70"
+    name: R08
+    regionId: "\uC624\uAD70"
     grade: 1
+    initialNationId: WU
     baseValue: 650
-    maxGarrison: 300000
+    maxTroops: 300000
     initPopulation: 60000
-    initialLord: 0
-  - id: C15
-    region: "\uC624\uAC15"
-    name: "\uC2DC\uC0C1"
-    grade: 2
-    baseValue: 450
-    maxGarrison: 180000
-    initPopulation: 35000
-    initialLord: 0
+    posX: 880
+    posY: 280
+    adjacentIdsRaw: C13,C39,C15
   - id: C16
-    region: "\uC11C\uB0A8"
-    name: "\uC131\uB3C4"
+    name: R10
+    regionId: "\uC131\uB3C4"
     grade: 1
+    initialNationId: SHU
     baseValue: 700
-    maxGarrison: 380000
+    maxTroops: 380000
     initPopulation: 75000
-    initialLord: 0
+    posX: 180
+    posY: 350
+    adjacentIdsRaw: C17,C42,C43,C44
   - id: C17
-    region: "\uC11C\uB0A8"
-    name: "\uAC15\uC8FC"
+    name: R10
+    regionId: "\uAC15\uC8FC"
     grade: 3
+    initialNationId: SHU
     baseValue: 400
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 250
+    posY: 320
+    adjacentIdsRaw: C16,C44,C42
   - id: C18
-    region: "\uC11C\uB0A8"
-    name: "\uAC74\uB155"
+    name: R11
+    regionId: "\uAC74\uB155"
     grade: 4
+    initialNationId: OTHERS
     baseValue: 200
-    maxGarrison: 50000
+    maxTroops: 50000
     initPopulation: 10000
-    initialLord: 0
+    posX: 150
+    posY: 150
+    adjacentIdsRaw: C43,C45
   - id: C19
-    region: "\uAE30\uD0C0"
-    name: "\uC11C\uC8FC"
+    name: R12
+    regionId: "\uC11C\uC8FC"
     grade: 2
+    initialNationId: OTHERS
     baseValue: 500
-    maxGarrison: 200000
+    maxTroops: 200000
     initPopulation: 45000
-    initialLord: 0
+    posX: 750
+    posY: 550
+    adjacentIdsRaw: C20,C46,C47,C48,C30
   - id: C20
-    region: "\uAE30\uD0C0"
-    name: "\uC18C\uD328"
+    name: R12
+    regionId: "\uC18C\uD328"
     grade: 5
+    initialNationId: OTHERS
     baseValue: 150
-    maxGarrison: 30000
+    maxTroops: 30000
     initPopulation: 5000
-    initialLord: 0
+    posX: 680
+    posY: 520
+    adjacentIdsRaw: C19,C46,C24
   - id: C21
-    region: "\uC911\uC6D0"
-    name: "\uD638\uB85C\uAD00"
+    name: R01
+    regionId: "\uD638\uB85C\uAD00"
     grade: 3
+    initialNationId: WEI
     baseValue: 400
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 15000
-    initialLord: 0
+    posX: 530
+    posY: 510
+    adjacentIdsRaw: C01,C24
   - id: C22
-    region: "\uC911\uC6D0"
-    name: "\uC644"
+    name: R02
+    regionId: "\uC644"
     grade: 3
+    initialNationId: WEI
     baseValue: 450
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 510
+    posY: 420
+    adjacentIdsRaw: C01,C02,C25,C23
   - id: C23
-    region: "\uC911\uC6D0"
-    name: "\uC5EC\uB0A8"
+    name: R02
+    regionId: "\uC5EC\uB0A8"
     grade: 3
+    initialNationId: WEI
     baseValue: 350
-    maxGarrison: 120000
+    maxTroops: 120000
     initPopulation: 25000
-    initialLord: 0
+    posX: 580
+    posY: 420
+    adjacentIdsRaw: C02,C22,C26
   - id: C24
-    region: "\uC911\uC6D0"
-    name: "\uBCF5\uC591"
+    name: R02
+    regionId: "\uBCF5\uC591"
     grade: 3
+    initialNationId: WEI
     baseValue: 400
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 600
+    posY: 550
+    adjacentIdsRaw: C03,C21,C27,C30,C20
   - id: C25
-    region: "\uC911\uC6D0"
-    name: "\uC2E0\uC57C"
+    name: R02
+    regionId: "\uC2E0\uC57C"
     grade: 4
+    initialNationId: WEI
     baseValue: 300
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 20000
-    initialLord: 0
+    posX: 480
+    posY: 380
+    adjacentIdsRaw: C22,C10
   - id: C26
-    region: "\uC911\uC6D0"
-    name: "\uC218\uCD98"
+    name: R09
+    regionId: "\uC218\uCD98"
     grade: 2
+    initialNationId: WEI
     baseValue: 450
-    maxGarrison: 180000
+    maxTroops: 180000
     initPopulation: 35000
-    initialLord: 0
+    posX: 650
+    posY: 400
+    adjacentIdsRaw: C02,C23,C49,C35
   - id: C27
-    region: "\uD558\uBD81"
-    name: "\uB0A8\uD53C"
+    name: R03
+    regionId: "\uB0A8\uD53C"
     grade: 2
+    initialNationId: WEI
     baseValue: 500
-    maxGarrison: 200000
+    maxTroops: 200000
     initPopulation: 40000
-    initialLord: 0
+    posX: 620
+    posY: 700
+    adjacentIdsRaw: C04,C24,C30,C05
   - id: C28
-    region: "\uD558\uBD81"
-    name: "\uACC4"
+    name: R03
+    regionId: "\uACC4"
     grade: 3
+    initialNationId: WEI
     baseValue: 350
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 20000
-    initialLord: 0
+    posX: 580
+    posY: 780
+    adjacentIdsRaw: C04,C05,C30
   - id: C29
-    region: "\uD558\uBD81"
-    name: "\uB099\uB791"
+    name: R04
+    regionId: "\uB099\uB791"
     grade: 5
+    initialNationId: OTHERS
     baseValue: 200
-    maxGarrison: 50000
+    maxTroops: 50000
     initPopulation: 10000
-    initialLord: 0
+    posX: 920
+    posY: 850
+    adjacentIdsRaw: C06
   - id: C30
-    region: "\uD558\uBD81"
-    name: "\uD3C9\uC6D0"
+    name: R03
+    regionId: "\uD3C9\uC6D0"
     grade: 2
+    initialNationId: WEI
     baseValue: 450
-    maxGarrison: 180000
+    maxTroops: 180000
     initPopulation: 35000
-    initialLord: 0
+    posX: 600
+    posY: 620
+    adjacentIdsRaw: C03,C04,C24,C27,C28,C19
   - id: C31
-    region: "\uC11C\uBD81"
-    name: "\uC548\uC815"
+    name: R05
+    regionId: "\uC548\uC815"
     grade: 3
+    initialNationId: WEI
     baseValue: 350
-    maxGarrison: 120000
+    maxTroops: 120000
     initPopulation: 25000
-    initialLord: 0
+    posX: 300
+    posY: 620
+    adjacentIdsRaw: C07,C09,C32
   - id: C32
-    region: "\uC11C\uBD81"
-    name: "\uBB34\uC704"
+    name: R05
+    regionId: "\uBB34\uC704"
     grade: 4
+    initialNationId: OTHERS
     baseValue: 250
-    maxGarrison: 80000
+    maxTroops: 80000
     initPopulation: 15000
-    initialLord: 0
+    posX: 120
+    posY: 720
+    adjacentIdsRaw: C08,C31,C33
   - id: C33
-    region: "\uC11C\uBD81"
-    name: "\uB3C8\uD669"
+    name: R05
+    regionId: "\uB3C8\uD669"
     grade: 4
+    initialNationId: OTHERS
     baseValue: 300
-    maxGarrison: 70000
+    maxTroops: 70000
     initPopulation: 12000
-    initialLord: 0
+    posX: 50
+    posY: 750
+    adjacentIdsRaw: C32
   - id: C34
-    region: "\uC11C\uBD81"
-    name: "\uBB34\uB3C4"
+    name: R05
+    regionId: "\uBB34\uB3C4"
     grade: 4
+    initialNationId: SHU
     baseValue: 300
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 20000
-    initialLord: 0
+    posX: 280
+    posY: 450
+    adjacentIdsRaw: C07,C09,C42
   - id: C35
-    region: "\uD615\uC8FC"
-    name: "\uAC15\uD558"
+    name: R09
+    regionId: "\uAC15\uD558"
     grade: 3
+    initialNationId: WEI
     baseValue: 400
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 550
+    posY: 320
+    adjacentIdsRaw: C10,C11,C13,C15,C26
   - id: C36
-    region: "\uD615\uC8FC"
-    name: "\uC7A5\uC0AC"
+    name: R07
+    regionId: "\uC7A5\uC0AC"
     grade: 2
+    initialNationId: WU
     baseValue: 500
-    maxGarrison: 200000
+    maxTroops: 200000
     initPopulation: 40000
-    initialLord: 0
+    posX: 520
+    posY: 180
+    adjacentIdsRaw: C15,C37,C38,C41
   - id: C37
-    region: "\uD615\uC8FC"
-    name: "\uC601\uB989"
+    name: R07
+    regionId: "\uC601\uB989"
     grade: 5
+    initialNationId: OTHERS
     baseValue: 200
-    maxGarrison: 60000
+    maxTroops: 60000
     initPopulation: 12000
-    initialLord: 0
+    posX: 450
+    posY: 150
+    adjacentIdsRaw: C12,C36,C38
   - id: C38
-    region: "\uD615\uC8FC"
-    name: "\uACC4\uC591"
+    name: R07
+    regionId: "\uACC4\uC591"
     grade: 4
+    initialNationId: OTHERS
     baseValue: 250
-    maxGarrison: 80000
+    maxTroops: 80000
     initPopulation: 15000
-    initialLord: 0
+    posX: 500
+    posY: 120
+    adjacentIdsRaw: C12,C36,C37
   - id: C39
-    region: "\uC624\uAC15"
-    name: "\uD68C\uACC4"
+    name: R08
+    regionId: "\uD68C\uACC4"
     grade: 3
+    initialNationId: WU
     baseValue: 450
-    maxGarrison: 180000
+    maxTroops: 180000
     initPopulation: 35000
-    initialLord: 0
+    posX: 920
+    posY: 220
+    adjacentIdsRaw: C13,C14,C40
   - id: C40
-    region: "\uC624\uAC15"
-    name: "\uAC74\uC548"
+    name: R08
+    regionId: "\uAC74\uC548"
     grade: 4
+    initialNationId: WU
     baseValue: 300
-    maxGarrison: 100000
+    maxTroops: 100000
     initPopulation: 20000
-    initialLord: 0
+    posX: 880
+    posY: 120
+    adjacentIdsRaw: C39,C41
   - id: C41
-    region: "\uC624\uAC15"
-    name: "\uC608\uC7A5"
+    name: R08
+    regionId: "\uC608\uC7A5"
     grade: 4
+    initialNationId: WU
     baseValue: 250
-    maxGarrison: 80000
+    maxTroops: 80000
     initPopulation: 15000
-    initialLord: 0
+    posX: 750
+    posY: 200
+    adjacentIdsRaw: C13,C15,C36,C40
   - id: C42
-    region: "\uC11C\uB0A8"
-    name: "\uC790\uB3D9"
+    name: R10
+    regionId: "\uC790\uB3D9"
     grade: 3
+    initialNationId: SHU
     baseValue: 350
-    maxGarrison: 120000
+    maxTroops: 120000
     initPopulation: 25000
-    initialLord: 0
+    posX: 220
+    posY: 420
+    adjacentIdsRaw: C16,C17,C34
   - id: C43
-    region: "\uC11C\uB0A8"
-    name: "\uAC15\uC591"
+    name: R10
+    regionId: "\uAC15\uC591"
     grade: 5
+    initialNationId: SHU
     baseValue: 200
-    maxGarrison: 60000
+    maxTroops: 60000
     initPopulation: 12000
-    initialLord: 0
+    posX: 150
+    posY: 280
+    adjacentIdsRaw: C16,C18
   - id: C44
-    region: "\uC11C\uB0A8"
-    name: "\uC601\uC548"
+    name: R10
+    regionId: "\uC601\uC548"
     grade: 3
+    initialNationId: SHU
     baseValue: 400
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 320
+    posY: 320
+    adjacentIdsRaw: C16,C17,C11
   - id: C45
-    region: "\uC11C\uB0A8"
-    name: "\uC6B4\uB0A8"
+    name: R11
+    regionId: "\uC6B4\uB0A8"
     grade: 5
+    initialNationId: OTHERS
     baseValue: 200
-    maxGarrison: 50000
+    maxTroops: 50000
     initPopulation: 10000
-    initialLord: 0
+    posX: 80
+    posY: 100
+    adjacentIdsRaw: C18
   - id: C46
-    region: "\uAE30\uD0C0"
-    name: "\uD558\uBE44"
+    name: R12
+    regionId: "\uD558\uBE44"
     grade: 1
+    initialNationId: OTHERS
     baseValue: 550
-    maxGarrison: 220000
+    maxTroops: 220000
     initPopulation: 45000
-    initialLord: 0
+    posX: 780
+    posY: 500
+    adjacentIdsRaw: C19,C20,C48
   - id: C47
-    region: "\uAE30\uD0C0"
-    name: "\uBD81\uD574"
+    name: R12
+    regionId: "\uBD81\uD574"
     grade: 3
+    initialNationId: OTHERS
     baseValue: 400
-    maxGarrison: 150000
+    maxTroops: 150000
     initPopulation: 30000
-    initialLord: 0
+    posX: 780
+    posY: 650
+    adjacentIdsRaw: C19,C50
   - id: C48
-    region: "\uAE30\uD0C0"
-    name: "\uAD11\uB989"
+    name: R12
+    regionId: "\uAD11\uB989"
     grade: 3
+    initialNationId: OTHERS
     baseValue: 350
-    maxGarrison: 120000
+    maxTroops: 120000
     initPopulation: 25000
-    initialLord: 0
+    posX: 820
+    posY: 450
+    adjacentIdsRaw: C19,C46,C49
   - id: C49
-    region: "\uAE30\uD0C0"
-    name: "\uD569\uBE44"
+    name: R09
+    regionId: "\uD569\uBE44"
     grade: 2
+    initialNationId: WEI
     baseValue: 450
-    maxGarrison: 180000
+    maxTroops: 180000
     initPopulation: 35000
-    initialLord: 0
+    posX: 720
+    posY: 380
+    adjacentIdsRaw: C03,C13,C26,C48
   - id: C50
-    region: "\uAE30\uD0C0"
     name: "\uB0AD\uC57C"
+    regionId: "\uAE30\uD0C0"
     grade: 5
-    baseValue: 150
-    maxGarrison: 30000
-    initPopulation: 5000
-    initialLord: 0
+    initialNationId: 150
+    baseValue: 30000
+    maxTroops: 5000
+    initPopulation: 0
+    posX: 0
+    posY: 0
+    adjacentIdsRaw: 

@@ -10,6 +10,9 @@ using TMPro;
 [DisallowMultipleComponent]
 public class WorldMarketPieChartUI : MonoBehaviour
 {
+    const string LogPrefix = "[WorldMarketPieChartUI]";
+    const int FramesLateRefresh = 120;
+
     [SerializeField] Image segmentWei;
     [SerializeField] Image segmentShu;
     [SerializeField] Image segmentWu;
@@ -28,10 +31,13 @@ public class WorldMarketPieChartUI : MonoBehaviour
     void Awake()
     {
         StripLegacyPieChrome();
+        EnsureSegmentsHorizontalLayout();
         ConfigureBarSegment(segmentWei, new Color(0.20f, 0.55f, 0.90f));
         ConfigureBarSegment(segmentShu, new Color(0.35f, 0.80f, 0.55f));
         ConfigureBarSegment(segmentWu, new Color(0.95f, 0.40f, 0.35f));
         ConfigureBarSegment(segmentOthers, new Color(0.55f, 0.58f, 0.66f));
+
+        EnsureInBarPercentLabels();
 
         UpdateStackedBar(new FactionCastleShare
         {
@@ -53,6 +59,38 @@ public class WorldMarketPieChartUI : MonoBehaviour
             var ch = transform.GetChild(i);
             if (ch != null && ch.name == "DonutHole")
                 ch.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>기존 씬: Segments에 HLG가 없으면 추가해 막대 비율이 LayoutElement.flexibleWidth로 유지되게 합니다.</summary>
+    void EnsureSegmentsHorizontalLayout()
+    {
+        if (segmentWei == null) return;
+        var seg = segmentWei.transform.parent;
+        if (seg == null) return;
+        var h = seg.GetComponent<HorizontalLayoutGroup>();
+        if (h == null)
+            h = seg.gameObject.AddComponent<HorizontalLayoutGroup>();
+        h.spacing = 0f;
+        h.childControlWidth = true;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = true;
+        h.childForceExpandHeight = true;
+        h.padding = new RectOffset(0, 0, 0, 0);
+        h.childAlignment = TextAnchor.MiddleCenter;
+
+        Image[] imgs = { segmentWei, segmentShu, segmentWu, segmentOthers };
+        foreach (var img in imgs)
+        {
+            if (img == null) continue;
+            var le = img.GetComponent<LayoutElement>();
+            if (le == null)
+                le = img.gameObject.AddComponent<LayoutElement>();
+            var rt = img.rectTransform;
+            rt.anchorMin = new Vector2(0f, 0f);
+            rt.anchorMax = new Vector2(0f, 1f);
+            rt.pivot = new Vector2(0f, 0.5f);
+            rt.sizeDelta = new Vector2(0f, 0f);
         }
     }
 
@@ -102,7 +140,7 @@ public class WorldMarketPieChartUI : MonoBehaviour
     IEnumerator CoLateRefreshUntilData()
     {
         DataManager dm;
-        for (int i = 0; i < 120; i++)
+        for (int i = 0; i < FramesLateRefresh; i++)
         {
             yield return null;
             TrySubscribeDataManager();
@@ -120,8 +158,14 @@ public class WorldMarketPieChartUI : MonoBehaviour
         dm = DataManager.InstanceOrNull;
         if (dm != null && !dm.IsReady)
         {
-            Debug.LogWarning("[WorldMarketPieChartUI] DataManager 미초기화 — 로컬 SO로 초기화 시도.");
+            Debug.LogWarning($"{LogPrefix} DataManager 미초기화 — 로컬 SO로 InitializeAllData 시도.");
             dm.InitializeAllData();
+            RefreshFromData();
+        }
+        else if (dm != null && dm.IsReady && !dm.IsStateReady)
+        {
+            Debug.LogWarning($"{LogPrefix} IsReady는 true인데 IsStateReady가 false — InitializeStateData 재시도.");
+            dm.InitializeStateData();
             RefreshFromData();
         }
     }
@@ -174,13 +218,11 @@ public class WorldMarketPieChartUI : MonoBehaviour
                && Mathf.Approximately(a.others, b.others);
     }
 
-    /// <summary>합계 1.0 근사 비율로 가로 스택 막대를 갱신합니다.</summary>
+    /// <summary>합계 1.0 근사 비율로 가로 스택 막대를 갱신합니다. 세그먼트 내부에 % 표시.</summary>
     public void UpdateStackedBar(FactionCastleShare share)
     {
         Image[] imgs = { segmentWei, segmentShu, segmentWu, segmentOthers };
         TextMeshProUGUI[] texts = { textWei, textShu, textWu, textOthers };
-        string[] prefixes = { "WEI", "SHU", "WU", "OTHERS" };
-
         float w = Mathf.Max(0f, share.wei);
         float sh = Mathf.Max(0f, share.shu);
         float wu = Mathf.Max(0f, share.wu);
@@ -199,53 +241,119 @@ public class WorldMarketPieChartUI : MonoBehaviour
         }
 
         float[] targets = { w, sh, wu, o };
-        float cum = 0f;
         const float minVisual = 1e-4f;
+        RectTransform segmentsRt = null;
 
         for (int i = 0; i < 4; i++)
         {
             Image img = imgs[i];
             if (img == null) continue;
 
+            if (segmentsRt == null)
+                segmentsRt = img.transform.parent as RectTransform;
+
             float t = Mathf.Clamp01(targets[i]);
             int pct = Mathf.RoundToInt(t * 100f);
+
+            var le = img.GetComponent<LayoutElement>();
+            if (le == null)
+                le = img.gameObject.AddComponent<LayoutElement>();
+
             if (texts[i] != null)
-                texts[i].text = $"{prefixes[i]}: {pct}%";
+            {
+                string[] legendShort = { "위", "촉", "오", "기타" };
+                texts[i].text = $"{legendShort[i]} 점유 {pct}%";
+            }
+
+            var inBar = img.transform.Find("PctLabel")?.GetComponent<TextMeshProUGUI>();
+            if (inBar != null)
+            {
+                bool showPct = t >= 0.06f;
+                inBar.gameObject.SetActive(showPct && t >= minVisual);
+                if (showPct && t >= minVisual)
+                    inBar.text = $"{pct}%";
+            }
 
             if (t < minVisual)
             {
                 img.gameObject.SetActive(false);
+                le.flexibleWidth = 0f;
+                le.minWidth = 0f;
+                le.preferredWidth = 0f;
+                if (inBar != null)
+                    inBar.gameObject.SetActive(false);
                 continue;
             }
 
             img.gameObject.SetActive(true);
-            float x0 = cum;
-            float x1 = i == 3 ? 1f : cum + t;
-            ApplyHorizontalSlice(img.rectTransform, x0, x1);
-            cum = x1;
+            le.minWidth = 0f;
+            le.preferredWidth = 0f;
+            le.flexibleWidth = t;
+            le.minHeight = 0f;
+            le.flexibleHeight = 1f;
+        }
+
+        if (segmentsRt != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(segmentsRt);
+            Canvas.ForceUpdateCanvases();
         }
     }
 
-    static void ApplyHorizontalSlice(RectTransform rt, float anchorXMin, float anchorXMax)
+    void EnsureInBarPercentLabels()
     {
-        if (rt == null) return;
-        rt.anchorMin = new Vector2(anchorXMin, 0f);
-        rt.anchorMax = new Vector2(anchorXMax, 1f);
-        rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
-        rt.localEulerAngles = Vector3.zero;
-        rt.localScale = Vector3.one;
+        TextMeshProUGUI template = textWei;
+        Image[] imgs = { segmentWei, segmentShu, segmentWu, segmentOthers };
+        foreach (var img in imgs)
+        {
+            if (img == null) continue;
+            if (img.transform.Find("PctLabel") != null)
+                continue;
+
+            var go = new GameObject("PctLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
+            go.transform.SetParent(img.transform, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            var tmp = go.GetComponent<TextMeshProUGUI>();
+            tmp.text = "0%";
+            tmp.enableAutoSizing = true;
+            tmp.fontSizeMin = 10f;
+            tmp.fontSizeMax = 18f;
+            tmp.fontSize = 16f;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.alignment = TextAlignmentOptions.Midline;
+            tmp.color = new Color(1f, 1f, 1f, 0.95f);
+            tmp.raycastTarget = false;
+            tmp.margin = new Vector4(4f, 0f, 4f, 0f);
+            if (template != null)
+            {
+                tmp.font = template.font;
+                tmp.fontSharedMaterial = template.fontSharedMaterial;
+            }
+        }
     }
 
     static void ConfigureBarSegment(Image img, Color tint)
     {
         if (img == null) return;
-        if (img.sprite == null)
-            img.sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
+        img.sprite = ResolveSquareUiSprite();
         img.type = Image.Type.Simple;
         img.color = tint;
         img.raycastTarget = false;
         img.rectTransform.localEulerAngles = Vector3.zero;
+    }
+
+    /// <summary>둥근 Knob 대신 직사각형 막대용 UI 스프라이트.</summary>
+    static Sprite ResolveSquareUiSprite()
+    {
+        Sprite s = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
+        if (s != null) return s;
+        s = Resources.GetBuiltinResource<Sprite>("UI/Skin/Background.psd");
+        if (s != null) return s;
+        return Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
     }
 }

@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4d2e1f9a0b5c6d7e8f9012345678ab, type: 3}
+  m_Name: RegionMasterDataSo
+  m_EditorClassIdentifier: Assembly-CSharp::RegionMasterDataSo
+  list:
+  - id: R01
+    sectorName: "\uB099\uC591/\uACBD\uAE30\uAD00 (Core)"
+    features: "\uCD08\uC6B0\uB7C9\uC8FC. \uC2DC\uAC00\uCD1D\uC561 1\uC704 \uC131\uB4E4\uC774
+      \uBAA8\uC778 \uD669\uAE08 \uC139\uD130."
+    castleIds:
+    - C01
+    - C21
+  - id: R02
+    sectorName: "\uC911\uC6D0 \uD3C9\uC6D0 (Plains)"
+    features: "\uC804\uD1B5 \uC6B0\uB7C9\uC8FC. \uB18D\uC5C5 \uAE30\uBC18\uC758 \uC548\uC815\uC801\uC778
+      \uAC00\uCE58\uC8FC."
+    castleIds:
+    - C02
+    - C03
+    - C23
+  - id: R03
+    sectorName: "\uD558\uBD81 \uBCF8\uD1A0 (Hebei)"
+    features: "\uC131\uC7A5\uC8FC. \uC778\uAD6C\uAC00 \uB9CE\uACE0 \uC778\uD504\uB77C\uAC00
+      \uD0C4\uD0C4\uD55C \uC139\uD130."
+    castleIds:
+    - C04
+    - C27
+    - C30
+  - id: R04
+    sectorName: "\uC694\uB3D9/\uBD81\uBC29 (Frontier)"
+    features: "\uD558\uC774\uB9AC\uC2A4\uD06C. \uC678\uC138\uC758 \uCE68\uC785\uC774
+      \uC7A6\uC73C\uB098 \uD76C\uC18C \uC790\uC6D0 \uBCF4\uC720."
+    castleIds:
+    - C05
+    - C06
+    - C29
+  - id: R05
+    sectorName: "\uAD00\uC911/\uC11C\uBD81 (Northwest)"
+    features: "\uBB34\uC5ED\uC8FC. \uBE44\uB2E8\uAE38\uACFC \uAD70\uB9C8\uC758 \uC911\uC2EC\uC9C0,
+      \uAC70\uB798\uB7C9 \uD3ED\uBC1C."
+    castleIds:
+    - C07
+    - C08
+    - C09
+  - id: R06
+    sectorName: "\uD615\uC8FC \uBD81\uBD80 (N-Jing)"
+    features: "\uC804\uB7B5\uC801 \uC694\uCDA9\uC9C0. \uC804\uC7C1\uC774 \uAC00\uC7A5
+      \uB9CE\uC774 \uD130\uC9C0\uB294 \uD14C\uB9C8\uC8FC."
+    castleIds:
+    - C10
+    - C25
+    - C22
+  - id: R07
+    sectorName: "\uD615\uC8FC \uB0A8\uBD80 (S-Jing)"
+    features: "\uC790\uC6D0\uC8FC. \uC2DD\uB7C9\uACFC \uBAA9\uC7AC \uB4F1 \uC6D0\uC790\uC7AC
+      \uC0DD\uC0B0 \uC911\uC2EC\uC9C0."
+    castleIds:
+    - C11
+    - C36
+    - C38
+  - id: R08
+    sectorName: "\uAC15\uB3D9 \uC694\uC9C0 (Wu-East)"
+    features: "\uBC30\uB2F9\uC8FC. \uC218\uB85C\uB97C \uC774\uC6A9\uD55C \uC0C1\uC5C5
+      \uBC1C\uB2EC, \uB192\uC740 \uBC30\uB2F9\uAE08."
+    castleIds:
+    - C13
+    - C14
+    - C39
+  - id: R09
+    sectorName: "\uD68C\uB0A8/\uAC15\uD558 (Logistics)"
+    features: "\uC778\uD504\uB77C\uC8FC. \uBCF4\uAE09\uACFC \uC218\uC1A1\uC758 \uAC70\uC810,
+      \uBCC0\uB3D9\uC131 \uBC29\uC5B4."
+    castleIds:
+    - C26
+    - C35
+    - C49
+  - id: R10
+    sectorName: "\uC775\uC8FC \uBCF8\uD1A0 (Sichuan)"
+    features: "\uBC29\uC5B4\uC8FC. \uD5D8\uB09C\uD55C \uC9C0\uD615 \uB355\uC5D0 \uC790\uC0B0
+      \uC190\uC2E4 \uC704\uD5D8\uC774 \uC801\uC74C."
+    castleIds:
+    - C16
+    - C42
+    - C44
+  - id: R11
+    sectorName: "\uB0A8\uB9CC/\uC775\uB0A8 (Southern)"
+    features: "\uC18C\uC678\uC8FC/\uAE09\uB4F1\uC8FC. \uD3C9\uC18C\uC5D4 \uC870\uC6A9\uD558\uB098
+      \uBC18\uB780 \uC2DC \uD3ED\uB4F1."
+    castleIds:
+    - C18
+    - C45
+  - id: R12
+    sectorName: "\uB3D9\uBD80 \uD574\uC548 (Coast)"
+    features: "\uAE08\uC735/\uAD50\uC5ED. \uC18C\uD328, \uD558\uBE44 \uB4F1 \uC0C1\uAD8C\uC774
+      \uBC1C\uB2EC\uD55C \uC139\uD130."
+    castleIds:
+    - C19
+    - C46
+    - C47

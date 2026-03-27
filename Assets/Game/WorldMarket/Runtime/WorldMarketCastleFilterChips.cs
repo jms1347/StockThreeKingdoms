@@ -1,19 +1,25 @@
 using UnityEngine;
 
 /// <summary>
-/// 필터 칩 버튼의 OnClick에 연결해 <see cref="WorldMarketCastleVirtualList.SetFilter"/>를 호출합니다.
+/// 레거시/버튼 OnClick용 — <see cref="WorldMarketFilterTabBar"/> 사용을 권장합니다.
 /// </summary>
+[DisallowMultipleComponent]
 public class WorldMarketCastleFilterChips : MonoBehaviour
 {
+    [Tooltip("비우면 부모에서 WorldMarketCastleVirtualList를 찾습니다.")]
     [SerializeField] WorldMarketCastleVirtualList castleList;
 
     public void SelectAll() => Apply(WorldMarketCastleListFilter.All);
 
-    public void SelectMyInvestments() => Apply(WorldMarketCastleListFilter.MyInvestments);
+    public void SelectMyHoldings() => Apply(WorldMarketCastleListFilter.MyHoldings);
 
-    public void SelectWarOrDisaster() => Apply(WorldMarketCastleListFilter.WarOrDisaster);
+    public void SelectWar() => Apply(WorldMarketCastleListFilter.War);
 
-    public void SelectByGradeOnly() => Apply(WorldMarketCastleListFilter.ByGradeOnly);
+    public void SelectEvent() => Apply(WorldMarketCastleListFilter.Event);
+
+    public void SelectPremium() => Apply(WorldMarketCastleListFilter.Premium);
+
+    public void SelectAttention() => Apply(WorldMarketCastleListFilter.Attention);
 
     void Apply(WorldMarketCastleListFilter f)
     {

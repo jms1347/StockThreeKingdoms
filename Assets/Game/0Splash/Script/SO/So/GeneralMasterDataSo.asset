@@ -13,31 +13,1803 @@ MonoBehaviour:
   m_Name: GeneralMasterDataSo
   m_EditorClassIdentifier: Assembly-CSharp::GeneralMasterDataSo
   list:
-  - id: G01
+  - id: G001
     name: "\uC870\uC870"
     grade: 0
-    power: 92
-    intel: 91
-    charm: 94
-    buffId: "\uC704"
-  - id: G02
+    power: 72
+    intel: 92
+    charm: 99
+    buffId: B12
+    initialNationId: WEI
+    initialCastleId: C01
+  - id: G002
     name: "\uC720\uBE44"
     grade: 0
     power: 75
     intel: 78
-    charm: 99
-    buffId: "\uCD09"
-  - id: G03
-    name: "\uAD00\uC6B0"
+    charm: 100
+    buffId: B24
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G003
+    name: "\uC190\uAD8C"
     grade: 1
-    power: 97
+    power: 68
     intel: 82
-    charm: 91
-    buffId: "\uCD09"
-  - id: G04
+    charm: 95
+    buffId: B22
+    initialNationId: WU
+    initialCastleId: C13
+  - id: G004
+    name: "\uAD00\uC6B0"
+    grade: 0
+    power: 98
+    intel: 82
+    charm: 93
+    buffId: B26
+    initialNationId: SHU
+    initialCastleId: C11
+  - id: G005
     name: "\uC81C\uAC08\uB7C9"
     grade: 0
     power: 38
     intel: 100
     charm: 95
-    buffId: "\uCD09"
+    buffId: B13
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G006
+    name: "\uC5EC\uD3EC"
+    grade: 0
+    power: 100
+    intel: 25
+    charm: 40
+    buffId: B10
+    initialNationId: OTHERS
+    initialCastleId: C20
+  - id: G007
+    name: "\uC0AC\uB9C8\uC758"
+    grade: 0
+    power: 62
+    intel: 98
+    charm: 88
+    buffId: B15
+    initialNationId: WEI
+    initialCastleId: C01
+  - id: G008
+    name: "\uC8FC\uC720"
+    grade: 0
+    power: 71
+    intel: 96
+    charm: 94
+    buffId: B18
+    initialNationId: WU
+    initialCastleId: C15
+  - id: G009
+    name: "\uC870\uC6B4"
+    grade: 1
+    power: 96
+    intel: 75
+    charm: 92
+    buffId: B16
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G010
+    name: "\uC7A5\uBE44"
+    grade: 1
+    power: 97
+    intel: 32
+    charm: 45
+    buffId: B04
+    initialNationId: SHU
+    initialCastleId: C44
+  - id: G011
+    name: "\uACFD\uAC00"
+    grade: 1
+    power: 15
+    intel: 97
+    charm: 78
+    buffId: B02
+    initialNationId: WEI
+    initialCastleId: C02
+  - id: G012
+    name: "\uBC29\uD1B5"
+    grade: 1
+    power: 32
+    intel: 98
+    charm: 65
+    buffId: B06
+    initialNationId: SHU
+    initialCastleId: C10
+  - id: G013
+    name: "\uC721\uC190"
+    grade: 1
+    power: 65
+    intel: 95
+    charm: 90
+    buffId: B09
+    initialNationId: WU
+    initialCastleId: C14
+  - id: G014
+    name: "\uC7A5\uB8CC"
+    grade: 1
+    power: 92
+    intel: 84
+    charm: 80
+    buffId: B11
+    initialNationId: WEI
+    initialCastleId: C04
+  - id: G015
+    name: "\uAC00\uD6C4"
+    grade: 1
+    power: 22
+    intel: 98
+    charm: 52
+    buffId: B25
+    initialNationId: WEI
+    initialCastleId: C22
+  - id: G016
+    name: "\uCD08\uC120"
+    grade: 1
+    power: 25
+    intel: 72
+    charm: 99
+    buffId: B03
+    initialNationId: OTHERS
+    initialCastleId: C46
+  - id: G017
+    name: "\uD558\uD6C4\uB3C8"
+    grade: 1
+    power: 91
+    intel: 68
+    charm: 82
+    buffId: B20
+    initialNationId: WEI
+    initialCastleId: C02
+  - id: G018
+    name: "\uB9C8\uCD08"
+    grade: 1
+    power: 96
+    intel: 45
+    charm: 82
+    buffId: B05
+    initialNationId: SHU
+    initialCastleId: C08
+  - id: G019
+    name: "\uD669\uC911"
+    grade: 1
+    power: 93
+    intel: 65
+    charm: 75
+    buffId: B21
+    initialNationId: SHU
+    initialCastleId: C36
+  - id: G020
+    name: "\uAC15\uC720"
+    grade: 1
+    power: 89
+    intel: 90
+    charm: 85
+    buffId: B29
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G021
+    name: "\uAC10\uB155"
+    grade: 1
+    power: 93
+    intel: 45
+    charm: 68
+    buffId: B07
+    initialNationId: WU
+    initialCastleId: C13
+  - id: G022
+    name: "\uD0DC\uC0AC\uC790"
+    grade: 1
+    power: 92
+    intel: 62
+    charm: 75
+    buffId: B23
+    initialNationId: WU
+    initialCastleId: C39
+  - id: G023
+    name: "\uD5C8\uC800"
+    grade: 1
+    power: 94
+    intel: 20
+    charm: 55
+    buffId: B10
+    initialNationId: WEI
+    initialCastleId: C01
+  - id: G024
+    name: "\uBC29\uB355"
+    grade: 1
+    power: 92
+    intel: 60
+    charm: 70
+    buffId: B16
+    initialNationId: WEI
+    initialCastleId: C31
+  - id: G025
+    name: "\uC704\uC5F0"
+    grade: 1
+    power: 91
+    intel: 55
+    charm: 45
+    buffId: B26
+    initialNationId: SHU
+    initialCastleId: C17
+  - id: G026
+    name: "\uC11C\uD669"
+    grade: 1
+    power: 90
+    intel: 72
+    charm: 72
+    buffId: B28
+    initialNationId: WEI
+    initialCastleId: C04
+  - id: G027
+    name: "\uB4F1\uC560"
+    grade: 1
+    power: 88
+    intel: 92
+    charm: 75
+    buffId: B09
+    initialNationId: WEI
+    initialCastleId: C34
+  - id: G028
+    name: "\uC885\uD68C"
+    grade: 1
+    power: 62
+    intel: 91
+    charm: 70
+    buffId: B14
+    initialNationId: WEI
+    initialCastleId: C26
+  - id: G029
+    name: "\uB178\uC219"
+    grade: 1
+    power: 55
+    intel: 92
+    charm: 90
+    buffId: B21
+    initialNationId: WU
+    initialCastleId: C13
+  - id: G030
+    name: "\uC21C\uC6B1"
+    grade: 1
+    power: 12
+    intel: 96
+    charm: 94
+    buffId: B12
+    initialNationId: WEI
+    initialCastleId: C02
+  - id: G031
+    name: "\uC7A5\uD569"
+    grade: 2
+    power: 88
+    intel: 70
+    charm: 72
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C27
+  - id: G032
+    name: "\uC870\uC778"
+    grade: 2
+    power: 86
+    intel: 72
+    charm: 78
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C21
+  - id: G033
+    name: "\uD558\uD6C4\uC5F0"
+    grade: 2
+    power: 90
+    intel: 65
+    charm: 75
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C24
+  - id: G034
+    name: "\uC870\uD64D"
+    grade: 2
+    power: 82
+    intel: 60
+    charm: 65
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C03
+  - id: G035
+    name: "\uC548\uB7C9"
+    grade: 2
+    power: 94
+    intel: 35
+    charm: 45
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C04
+  - id: G036
+    name: "\uBB38\uCD94"
+    grade: 2
+    power: 93
+    intel: 32
+    charm: 42
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C04
+  - id: G037
+    name: "\uC190\uCC45"
+    grade: 2
+    power: 92
+    intel: 72
+    charm: 91
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C14
+  - id: G038
+    name: "\uC815\uBCF4"
+    grade: 2
+    power: 83
+    intel: 78
+    charm: 80
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C13
+  - id: G039
+    name: "\uD669\uAC1C"
+    grade: 2
+    power: 85
+    intel: 75
+    charm: 82
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C35
+  - id: G040
+    name: "\uD55C\uB2F9"
+    grade: 2
+    power: 82
+    intel: 65
+    charm: 70
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C41
+  - id: G041
+    name: "\uC704\uAD00"
+    grade: 2
+    power: 65
+    intel: 88
+    charm: 75
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C49
+  - id: G042
+    name: "\uB9C8\uB300"
+    grade: 2
+    power: 85
+    intel: 62
+    charm: 72
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C09
+  - id: G043
+    name: "\uC5C4\uC548"
+    grade: 2
+    power: 84
+    intel: 70
+    charm: 80
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C42
+  - id: G044
+    name: "\uC694\uD654"
+    grade: 2
+    power: 78
+    intel: 72
+    charm: 75
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G045
+    name: "\uB9F9\uD68D"
+    grade: 2
+    power: 88
+    intel: 42
+    charm: 80
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C45
+  - id: G046
+    name: "\uCD95\uC735"
+    grade: 2
+    power: 85
+    intel: 45
+    charm: 85
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C45
+  - id: G047
+    name: "\uACF5\uC735"
+    grade: 2
+    power: 25
+    intel: 82
+    charm: 88
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C47
+  - id: G048
+    name: "\uB3C4\uACB8"
+    grade: 2
+    power: 35
+    intel: 72
+    charm: 85
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C19
+  - id: G049
+    name: "\uC720\uD45C"
+    grade: 2
+    power: 45
+    intel: 75
+    charm: 82
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C10
+  - id: G050
+    name: "\uB9C8\uB4F1"
+    grade: 2
+    power: 82
+    intel: 62
+    charm: 85
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C08
+  - id: G051
+    name: "\uC6B0\uAE08"
+    grade: 3
+    power: 78
+    intel: 75
+    charm: 65
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C01
+  - id: G052
+    name: "\uC545\uC9C4"
+    grade: 3
+    power: 80
+    intel: 62
+    charm: 60
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C23
+  - id: G053
+    name: "\uC774\uC804"
+    grade: 3
+    power: 75
+    intel: 78
+    charm: 72
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C49
+  - id: G054
+    name: "\uACFD\uD68C"
+    grade: 3
+    power: 78
+    intel: 82
+    charm: 70
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C31
+  - id: G055
+    name: "\uC9C4\uD0DC"
+    grade: 3
+    power: 80
+    intel: 85
+    charm: 78
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C31
+  - id: G056
+    name: "\uACE0\uC21C"
+    grade: 3
+    power: 85
+    intel: 60
+    charm: 65
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C20
+  - id: G057
+    name: "\uC7A5\uC784"
+    grade: 3
+    power: 84
+    intel: 78
+    charm: 75
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C42
+  - id: G058
+    name: "\uC5C4\uBC31\uD638"
+    grade: 3
+    power: 72
+    intel: 35
+    charm: 40
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C39
+  - id: G059
+    name: "\uC720\uC7A5"
+    grade: 3
+    power: 32
+    intel: 45
+    charm: 65
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C16
+  - id: G060
+    name: "\uC6D0\uC220"
+    grade: 3
+    power: 62
+    intel: 68
+    charm: 35
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C26
+  - id: G061
+    name: "\uACF5\uC190\uCC2C"
+    grade: 3
+    power: 82
+    intel: 68
+    charm: 78
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C05
+  - id: G062
+    name: "\uC7A5\uB85C"
+    grade: 3
+    power: 45
+    intel: 72
+    charm: 82
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C34
+  - id: G063
+    name: "\uD55C\uBCF5"
+    grade: 3
+    power: 42
+    intel: 52
+    charm: 45
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C30
+  - id: G064
+    name: "\uC2EC\uBC30"
+    grade: 3
+    power: 72
+    intel: 84
+    charm: 68
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C04
+  - id: G065
+    name: "\uBD09\uAE30"
+    grade: 3
+    power: 35
+    intel: 85
+    charm: 42
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C27
+  - id: G066
+    name: "\uACFD\uB3C4"
+    grade: 3
+    power: 32
+    intel: 82
+    charm: 35
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C28
+  - id: G067
+    name: "\uC800\uC218"
+    grade: 3
+    power: 45
+    intel: 91
+    charm: 75
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C04
+  - id: G068
+    name: "\uC804\uD48D"
+    grade: 3
+    power: 30
+    intel: 93
+    charm: 72
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C04
+  - id: G069
+    name: "\uACF5\uC8FC"
+    grade: 3
+    power: 25
+    intel: 65
+    charm: 60
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C23
+  - id: G070
+    name: "\uC6D0\uC720"
+    grade: 3
+    power: 45
+    intel: 62
+    charm: 65
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C22
+  - id: G071
+    name: "\uC7A5\uC591"
+    grade: 3
+    power: 30
+    intel: 70
+    charm: 25
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C01
+  - id: G072
+    name: "\uC720\uB300"
+    grade: 3
+    power: 52
+    intel: 55
+    charm: 50
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C19
+  - id: G073
+    name: "\uC655\uAD11"
+    grade: 3
+    power: 65
+    intel: 52
+    charm: 55
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C30
+  - id: G074
+    name: "\uD3EC\uC2E0"
+    grade: 3
+    power: 72
+    intel: 65
+    charm: 70
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C24
+  - id: G075
+    name: "\uAD50\uBAA8"
+    grade: 3
+    power: 55
+    intel: 68
+    charm: 62
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C24
+  - id: G076
+    name: "\uC815\uC6B1"
+    grade: 3
+    power: 25
+    intel: 93
+    charm: 78
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C01
+  - id: G077
+    name: "\uC21C\uC720"
+    grade: 3
+    power: 20
+    intel: 94
+    charm: 82
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C02
+  - id: G078
+    name: "\uB9CC\uCD1D"
+    grade: 3
+    power: 68
+    intel: 85
+    charm: 80
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C49
+  - id: G079
+    name: "\uBB38\uBE59"
+    grade: 3
+    power: 82
+    intel: 70
+    charm: 75
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C35
+  - id: G080
+    name: "\uC7A5\uC81C"
+    grade: 3
+    power: 75
+    intel: 62
+    charm: 55
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C22
+  - id: G081
+    name: "\uC7A5\uD328"
+    grade: 3
+    power: 78
+    intel: 68
+    charm: 65
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C50
+  - id: G082
+    name: "\uC81C\uAC08\uADFC"
+    grade: 3
+    power: 35
+    intel: 88
+    charm: 92
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C13
+  - id: G083
+    name: "\uC7A5\uC18C"
+    grade: 3
+    power: 22
+    intel: 91
+    charm: 88
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C14
+  - id: G084
+    name: "\uC7A5\uAD49"
+    grade: 3
+    power: 20
+    intel: 90
+    charm: 85
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C14
+  - id: G085
+    name: "\uB2A5\uD1B5"
+    grade: 3
+    power: 84
+    intel: 65
+    charm: 78
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C39
+  - id: G086
+    name: "\uC11C\uC131"
+    grade: 3
+    power: 85
+    intel: 78
+    charm: 80
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C13
+  - id: G087
+    name: "\uC815\uBD09"
+    grade: 3
+    power: 83
+    intel: 72
+    charm: 75
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C41
+  - id: G088
+    name: "\uC8FC\uD658"
+    grade: 3
+    power: 81
+    intel: 75
+    charm: 72
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C40
+  - id: G089
+    name: "\uBC18\uC7A5"
+    grade: 3
+    power: 82
+    intel: 60
+    charm: 45
+    buffId: 
+    initialNationId: WU
+    initialCastleId: C41
+  - id: G090
+    name: "\uC81C\uAC08\uD0C4"
+    grade: 3
+    power: 75
+    intel: 78
+    charm: 75
+    buffId: 
+    initialNationId: WEI
+    initialCastleId: C26
+  - id: G091
+    name: "\uAD00\uC0C9"
+    grade: 3
+    power: 82
+    intel: 52
+    charm: 78
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G092
+    name: "\uB9C8\uB7C9"
+    grade: 3
+    power: 25
+    intel: 92
+    charm: 88
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C11
+  - id: G093
+    name: "\uB9C8\uC18D"
+    grade: 3
+    power: 45
+    intel: 85
+    charm: 62
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G094
+    name: "\uC655\uD3C9"
+    grade: 3
+    power: 80
+    intel: 75
+    charm: 72
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C17
+  - id: G095
+    name: "\uC7A5\uC5B5"
+    grade: 3
+    power: 78
+    intel: 72
+    charm: 75
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C45
+  - id: G096
+    name: "\uC7A5\uC775"
+    grade: 3
+    power: 75
+    intel: 70
+    charm: 72
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C44
+  - id: G097
+    name: "\uC8FC\uCC3D"
+    grade: 3
+    power: 82
+    intel: 45
+    charm: 65
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C11
+  - id: G098
+    name: "\uBC95\uC815"
+    grade: 3
+    power: 35
+    intel: 94
+    charm: 72
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C16
+  - id: G099
+    name: "\uC774\uC5C4"
+    grade: 3
+    power: 80
+    intel: 82
+    charm: 75
+    buffId: 
+    initialNationId: SHU
+    initialCastleId: C44
+  - id: G100
+    name: "\uD558\uC9C4"
+    grade: 3
+    power: 55
+    intel: 25
+    charm: 42
+    buffId: 
+    initialNationId: OTHERS
+    initialCastleId: C01
+  - id: G101
+    name: "\uBC30\uC6D0\uC18C"
+    grade: 4
+    power: 65
+    intel: 22
+    charm: 35
+    buffId: OTHERS
+    initialNationId: C30
+    initialCastleId: 
+  - id: G102
+    name: "\uC720\uC120"
+    grade: 4
+    power: 15
+    intel: 20
+    charm: 55
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G103
+    name: "\uCC44\uBAA8"
+    grade: 4
+    power: 72
+    intel: 75
+    charm: 42
+    buffId: OTHERS
+    initialNationId: C10
+    initialCastleId: 
+  - id: G104
+    name: "\uC7A5\uC724"
+    grade: 4
+    power: 70
+    intel: 68
+    charm: 40
+    buffId: OTHERS
+    initialNationId: C10
+    initialCastleId: 
+  - id: G105
+    name: "\uACFD\uC0AC"
+    grade: 4
+    power: 78
+    intel: 42
+    charm: 25
+    buffId: OTHERS
+    initialNationId: C07
+    initialCastleId: 
+  - id: G106
+    name: "\uC774\uAC01"
+    grade: 4
+    power: 76
+    intel: 45
+    charm: 28
+    buffId: OTHERS
+    initialNationId: C07
+    initialCastleId: 
+  - id: G107
+    name: "\uC591\uBD09"
+    grade: 4
+    power: 72
+    intel: 40
+    charm: 35
+    buffId: OTHERS
+    initialNationId: C22
+    initialCastleId: 
+  - id: G108
+    name: "\uD615\uB3C4\uC601"
+    grade: 4
+    power: 80
+    intel: 15
+    charm: 30
+    buffId: OTHERS
+    initialNationId: C37
+    initialCastleId: 
+  - id: G109
+    name: "\uC7A5\uC1A1"
+    grade: 4
+    power: 12
+    intel: 88
+    charm: 25
+    buffId: OTHERS
+    initialNationId: C16
+    initialCastleId: 
+  - id: G110
+    name: "\uC591\uC1A1"
+    grade: 4
+    power: 10
+    intel: 45
+    charm: 15
+    buffId: OTHERS
+    initialNationId: C34
+    initialCastleId: 
+  - id: G111
+    name: "\uBBF8\uCD95"
+    grade: 4
+    power: 32
+    intel: 78
+    charm: 85
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G112
+    name: "\uC190\uAC74"
+    grade: 4
+    power: 35
+    intel: 80
+    charm: 82
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G113
+    name: "\uAC04\uC639"
+    grade: 4
+    power: 38
+    intel: 75
+    charm: 80
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G114
+    name: "\uAD00\uD3C9"
+    grade: 4
+    power: 82
+    intel: 68
+    charm: 75
+    buffId: SHU
+    initialNationId: C11
+    initialCastleId: 
+  - id: G115
+    name: "\uAD00\uD765"
+    grade: 4
+    power: 80
+    intel: 70
+    charm: 72
+    buffId: SHU
+    initialNationId: C11
+    initialCastleId: 
+  - id: G116
+    name: "\uC7A5\uD3EC"
+    grade: 4
+    power: 84
+    intel: 45
+    charm: 68
+    buffId: SHU
+    initialNationId: C44
+    initialCastleId: 
+  - id: G117
+    name: "\uC870\uC9C4"
+    grade: 4
+    power: 75
+    intel: 72
+    charm: 70
+    buffId: WEI
+    initialNationId: C01
+    initialCastleId: 
+  - id: G118
+    name: "\uC870\uD734"
+    grade: 4
+    power: 74
+    intel: 68
+    charm: 65
+    buffId: WEI
+    initialNationId: C04
+    initialCastleId: 
+  - id: G119
+    name: "\uC190\uCE68"
+    grade: 4
+    power: 68
+    intel: 45
+    charm: 25
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G120
+    name: "\uC190\uC900"
+    grade: 4
+    power: 70
+    intel: 42
+    charm: 22
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G121
+    name: "\uC81C\uAC08\uAC01"
+    grade: 4
+    power: 45
+    intel: 88
+    charm: 65
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G122
+    name: "\uD669\uD638"
+    grade: 5
+    power: 5
+    intel: 60
+    charm: 5
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G123
+    name: "\uC7A0\uD63C"
+    grade: 5
+    power: 8
+    intel: 55
+    charm: 8
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G124
+    name: "\uD558\uD6C4\uBB34"
+    grade: 5
+    power: 45
+    intel: 30
+    charm: 35
+    buffId: WEI
+    initialNationId: C07
+    initialCastleId: 
+  - id: G125
+    name: "\uC720\uB300"
+    grade: 5
+    power: 52
+    intel: 55
+    charm: 50
+    buffId: OTHERS
+    initialNationId: C19
+    initialCastleId: 
+  - id: G126
+    name: "\uC655\uB791"
+    grade: 4
+    power: 22
+    intel: 82
+    charm: 75
+    buffId: OTHERS
+    initialNationId: C14
+    initialCastleId: 
+  - id: G127
+    name: "\uD5C8\uACF5"
+    grade: 5
+    power: 45
+    intel: 52
+    charm: 40
+    buffId: OTHERS
+    initialNationId: C14
+    initialCastleId: 
+  - id: G128
+    name: "\uC5C4\uBC31\uD638(\uD615)"
+    grade: 5
+    power: 62
+    intel: 25
+    charm: 30
+    buffId: OTHERS
+    initialNationId: C39
+    initialCastleId: 
+  - id: G129
+    name: "\uC870\uC0C1"
+    grade: 5
+    power: 42
+    intel: 45
+    charm: 50
+    buffId: WEI
+    initialNationId: C01
+    initialCastleId: 
+  - id: G130
+    name: "\uB9C8\uC900"
+    grade: 5
+    power: 35
+    intel: 52
+    charm: 42
+    buffId: OTHERS
+    initialNationId: C09
+    initialCastleId: 
+  - id: G131
+    name: "\uC720\uC120(\uB9D0\uAE30)"
+    grade: 5
+    power: 10
+    intel: 15
+    charm: 45
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G132
+    name: "\uC9C4\uB791"
+    grade: 4
+    power: 72
+    intel: 55
+    charm: 60
+    buffId: WEI
+    initialNationId: C01
+    initialCastleId: 
+  - id: G133
+    name: "\uC7A5\uD638"
+    grade: 4
+    power: 74
+    intel: 52
+    charm: 58
+    buffId: WEI
+    initialNationId: C04
+    initialCastleId: 
+  - id: G134
+    name: "\uC545\uCE68"
+    grade: 4
+    power: 73
+    intel: 50
+    charm: 62
+    buffId: WEI
+    initialNationId: C23
+    initialCastleId: 
+  - id: G135
+    name: "\uBB38\uC559"
+    grade: 3
+    power: 92
+    intel: 45
+    charm: 70
+    buffId: OTHERS
+    initialNationId: C26
+    initialCastleId: 
+  - id: G136
+    name: "\uC724\uB300\uBAA9"
+    grade: 4
+    power: 25
+    intel: 72
+    charm: 68
+    buffId: WEI
+    initialNationId: C01
+    initialCastleId: 
+  - id: G137
+    name: "\uC0AC\uB9C8\uC8FC"
+    grade: 4
+    power: 55
+    intel: 70
+    charm: 72
+    buffId: WEI
+    initialNationId: C49
+    initialCastleId: 
+  - id: G138
+    name: "\uC81C\uAC08\uADE0"
+    grade: 4
+    power: 22
+    intel: 75
+    charm: 78
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G139
+    name: "\uCD5C\uC8FC\uD3C9"
+    grade: 4
+    power: 20
+    intel: 82
+    charm: 80
+    buffId: OTHERS
+    initialNationId: C16
+    initialCastleId: 
+  - id: G140
+    name: "\uC11D\uAD11\uC6D0"
+    grade: 4
+    power: 18
+    intel: 80
+    charm: 78
+    buffId: OTHERS
+    initialNationId: C16
+    initialCastleId: 
+  - id: G141
+    name: "\uC11C\uC11C"
+    grade: 1
+    power: 65
+    intel: 96
+    charm: 85
+    buffId: OTHERS
+    initialNationId: C25
+    initialCastleId: 
+  - id: G142
+    name: "\uC7A5\uC644"
+    grade: 2
+    power: 35
+    intel: 92
+    charm: 90
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G143
+    name: "\uBE44\uC758"
+    grade: 2
+    power: 32
+    intel: 93
+    charm: 92
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G144
+    name: "\uB4F1\uC9C0"
+    grade: 3
+    power: 45
+    intel: 82
+    charm: 85
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G145
+    name: "\uACFD\uC720\uC9C0"
+    grade: 4
+    power: 15
+    intel: 78
+    charm: 80
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G146
+    name: "\uC9C4\uC9C4"
+    grade: 4
+    power: 12
+    intel: 75
+    charm: 82
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G147
+    name: "\uB3D9\uC724"
+    grade: 3
+    power: 25
+    intel: 88
+    charm: 90
+    buffId: SHU
+    initialNationId: C16
+    initialCastleId: 
+  - id: G148
+    name: "\uC5EC\uC758"
+    grade: 5
+    power: 20
+    intel: 72
+    charm: 12
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G149
+    name: "\uBCF4\uC990"
+    grade: 3
+    power: 42
+    intel: 88
+    charm: 85
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G150
+    name: "\uC5C4\uC900"
+    grade: 4
+    power: 15
+    intel: 82
+    charm: 80
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G151
+    name: "\uAC00\uADDC"
+    grade: 3
+    power: 62
+    intel: 88
+    charm: 85
+    buffId: WEI
+    initialNationId: C01
+    initialCastleId: 
+  - id: G152
+    name: "\uC2E0\uBE44"
+    grade: 3
+    power: 32
+    intel: 85
+    charm: 82
+    buffId: WEI
+    initialNationId: C27
+    initialCastleId: 
+  - id: G153
+    name: "\uC2E0\uD3C9"
+    grade: 4
+    power: 30
+    intel: 78
+    charm: 65
+    buffId: OTHERS
+    initialNationId: C27
+    initialCastleId: 
+  - id: G154
+    name: "\uC800\uC218(\uC544\uB4E4)"
+    grade: 4
+    power: 55
+    intel: 62
+    charm: 58
+    buffId: OTHERS
+    initialNationId: C04
+    initialCastleId: 
+  - id: G155
+    name: "\uC9C4\uB4F1"
+    grade: 3
+    power: 58
+    intel: 89
+    charm: 85
+    buffId: OTHERS
+    initialNationId: C48
+    initialCastleId: 
+  - id: G156
+    name: "\uC9C4\uADDC"
+    grade: 4
+    power: 15
+    intel: 85
+    charm: 82
+    buffId: OTHERS
+    initialNationId: C19
+    initialCastleId: 
+  - id: G157
+    name: "\uBBF8\uBC29"
+    grade: 5
+    power: 62
+    intel: 42
+    charm: 35
+    buffId: OTHERS
+    initialNationId: C48
+    initialCastleId: 
+  - id: G158
+    name: "\uC0AC\uC778"
+    grade: 5
+    power: 60
+    intel: 40
+    charm: 32
+    buffId: OTHERS
+    initialNationId: C48
+    initialCastleId: 
+  - id: G159
+    name: "\uBD80\uC0AC\uC778"
+    grade: 5
+    power: 58
+    intel: 38
+    charm: 30
+    buffId: OTHERS
+    initialNationId: C11
+    initialCastleId: 
+  - id: G160
+    name: "\uC6B0\uBC88"
+    grade: 3
+    power: 25
+    intel: 88
+    charm: 62
+    buffId: WU
+    initialNationId: C14
+    initialCastleId: 
+  - id: G161
+    name: "\uAC10\uD0DD"
+    grade: 3
+    power: 22
+    intel: 85
+    charm: 88
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G162
+    name: "\uACE0\uC639"
+    grade: 3
+    power: 15
+    intel: 90
+    charm: 92
+    buffId: WU
+    initialNationId: C14
+    initialCastleId: 
+  - id: G163
+    name: "\uC8FC\uC801"
+    grade: 3
+    power: 78
+    intel: 75
+    charm: 72
+    buffId: WU
+    initialNationId: C15
+    initialCastleId: 
+  - id: G164
+    name: "\uC804\uC885"
+    grade: 3
+    power: 75
+    intel: 72
+    charm: 78
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G165
+    name: "\uC8FC\uC774"
+    grade: 4
+    power: 72
+    intel: 68
+    charm: 65
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G166
+    name: "\uB2F9\uC790"
+    grade: 4
+    power: 70
+    intel: 65
+    charm: 62
+    buffId: WU
+    initialNationId: C13
+    initialCastleId: 
+  - id: G167
+    name: "\uC720\uBCF5"
+    grade: 3
+    power: 32
+    intel: 85
+    charm: 82
+    buffId: WEI
+    initialNationId: C49
+    initialCastleId: 
+  - id: G168
+    name: "\uC628\uD68C"
+    grade: 4
+    power: 25
+    intel: 82
+    charm: 78
+    buffId: WEI
+    initialNationId: C49
+    initialCastleId: 
+  - id: G169
+    name: "\uC5EC\uAC74"
+    grade: 4
+    power: 75
+    intel: 70
+    charm: 68
+    buffId: WEI
+    initialNationId: C01
+    initialCastleId: 
+  - id: G170
+    name: "\uC655\uC218"
+    grade: 4
+    power: 35
+    intel: 78
+    charm: 85
+    buffId: OTHERS
+    initialNationId: C47
+    initialCastleId: 
+  - id: G171
+    name: "\uD5C8\uACF5\uC758\uC2DD\uAC1D"
+    grade: 5
+    power: 85
+    intel: 10
+    charm: 10
+    buffId: OTHERS
+    initialNationId: C14
+    initialCastleId: 
+  - id: G172
+    name: "\uAC00\uBC94"
+    grade: 4
+    power: 68
+    intel: 72
+    charm: 65
+    buffId: OTHERS
+    initialNationId: C06
+    initialCastleId: 
+  - id: G173
+    name: "\uC724\uC9C1"
+    grade: 4
+    power: 35
+    intel: 78
+    charm: 72
+    buffId: OTHERS
+    initialNationId: C06
+    initialCastleId: 
+  - id: G174
+    name: "\uBE44\uAD00"
+    grade: 4
+    power: 62
+    intel: 70
+    charm: 72
+    buffId: OTHERS
+    initialNationId: C42
+    initialCastleId: 
+  - id: G175
+    name: "\uC774\uD68C"
+    grade: 3
+    power: 45
+    intel: 85
+    charm: 82
+    buffId: SHU
+    initialNationId: C45
+    initialCastleId: 
+  - id: G176
+    name: "\uC5EC\uAC1C"
+    grade: 3
+    power: 32
+    intel: 88
+    charm: 85
+    buffId: SHU
+    initialNationId: C45
+    initialCastleId: 
+  - id: G177
+    name: "\uC655\uD56D"
+    grade: 4
+    power: 65
+    intel: 72
+    charm: 78
+    buffId: SHU
+    initialNationId: C45
+    initialCastleId: 
+  - id: G178
+    name: "\uACE0\uC815"
+    grade: 4
+    power: 75
+    intel: 45
+    charm: 52
+    buffId: OTHERS
+    initialNationId: C18
+    initialCastleId: 
+  - id: G179
+    name: "\uC8FC\uD3EC"
+    grade: 4
+    power: 72
+    intel: 42
+    charm: 48
+    buffId: OTHERS
+    initialNationId: C18
+    initialCastleId: 
+  - id: G180
+    name: "\uC545\uD658"
+    grade: 3
+    power: 92
+    intel: 32
+    charm: 45
+    buffId: OTHERS
+    initialNationId: C18
+    initialCastleId: 
+  - id: G181
+    name: "\uB3D9\uB2E4\uB098"
+    grade: 4
+    power: 82
+    intel: 35
+    charm: 40
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G182
+    name: "\uC544\uD68C\uB0A8"
+    grade: 4
+    power: 80
+    intel: 32
+    charm: 38
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G183
+    name: "\uC62C\uB3CC\uACE8"
+    grade: 3
+    power: 98
+    intel: 5
+    charm: 25
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G184
+    name: "\uBAA9\uB85D\uB300\uC655"
+    grade: 3
+    power: 72
+    intel: 65
+    charm: 45
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G185
+    name: "\uD0C0\uC0AC\uB300\uC655"
+    grade: 3
+    power: 65
+    intel: 82
+    charm: 52
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G186
+    name: "\uB300\uB798\uB3D9\uC8FC"
+    grade: 4
+    power: 78
+    intel: 45
+    charm: 55
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G187
+    name: "\uC870\uC6B4(\uAC00\uC0C1)"
+    grade: 5
+    power: 45
+    intel: 45
+    charm: 45
+    buffId: OTHERS
+    initialNationId: C01
+    initialCastleId: 
+  - id: G188
+    name: "\uBCD1\uC878A"
+    grade: 5
+    power: 30
+    intel: 30
+    charm: 30
+    buffId: OTHERS
+    initialNationId: C01
+    initialCastleId: 
+  - id: G189
+    name: "\uBCD1\uC878B"
+    grade: 5
+    power: 32
+    intel: 28
+    charm: 32
+    buffId: OTHERS
+    initialNationId: C02
+    initialCastleId: 
+  - id: G190
+    name: "\uBCD1\uC878C"
+    grade: 5
+    power: 28
+    intel: 32
+    charm: 28
+    buffId: OTHERS
+    initialNationId: C03
+    initialCastleId: 
+  - id: G191
+    name: "\uBCD1\uC878D"
+    grade: 5
+    power: 35
+    intel: 25
+    charm: 35
+    buffId: OTHERS
+    initialNationId: C04
+    initialCastleId: 
+  - id: G192
+    name: "\uBCD1\uC878E"
+    grade: 5
+    power: 25
+    intel: 35
+    charm: 25
+    buffId: OTHERS
+    initialNationId: C05
+    initialCastleId: 
+  - id: G193
+    name: "\uB18D\uBBFCA"
+    grade: 5
+    power: 10
+    intel: 40
+    charm: 60
+    buffId: OTHERS
+    initialNationId: C01
+    initialCastleId: 
+  - id: G194
+    name: "\uB18D\uBBFCB"
+    grade: 5
+    power: 12
+    intel: 38
+    charm: 62
+    buffId: OTHERS
+    initialNationId: C16
+    initialCastleId: 
+  - id: G195
+    name: "\uB18D\uBBFCC"
+    grade: 5
+    power: 8
+    intel: 42
+    charm: 58
+    buffId: OTHERS
+    initialNationId: C13
+    initialCastleId: 
+  - id: G196
+    name: "\uC0C1\uC778A"
+    grade: 5
+    power: 15
+    intel: 75
+    charm: 65
+    buffId: OTHERS
+    initialNationId: C01
+    initialCastleId: 
+  - id: G197
+    name: "\uC0C1\uC778B"
+    grade: 5
+    power: 18
+    intel: 72
+    charm: 68
+    buffId: OTHERS
+    initialNationId: C16
+    initialCastleId: 
+  - id: G198
+    name: "\uC0C1\uC778C"
+    grade: 5
+    power: 12
+    intel: 78
+    charm: 62
+    buffId: OTHERS
+    initialNationId: C13
+    initialCastleId: 
+  - id: G199
+    name: "\uB3C4\uC801A"
+    grade: 5
+    power: 65
+    intel: 25
+    charm: 10
+    buffId: OTHERS
+    initialNationId: C45
+    initialCastleId: 
+  - id: G200
+    name: "\uB3C4\uC801B"
+    grade: 5
+    power: 62
+    intel: 28
+    charm: 12
+    buffId: OTHERS
+    initialNationId: C08
+    initialCastleId: 

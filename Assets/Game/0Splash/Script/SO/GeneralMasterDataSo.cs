@@ -5,14 +5,19 @@ using UnityEngine;
 [Serializable]
 public class GeneralMasterData
 {
-    public string id;
-    public string name;
-    public Grade grade;
-    public int power;
-    public int intel;
-    public int charm;
-    public string buffId; // S급 이상만 존재, 나머지는 null 또는 empty
+    public string id;                // G001
+    public string name;              // 조조
+    public Grade grade;              // SS, S, A...
+    public int power;                // 무력
+    public int intel;                // 지력
+    public int charm;                // 매력
+    public string buffId;            // S급 이상 버프 ID
 
+    [Header("초기 배치 데이터")]
+    public string initialNationId;   // 초기 소속 국가 (WEI, SHU, WU, OTHERS)
+    public string initialCastleId;   // 초기 배치 성 ID (C01 ~ C50)
+
+    public bool HasBuff => !string.IsNullOrEmpty(buffId);
 }
 
 [CreateAssetMenu(fileName = "GeneralMasterDataSo", menuName = "ScriptableObject/GeneralMasterDataSo")]

@@ -48,3 +48,13 @@ MonoBehaviour:
   castleMasterDataSo: {fileID: 11400000, guid: cd27aa09cb3f02541bf3cf7883c66663, type: 2}
   generalMasterDataSo: {fileID: 11400000, guid: be3b6826230f7614c8a24a3dc655983a, type: 2}
   buffMasterDataSo: {fileID: 11400000, guid: f5580141b7387d6488d5e698d11373f9, type: 2}
+  nationMasterDataSo: {fileID: 11400000, guid: 94607bde24f024c4db10a7b9a088c631, type: 2}
+  regionMasterDataSo: {fileID: 11400000, guid: b3a91c2d4e5f60718293a4b5c6d7e8f9, type: 2}
+  worldNews: []
+  economyTickIntervalSec: 5
+  randomEventIntervalSec: 30
+  randomEventChance: 0.1
+  populationJitterPct: 0.005
+  sentimentJitterMax: 0.5
+  governorCharmBias: 0.15
+  tradeSpread: 0.03

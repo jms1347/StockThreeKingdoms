@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,26 +12,34 @@ using TMPro;
 [DisallowMultipleComponent]
 public class WorldMarketCastleVirtualList : MonoBehaviour
 {
+    const string LogPrefix = "[WorldMarketCastleVirtualList]";
+    const float FallbackViewportHeight = 600f;
+    const float ContentHeightExtra = 8f;
+    const int PoolSizeMin = 8;
+    const int PoolSizeMax = 12;
+    const int FramesWaitViewport = 90;
+    const int FramesLateRefresh = 120;
+
     [SerializeField] ScrollRect scrollRect;
     [SerializeField] RectTransform content;
     [SerializeField] GameObject cellTemplate;
 
-    [Tooltip("필터 칩(전체/내 투자/전쟁/등급)을 나중에 붙일 수 있도록 빈 영역")]
+    [Tooltip("필터 탭 바가 차지하는 영역(레이아웃·여백 참고용)")]
     [SerializeField] RectTransform filterChipsReservedArea;
 
     [Tooltip("선택) 패널 제목에 Castle Stocks (표시/총)")]
     [SerializeField] TextMeshProUGUI listHeaderText;
 
     [Tooltip("카드 한 줄 높이 + 여백")]
-    [SerializeField] float cellStride = 180f;
+    [SerializeField] float cellStride = 232f;
 
     [Tooltip("뷰포트에 보이는 줄 수 + 이 값만큼 풀에 여유")]
     [SerializeField] int poolBufferRows = 2;
 
     [SerializeField] WorldMarketCastleListFilter currentFilter = WorldMarketCastleListFilter.All;
 
-    [Header("Diagnostics (PD)")]
-    [Tooltip("RefreshData 시 정렬 개수·뷰포트·콘텐츠 크기·풀 상태를 로그")]
+    [Header("Diagnostics")]
+    [Tooltip("RefreshData 시 정렬 개수·뷰포트·콘텐츠·풀 상태 로그")]
     [SerializeField] bool logListDiagnostics;
 
     [Tooltip("뷰포트 높이가 0일 때 풀 생성을 지연(최대 90프레임). 끄면 즉시 폴백 높이로 풀 생성")]
@@ -48,6 +57,29 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     bool _catchUpRefreshOnce;
 
     public WorldMarketCastleListFilter CurrentFilter => currentFilter;
+
+    /// <summary>필터가 바뀔 때(탭 UI 동기화용).</summary>
+    public event Action<WorldMarketCastleListFilter> FilterChanged;
+
+    void LogDiag(string message)
+    {
+        if (logListDiagnostics)
+            Debug.Log($"{LogPrefix} {message}");
+    }
+
+    void LogWarn(string message) => Debug.LogWarning($"{LogPrefix} {message}");
+
+    static WorldMarketCastleCardView EnsureCardViewComponent(GameObject go)
+    {
+        var v = go.GetComponent<WorldMarketCastleCardView>();
+        return v != null ? v : go.AddComponent<WorldMarketCastleCardView>();
+    }
+
+    void RebuildViewportLayout()
+    {
+        if (scrollRect == null || scrollRect.viewport == null) return;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.viewport);
+    }
 
     void ResolveScrollReferences()
     {
@@ -83,11 +115,12 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         return scrollRect.viewport.rect.height;
     }
 
-    /// <summary>필터 칩 UI에서 호출. 순서·콘텐츠 전체 재구성.</summary>
+    /// <summary>필터 탭 UI에서 호출. 순서·콘텐츠 전체 재구성.</summary>
     public void SetFilter(WorldMarketCastleListFilter filter)
     {
         if (currentFilter == filter) return;
         currentFilter = filter;
+        FilterChanged?.Invoke(currentFilter);
         RefreshData();
     }
 
@@ -137,7 +170,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     IEnumerator CoLateRefreshUntilData()
     {
-        for (int i = 0; i < 120; i++)
+        for (int i = 0; i < FramesLateRefresh; i++)
         {
             yield return null;
             TrySubscribeDataManager();
@@ -154,14 +187,13 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         if (_orderedIds.Count == 0 && dm != null && !dm.IsReady)
         {
-            Debug.LogWarning("[WorldMarketCastleVirtualList] DataManager가 아직 초기화되지 않았습니다. 로컬 SO로 초기화를 시도합니다.");
+            LogWarn("DataManager 미초기화 — 로컬 SO로 InitializeAllData 시도.");
             dm.InitializeAllData();
             RefreshData();
         }
         else if (_orderedIds.Count == 0 && dm != null && dm.IsReady && !dm.IsStateReady)
         {
-            // 마스터만 로드된 채 InitializeStateData가 끝나지 않은 비정상 상태(예외 등) 복구
-            Debug.LogWarning("[WorldMarketCastleVirtualList] IsReady이나 IsStateReady가 false입니다. InitializeStateData()를 다시 시도합니다.");
+            LogWarn("IsReady는 true인데 IsStateReady가 false — InitializeStateData 재시도.");
             dm.InitializeStateData();
             RefreshData();
         }
@@ -185,8 +217,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     void HandleStateDataReady()
     {
-        if (logListDiagnostics)
-            Debug.Log("[WorldMarketCastleVirtualList] OnStateDataReady → RefreshData()");
+        LogDiag("OnStateDataReady → RefreshData()");
         RefreshData();
     }
 
@@ -315,15 +346,14 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         float viewH = GetViewportHeight();
         if (deferPoolUntilViewportValid && viewH < 1f)
         {
-            if (logListDiagnostics)
-                Debug.LogWarning($"[WorldMarketCastleVirtualList] 뷰포트 높이={viewH:F1} → 풀 생성을 다음 레이아웃까지 지연합니다.");
+            LogDiag($"뷰포트 높이={viewH:F1} — 풀 생성을 다음 레이아웃까지 지연.");
             if (_waitViewportRoutine == null)
                 _waitViewportRoutine = StartCoroutine(CoWaitViewportAndInitPool());
             return;
         }
 
         if (viewH < 1f)
-            viewH = 600f;
+            viewH = FallbackViewportHeight;
 
         CreatePoolCells(viewH);
         _inited = true;
@@ -333,7 +363,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     {
         int visibleRows = Mathf.CeilToInt(viewH / Mathf.Max(40f, cellStride));
         int need = visibleRows + Mathf.Max(0, poolBufferRows);
-        need = Mathf.Clamp(need, 8, 12);
+        need = Mathf.Clamp(need, PoolSizeMin, PoolSizeMax);
 
         cellTemplate.SetActive(false);
         float rowW = ResolveRowWidth();
@@ -342,8 +372,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             var go = Instantiate(cellTemplate, content, false);
             go.SetActive(true);
             ConfigurePooledCellRoot(go);
-            var view = go.GetComponent<WorldMarketCastleCardView>();
-            if (view == null) view = go.AddComponent<WorldMarketCastleCardView>();
+            var view = EnsureCardViewComponent(go);
             LayoutPoolRowAtIndex(go.GetComponent<RectTransform>(), 0, rowW, cellStride);
             _pool.Add(view);
         }
@@ -351,14 +380,14 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     IEnumerator CoWaitViewportAndInitPool()
     {
-        for (int f = 0; f < 90; f++)
+        for (int f = 0; f < FramesWaitViewport; f++)
         {
             yield return null;
             Canvas.ForceUpdateCanvases();
             ResolveScrollReferences();
             float vh = GetViewportHeight();
             if (logListDiagnostics && f > 0 && f % 15 == 0)
-                Debug.Log($"[WorldMarketCastleVirtualList] 뷰포트 대기 frame={f} viewport.h={vh:F1}");
+                LogDiag($"뷰포트 대기 frame={f} viewport.h={vh:F1}");
             if (vh >= 1f)
                 break;
         }
@@ -371,15 +400,14 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         float viewH = GetViewportHeight();
         if (viewH < 1f)
         {
-            Debug.LogWarning("[WorldMarketCastleVirtualList] 뷰포트가 여전히 0에 가깝습니다. 폴백 높이(600)로 풀을 생성합니다.");
-            viewH = 600f;
+            LogWarn($"뷰포트가 여전히 0에 가깝습니다. 폴백 높이({FallbackViewportHeight})로 풀 생성.");
+            viewH = FallbackViewportHeight;
         }
 
         CreatePoolCells(viewH);
         _inited = true;
 
-        if (logListDiagnostics)
-            Debug.Log($"[WorldMarketCastleVirtualList] 지연 풀 생성 완료 pool={_pool.Count} viewport.h={GetViewportHeight():F1}");
+        LogDiag($"지연 풀 생성 완료 pool={_pool.Count} viewport.h={GetViewportHeight():F1}");
 
         RefreshData();
     }
@@ -391,7 +419,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         EnsureListHeaderResolved();
         if (content == null)
         {
-            Debug.LogWarning("[WorldMarketCastleVirtualList] ScrollRect 또는 Content가 없습니다. 인스펙터에서 ScrollRect·Content를 지정하세요.");
+            LogWarn("ScrollRect 또는 Content가 없습니다. 인스펙터에서 지정하세요.");
             return;
         }
 
@@ -402,10 +430,6 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         _orderedIds.Clear();
         BuildOrderedIds(dm, _orderedIds);
 
-        int dmOrderedCount = 0;
-        if (dm != null && dm.IsStateReady)
-            dmOrderedCount = dm.GetOrderedWorldCastleIds(currentFilter).Count;
-
         if (logListDiagnostics)
         {
             float vh = GetViewportHeight();
@@ -413,26 +437,25 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             int stateN = dm != null && dm.castleStateDataMap != null ? dm.castleStateDataMap.Count : -1;
             bool ready = dm != null && dm.IsReady;
             bool stateReady = dm != null && dm.IsStateReady;
-            Debug.Log(
-                $"[WorldMarketCastleVirtualList] RefreshData | UI orderedIds={_orderedIds.Count} | " +
-                $"GetOrderedCount(참조용)={dmOrderedCount} | dm IsReady={ready} IsStateReady={stateReady} | " +
-                $"masterMap={masterN} stateMap={stateN} | " +
-                $"viewport.h={vh:F1} | content.sizeDelta.y={content.sizeDelta.y:F1} | content.rect={content.rect.width:F0}x{content.rect.height:F0} | " +
+            LogDiag(
+                $"RefreshData | orderedIds={_orderedIds.Count} | dm IsReady={ready} IsStateReady={stateReady} | " +
+                $"masterMap={masterN} stateMap={stateN} | viewport.h={vh:F1} | " +
+                $"content.sizeDelta.y={content.sizeDelta.y:F1} | content.rect={content.rect.width:F0}x{content.rect.height:F0} | " +
                 $"pool={_pool.Count} _inited={_inited} filter={currentFilter}");
             if (_orderedIds.Count == 0)
             {
                 if (dm == null)
-                    Debug.LogWarning("[WorldMarketCastleVirtualList] 원인: DataManager 인스턴스 없음 → BuildOrderedIds가 비움.");
+                    LogWarn("목록 0건: DataManager 없음.");
                 else if (!stateReady)
-                    Debug.LogWarning("[WorldMarketCastleVirtualList] 원인: IsStateReady==false → BuildOrderedIds가 비움(상태 초기화 전 프레임이거나 InitializeStateData 미호출).");
+                    LogWarn("목록 0건: IsStateReady==false (InitializeStateData 전/미호출).");
                 else if (stateN == 0)
-                    Debug.LogWarning("[WorldMarketCastleVirtualList] 원인: castleStateDataMap 비어 있음 → GetOrderedWorldCastleIds가 빈 목록.");
-                else if (dmOrderedCount == 0)
-                    Debug.LogWarning("[WorldMarketCastleVirtualList] 원인: 필터/정렬 결과 0건(filter=" + currentFilter + ").");
+                    LogWarn("목록 0건: castleStateDataMap 비어 있음.");
+                else
+                    LogWarn("목록 0건: 필터/정렬 결과 없음 (filter=" + currentFilter + ").");
             }
 
             if (vh < 1f)
-                Debug.LogWarning("[WorldMarketCastleVirtualList] 뷰포트 높이가 0에 가깝습니다. 레이아웃/마스크/부모 활성화를 확인하세요.");
+                LogWarn("뷰포트 높이가 0에 가깝습니다. 레이아웃·마스크·부모 활성화를 확인하세요.");
         }
 
         UpdateListHeader(dm);
@@ -445,16 +468,16 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         _contentWidth = content.rect.width;
 
         float viewH = GetViewportHeight();
-        float contentH = _orderedIds.Count * cellStride + 8f;
+        float contentH = _orderedIds.Count * cellStride + ContentHeightExtra;
         float totalH = Mathf.Max(viewH, contentH);
 
         content.anchorMin = new Vector2(0f, 1f);
         content.anchorMax = new Vector2(1f, 1f);
         content.pivot = new Vector2(0.5f, 1f);
         content.sizeDelta = new Vector2(content.sizeDelta.x, totalH);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content);
 
-        if (logListDiagnostics)
-            Debug.Log($"[WorldMarketCastleVirtualList] Content 높이 강제: sizeDelta.y={totalH:F0} (= max(viewport {viewH:F0}, items×stride {contentH:F0}))");
+        LogDiag($"Content 높이: sizeDelta.y={totalH:F0} (max viewport {viewH:F0}, items×stride {contentH:F0})");
 
         if (scrollRect != null)
         {
@@ -465,9 +488,8 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         }
 
         Canvas.ForceUpdateCanvases();
-        // Content 전체 ForceRebuild는 카드 루트 HLG가 sizeDelta로 잡은 행 높이를 0에 가깝게 덮어쓸 수 있음(가상 리스트와 충돌).
-        if (scrollRect != null && scrollRect.viewport != null)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.viewport);
+        // Content 전체 ForceRebuild는 카드 HLG가 행 높이를 덮어쓸 수 있어 뷰포트만 갱신.
+        RebuildViewportLayout();
 
         UpdateVisible();
 
@@ -478,27 +500,23 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     IEnumerator CoDeferredUpdateVisible()
     {
-        yield return null;
-        Canvas.ForceUpdateCanvases();
-        if (scrollRect != null && scrollRect.viewport != null)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.viewport);
-
-        yield return null;
-        Canvas.ForceUpdateCanvases();
-        if (scrollRect != null && scrollRect.viewport != null)
-            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.viewport);
+        for (int pass = 0; pass < 2; pass++)
+        {
+            yield return null;
+            Canvas.ForceUpdateCanvases();
+            RebuildViewportLayout();
+        }
 
         if (content != null)
         {
             _contentWidth = Mathf.Max(_contentWidth, content.rect.width);
             float vh = GetViewportHeight();
-            float contentH = _orderedIds.Count * cellStride + 8f;
+            float contentH = _orderedIds.Count * cellStride + ContentHeightExtra;
             float totalH = Mathf.Max(vh, contentH);
             content.sizeDelta = new Vector2(content.sizeDelta.x, totalH);
         }
 
-        if (logListDiagnostics)
-            Debug.Log($"[WorldMarketCastleVirtualList] 지연 갱신 후 viewport.h={GetViewportHeight():F1} content.w={content.rect.width:F0}");
+        LogDiag($"지연 갱신 후 viewport.h={GetViewportHeight():F1} content.w={content.rect.width:F0}");
 
         UpdateVisible();
         _deferredVisibleRoutine = null;
@@ -523,7 +541,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
         if (scrollRect == null)
         {
-            Debug.LogWarning("[WorldMarketCastleVirtualList] ScrollRect가 없어 목록을 그릴 수 없습니다.");
+            LogWarn("ScrollRect가 없어 목록을 그릴 수 없습니다.");
             return;
         }
 
@@ -587,18 +605,17 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         {
             var go = Instantiate(cellTemplate, content, false);
             go.SetActive(true);
-            var view = go.GetComponent<WorldMarketCastleCardView>();
-            if (view == null) view = go.AddComponent<WorldMarketCastleCardView>();
+            var view = EnsureCardViewComponent(go);
             var rt = go.GetComponent<RectTransform>();
             float rw = ResolveRowWidth();
             LayoutPoolRowAtIndex(rt, i, rw, cellStride);
             view.Bind(ids[i]);
         }
 
-        float totalH = Mathf.Max(GetViewportHeight(), ids.Count * cellStride + 8f);
+        float totalH = Mathf.Max(GetViewportHeight(), ids.Count * cellStride + ContentHeightExtra);
         content.sizeDelta = new Vector2(content.sizeDelta.x, totalH);
         Canvas.ForceUpdateCanvases();
-        Debug.Log($"[WorldMarketCastleVirtualList] 테스트: {ids.Count}개 직접 생성. 보이면 가상 스크롤 '보이는 구간' 로직 문제, 안 보이면 마스크/알파/레이어 의심.");
+        Debug.Log($"{LogPrefix} 테스트: {ids.Count}행 즉시 생성. 보이면 가상 스크롤 가시 범위 문제, 아니면 마스크·레이어 의심.");
     }
 #endif
 }

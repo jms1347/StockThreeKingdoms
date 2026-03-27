@@ -32,12 +32,20 @@ public class CastleStateData
     // 점령/인사 상태
     public Faction currentLord;
     public string currentGovernorId;
+    /// <summary>태수 일일 버프 마지막 적용 시각(Unix 초). <see cref="TimeManager.GetUnixNow"/> 기준.</summary>
+    public long lastDailyBuffTime;
+    /// <summary>일일 버프 쿨다운이 묶인 태수 id. <see cref="currentGovernorId"/>와 다르면 쿨다운을 새 태수 기준으로 리셋.</summary>
+    public string lastDailyBuffGovernorId;
 
     // 상태/히스토리
     public bool isWar;
     /// <summary>재해·특수 이벤트 등 (리스트 정렬 상단용 플래그).</summary>
     public bool isDisaster;
-    public List<float> sentimentHistory = new List<float>(); // 최근 7개
+    /// <summary>호재(풍년 등) — 이벤트 탭 필터용. 데이터·연출 붙이면 갱신.</summary>
+    public bool isFavorableEvent;
+    public List<float> sentimentHistory = new List<float>(); // 최근 7~10개
+    /// <summary>미니 스파크라인용 인구 이력 (최근 7~10개).</summary>
+    public List<int> populationHistory = new List<int>();
 
     // 매수가/매도가 분리
     public float currentBuyPrice;
