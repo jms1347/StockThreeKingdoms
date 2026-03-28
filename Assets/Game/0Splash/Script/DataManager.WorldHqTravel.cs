@@ -11,6 +11,10 @@ public partial class DataManager
     /// <summary><see cref="UserPortfolioSo.currentStepCount"/>와 동기화된 만보기 누적(표시용).</summary>
     public int PortfolioSyncedStepCount => _lastStepCountSyncedForGauge;
     public float TravelGaugeVisualCap => Mathf.Max(1000f, travelGaugeVisualCap);
+    /// <summary>실시간 1분당 이동 게이지 자동 충전량(밸런스).</summary>
+    public float TravelIdlePointsPerMinute => Mathf.Max(0f, travelIdlePointsPerMinute);
+    /// <summary>만보기 1걸음당 이동 게이지 충전량(밸런스).</summary>
+    public float TravelPointsPerStep => Mathf.Max(0f, travelPointsPerStep);
 
     public bool HasPendingHqMove => !string.IsNullOrWhiteSpace(_pendingHqMoveCastleId);
     public string PendingHqMoveTargetId => _pendingHqMoveCastleId ?? "";
@@ -142,6 +146,19 @@ public partial class DataManager
             case Faction.SHU: return "촉";
             case Faction.WU: return "오";
             case Faction.OTHERS: return "기타";
+            default: return "중립";
+        }
+    }
+
+    /// <summary>성 상세 등에서 쓰는 점령 세력 표기(한글만 — TMP 폰트에 한자 글리프가 없을 때 □ 방지).</summary>
+    public static string GetFactionLordDisplayLabel(Faction f)
+    {
+        switch (f)
+        {
+            case Faction.WEI: return "위나라";
+            case Faction.SHU: return "촉나라";
+            case Faction.WU: return "오나라";
+            case Faction.OTHERS: return "기타 세력";
             default: return "중립";
         }
     }

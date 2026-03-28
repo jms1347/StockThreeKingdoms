@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c4a90db64d7b347ba85055b410b8df, type: 3}
   m_Name: UserPortfolioSo
   m_EditorClassIdentifier: Assembly-CSharp::UserPortfolioSo
-  totalGold: 385951
+  totalGold: 56351
   holdings:
-  - castleId: C04
-    troopCount: 40000
-    averagePurchasePrice: 81727.37
+  - castleId: C01
+    troopCount: 2
+    averagePurchasePrice: 164800
   homeCastleId: C01
-  travelGaugePoints: 372.10104
-  currentStepCount: 30500
+  travelGaugePoints: 4262.485
+  currentStepCount: 33000

@@ -27,7 +27,7 @@ public class CastleWorldInitialEntry
     public int currentPopulation;
 
     public bool overrideSentiment;
-    [Range(0f, 100f)] public float currentSentiment = 100f;
+    [Range(0f, 200f)] public float currentSentiment = 100f;
 
     public bool overrideGovernor;
     public string currentGovernorId;
@@ -48,7 +48,7 @@ public class CastleWorldInitialEntry
         if (overridePopulation) s.currentPopulation = Mathf.Max(0, currentPopulation);
         if (overrideSentiment)
         {
-            s.currentSentiment = Mathf.Clamp(currentSentiment, 0f, 100f);
+            s.currentSentiment = Mathf.Clamp(currentSentiment, 0f, 200f);
             if (s.sentimentHistory == null) s.sentimentHistory = new List<float>();
             if (s.sentimentHistory.Count == 0) s.sentimentHistory.Add(s.currentSentiment);
             else s.sentimentHistory[s.sentimentHistory.Count - 1] = s.currentSentiment;

@@ -19,7 +19,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] Button closeButton;
     [SerializeField] Button dimCloseButton;
     [SerializeField] TextMeshProUGUI headerTitleText;
+    [SerializeField] TextMeshProUGUI headerSubtitlePrefixText;
+    [SerializeField] TextMeshProUGUI headerSubtitleText;
+    [SerializeField] Image factionSubtitleSwatchImage;
+    [SerializeField] TextMeshProUGUI buyCaptionText;
     [SerializeField] TextMeshProUGUI buyPriceBigText;
+    [SerializeField] TextMeshProUGUI sellCaptionText;
     [SerializeField] TextMeshProUGUI sellPriceText;
     [SerializeField] TextMeshProUGUI changePctText;
     [SerializeField] UIPopSentiment7DayChart chart7Dual;
@@ -65,6 +70,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         InstanceOrNull = this;
         BuildUiIfNeeded();
         WireButtons();
+        DisableHeaderCloseButton();
         gameObject.SetActive(false);
     }
 
@@ -128,6 +134,13 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             confirmCloseButton.onClick.RemoveListener(Close);
             confirmCloseButton.onClick.AddListener(Close);
         }
+    }
+
+    void DisableHeaderCloseButton()
+    {
+        if (closeButton == null) return;
+        closeButton.onClick.RemoveAllListeners();
+        closeButton.gameObject.SetActive(false);
     }
 
     public static void OpenCastle(string castleId)
@@ -223,12 +236,32 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         Grade g = master?.grade ?? Grade.D;
 
         if (headerTitleText != null)
-            headerTitleText.text = $"{disp}  [{g}]";
+            headerTitleText.text = disp;
+        Color subCol = new Color(0.62f, 0.66f, 0.72f, 1f);
+        string factionLine = DataManager.GetFactionLordDisplayLabel(lord);
+        if (headerSubtitlePrefixText != null && factionSubtitleSwatchImage != null && headerSubtitleText != null)
+        {
+            headerSubtitlePrefixText.text = $"등급  [{g}]    ·    ";
+            headerSubtitlePrefixText.color = subCol;
+            headerSubtitleText.text = factionLine;
+            headerSubtitleText.color = subCol;
+            factionSubtitleSwatchImage.color = FactionAccentColor(lord);
+            SyncFactionSubtitleSwatchSize();
+        }
+        else if (headerSubtitleText != null)
+        {
+            headerSubtitleText.text = $"등급  [{g}]    ·    {factionLine}";
+            headerSubtitleText.color = subCol;
+        }
 
+        if (buyCaptionText != null)
+            buyCaptionText.text = "입성비";
         if (buyPriceBigText != null)
             buyPriceBigText.text = $"{Mathf.RoundToInt(buy):N0} G";
+        if (sellCaptionText != null)
+            sellCaptionText.text = "퇴성비";
         if (sellPriceText != null)
-            sellPriceText.text = $"매도 {Mathf.RoundToInt(sell):N0} G";
+            sellPriceText.text = $"{Mathf.RoundToInt(sell):N0} G";
 
         float pct = dm.CalculateChangeRate24h(st);
         if (changePctText != null)
@@ -239,32 +272,38 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             changePctText.color = flat ? new Color(0.7f, 0.72f, 0.76f) : (up ? RiseColor : FallColor);
         }
 
-        int maxCap = Mathf.Max(1, master?.maxTroops ?? 1);
         if (chart7Dual != null)
-            chart7Dual.SetSeries(st.historyPopulation7Day, st.historySentiment7Day, maxCap);
+            chart7Dual.SetSeries(st.historyPopulation7Day, st.historySentiment7Day);
 
+        float popAxis = PopulationGaugeAxisMax(pop, st.historyPopulation7Day);
         if (popStatText != null)
-            popStatText.text = maxCap > 0
-                ? $"인구 {pop:N0} / 수용 {maxCap:N0}"
-                : $"인구 {pop:N0}";
+            popStatText.text =
+                $"인구 {pop:N0}  (막대 100% 기준치 약 {Mathf.RoundToInt(popAxis):N0})";
 
         if (sentimentStatText != null)
-            sentimentStatText.text = $"민심 {sentiment:0.#} / 100";
+            sentimentStatText.text = $"민심 {Mathf.RoundToInt(sentiment)} (기준 100, 범위 0-200)";
 
+        int troopCap = Mathf.Max(1, master?.maxTroops ?? 1);
         int totalMil = dm.EstimateCastleTotalGarrisonTroops(_castleId);
         if (militaryStatText != null)
-            militaryStatText.text = $"군사력 {totalMil:N0} / {maxCap:N0}";
+            militaryStatText.text = $"군사력 {totalMil:N0} / {troopCap:N0}";
 
         float intrinsic = dm.EvaluateBasePriceForCastle(_castleId);
         float baseVal = Mathf.Max(1f, master?.baseValue ?? 1f);
         float assetRatio = intrinsic / baseVal;
+        float assetBarN = NormalizeAssetBar(assetRatio, dm, out var worldAssetHint);
         if (assetStatText != null)
-            assetStatText.text = $"자산 위치 약 {Mathf.Clamp(assetRatio / 2.5f, 0f, 1f) * 100f:0}% (내재/액면 {assetRatio:0.##}×)";
+        {
+            int assetBarPct = Mathf.RoundToInt(Mathf.Clamp01(assetBarN) * 100f);
+            assetStatText.text = worldAssetHint.Length > 0
+                ? $"자산: 기준가 대비 내재가 {assetRatio:0.#}배입니다. {worldAssetHint} 초록 막대는 천하 분포에서의 상대 위치({assetBarPct}%)입니다."
+                : $"자산: 기준가 대비 내재가 {assetRatio:0.#}배입니다. 초록 막대는 고정 눈금(2.5배=100%) 기준 {assetBarPct}%입니다.";
+        }
 
-        float popN = maxCap > 0 ? Mathf.Clamp01(pop / (float)maxCap) : 0f;
-        float sentN = Mathf.Clamp01(sentiment / 100f);
-        float milN = maxCap > 0 ? Mathf.Clamp01(totalMil / (float)maxCap) : 0f;
-        float assetN = Mathf.Clamp01(assetRatio / 2.5f);
+        float popN = popAxis > 1e-4f ? Mathf.Clamp01(pop / popAxis) : 0f;
+        float sentN = Mathf.Clamp01(0.5f + 0.5f * ((sentiment - 100f) / 100f));
+        float milN = Mathf.Clamp01(totalMil / (float)troopCap);
+        float assetN = Mathf.Clamp01(assetBarN);
 
         if (_playOpenGaugeAnim)
         {
@@ -281,40 +320,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         GeneralMasterData gen = null;
         if (!string.IsNullOrWhiteSpace(govId))
             gen = dm.GetGeneralMasterData(govId);
-        Faction govFac = gen != null ? GovernorFactionFromGeneral(gen) : Faction.NONE;
-        Color frameCol = govFac != Faction.NONE ? FactionAccentColor(govFac) : facCol;
-        if (governorPortraitFrameImage != null)
-            governorPortraitFrameImage.color = Color.Lerp(frameCol, new Color(0.08f, 0.09f, 0.12f, 1f), 0.35f);
 
         string govName = "—";
         if (gen != null && !string.IsNullOrWhiteSpace(gen.name))
             govName = gen.name.Trim();
         if (governorNameText != null)
             governorNameText.text = $"태수 {govName}";
-        if (governorFactionText != null)
-            governorFactionText.text = DataManager.GetFactionLordShortLabel(lord);
-        bool hasPortraitSprite = gen != null && gen.governorPortrait != null;
-        if (governorPortraitImage != null)
-        {
-            if (hasPortraitSprite)
-            {
-                governorPortraitImage.sprite = gen.governorPortrait;
-                governorPortraitImage.color = Color.white;
-            }
-            else
-            {
-                governorPortraitImage.sprite = null;
-                governorPortraitImage.color = Color.Lerp(facCol, new Color(0.12f, 0.13f, 0.16f), 0.55f);
-            }
-        }
-
-        if (governorInitialText != null)
-        {
-            governorInitialText.gameObject.SetActive(!hasPortraitSprite);
-            governorInitialText.text = string.IsNullOrWhiteSpace(govName) || govName == "—"
-                ? "?"
-                : govName.Substring(0, Math.Min(1, govName.Length));
-        }
 
         dm.TryGetUserCastleStock(_castleId, out var stock);
         int troops = stock != null && stock.troopCount > 0 ? stock.troopCount : st.userDeployedTroops;
@@ -337,7 +348,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (recallButton != null)
             recallButton.interactable = invested;
 
-        _deployMaxThisOpen = ComputeQuickDeployTroops(st, master);
+        _deployMaxThisOpen = dm.ComputeMaxDeployTroopsForCastle(_castleId);
         if (deployButton != null)
             deployButton.interactable = _deployMaxThisOpen > 0;
 
@@ -346,13 +357,17 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         bool travelInProgress = dm.HasPendingHqMove
                                 || (WorldHqTravelHud.InstanceOrNull != null
                                     && WorldHqTravelHud.InstanceOrNull.IsHqTravelAnimating);
+        string cid = (_castleId ?? "").Trim();
+        bool pendingMoveToThisCastle = dm.HasPendingHqMove
+                                       && string.Equals(dm.PendingHqMoveTargetId.Trim(), cid,
+                                           StringComparison.Ordinal);
         float cost = isHq ? 0f : dm.CalculateStepCost(dm.HomeCastleId, _castleId);
         float gauge = dm.TravelGaugePoints;
         int syncedSteps = dm.PortfolioSyncedStepCount;
-        int stepEq = dm.GetTravelCostStepEquivalent(cost);
         bool canRelocate = !isHq && cost > 0f && cost < float.MaxValue * 0.25f;
 
-        if (!isHq && cost > 0f && cost < float.MaxValue * 0.25f)
+        SetRelocateProgressBlockVisible(pendingMoveToThisCastle);
+        if (pendingMoveToThisCastle && !isHq && cost > 0f && cost < float.MaxValue * 0.25f)
         {
             float dist = dm.GetDistance(dm.HomeCastleId, _castleId);
             ApplyFootprintTier(RelocationFootprintTier(dist));
@@ -371,9 +386,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         if (relocateHintText != null)
         {
-            if (travelInProgress)
-                relocateHintText.text = "본영 이주 중입니다…";
-            else if (isHq)
+            if (!pendingMoveToThisCastle)
                 relocateHintText.text = "";
             else if (cost >= float.MaxValue * 0.25f)
                 relocateHintText.text = "거리를 계산할 수 없습니다.";
@@ -383,15 +396,29 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         }
     }
 
-    static Faction GovernorFactionFromGeneral(GeneralMasterData gen)
+    /// <summary>이주 게이지·만보기 안내와 발자국 행은, 본영 이주 <b>목적지가 이 성</b>일 때만 표시합니다.</summary>
+    void SetRelocateProgressBlockVisible(bool visible)
     {
-        if (gen == null || string.IsNullOrWhiteSpace(gen.initialNationId)) return Faction.NONE;
-        string raw = gen.initialNationId.Trim();
-        if (int.TryParse(raw, out int n) && Enum.IsDefined(typeof(Faction), n))
-            return (Faction)n;
-        if (Enum.TryParse(raw, true, out Faction f))
-            return f;
-        return Faction.NONE;
+        if (relocateHintText != null)
+            relocateHintText.gameObject.SetActive(visible);
+        Transform footprintRow = footprintIcon1 != null ? footprintIcon1.transform.parent : null;
+        if (footprintRow != null)
+            footprintRow.gameObject.SetActive(visible);
+    }
+
+    /// <summary>
+    /// 인구 절대 상한은 없음. 슬라이더·문구의 「기준 최대」는 <b>현재 인구</b>와 <b>7일 이력</b> 중 최댓값에 8% 여유를 더한 값(최소 1)입니다.
+    /// </summary>
+    static float PopulationGaugeAxisMax(int currentPop, IReadOnlyList<float> history7)
+    {
+        float m = Mathf.Max(1f, currentPop);
+        if (history7 != null)
+        {
+            for (int i = 0; i < history7.Count; i++)
+                m = Mathf.Max(m, history7[i]);
+        }
+
+        return Mathf.Max(m * 1.08f, 1f);
     }
 
     static int RelocationFootprintTier(float mapDistance)
@@ -436,14 +463,6 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
                 .SetEase(Ease.OutCubic).SetId(GaugeTweenId));
     }
 
-    static int ComputeQuickDeployTroops(CastleStateData st, CastleMasterData master)
-    {
-        if (st == null) return 0;
-        int cap = master != null ? master.maxTroops : 5000;
-        int v = Mathf.Max(1, Mathf.RoundToInt(cap * 0.10f));
-        return Mathf.Clamp(v, 1, Mathf.Max(1, cap - st.userDeployedTroops));
-    }
-
     static Color FactionAccentColor(Faction f)
     {
         switch (f)
@@ -456,9 +475,44 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 자산 막대: 천하 성들의 (내재가/기준가) 최저~최고로 정규화. 분포가 너무 좁으면 평균 대비(2×평균=막대 꽉 참)로 대체.
+    /// </summary>
+    static float NormalizeAssetBar(float assetRatio, DataManager dm, out string worldHint)
+    {
+        worldHint = "";
+        if (dm == null || !dm.TryGetWorldCastleAssetRatioStats(out float minR, out float maxR, out float meanR, out int count))
+            return Mathf.Clamp01(assetRatio / 2.5f);
+
+        worldHint = $"천하 {count}개 성 평균 {meanR:0.#}배(최저 {minR:0.#}~최고 {maxR:0.#}).";
+
+        float spread = maxR - minR;
+        float relSpread = meanR > 1e-3f ? spread / meanR : spread;
+        if (count >= 2 && spread > 1e-6f && relSpread > 0.015f)
+            return Mathf.Clamp01((assetRatio - minR) / spread);
+
+        float denom = Mathf.Max(meanR * 2f, 0.01f);
+        return Mathf.Clamp01(assetRatio / denom);
+    }
+
+    void SyncFactionSubtitleSwatchSize()
+    {
+        if (factionSubtitleSwatchImage == null) return;
+        float fs = 17f;
+        if (headerSubtitleText != null)
+            fs = headerSubtitleText.fontSize;
+        else if (headerSubtitlePrefixText != null)
+            fs = headerSubtitlePrefixText.fontSize;
+        var le = factionSubtitleSwatchImage.GetComponent<LayoutElement>();
+        if (le == null) return;
+        le.minWidth = le.preferredWidth = fs;
+        le.minHeight = le.preferredHeight = fs;
+    }
+
     void OnDeployOpen()
     {
         if (deployDialogRoot == null || deploySlider == null) return;
+        if (_deployMaxThisOpen <= 0) return;
         deployDialogRoot.SetAsLastSibling();
         deployDialogRoot.gameObject.SetActive(true);
         deploySlider.wholeNumbers = true;
@@ -472,8 +526,16 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
     void OnDeploySlider(float v)
     {
-        if (deploySliderValueText != null)
-            deploySliderValueText.text = $"투입 병력: {Mathf.RoundToInt(v):N0}명";
+        if (deploySliderValueText == null) return;
+        int n = Mathf.RoundToInt(v);
+        var dm = DataManager.InstanceOrNull;
+        float buy = dm != null && !string.IsNullOrWhiteSpace(_castleId)
+            ? dm.EvaluateBuyPriceForCastle(_castleId)
+            : 0f;
+        long cost = (long)Mathf.RoundToInt(buy) * n;
+        deploySliderValueText.text = cost > 0L
+            ? $"투입 병력: {n:N0}명 · 비용 {cost:N0} G"
+            : $"투입 병력: {n:N0}명";
     }
 
     void OnDeployConfirm()
@@ -483,7 +545,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (!dm.castleStateDataMap.TryGetValue(_castleId, out var st) || st == null) return;
         int n = Mathf.RoundToInt(deploySlider.value);
         if (n <= 0) return;
-        dm.AddUserCastleDeployment(_castleId, n, st.currentBuyPrice);
+        dm.AddUserCastleDeployment(_castleId, n, dm.EvaluateBuyPriceForCastle(_castleId));
         deployDialogRoot.gameObject.SetActive(false);
         Refresh();
     }
@@ -557,8 +619,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var panel = new GameObject("DetailPanel", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
         panel.transform.SetParent(transform, false);
         var pRt = panel.GetComponent<RectTransform>();
-        pRt.anchorMin = new Vector2(0.06f, 0.08f);
-        pRt.anchorMax = new Vector2(0.94f, 0.92f);
+        pRt.anchorMin = new Vector2(0.04f, 0.04f);
+        pRt.anchorMax = new Vector2(0.96f, 0.95f);
         pRt.offsetMin = Vector2.zero;
         pRt.offsetMax = Vector2.zero;
         panel.GetComponent<Image>().color = new Color(0.09f, 0.10f, 0.13f, 0.99f);
@@ -571,32 +633,176 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         pv.childForceExpandWidth = true;
         pv.childForceExpandHeight = false;
 
+        governorPortraitFrameImage = null;
+        governorPortraitImage = null;
+        governorInitialText = null;
+
+        var headerCard = new GameObject("HeaderCard", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        headerCard.transform.SetParent(panel.transform, false);
+        var headerCardImg = headerCard.GetComponent<Image>();
+        headerCardImg.color = new Color(0.05f, 0.10f, 0.17f, 0.97f);
+        headerCardImg.raycastTarget = false;
+        var headerCardLe = headerCard.GetComponent<LayoutElement>();
+        headerCardLe.minHeight = 168f;
+        headerCardLe.preferredHeight = 176f;
+        headerCardLe.flexibleHeight = 0f;
+        var hcv = headerCard.GetComponent<VerticalLayoutGroup>();
+        hcv.padding = new RectOffset(14, 14, 12, 12);
+        hcv.spacing = 12;
+        hcv.childAlignment = TextAnchor.UpperLeft;
+        hcv.childControlWidth = true;
+        hcv.childControlHeight = true;
+        hcv.childForceExpandWidth = true;
+
         var header = new GameObject("Header", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
-        header.transform.SetParent(panel.transform, false);
-        header.GetComponent<LayoutElement>().minHeight = 40f;
+        header.transform.SetParent(headerCard.transform, false);
+        var headerLe = header.GetComponent<LayoutElement>();
+        headerLe.minHeight = 56f;
+        headerLe.preferredHeight = 60f;
         var hh = header.GetComponent<HorizontalLayoutGroup>();
+        hh.spacing = 12;
         hh.childAlignment = TextAnchor.MiddleLeft;
         hh.childControlWidth = true;
-        hh.childForceExpandWidth = true;
-        headerTitleText = CreateTmp(header.transform, "Title", "", 22, FontStyles.Bold, TextAlignmentOptions.Left);
+        hh.childControlHeight = true;
+        hh.childForceExpandWidth = false;
+        hh.childForceExpandHeight = true;
+
+        var titleCol = new GameObject("TitleCol", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        titleCol.transform.SetParent(header.transform, false);
+        titleCol.GetComponent<LayoutElement>().flexibleWidth = 1f;
+        titleCol.GetComponent<LayoutElement>().minWidth = 120f;
+        var tvg = titleCol.GetComponent<VerticalLayoutGroup>();
+        tvg.childAlignment = TextAnchor.UpperLeft;
+        tvg.spacing = 4;
+        tvg.childControlWidth = true;
+        tvg.childForceExpandWidth = true;
+
+        headerTitleText = CreateTmp(titleCol.transform, "Title", "", 24, FontStyles.Bold, TextAlignmentOptions.Left);
         headerTitleText.color = Color.white;
-        var titleLe = headerTitleText.GetComponent<LayoutElement>();
-        titleLe.flexibleWidth = 1f;
-        var closeGo = new GameObject("Close", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
-        closeGo.transform.SetParent(header.transform, false);
-        closeGo.GetComponent<Image>().color = new Color(0.2f, 0.22f, 0.28f, 0.95f);
-        closeButton = closeGo.GetComponent<Button>();
-        closeGo.GetComponent<LayoutElement>().minWidth = 40f;
-        closeGo.GetComponent<LayoutElement>().preferredWidth = 44f;
-        var cx = CreateTmp(closeGo.transform, "X", "✕", 20, FontStyles.Bold, TextAlignmentOptions.Center);
-        cx.color = new Color(0.85f, 0.87f, 0.9f, 1f);
-        StretchFull(cx.rectTransform);
+
+        const float subFont = 17f;
+        var subRow = new GameObject("SubTitleRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        subRow.transform.SetParent(titleCol.transform, false);
+        var subH = subRow.GetComponent<HorizontalLayoutGroup>();
+        subH.childAlignment = TextAnchor.MiddleLeft;
+        subH.spacing = 6f;
+        subH.padding = new RectOffset(0, 0, 0, 0);
+        subH.childControlWidth = true;
+        subH.childControlHeight = true;
+        subH.childForceExpandWidth = false;
+        subH.childForceExpandHeight = false;
+        subRow.GetComponent<LayoutElement>().flexibleWidth = 1f;
+
+        headerSubtitlePrefixText = CreateTmp(subRow.transform, "SubPrefix", "", subFont, FontStyles.Normal, TextAlignmentOptions.Left);
+        headerSubtitlePrefixText.color = new Color(0.68f, 0.72f, 0.78f, 1f);
+        var prefixCsf = headerSubtitlePrefixText.gameObject.AddComponent<ContentSizeFitter>();
+        prefixCsf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        prefixCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        var prefixLe = headerSubtitlePrefixText.GetComponent<LayoutElement>();
+        prefixLe.flexibleWidth = 0f;
+
+        var swatchGo = new GameObject("FactionSwatch", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        swatchGo.transform.SetParent(subRow.transform, false);
+        factionSubtitleSwatchImage = swatchGo.GetComponent<Image>();
+        factionSubtitleSwatchImage.sprite = WorldMarketPieChartUI.GetSquareUiSprite();
+        factionSubtitleSwatchImage.type = Image.Type.Simple;
+        factionSubtitleSwatchImage.raycastTarget = false;
+        var swLe = swatchGo.GetComponent<LayoutElement>();
+        swLe.flexibleWidth = 0f;
+        swLe.flexibleHeight = 0f;
+        swLe.minWidth = swLe.preferredWidth = subFont;
+        swLe.minHeight = swLe.preferredHeight = subFont;
+
+        headerSubtitleText = CreateTmp(subRow.transform, "SubFaction", "", subFont, FontStyles.Normal, TextAlignmentOptions.Left);
+        headerSubtitleText.color = new Color(0.68f, 0.72f, 0.78f, 1f);
+        var facLe = headerSubtitleText.GetComponent<LayoutElement>();
+        facLe.flexibleWidth = 1f;
+        facLe.minWidth = 40f;
+
+        var govWrap = new GameObject("GovernorHeaderBox", typeof(RectTransform), typeof(LayoutElement));
+        govWrap.transform.SetParent(header.transform, false);
+        var gwLe = govWrap.GetComponent<LayoutElement>();
+        gwLe.minWidth = 200f;
+        gwLe.preferredWidth = 268f;
+        gwLe.flexibleWidth = 0f;
+        gwLe.minHeight = 56f;
+
+        var govBg = new GameObject("GovBg", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup));
+        govBg.transform.SetParent(govWrap.transform, false);
+        StretchFull(govBg.GetComponent<RectTransform>());
+        govBg.GetComponent<Image>().color = new Color(0.07f, 0.09f, 0.13f, 1f);
+        var gvg = govBg.GetComponent<VerticalLayoutGroup>();
+        gvg.padding = new RectOffset(12, 12, 10, 10);
+        gvg.spacing = 8;
+        gvg.childAlignment = TextAnchor.UpperLeft;
+        gvg.childControlWidth = true;
+        gvg.childForceExpandWidth = true;
+
+        var bandGo = new GameObject("FactionBand", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        bandGo.transform.SetParent(govBg.transform, false);
+        factionBandImage = bandGo.GetComponent<Image>();
+        var bandLe = bandGo.GetComponent<LayoutElement>();
+        bandLe.minHeight = 5f;
+        bandLe.preferredHeight = 5f;
+        bandLe.flexibleWidth = 1f;
+        StretchFull(bandGo.GetComponent<RectTransform>());
+
+        governorFactionText = null;
+
+        governorNameText = CreateTmp(govBg.transform, "GovName", "태수 —", 19, FontStyles.Bold, TextAlignmentOptions.Left);
+        governorNameText.color = Color.white;
+
+        closeButton = null;
+
+        var priceRow = new GameObject("PriceRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        priceRow.transform.SetParent(headerCard.transform, false);
+        priceRow.GetComponent<LayoutElement>().minHeight = 64f;
+        var prh = priceRow.GetComponent<HorizontalLayoutGroup>();
+        prh.spacing = 8;
+        prh.childAlignment = TextAnchor.MiddleLeft;
+        prh.childControlWidth = true;
+        prh.childForceExpandWidth = true;
+        prh.padding = new RectOffset(0, 0, 4, 0);
+
+        var buyStack = new GameObject("BuyStack", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        buyStack.transform.SetParent(priceRow.transform, false);
+        buyStack.GetComponent<LayoutElement>().flexibleWidth = 1f;
+        var bsv = buyStack.GetComponent<VerticalLayoutGroup>();
+        bsv.spacing = 2;
+        bsv.childAlignment = TextAnchor.UpperLeft;
+        bsv.childControlWidth = true;
+        bsv.childForceExpandWidth = true;
+
+        buyCaptionText = CreateTmp(buyStack.transform, "BuyCap", "입성비", 19, FontStyles.Bold, TextAlignmentOptions.Left);
+        buyCaptionText.color = new Color(0.72f, 0.78f, 0.88f, 1f);
+        buyPriceBigText = CreateTmp(buyStack.transform, "BuyBig", "0 G", 34, FontStyles.Bold, TextAlignmentOptions.Left);
+        buyPriceBigText.color = Color.white;
+
+        var sellStack = new GameObject("SellStack", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        sellStack.transform.SetParent(priceRow.transform, false);
+        sellStack.GetComponent<LayoutElement>().flexibleWidth = 1f;
+        var ssv = sellStack.GetComponent<VerticalLayoutGroup>();
+        ssv.spacing = 2;
+        ssv.childAlignment = TextAnchor.UpperRight;
+        ssv.childControlWidth = true;
+        ssv.childForceExpandWidth = true;
+
+        sellCaptionText = CreateTmp(sellStack.transform, "SellCap", "퇴성비", 19, FontStyles.Bold, TextAlignmentOptions.TopRight);
+        sellCaptionText.color = new Color(0.72f, 0.78f, 0.88f, 1f);
+        sellPriceText = CreateTmp(sellStack.transform, "SellVal", "0 G", 34, FontStyles.Bold, TextAlignmentOptions.TopRight);
+        sellPriceText.color = new Color(0.88f, 0.90f, 0.94f, 1f);
+
+        changePctText = CreateTmp(headerCard.transform, "Chg", "+0.00%", 22, FontStyles.Bold, TextAlignmentOptions.Left);
+        changePctText.color = new Color(0.7f, 0.72f, 0.76f, 1f);
 
         var scrollGo = new GameObject("Scroll", typeof(RectTransform), typeof(ScrollRect), typeof(Image), typeof(LayoutElement));
         scrollGo.transform.SetParent(panel.transform, false);
         scrollGo.GetComponent<Image>().color = new Color(0.07f, 0.08f, 0.10f, 0.5f);
-        scrollGo.GetComponent<LayoutElement>().flexibleHeight = 1f;
-        scrollGo.GetComponent<LayoutElement>().minHeight = 200f;
+        var scrollLe = scrollGo.GetComponent<LayoutElement>();
+        scrollLe.flexibleHeight = 1f;
+        scrollLe.flexibleWidth = 1f;
+        scrollLe.minHeight = 400f;
+        scrollLe.preferredHeight = 460f;
         var scroll = scrollGo.GetComponent<ScrollRect>();
         var viewport = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(Mask));
         viewport.transform.SetParent(scrollGo.transform, false);
@@ -612,7 +818,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         cRt.pivot = new Vector2(0.5f, 1f);
         cRt.sizeDelta = new Vector2(0f, 0f);
         var cv = content.GetComponent<VerticalLayoutGroup>();
-        cv.spacing = 12;
+        cv.spacing = 14;
         cv.childControlWidth = true;
         cv.childForceExpandWidth = true;
         content.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
@@ -622,121 +828,91 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         scroll.vertical = true;
         scroll.horizontal = false;
 
-        buyPriceBigText = CreateTmp(content.transform, "BuyBig", "0 G", 36, FontStyles.Bold, TextAlignmentOptions.Left);
-        buyPriceBigText.color = Color.white;
-        sellPriceText = CreateTmp(content.transform, "Sell", "매도 0 G", 16, FontStyles.Normal, TextAlignmentOptions.Left);
-        sellPriceText.color = new Color(0.65f, 0.68f, 0.74f);
-        changePctText = CreateTmp(content.transform, "Chg", "+0.00%", 20, FontStyles.Bold, TextAlignmentOptions.Left);
-
         var chartHost = new GameObject("ChartHost", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
         chartHost.transform.SetParent(content.transform, false);
         chartHost.GetComponent<Image>().color = new Color(0.05f, 0.06f, 0.09f, 0.92f);
-        chartHost.GetComponent<LayoutElement>().minHeight = 150f;
-        chartHost.GetComponent<LayoutElement>().preferredHeight = 160f;
+        var chartLe = chartHost.GetComponent<LayoutElement>();
+        chartLe.minHeight = 248f;
+        chartLe.preferredHeight = 264f;
+        chartLe.flexibleHeight = 0f;
         var chartGo = new GameObject("PopSentChart", typeof(RectTransform), typeof(UIPopSentiment7DayChart));
         chartGo.transform.SetParent(chartHost.transform, false);
         StretchFull(chartGo.GetComponent<RectTransform>());
         chart7Dual = chartGo.GetComponent<UIPopSentiment7DayChart>();
 
-        popStatText = CreateTmp(content.transform, "PopLine", "인구", 15, FontStyles.Normal, TextAlignmentOptions.Left);
+        popStatText = CreateTmp(content.transform, "PopLine", "인구", 25, FontStyles.Normal, TextAlignmentOptions.Left);
         popStatText.color = new Color(0.78f, 0.8f, 0.84f);
         popGaugeSlider = CreateReadOnlySliderGauge(content.transform, "PopGauge",
             new Color(0.55f, 0.32f, 0.28f, 0.95f));
 
-        sentimentStatText = CreateTmp(content.transform, "SentLine", "민심", 15, FontStyles.Normal, TextAlignmentOptions.Left);
+        sentimentStatText = CreateTmp(content.transform, "SentLine", "민심", 25, FontStyles.Normal, TextAlignmentOptions.Left);
         sentimentStatText.color = new Color(0.78f, 0.8f, 0.84f);
         sentimentGaugeSlider = CreateReadOnlySliderGauge(content.transform, "SentGauge",
             new Color(0.92f, 0.78f, 0.35f, 0.95f));
 
-        militaryStatText = CreateTmp(content.transform, "MilLine", "군사력", 15, FontStyles.Normal, TextAlignmentOptions.Left);
+        militaryStatText = CreateTmp(content.transform, "MilLine", "군사력", 25, FontStyles.Normal, TextAlignmentOptions.Left);
         militaryStatText.color = new Color(0.78f, 0.8f, 0.84f);
         militaryGaugeSlider = CreateReadOnlySliderGauge(content.transform, "MilGauge",
             new Color(0.32f, 0.52f, 0.88f, 0.95f));
 
-        assetStatText = CreateTmp(content.transform, "AssetLine", "자산", 15, FontStyles.Normal, TextAlignmentOptions.Left);
+        assetStatText = CreateTmp(content.transform, "AssetLine", "자산", 25, FontStyles.Normal, TextAlignmentOptions.Left);
         assetStatText.color = new Color(0.78f, 0.8f, 0.84f);
         assetGaugeSlider = CreateReadOnlySliderGauge(content.transform, "AssetGauge",
             new Color(0.28f, 0.62f, 0.42f, 0.95f));
-
-        var govRow = new GameObject("GovernorRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
-        govRow.transform.SetParent(content.transform, false);
-        govRow.GetComponent<LayoutElement>().minHeight = 64f;
-        var gh = govRow.GetComponent<HorizontalLayoutGroup>();
-        gh.spacing = 12;
-        gh.childAlignment = TextAnchor.MiddleLeft;
-        var portraitGo = new GameObject("Portrait", typeof(RectTransform), typeof(Image));
-        portraitGo.transform.SetParent(govRow.transform, false);
-        var prt = portraitGo.GetComponent<RectTransform>();
-        prt.sizeDelta = new Vector2(56f, 56f);
-        governorPortraitFrameImage = portraitGo.GetComponent<Image>();
-        governorPortraitFrameImage.color = new Color(0.35f, 0.28f, 0.22f, 1f);
-
-        var faceGo = new GameObject("Face", typeof(RectTransform), typeof(Image));
-        faceGo.transform.SetParent(portraitGo.transform, false);
-        var faceRt = faceGo.GetComponent<RectTransform>();
-        faceRt.anchorMin = new Vector2(0.1f, 0.1f);
-        faceRt.anchorMax = new Vector2(0.9f, 0.9f);
-        faceRt.offsetMin = Vector2.zero;
-        faceRt.offsetMax = Vector2.zero;
-        governorPortraitImage = faceGo.GetComponent<Image>();
-        governorPortraitImage.color = new Color(0.25f, 0.28f, 0.35f, 1f);
-
-        var initGo = CreateTmp(portraitGo.transform, "Initial", "?", 22, FontStyles.Bold, TextAlignmentOptions.Center);
-        governorInitialText = initGo;
-        governorInitialText.color = Color.white;
-        StretchFull(initGo.rectTransform);
-        var govCol = new GameObject("GovTextCol", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
-        govCol.transform.SetParent(govRow.transform, false);
-        govCol.GetComponent<LayoutElement>().flexibleWidth = 1f;
-        var gv = govCol.GetComponent<VerticalLayoutGroup>();
-        gv.spacing = 2;
-        gv.childAlignment = TextAnchor.UpperLeft;
-        var bandGo = new GameObject("FactionBand", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        bandGo.transform.SetParent(govCol.transform, false);
-        factionBandImage = bandGo.GetComponent<Image>();
-        var bandLe = bandGo.GetComponent<LayoutElement>();
-        bandLe.minHeight = 4f;
-        bandLe.preferredHeight = 4f;
-        bandLe.flexibleWidth = 1f;
-        StretchFull(bandGo.GetComponent<RectTransform>());
-        governorNameText = CreateTmp(govCol.transform, "GovName", "태수 —", 17, FontStyles.Bold, TextAlignmentOptions.Left);
-        governorFactionText = CreateTmp(govCol.transform, "GovFac", "위", 14, FontStyles.Normal, TextAlignmentOptions.Left);
-        governorFactionText.color = new Color(0.65f, 0.68f, 0.74f);
 
         var pfGo = new GameObject("PortfolioBox", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
         pfGo.transform.SetParent(content.transform, false);
         portfolioBox = pfGo.GetComponent<RectTransform>();
         portfolioBox.GetComponent<Image>().color = new Color(0.14f, 0.12f, 0.10f, 0.95f);
-        portfolioBox.GetComponent<LayoutElement>().minHeight = 72f;
-        portfolioText = CreateTmp(portfolioBox.transform, "PfText", "", 16, FontStyles.Normal, TextAlignmentOptions.Left);
+        portfolioBox.GetComponent<LayoutElement>().minHeight = 100f;
+        portfolioText = CreateTmp(portfolioBox.transform, "PfText", "", 26, FontStyles.Normal, TextAlignmentOptions.Left);
         StretchWithPadding(portfolioText.rectTransform, 12f);
 
         var footer = new GameObject("Footer", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
         footer.transform.SetParent(panel.transform, false);
-        footer.GetComponent<LayoutElement>().minHeight = 120f;
+        var footLe = footer.GetComponent<LayoutElement>();
+        footLe.minHeight = 268f;
+        footLe.preferredHeight = 276f;
+        footLe.flexibleHeight = 0f;
         var fv = footer.GetComponent<VerticalLayoutGroup>();
-        fv.spacing = 8;
+        fv.spacing = 10;
         fv.childControlWidth = true;
         fv.childForceExpandWidth = true;
 
         var fpRow = new GameObject("Footprints", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         fpRow.transform.SetParent(footer.transform, false);
-        fpRow.GetComponent<LayoutElement>().minHeight = 22f;
+        fpRow.GetComponent<LayoutElement>().minHeight = 36f;
         var fph = fpRow.GetComponent<HorizontalLayoutGroup>();
         fph.spacing = 8;
         fph.childAlignment = TextAnchor.MiddleCenter;
         fph.childControlWidth = false;
         fph.childForceExpandWidth = false;
-        footprintIcon1 = CreateTmp(fpRow.transform, "F1", "\u00B7", 22, FontStyles.Bold, TextAlignmentOptions.Center);
-        footprintIcon2 = CreateTmp(fpRow.transform, "F2", "\u00B7\u00B7", 22, FontStyles.Bold, TextAlignmentOptions.Center);
-        footprintIcon3 = CreateTmp(fpRow.transform, "F3", "\u00B7\u00B7\u00B7", 22, FontStyles.Bold, TextAlignmentOptions.Center);
+        footprintIcon1 = CreateTmp(fpRow.transform, "F1", "\u00B7", 30, FontStyles.Bold, TextAlignmentOptions.Center);
+        footprintIcon2 = CreateTmp(fpRow.transform, "F2", "\u00B7\u00B7", 30, FontStyles.Bold, TextAlignmentOptions.Center);
+        footprintIcon3 = CreateTmp(fpRow.transform, "F3", "\u00B7\u00B7\u00B7", 30, FontStyles.Bold, TextAlignmentOptions.Center);
         footprintIcon1.color = new Color(0.85f, 0.78f, 0.55f, 1f);
         footprintIcon2.color = footprintIcon1.color;
         footprintIcon3.color = footprintIcon1.color;
         ApplyFootprintTier(0);
 
-        relocateHintText = CreateTmp(footer.transform, "RelocateHint", "", 13, FontStyles.Normal, TextAlignmentOptions.Center);
-        relocateHintText.color = new Color(0.72f, 0.76f, 0.82f);
+        var hintGo = new GameObject("RelocateHint", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        hintGo.transform.SetParent(footer.transform, false);
+        relocateHintText = hintGo.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            relocateHintText.font = TMP_Settings.defaultFontAsset;
+        relocateHintText.fontSize = 24;
+        relocateHintText.fontStyle = FontStyles.Normal;
+        relocateHintText.alignment = TextAlignmentOptions.Center;
+        relocateHintText.color = new Color(0.78f, 0.82f, 0.88f, 1f);
+        relocateHintText.enableWordWrapping = true;
+        relocateHintText.overflowMode = TextOverflowModes.Overflow;
+        var hintLe = hintGo.GetComponent<LayoutElement>();
+        hintLe.minHeight = 88f;
+        hintLe.preferredHeight = 96f;
+        hintLe.flexibleWidth = 1f;
+        var hintRt = hintGo.GetComponent<RectTransform>();
+        hintRt.sizeDelta = new Vector2(0f, 96f);
+
         var btnRow = new GameObject("BtnRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         btnRow.transform.SetParent(footer.transform, false);
         btnRow.GetComponent<LayoutElement>().minHeight = 52f;
@@ -757,9 +933,10 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var okGo = new GameObject("HwagInClose", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
         okGo.transform.SetParent(footer.transform, false);
         okGo.GetComponent<Image>().color = new Color(0.28f, 0.22f, 0.16f, 0.98f);
-        okGo.GetComponent<LayoutElement>().minHeight = 46f;
+        okGo.GetComponent<LayoutElement>().minHeight = 50f;
+        okGo.GetComponent<LayoutElement>().preferredHeight = 50f;
         confirmCloseButton = okGo.GetComponent<Button>();
-        var okTmp = CreateTmp(okGo.transform, "Lbl", "확인 / 닫기", 16, FontStyles.Bold, TextAlignmentOptions.Center);
+        var okTmp = CreateTmp(okGo.transform, "Lbl", "확인 / 닫기", 22, FontStyles.Bold, TextAlignmentOptions.Center);
         okTmp.color = new Color(0.95f, 0.92f, 0.85f, 1f);
         StretchFull(okTmp.rectTransform);
 
@@ -786,11 +963,11 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         bv.padding = new RectOffset(16, 16, 16, 16);
         bv.spacing = 12;
         bv.childControlWidth = true;
-        deploySliderValueText = CreateTmp(box.transform, "SliderLabel", "투입 병력: 0", 16, FontStyles.Bold, TextAlignmentOptions.Center);
+        deploySliderValueText = CreateTmp(box.transform, "SliderLabel", "투입 병력: 0", 24, FontStyles.Bold, TextAlignmentOptions.Center);
 
         var sgo = new GameObject("Slider", typeof(RectTransform), typeof(Slider));
         sgo.transform.SetParent(box.transform, false);
-        sgo.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 28f);
+        sgo.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 34f);
         deploySlider = sgo.GetComponent<Slider>();
         deploySlider.minValue = 1;
         deploySlider.maxValue = 100;
@@ -857,8 +1034,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     {
         var row = new GameObject(name, typeof(RectTransform), typeof(LayoutElement));
         row.transform.SetParent(parent, false);
-        row.GetComponent<LayoutElement>().minHeight = 18f;
-        row.GetComponent<LayoutElement>().preferredHeight = 20f;
+        row.GetComponent<LayoutElement>().minHeight = 28f;
+        row.GetComponent<LayoutElement>().preferredHeight = 34f;
         var sgo = new GameObject("Slider", typeof(RectTransform), typeof(Slider));
         sgo.transform.SetParent(row.transform, false);
         StretchFull(sgo.GetComponent<RectTransform>());
@@ -900,10 +1077,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var go = new GameObject(label, typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
         go.transform.SetParent(parent, false);
         go.GetComponent<Image>().color = bg;
-        go.GetComponent<LayoutElement>().minHeight = 48f;
-        go.GetComponent<LayoutElement>().flexibleWidth = 1f;
+        var le = go.GetComponent<LayoutElement>();
+        le.minHeight = 48f;
+        le.preferredHeight = 48f;
+        le.flexibleWidth = 1f;
         var btn = go.GetComponent<Button>();
-        var tmp = CreateTmp(go.transform, "Lbl", label, 15, FontStyles.Bold, TextAlignmentOptions.Center);
+        var tmp = CreateTmp(go.transform, "Lbl", label, 20, FontStyles.Bold, TextAlignmentOptions.Center);
         tmp.color = Color.white;
         StretchFull(tmp.rectTransform);
         return btn;

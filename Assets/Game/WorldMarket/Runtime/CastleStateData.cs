@@ -26,7 +26,7 @@ public class CastleStateData
     public string id; // CastleMasterData.id
 
     // 실시간 수치
-    public float currentSentiment = 100f; // 0~100 권장
+    public float currentSentiment = 100f; // 0~200, 100=기본
     public int currentPopulation;
 
     // 점령/인사 상태
@@ -49,7 +49,7 @@ public class CastleStateData
 
     /// <summary>7일 일간 스냅샷(인구). 차트 X는 과거→현재.</summary>
     public List<float> historyPopulation7Day = new List<float>();
-    /// <summary>7일 일간 스냅샷(민심 0~100).</summary>
+    /// <summary>7일 일간 스냅샷(민심 0~200, 100 기준).</summary>
     public List<float> historySentiment7Day = new List<float>();
     /// <summary>전일 종가에 가까운 매수가 앵커 — <see cref="DataManager.CalculateChangeRate24h"/>용.</summary>
     public float buyPricePrevDayClose;

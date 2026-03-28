@@ -10,7 +10,7 @@ public class WorldHqTravelHud : MonoBehaviour
 {
     public static WorldHqTravelHud InstanceOrNull { get; private set; }
 
-    const float PanelHeight = 72f;
+    const float PanelHeight = 102f;
 
     [SerializeField] RectTransform hudRoot;
     [SerializeField] Image gaugeBackground;
@@ -18,11 +18,16 @@ public class WorldHqTravelHud : MonoBehaviour
     [SerializeField] TextMeshProUGUI gaugeValueText;
     [SerializeField] TextMeshProUGUI routeStatusText;
     [SerializeField] Button debugAddStepsButton;
+    [Tooltip("Canvas 오버레이 시 하단 탭바 위 여백(px). 슬라이드로 천하 패널이 꺼져도 이주 바가 보이게 합니다.")]
+    [SerializeField] float overlayBottomInset = 168f;
 
     LayoutElement _hostLayoutElement;
     DataManager _dm;
     float _displayedGaugePoints;
     Coroutine _travelRoutine;
+    bool _anchoredToOverlay;
+    Transform _restoreParent;
+    int _restoreSiblingIndex;
 
     /// <summary>본영 이주 패널·코루틴이 돌아가는 동안. 리스트·팝업 UI 분기용(대기 이주는 <see cref="DataManager.HasPendingHqMove"/>).</summary>
     public bool IsHqTravelAnimating => _travelRoutine != null;
@@ -32,6 +37,12 @@ public class WorldHqTravelHud : MonoBehaviour
         InstanceOrNull = this;
         _hostLayoutElement = GetComponent<LayoutElement>();
         BuildUiIfNeeded();
+        if (gaugeValueText != null)
+        {
+            gaugeValueText.richText = true;
+            gaugeValueText.enableWordWrapping = true;
+        }
+
         ResolveHudRoot();
         SetTravelPanelVisible(false);
     }
@@ -73,6 +84,7 @@ public class WorldHqTravelHud : MonoBehaviour
             return;
         if (!gameObject.activeInHierarchy)
             return;
+        PromoteToCanvasOverlay();
         _travelRoutine = StartCoroutine(CoTravel(dm, dm.PendingHqMoveTargetId, dm.PendingHqMoveCostPoints));
     }
 
@@ -169,6 +181,7 @@ public class WorldHqTravelHud : MonoBehaviour
         if (!gameObject.activeInHierarchy)
             gameObject.SetActive(true);
 
+        PromoteToCanvasOverlay();
         _travelRoutine = StartCoroutine(CoTravel(dm, targetCastleId, cost));
         if (_travelRoutine == null)
         {
@@ -192,6 +205,74 @@ public class WorldHqTravelHud : MonoBehaviour
         SetTravelPanelVisible(false);
         if (routeStatusText != null)
             routeStatusText.text = "";
+
+        DemoteFromCanvasOverlay();
+    }
+
+    Canvas FindHostCanvas()
+    {
+        Transform t = transform;
+        Canvas deepest = null;
+        while (t != null)
+        {
+            var c = t.GetComponent<Canvas>();
+            if (c != null)
+                deepest = c;
+            t = t.parent;
+        }
+
+        if (deepest != null)
+            return deepest;
+        return FindObjectOfType<Canvas>();
+    }
+
+    void PromoteToCanvasOverlay()
+    {
+        if (_anchoredToOverlay)
+            return;
+
+        Canvas canvas = FindHostCanvas();
+        if (canvas == null)
+            return;
+
+        _restoreParent = transform.parent;
+        _restoreSiblingIndex = transform.GetSiblingIndex();
+
+        transform.SetParent(canvas.transform, false);
+        transform.SetAsLastSibling();
+
+        var rt = transform as RectTransform;
+        if (rt != null)
+        {
+            rt.anchorMin = new Vector2(0f, 0f);
+            rt.anchorMax = new Vector2(1f, 0f);
+            rt.pivot = new Vector2(0.5f, 0f);
+            rt.anchoredPosition = new Vector2(0f, overlayBottomInset);
+            rt.sizeDelta = new Vector2(0f, 0f);
+        }
+
+        _anchoredToOverlay = true;
+    }
+
+    void DemoteFromCanvasOverlay()
+    {
+        if (!_anchoredToOverlay)
+            return;
+
+        if (_restoreParent != null)
+        {
+            transform.SetParent(_restoreParent, false);
+            int max = _restoreParent.childCount - 1;
+            if (max >= 0)
+                transform.SetSiblingIndex(Mathf.Clamp(_restoreSiblingIndex, 0, max));
+
+            var rt = transform as RectTransform;
+            if (rt != null)
+                StretchBottomFullWidth(rt, 0f);
+        }
+
+        _anchoredToOverlay = false;
+        _restoreParent = null;
     }
 
     IEnumerator CoTravel(DataManager dm, string targetCastleId, float cost)
@@ -201,6 +282,7 @@ public class WorldHqTravelHud : MonoBehaviour
         dm.TryCompletePendingHqMoveIfReady();
         if (!dm.HasPendingHqMove)
         {
+            DemoteFromCanvasOverlay();
             SetTravelPanelVisible(false);
             _travelRoutine = null;
             yield break;
@@ -236,6 +318,8 @@ public class WorldHqTravelHud : MonoBehaviour
         if (routeStatusText != null)
             routeStatusText.text = "";
 
+        DemoteFromCanvasOverlay();
+
         _travelRoutine = null;
     }
 
@@ -254,13 +338,24 @@ public class WorldHqTravelHud : MonoBehaviour
         float p = dm.TravelGaugePoints;
         float fill = requiredTotal > 1e-4f ? Mathf.Clamp01(p / requiredTotal) : 1f;
         if (gaugeFill != null)
+        {
             gaugeFill.fillAmount = fill;
+            gaugeFill.enabled = true;
+        }
+
+        if (gaugeBackground != null)
+            gaugeBackground.enabled = true;
+
         if (gaugeValueText != null)
         {
             float remain = Mathf.Max(0f, requiredTotal - p);
             int stepEq = dm.GetTravelCostStepEquivalent(remain);
+            float idlePm = dm.TravelIdlePointsPerMinute;
+            float ptStep = dm.TravelPointsPerStep;
+            int stepsToday = dm.PortfolioSyncedStepCount;
             gaugeValueText.text =
-                $"이동 충전 {p:N0} / {requiredTotal:N0}pt (만보기 약 {stepEq:N0}보 남음)";
+                $"<b>{p:N0} / {requiredTotal:N0}</b> pt  (약 {stepEq:N0}보 남음)\n" +
+                $"<size=90%>시간 <color=#9EC5F7>+{idlePm:N0}pt/분</color> · 걸음 <color=#A8E6A8>+{ptStep:N0}pt/보</color> · 오늘 {stepsToday:N0}보</size>";
         }
     }
 
@@ -297,6 +392,18 @@ public class WorldHqTravelHud : MonoBehaviour
                 _hostLayoutElement.preferredHeight = 0f;
             }
         }
+
+        SyncOverlayHostHeight(visible);
+    }
+
+    void SyncOverlayHostHeight(bool panelOpen)
+    {
+        if (!_anchoredToOverlay)
+            return;
+        var hostRt = transform as RectTransform;
+        if (hostRt == null)
+            return;
+        hostRt.sizeDelta = new Vector2(0f, panelOpen ? PanelHeight : 0f);
     }
 
     void ResolveHudRoot()
@@ -364,8 +471,8 @@ public class WorldHqTravelHud : MonoBehaviour
         var rowBot = new GameObject("GaugeRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         rowBot.transform.SetParent(strip.transform, false);
         var rowBotLe = rowBot.GetComponent<LayoutElement>();
-        rowBotLe.minHeight = 30f;
-        rowBotLe.preferredHeight = 32f;
+        rowBotLe.minHeight = 52f;
+        rowBotLe.preferredHeight = 56f;
         rowBotLe.flexibleWidth = 1f;
         var rowH = rowBot.GetComponent<HorizontalLayoutGroup>();
         rowH.padding = new RectOffset(0, 0, 0, 0);
@@ -383,8 +490,8 @@ public class WorldHqTravelHud : MonoBehaviour
         var barLe = barHost.GetComponent<LayoutElement>();
         barLe.flexibleWidth = 1f;
         barLe.minWidth = 80f;
-        barLe.minHeight = 22f;
-        barLe.preferredHeight = 22f;
+        barLe.minHeight = 20f;
+        barLe.preferredHeight = 20f;
         gaugeBackground = barHost.GetComponent<Image>();
 
         var fillGo = new GameObject("Fill", typeof(RectTransform), typeof(Image));
@@ -406,13 +513,17 @@ public class WorldHqTravelHud : MonoBehaviour
         var valGo = new GameObject("GaugeValue", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
         valGo.transform.SetParent(rowBot.transform, false);
         var valTmp = valGo.GetComponent<TextMeshProUGUI>();
-        valTmp.fontSize = 13;
+        valTmp.fontSize = 12;
         valTmp.color = new Color(0.78f, 0.8f, 0.84f, 1f);
-        valTmp.alignment = TextAlignmentOptions.MidlineRight;
+        valTmp.alignment = TextAlignmentOptions.TopLeft;
         valTmp.text = "0 / 0";
+        valTmp.enableWordWrapping = true;
+        valTmp.richText = true;
         var valLe = valGo.GetComponent<LayoutElement>();
-        valLe.minWidth = 120f;
-        valLe.preferredWidth = 220f;
+        valLe.minWidth = 140f;
+        valLe.preferredWidth = 260f;
+        valLe.minHeight = 48f;
+        valLe.preferredHeight = 52f;
         valLe.flexibleWidth = 0f;
         gaugeValueText = valTmp;
 

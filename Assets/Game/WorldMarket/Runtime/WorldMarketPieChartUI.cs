@@ -376,4 +376,7 @@ public class WorldMarketPieChartUI : MonoBehaviour
         _cachedUiBlockSprite.name = "WorldMarketPieChartUI_WhiteBlockSprite";
         return _cachedUiBlockSprite;
     }
+
+    /// <summary>단색 <see cref="Image"/> 칩 등 다른 UI에서 재사용.</summary>
+    public static Sprite GetSquareUiSprite() => ResolveSquareUiSprite();
 }

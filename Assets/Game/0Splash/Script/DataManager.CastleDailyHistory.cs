@@ -94,6 +94,51 @@ public partial class DataManager
         return CalculateBasePrice(s);
     }
 
+    /// <summary>
+    /// 모든 성의 (내재가 ÷ 성 기준가) 비율 통계. 자산 막대를 천하 분포 기준으로 나누는 데 사용.
+    /// </summary>
+    public bool TryGetWorldCastleAssetRatioStats(out float minRatio, out float maxRatio, out float meanRatio, out int count)
+    {
+        minRatio = maxRatio = meanRatio = 0f;
+        count = 0;
+        if (!IsStateReady || castleStateDataMap == null || castleMasterDataMap == null)
+            return false;
+
+        float sum = 0f;
+        minRatio = float.PositiveInfinity;
+        maxRatio = float.NegativeInfinity;
+
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null || string.IsNullOrWhiteSpace(s.id)) continue;
+            if (!castleMasterDataMap.TryGetValue(s.id.Trim(), out var m) || m == null) continue;
+
+            float intrinsic = CalculateBasePrice(s);
+            if (intrinsic < 0f) intrinsic = 0f;
+            float baseVal = Mathf.Max(1f, m.baseValue);
+            float r = intrinsic / baseVal;
+
+            count++;
+            sum += r;
+            if (r < minRatio) minRatio = r;
+            if (r > maxRatio) maxRatio = r;
+        }
+
+        if (count == 0)
+            return false;
+
+        meanRatio = sum / count;
+        if (minRatio > maxRatio)
+            minRatio = maxRatio = meanRatio;
+        if (!float.IsFinite(minRatio) || !float.IsFinite(maxRatio))
+        {
+            minRatio = maxRatio = meanRatio;
+        }
+
+        return true;
+    }
+
     /// <summary>주둔 추정(AI) + <see cref="CastleStateData.userDeployedTroops"/> 합. 상한은 <see cref="CastleMasterData.maxTroops"/>.</summary>
     public int EstimateCastleTotalGarrisonTroops(string castleId)
     {

@@ -23,7 +23,7 @@ public class UIMiniSparklineGraphic : MaskableGraphic
     public void SetHistories(IReadOnlyList<int> population, IReadOnlyList<float> sentiment)
     {
         _popNorm = NormalizeInts(population);
-        _sentNorm = NormalizeFloats(sentiment);
+        _sentNorm = NormalizeSentimentForSparkline(sentiment);
         SetVerticesDirty();
     }
 
@@ -104,23 +104,14 @@ public class UIMiniSparklineGraphic : MaskableGraphic
         return o;
     }
 
-    static float[] NormalizeFloats(IReadOnlyList<float> data)
+    /// <summary>민심 0~200(100 중간)을 스파크라인 세로 0~1에 매핑.</summary>
+    static float[] NormalizeSentimentForSparkline(IReadOnlyList<float> data)
     {
         if (data == null || data.Count < 2) return null;
         int n = data.Count;
-        float min = float.MaxValue;
-        float max = float.MinValue;
-        for (int i = 0; i < n; i++)
-        {
-            float v = data[i];
-            if (v < min) min = v;
-            if (v > max) max = v;
-        }
-
-        float range = Mathf.Max(0.0001f, max - min);
         var o = new float[n];
         for (int i = 0; i < n; i++)
-            o[i] = (data[i] - min) / range;
+            o[i] = Mathf.Clamp01(data[i] / 200f);
         return o;
     }
 }

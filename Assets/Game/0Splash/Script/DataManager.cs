@@ -821,12 +821,76 @@ public partial class DataManager : Singleton<DataManager>
         return (int)m.grade;
     }
 
+    /// <summary>홈/상단바에 표시되는 미투입 보유 병사 수.</summary>
+    public long GetUserSoldierPool()
+    {
+        var gm = GameManager.InstanceOrNull;
+        return gm?.currentUser != null ? Math.Max(0L, gm.currentUser.soldierCount) : 0L;
+    }
+
+    /// <summary>
+    /// 한 번에 투입 가능한 병력 상한: 성 정원 여유, 10% 퀵 배치 규칙, <see cref="GetUserSoldierPool"/> 중 최소.
+    /// </summary>
+    public int ComputeMaxDeployTroopsForCastle(string castleId)
+    {
+        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId)) return 0;
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null) return 0;
+        castleMasterDataMap.TryGetValue(castleId, out var master);
+        int cap = master != null ? master.maxTroops : 5000;
+        int room = Mathf.Max(0, cap - s.userDeployedTroops);
+        if (room <= 0) return 0;
+        long pool = GetUserSoldierPool();
+        if (pool <= 0L) return 0;
+        int batch = Mathf.Max(1, Mathf.RoundToInt(cap * 0.10f));
+        int maxByCastle = Mathf.Min(batch, room);
+        int poolCap = pool > int.MaxValue ? int.MaxValue : (int)pool;
+        int maxByGold = int.MaxValue;
+        var gm = GameManager.InstanceOrNull;
+        long gold = gm?.currentGold ?? 0L;
+        int unitGold = Mathf.Max(0, Mathf.RoundToInt(EvaluateBuyPriceForCastle(castleId)));
+        if (unitGold > 0)
+        {
+            long affordable = gold / unitGold;
+            maxByGold = affordable > int.MaxValue ? int.MaxValue : (int)affordable;
+        }
+
+        return Mathf.Min(maxByCastle, poolCap, maxByGold);
+    }
+
+    static void RefreshGlobalTopBarIfPossible()
+    {
+        var gm = GameManager.InstanceOrNull;
+        var gui = GlobalUIManager.InstanceOrNull;
+        if (gm?.currentUser == null || gui == null) return;
+        string name = string.IsNullOrEmpty(gm.currentUser.userName) ? "—" : gm.currentUser.userName;
+        gui.SetTopBarNumbers(name, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
+    }
+
     /// <summary> 병력 추가 시 가중 평균으로 averagePurchasePrice 갱신. </summary>
     public void AddUserCastleDeployment(string castleId, int additionalTroops, float pricePerTroop)
     {
         if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || additionalTroops <= 0) return;
         castleId = castleId.Trim();
         if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null) return;
+
+        long pool = GetUserSoldierPool();
+        if (pool <= 0L) return;
+        int poolCap = pool > int.MaxValue ? int.MaxValue : (int)pool;
+        castleMasterDataMap.TryGetValue(castleId, out var masterCap);
+        int mcap = masterCap != null ? masterCap.maxTroops : 5000;
+        int roomLeft = Mathf.Max(0, mcap - s.userDeployedTroops);
+        additionalTroops = Mathf.Min(additionalTroops, poolCap, roomLeft);
+        if (additionalTroops <= 0) return;
+
+        long unitGold = Math.Max(0L, (long)Mathf.RoundToInt(pricePerTroop));
+        long goldCost = unitGold * additionalTroops;
+        var gmSpend = GameManager.InstanceOrNull;
+        if (goldCost > 0L)
+        {
+            if (gmSpend == null || !gmSpend.UseGold(goldCost))
+                return;
+        }
 
         long newTotal = (long)s.userDeployedTroops + additionalTroops;
         if (newTotal > int.MaxValue) newTotal = int.MaxValue;
@@ -840,6 +904,15 @@ public partial class DataManager : Singleton<DataManager>
         }
 
         s.userDeployedTroops = (int)newTotal;
+
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser != null)
+        {
+            gm.currentUser.soldierCount = Math.Max(0L, gm.currentUser.soldierCount - additionalTroops);
+            gm.SaveUserData();
+            RefreshGlobalTopBarIfPossible();
+        }
+
         _stateDirty = true;
         FlushLiveScriptableObjects();
         OnStateTicked?.Invoke();
@@ -852,8 +925,18 @@ public partial class DataManager : Singleton<DataManager>
         castleId = castleId.Trim();
         if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null) return;
         if (s.userDeployedTroops <= 0) return;
+        int returned = s.userDeployedTroops;
         s.userDeployedTroops = 0;
         s.averagePurchasePrice = 0f;
+
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser != null)
+        {
+            gm.currentUser.soldierCount += returned;
+            gm.SaveUserData();
+            RefreshGlobalTopBarIfPossible();
+        }
+
         _stateDirty = true;
         FlushLiveScriptableObjects();
         OnStateTicked?.Invoke();
@@ -914,7 +997,8 @@ public partial class DataManager : Singleton<DataManager>
         if (!castleMasterDataMap.TryGetValue(s.id.Trim(), out var master) || master == null) return 0f;
 
         float gradeW = GradeWeight(master.grade);
-        float sentimentMul = Mathf.Clamp01(s.currentSentiment / 100f);
+        // 민심 0~200, 100=기존 1.0 배율에 해당
+        float sentimentMul = Mathf.Clamp(s.currentSentiment / 100f, 0f, 2f);
         float popMul = Mathf.Max(0f, s.currentPopulation / 1000f);
         return master.baseValue * sentimentMul * popMul * gradeW;
     }

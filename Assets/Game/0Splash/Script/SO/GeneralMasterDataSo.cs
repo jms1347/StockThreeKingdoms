@@ -6,19 +6,19 @@ using UnityEngine;
 public class GeneralMasterData
 {
     public string id;                // G001
-    public string name;              // Á¶Á¶
+    public string name;              // ï¿½ï¿½ï¿½ï¿½
     public Grade grade;              // SS, S, A...
-    public int power;                // ¹«·Â
-    public int intel;                // Áö·Â
-    public int charm;                // ¸Å·Â
-    public string buffId;            // S±Þ ÀÌ»ó ¹öÇÁ ID
+    public int power;                // ï¿½ï¿½ï¿½ï¿½
+    public int intel;                // ï¿½ï¿½ï¿½ï¿½
+    public int charm;                // ï¿½Å·ï¿½
+    public string buffId;            // Sï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ ID
 
-    [Header("ÃÊ±â ¹èÄ¡ µ¥ÀÌÅÍ")]
-    public string initialNationId;   // ÃÊ±â ¼Ò¼Ó ±¹°¡ (WEI, SHU, WU, OTHERS)
-    public string initialCastleId;   // ÃÊ±â ¹èÄ¡ ¼º ID (C01 ~ C50)
+    [Header("ï¿½Ê±ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public string initialNationId;   // ï¿½Ê±ï¿½ ï¿½Ò¼ï¿½ ï¿½ï¿½ï¿½ï¿½ (WEI, SHU, WU, OTHERS)
+    public string initialCastleId;   // ï¿½Ê±ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ ID (C01 ~ C50)
 
     [Header("UI")]
-    [Tooltip("¼º »ó¼¼ ÅÂ¼ö ÃÊ»óÈ­(¾øÀ¸¸é ÀÌ´Ï¼È Ç¥½Ã).")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ ï¿½Â¼ï¿½ ï¿½Ê»ï¿½È­(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì´Ï¼ï¿½ Ç¥ï¿½ï¿½).")]
     public Sprite governorPortrait;
 
     public bool HasBuff => !string.IsNullOrEmpty(buffId);

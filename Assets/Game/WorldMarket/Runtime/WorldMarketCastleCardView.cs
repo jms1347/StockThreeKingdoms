@@ -227,10 +227,12 @@ public class WorldMarketCastleCardView : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         if (dm == null || string.IsNullOrWhiteSpace(_boundCastleId)) return;
         if (!dm.castleStateDataMap.TryGetValue(_boundCastleId.Trim(), out var st) || st == null) return;
-        dm.castleMasterDataMap.TryGetValue(_boundCastleId.Trim(), out var master);
-        int troops = ComputeQuickDeployTroops(st, master);
+        int troops = dm.ComputeMaxDeployTroopsForCastle(_boundCastleId.Trim());
         if (troops <= 0) return;
-        dm.AddUserCastleDeployment(_boundCastleId.Trim(), troops, st.currentBuyPrice);
+        if (quickDeployTroopFixed > 0)
+            troops = Mathf.Min(quickDeployTroopFixed, troops);
+        dm.AddUserCastleDeployment(_boundCastleId.Trim(), troops,
+            dm.EvaluateBuyPriceForCastle(_boundCastleId.Trim()));
     }
 
     void OnRecallClicked()
@@ -238,15 +240,6 @@ public class WorldMarketCastleCardView : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         if (dm == null || string.IsNullOrWhiteSpace(_boundCastleId)) return;
         dm.RecallUserCastleDeployment(_boundCastleId.Trim());
-    }
-
-    int ComputeQuickDeployTroops(CastleStateData st, CastleMasterData master)
-    {
-        if (quickDeployTroopFixed > 0)
-            return quickDeployTroopFixed;
-        int cap = master != null ? master.maxTroops : 5000;
-        int v = Mathf.Max(1, Mathf.RoundToInt(cap * quickDeployGarrisonRatio));
-        return Mathf.Clamp(v, 1, Mathf.Max(1, cap - st.userDeployedTroops));
     }
 
     void OnDisable()
@@ -546,6 +539,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (stakeGaugeFillImage != null && hasStock && maxG > 0)
             stakeGaugeFillImage.fillAmount = Mathf.Clamp01(troopCount / (float)maxG);
+
+        if (deployButton != null)
+            deployButton.interactable = dm.ComputeMaxDeployTroopsForCastle(castleId) > 0;
 
         if (roiText != null)
         {
