@@ -4,20 +4,24 @@ public enum BuffType
 {
     None = 0,
 
-    // 1. 가치 관련
-    ValueMultiplier = 1, // 성 가치(시세) 배율 증가
-    ParValueModifier = 2,      // 성 액면가(가입/탈퇴비 기준) 조정
+    // 1. 가치 및 시세 관련 (MTS 핵심)
+    CastleValue = 1,       // 성 가치(시세) 배율 증가 (최종가 영향)
+    PriceValue = 2,      // 성 액면가 조정 (시세 과열/할인 - 기초가액 영향)
 
-    // 2. 성장 관련
-    SentimentRecovery = 3,     // 민심 회복량 증가
-    PopulationGrowth = 4,      // 백성 수 증가 속도 가속
+    // 2. 심리 및 성장 관련
+    SentimentRecovery = 3,     // 민심 직접 가감 (합연산: +10, -20 등)
+    PopulationGrowth = 4,      // 백성 수 증가 속도 가속 (곱연산: 1.1f 등)
 
-    // 3. 전쟁 관련 (손실 방어)
-    WarAttackLossReduction = 5,  // 전쟁 공격 시 병사 손실율 감소
-    WarDefenseLossReduction = 6, // 전쟁 수비 시 병사 손실율 감소
+    // 3. 전쟁 및 방어 관련
+    WarAttackLossReduction = 5,
+    WarDefenseLossReduction = 6,
 
     // 4. 보상 관련
-    DividendBonus = 7          // 배당금(보상) 추가 보너스
+    DividendBonus = 7,         // 배당금 추가 보너스 (합연산)
+    DividendMultiplier = 8,    // 배당 배율 조정 (곱연산: 1.5f, 0.5f)
+
+            TradeLock = 10,            // 거래 정지 (1: 정지, 0: 정상)
+
 }
 [System.Serializable]
 public class BuffMasterData

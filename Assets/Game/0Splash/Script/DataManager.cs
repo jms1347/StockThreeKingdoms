@@ -25,6 +25,7 @@ public partial class DataManager : Singleton<DataManager>
     [SerializeField] BuffMasterDataSo buffMasterDataSo;
     [SerializeField] NationMasterDataSo nationMasterDataSo;
     [SerializeField] RegionMasterDataSo regionMasterDataSo;
+    [SerializeField] EventMasterDataSo eventMasterDataSo;
 
     [Header("경제 기본값 SO (선택)")]
     [Tooltip("GlobalEconomy 정적 필드 초기화.")]
@@ -65,6 +66,10 @@ public partial class DataManager : Singleton<DataManager>
     [ShowInInspector]
     [DictionaryDrawerSettings(KeyLabel = "지역 코드", ValueLabel = "지역 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
     public Dictionary<string, RegionMasterData> regionMasterDataMap = new Dictionary<string, RegionMasterData>();
+
+    [ShowInInspector]
+    [DictionaryDrawerSettings(KeyLabel = "이벤트 ID", ValueLabel = "이벤트 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+    public Dictionary<string, EventMasterData> eventMasterDataMap = new Dictionary<string, EventMasterData>();
 
     /// <summary>성 ID → 지역 코드(R01 등). <see cref="RebuildRegionCastleLookup"/>로 갱신.</summary>
     public Dictionary<string, string> castleIdToRegionIdMap = new Dictionary<string, string>();
@@ -122,7 +127,7 @@ public partial class DataManager : Singleton<DataManager>
         SyncRuntimeMapsFromSo();
         IsReady = true;
         OnDataReady?.Invoke(); // 구독 중인 UI(UpgradeButton 등)가 초기화되도록 호출
-        Debug.Log($"[DataManager] 데이터 세팅 완료! 레벨룰 {levelRuleMap.Count}개, 성 {castleMasterDataMap.Count}개, 장수 {generalMasterDataMap.Count}개, 버프 {buffMasterDataMap.Count}개, 세력 {nationMasterDataMap.Count}개, 지역 {regionMasterDataMap.Count}개를 로드했습니다.");
+        Debug.Log($"[DataManager] 데이터 세팅 완료! 레벨룰 {levelRuleMap.Count}개, 성 {castleMasterDataMap.Count}개, 장수 {generalMasterDataMap.Count}개, 버프 {buffMasterDataMap.Count}개, 세력 {nationMasterDataMap.Count}개, 지역 {regionMasterDataMap.Count}개, 이벤트 {eventMasterDataMap.Count}개를 로드했습니다.");
 
         InitializeStateData();
     }
@@ -169,6 +174,23 @@ public partial class DataManager : Singleton<DataManager>
         return null;
     }
 
+    /// <summary>
+    /// 구글 시트로 버프 맵을 채운 뒤, SO에만 있는 ID(예: 이벤트용 E01~E11)를 맵에 합칩니다.
+    /// <see cref="GoogleSheetManager"/>에서 SetBuff 직후 호출.
+    /// </summary>
+    public void MergeBuffMasterFromSoMissingKeys()
+    {
+        if (buffMasterDataSo == null || buffMasterDataSo.list == null) return;
+        for (int i = 0; i < buffMasterDataSo.list.Count; i++)
+        {
+            var b = buffMasterDataSo.list[i];
+            if (b == null || string.IsNullOrWhiteSpace(b.id)) continue;
+            string id = b.id.Trim();
+            if (!buffMasterDataMap.ContainsKey(id))
+                buffMasterDataMap[id] = b;
+        }
+    }
+
     public NationMasterData GetNationMasterData(string id)
     {
         if (string.IsNullOrWhiteSpace(id)) return null;
@@ -180,6 +202,13 @@ public partial class DataManager : Singleton<DataManager>
     {
         if (string.IsNullOrWhiteSpace(regionId)) return null;
         if (regionMasterDataMap.TryGetValue(regionId.Trim(), out RegionMasterData data)) return data;
+        return null;
+    }
+
+    public EventMasterData GetEventMasterData(string eventId)
+    {
+        if (string.IsNullOrWhiteSpace(eventId)) return null;
+        if (eventMasterDataMap.TryGetValue(eventId.Trim(), out EventMasterData data)) return data;
         return null;
     }
 
@@ -1023,11 +1052,11 @@ public partial class DataManager : Singleton<DataManager>
         if (buff == null) return 0f;
 
         // 기본: ValueMultiplier는 Buy/Sell 모두 적용
-        if (buff.type == BuffType.ValueMultiplier)
+        if (buff.type == BuffType.CastleValue)
             return buff.value;
 
         // ParValueModifier: 액면가(매수 기준) 할인 — value=0.1이면 매수가 10% 유리 (multiplier -0.1)
-        if (isBuy && buff.type == BuffType.ParValueModifier)
+        if (isBuy && buff.type == BuffType.PriceValue)
             return -Mathf.Abs(buff.value);
 
         return 0f;
@@ -1075,6 +1104,7 @@ public partial class DataManager : Singleton<DataManager>
         SyncBuffFromSoIfNeeded();
         SyncNationFromSoIfNeeded();
         SyncRegionFromSoIfNeeded();
+        SyncEventFromSoIfNeeded();
     }
 
     public void SyncSoFromRuntimeMaps()
@@ -1097,6 +1127,9 @@ public partial class DataManager : Singleton<DataManager>
         if (regionMasterDataSo != null)
             regionMasterDataSo.list = regionMasterDataMap.Values.OrderBy(x => x.id).ToList();
 
+        if (eventMasterDataSo != null)
+            eventMasterDataSo.list = eventMasterDataMap.Values.OrderBy(x => x.id).ToList();
+
 #if UNITY_EDITOR
         if (levelRuleDataSo != null) EditorUtility.SetDirty(levelRuleDataSo);
         if (castleMasterDataSo != null) EditorUtility.SetDirty(castleMasterDataSo);
@@ -1104,6 +1137,7 @@ public partial class DataManager : Singleton<DataManager>
         if (buffMasterDataSo != null) EditorUtility.SetDirty(buffMasterDataSo);
         if (nationMasterDataSo != null) EditorUtility.SetDirty(nationMasterDataSo);
         if (regionMasterDataSo != null) EditorUtility.SetDirty(regionMasterDataSo);
+        if (eventMasterDataSo != null) EditorUtility.SetDirty(eventMasterDataSo);
         AssetDatabase.SaveAssets();
 #endif
     }
@@ -1195,5 +1229,19 @@ public partial class DataManager : Singleton<DataManager>
         }
 
         RebuildRegionCastleLookup();
+    }
+
+    void SyncEventFromSoIfNeeded()
+    {
+        if (eventMasterDataMap.Count > 0 || eventMasterDataSo == null || eventMasterDataSo.list == null)
+            return;
+
+        for (int i = 0; i < eventMasterDataSo.list.Count; i++)
+        {
+            var item = eventMasterDataSo.list[i];
+            if (item == null || string.IsNullOrWhiteSpace(item.id))
+                continue;
+            eventMasterDataMap[item.id.Trim()] = item;
+        }
     }
 }

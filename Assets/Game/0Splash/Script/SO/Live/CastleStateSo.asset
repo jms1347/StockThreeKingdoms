@@ -23,8 +23,8 @@ MonoBehaviour:
     currentLord: 1
     currentBuyPrice: 164800
     currentSellPrice: 155200
-    userDeployedTroops: 2
-    averagePurchasePrice: 164800
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
     historyPopulation7Day:
     - 84433.73
     - 86564.016

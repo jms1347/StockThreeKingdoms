@@ -47,7 +47,9 @@ public class SingletonLoader : MonoBehaviour
         string target = ResolveNextSceneName();
         if (string.IsNullOrEmpty(target))
         {
-            Debug.LogWarning("[SingletonLoader] 빌드 프로필에서 로드 가능한 씬을 찾지 못해 씬 전환을 건너뜁니다.");
+            // 의도적으로 nextSceneName을 비운 경우(빈 문자열)는 조용히 유지
+            if (!string.IsNullOrWhiteSpace(nextSceneName))
+                Debug.LogWarning("[SingletonLoader] 빌드에 없는 nextSceneName이라 전환하지 않습니다: " + nextSceneName);
             return;
         }
 
@@ -61,9 +63,13 @@ public class SingletonLoader : MonoBehaviour
 
     string ResolveNextSceneName()
     {
+        // nextSceneName을 비워 두면: 폴백 없이 현재 씬에 머뭅니다(NewsScene·HomeScene 단독 테스트 등).
+        if (nextSceneName != null && nextSceneName.Trim().Length == 0)
+            return string.Empty;
+
         // 1) Inspector에서 지정한 씬 우선
-        if (IsSceneInBuildByName(nextSceneName))
-            return nextSceneName;
+        if (!string.IsNullOrWhiteSpace(nextSceneName) && IsSceneInBuildByName(nextSceneName.Trim()))
+            return nextSceneName.Trim();
 
         // 2) 월드 탭 기본 씬
         if (IsSceneInBuildByName("WorldScene"))

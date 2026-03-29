@@ -13,10 +13,7 @@ MonoBehaviour:
   m_Name: UserPortfolioSo
   m_EditorClassIdentifier: Assembly-CSharp::UserPortfolioSo
   totalGold: 56351
-  holdings:
-  - castleId: C01
-    troopCount: 2
-    averagePurchasePrice: 164800
+  holdings: []
   homeCastleId: C01
   travelGaugePoints: 4262.485
   currentStepCount: 33000

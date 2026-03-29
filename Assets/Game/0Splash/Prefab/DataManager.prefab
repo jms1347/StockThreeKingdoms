@@ -50,6 +50,7 @@ MonoBehaviour:
   buffMasterDataSo: {fileID: 11400000, guid: f5580141b7387d6488d5e698d11373f9, type: 2}
   nationMasterDataSo: {fileID: 11400000, guid: 94607bde24f024c4db10a7b9a088c631, type: 2}
   regionMasterDataSo: {fileID: 11400000, guid: b3a91c2d4e5f60718293a4b5c6d7e8f9, type: 2}
+  eventMasterDataSo: {fileID: 11400000, guid: a7c3e2d1b4f5069786a5342bc1def002, type: 2}
   globalEconomyDefaultsSo: {fileID: 0}
   castleWorldInitialScenarioSo: {fileID: 0}
   castleStateLiveSo: {fileID: 11400000, guid: c54af1baa5e7d1642b670ee3e05eae74, type: 2}

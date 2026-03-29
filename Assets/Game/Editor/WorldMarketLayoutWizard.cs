@@ -7,14 +7,14 @@ using TMPro;
 
 /// <summary>
 /// 천하탭(MTS) 레이아웃 자동 생성.
-/// 메뉴: StockThreeKingdoms/천하/천하탭 만들기 (MTS Layout)
+/// 메뉴: StockThreeKingdoms/Layout/천하 메뉴/천하탭 만들기 (MTS Layout)
 /// - 상단: Faction Market Share(가로 스택 막대)
 /// - 중단: 필터 탭(전체·보유·교전·이벤트·우량) + Castle Stocks 리스트(ScrollRect + 템플릿 2종)
 /// - 팝업: CityDetailPanel(기본 비활성)
 /// </summary>
 public static class WorldMarketLayoutWizard
 {
-    const string MenuPath = "StockThreeKingdoms/천하/천하탭 만들기 (MTS Layout)";
+    const string MenuPath = "StockThreeKingdoms/Layout/천하 메뉴/천하탭 만들기 (MTS Layout)";
     const float ContentTopInset = 160f;    // GlobalUI TopBar(140) + 여유
     const float ContentBottomInset = 180f; // GlobalUI BottomTabBar(160) + 여유
 

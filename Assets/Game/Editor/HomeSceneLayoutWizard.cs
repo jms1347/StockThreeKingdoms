@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.SceneManagement;
 
 /// <summary>
 /// HomeScene(구 TestScene) 레이아웃을 "한 번에" 자동 생성/수정합니다.
@@ -15,7 +14,7 @@ using UnityEditor.SceneManagement;
 /// </summary>
 public static class HomeSceneLayoutWizard
 {
-    const string MenuPath = "StockThreeKingdoms/Home/HomeScene 레이아웃 자동 생성(전체)";
+    const string MenuPath = "StockThreeKingdoms/Layout/Home/HomeScene 레이아웃 자동 생성(전체)";
 
     const float ContentTopInset = 160f;    // GlobalUI TopBar(140) + 여유
     const float ContentBottomInset = 180f; // GlobalUI BottomTabBar(160) + 여유

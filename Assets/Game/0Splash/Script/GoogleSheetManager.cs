@@ -24,6 +24,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     const string nationMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1621681501&range=A2:E";
     /// <summary>지역(섹터) 마스터 TSV URL. A:지역코드, B:섹터명, C:특징, D:배정 성 예시 (낙양(C01) 형식, range=A2:D 등)</summary>
     const string regionMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1716545491&range=A2:D";
+    /// <summary>이벤트 마스터 TSV. A:id, B:name, C:scope(Region|Castle), D:minDays, E:maxDays, F:buffCodes(콤마). 비우면 시트에서 가져오지 않고 SO만 사용.</summary>
+    const string eventMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=902917272&range=A2:F";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -46,12 +48,15 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         string buffMasterResult = await GetGSDataToURL(buffMasterDataURL);
         string nationMasterResult = await GetGSDataToURL(nationMasterDataURL);
         string regionMasterResult = await GetGSDataToURL(regionMasterDataURL);
+        string eventMasterResult = string.IsNullOrWhiteSpace(eventMasterDataURL)
+            ? ""
+            : await GetGSDataToURL(eventMasterDataURL);
 
 #if UNITY_EDITOR
         // 에디터에서 수동 실행(비플레이) 시 DataManager가 없더라도 SO에 직접 반영
         if (!Application.isPlaying && DataManager.InstanceOrNull == null)
         {
-            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult);
+            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult, eventMasterResult);
             IsSetData.Value = saved;
             if (saved)
                 Debug.Log("[GoogleSheetManager] DataManager 없이 SO 저장 완료.");
@@ -73,8 +78,10 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         SetCastleMasterData(dm, castleMasterResult);
         SetGeneralMasterData(dm, generalMasterResult);
         SetBuffMasterData(dm, buffMasterResult);
+        dm.MergeBuffMasterFromSoMissingKeys();
         SetNationMasterData(dm, nationMasterResult);
         SetRegionMasterData(dm, regionMasterResult);
+        SetEventMasterData(dm, eventMasterResult);
 
         // 3. 런타임 맵 내용을 SO 리스트에도 반영 (인스펙터에서 즉시 확인 가능)
         dm.SyncSoFromRuntimeMaps();
@@ -359,6 +366,71 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         dm.RebuildRegionCastleLookup();
     }
 
+    static EventScope ParseEventScopeCell(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return EventScope.Castle;
+        raw = raw.Trim();
+        if (int.TryParse(raw, out int n) && Enum.IsDefined(typeof(EventScope), n))
+            return (EventScope)n;
+        if (Enum.TryParse(raw, true, out EventScope s))
+            return s;
+        return EventScope.Castle;
+    }
+
+    static List<string> ParseEventBuffCodesCell(string cell)
+    {
+        var list = new List<string>();
+        if (string.IsNullOrWhiteSpace(cell)) return list;
+        string[] parts = cell.Split(',');
+        for (int i = 0; i < parts.Length; i++)
+        {
+            string t = parts[i].Trim();
+            if (!string.IsNullOrEmpty(t))
+                list.Add(t);
+        }
+
+        return list;
+    }
+
+    void SetEventMasterData(DataManager dm, string data)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrEmpty(data)) return;
+
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] EventMaster TSV가 아닌 HTML이 반환되었습니다. 시트가 '웹에 게시' 상태인지, URL이 정확한지 확인해 주세요.");
+            return;
+        }
+
+        dm.eventMasterDataMap.Clear();
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 5) continue;
+
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            var ev = new EventMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                scope = ParseEventScopeCell(cells.Length > 2 ? cells[2] : ""),
+                buffCodes = ParseEventBuffCodesCell(cells.Length > 5 ? cells[5] : "")
+            };
+
+            int.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out ev.minDays);
+            int.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", out ev.maxDays);
+            if (ev.maxDays < ev.minDays)
+                ev.maxDays = ev.minDays;
+
+            dm.eventMasterDataMap[ev.id] = ev;
+        }
+    }
+
     /// <summary>"낙양(C01), 호로관(C21)" 등 괄호 안의 성 ID를 순서대로 추출.</summary>
     static List<string> ParseCastleIdsFromAssignedExamplesCell(string cell)
     {
@@ -387,7 +459,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     }
 
 #if UNITY_EDITOR
-    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData)
+    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData, string eventData)
     {
         var levelSo = FindAsset<LevelRuleDataSo>();
         var castleSo = FindAsset<CastleMasterDataSo>();
@@ -395,6 +467,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         var buffSo = FindAsset<BuffMasterDataSo>();
         var nationSo = FindAsset<NationMasterDataSo>();
         var regionSo = FindAsset<RegionMasterDataSo>();
+        var eventSo = FindAsset<EventMasterDataSo>();
 
         if (levelSo == null || castleSo == null || generalSo == null || buffSo == null || nationSo == null || regionSo == null)
         {
@@ -410,6 +483,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             nationSo.list = ParseNationList(nationData);
         if (!string.IsNullOrWhiteSpace(regionData) && !regionData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
             regionSo.list = ParseRegionList(regionData);
+        if (eventSo != null && !string.IsNullOrWhiteSpace(eventData) && !eventData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            eventSo.list = ParseEventList(eventData);
 
         EditorUtility.SetDirty(levelSo);
         EditorUtility.SetDirty(castleSo);
@@ -419,6 +494,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             EditorUtility.SetDirty(nationSo);
         if (!string.IsNullOrWhiteSpace(regionData) && !regionData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
             EditorUtility.SetDirty(regionSo);
+        if (eventSo != null && !string.IsNullOrWhiteSpace(eventData) && !eventData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            EditorUtility.SetDirty(eventSo);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         return true;
@@ -620,6 +697,37 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             if (item != null)
                 list.Add(item);
         }
+        return list;
+    }
+
+    List<EventMasterData> ParseEventList(string data)
+    {
+        var list = new List<EventMasterData>();
+        if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 5) continue;
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            var ev = new EventMasterData
+            {
+                id = id,
+                name = cells.Length > 1 ? cells[1].Trim() : "",
+                scope = ParseEventScopeCell(cells.Length > 2 ? cells[2] : ""),
+                buffCodes = ParseEventBuffCodesCell(cells.Length > 5 ? cells[5] : "")
+            };
+            int.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out ev.minDays);
+            int.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", out ev.maxDays);
+            if (ev.maxDays < ev.minDays)
+                ev.maxDays = ev.minDays;
+            list.Add(ev);
+        }
+
         return list;
     }
 #endif
