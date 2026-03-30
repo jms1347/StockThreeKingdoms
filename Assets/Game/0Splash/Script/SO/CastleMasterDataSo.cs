@@ -24,7 +24,9 @@ public class CastleMasterData
     public string initialNationId;   // 초기 점령 국가 (WEI, SHU, WU...)
 
     [Header("경제/군사 스탯")]
-    public float baseValue;          // 초기 액면가
+    [Tooltip("입성(매수) 시 징수 관부율(%). 시트 F열 ? 20이면 본금의 20%")]
+    public float initialTaxRatePercent;
+    public float baseValue;          // 초기 액면가 (시트 G열)
     public int maxTroops;            // 최대 군대 수용량
     public int initPopulation;       // 초기 백성 수
 

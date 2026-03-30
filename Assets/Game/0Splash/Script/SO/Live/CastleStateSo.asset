@@ -14,1423 +14,1452 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CastleStateSo
   castles:
   - castleId: C01
-    currentPopulation: 100000
-    currentSentiment: 100
+    currentPopulation: 123985
+    currentSentiment: 76.98723
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
-    currentGovernorId: 
+    currentGovernorId: G01
     currentLord: 1
-    currentBuyPrice: 164800
-    currentSellPrice: 155200
+    currentBuyPrice: 152724.19
+    castleTaxRatePercent: 5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 84433.73
-    - 86564.016
-    - 90476.53
-    - 86529.55
-    - 89217.39
-    - 90672.07
-    - 96288.64
+    - 99405.63
+    - 104445.195
+    - 104380.555
+    - 108778.484
+    - 120113.14
+    - 123097.32
+    - 117842.766
     historySentiment7Day:
-    - 100
-    - 100
-    - 97.46948
-    - 97.1377
-    - 95.62906
-    - 100
-    - 100
-    buyPricePrevDayClose: 164800
+    - 73.74789
+    - 73.13119
+    - 70.038864
+    - 74.13659
+    - 73.19106
+    - 85.078674
+    - 79.78123
+    buyPricePrevDayClose: 152724.19
   - castleId: C02
-    currentPopulation: 70000
-    currentSentiment: 100
+    currentPopulation: 54064
+    currentSentiment: 89.915794
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 77868
-    currentSellPrice: 73332
+    currentBuyPrice: 52501.043
+    castleTaxRatePercent: 4.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 58370.258
-    - 56413.676
-    - 65461.22
-    - 65955.945
-    - 69797.55
-    - 72657.71
-    - 73326.01
+    - 45100.582
+    - 44194.613
+    - 51019.887
+    - 53774.125
+    - 49304.742
+    - 49420.047
+    - 53040.996
     historySentiment7Day:
-    - 98.529884
+    - 80.25161
+    - 87.177956
+    - 93.35288
+    - 83.808624
+    - 86.946075
+    - 98.87306
     - 100
-    - 92.608315
-    - 96.840866
-    - 95.98383
-    - 100
-    - 100
-    buyPricePrevDayClose: 77868
+    buyPricePrevDayClose: 52501.043
   - castleId: C03
-    currentPopulation: 40000
-    currentSentiment: 100
+    currentPopulation: 36319
+    currentSentiment: 38.614403
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 24720
-    currentSellPrice: 23280
+    currentLord: 4
+    currentBuyPrice: 8414.62
+    castleTaxRatePercent: 3.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 36160.656
-    - 36994.05
-    - 37347.133
-    - 36421.58
-    - 39346.254
-    - 40008.97
-    - 39578.418
+    - 32009.637
+    - 30100.045
+    - 30784.482
+    - 32507.268
+    - 31971.941
+    - 36222.605
+    - 35179.156
     historySentiment7Day:
-    - 100
-    - 95.146904
-    - 97.44281
-    - 98.911766
-    - 100
-    - 99.596245
-    - 100
-    buyPricePrevDayClose: 24720
+    - 35.520912
+    - 30.28516
+    - 40.025665
+    - 39.414246
+    - 46.75463
+    - 41.489437
+    - 45.558735
+    buyPricePrevDayClose: 8414.62
   - castleId: C04
-    currentPopulation: 80000
-    currentSentiment: 100
+    currentPopulation: 78808
+    currentSentiment: 96.76201
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 83430
-    currentSellPrice: 78570
+    currentLord: 2
+    currentBuyPrice: 77209.41
+    castleTaxRatePercent: 4
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 66792.29
-    - 74864.28
-    - 73947.586
-    - 70213.58
-    - 71732.92
-    - 78962.93
-    - 85146.59
+    - 62522.73
+    - 73278.65
+    - 67085.336
+    - 67926.875
+    - 72535.29
+    - 72805.445
+    - 76205.75
     historySentiment7Day:
-    - 92.41695
-    - 90.605804
-    - 93.48355
+    - 92.19814
+    - 87.22129
+    - 98.05111
+    - 96.52391
     - 100
     - 100
     - 100
-    - 100
-    buyPricePrevDayClose: 83430
+    buyPricePrevDayClose: 77209.41
   - castleId: C05
-    currentPopulation: 30000
-    currentSentiment: 100
+    currentPopulation: 32459
+    currentSentiment: 35.118473
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 13596
-    currentSellPrice: 12804
+    currentGovernorId: G03
+    currentLord: 3
+    currentBuyPrice: 5015.6064
+    castleTaxRatePercent: 2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 25666.018
-    - 24457.611
-    - 27360.25
-    - 28854.604
-    - 28768.416
-    - 29925.162
-    - 30320.074
+    - 26709.812
+    - 28061.244
+    - 27322.572
+    - 30037.305
+    - 30941.162
+    - 30678.363
+    - 30847.592
     historySentiment7Day:
-    - 91.33724
-    - 90.42565
-    - 99.67905
-    - 98.19022
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 13596
+    - 27.032099
+    - 25.139454
+    - 34.635303
+    - 39.138206
+    - 39.308784
+    - 45.984417
+    - 41.60424
+    buyPricePrevDayClose: 5015.6064
   - castleId: C06
-    currentPopulation: 20000
-    currentSentiment: 100
+    currentPopulation: 23209
+    currentSentiment: 33.496918
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 6180
-    currentSellPrice: 5820
+    currentLord: 3
+    currentBuyPrice: 2332.2898
+    castleTaxRatePercent: 1.2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 16157.013
-    - 17835.676
-    - 17734.26
-    - 19333.68
-    - 17603.48
-    - 18412.412
-    - 21487.365
+    - 19627.041
+    - 20335
+    - 19786.342
+    - 22053.021
+    - 22772.455
+    - 22940.744
+    - 24775.422
     historySentiment7Day:
-    - 88.06943
-    - 95.38918
-    - 100
-    - 99.08347
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 6180
+    - 29.053856
+    - 24.728466
+    - 27.681023
+    - 39.943806
+    - 40.892715
+    - 38.033634
+    - 39.636612
+    buyPricePrevDayClose: 2332.2898
   - castleId: C07
-    currentPopulation: 90000
-    currentSentiment: 100
+    currentPopulation: 98009
+    currentSentiment: 74.62137
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 133488
-    currentSellPrice: 125712
+    currentBuyPrice: 105315.35
+    castleTaxRatePercent: 5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 77441.89
-    - 73950.92
-    - 83353.22
-    - 89580.016
-    - 86105.6
-    - 94028.805
-    - 92216.484
+    - 83540.4
+    - 83319.34
+    - 90117.02
+    - 88993.82
+    - 99732.65
+    - 102375.88
+    - 93826.664
     historySentiment7Day:
-    - 92.151924
-    - 89.52518
-    - 93.755
-    - 94.81261
-    - 99.80764
-    - 100
-    - 100
-    buyPricePrevDayClose: 133488
+    - 75.133095
+    - 77.62091
+    - 78.18003
+    - 69.61579
+    - 80.168465
+    - 75.51358
+    - 81.72623
+    buyPricePrevDayClose: 105315.35
   - castleId: C08
-    currentPopulation: 25000
-    currentSentiment: 100
+    currentPopulation: 21372
+    currentSentiment: 26.325462
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 9913.75
-    currentSellPrice: 9336.25
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
+    currentLord: 2
+    currentBuyPrice: 2166.117
+    castleTaxRatePercent: 2
+    userDeployedTroops: 4994
+    averagePurchasePrice: 66.3355
     historyPopulation7Day:
-    - 19816.578
-    - 20445.47
-    - 23894.88
-    - 21854.75
-    - 22748.025
-    - 24924.475
-    - 24495.033
+    - 17810.713
+    - 17833.95
+    - 17900.129
+    - 18667.555
+    - 18854.133
+    - 22116.863
+    - 21054.145
     historySentiment7Day:
-    - 96.261955
-    - 89.84682
-    - 97.89619
-    - 100
-    - 99.38952
-    - 100
-    - 100
-    buyPricePrevDayClose: 9913.75
+    - 26.194363
+    - 17.926434
+    - 18.894482
+    - 21.007761
+    - 23.333027
+    - 27.335705
+    - 39.22814
+    buyPricePrevDayClose: 2166.117
   - castleId: C09
-    currentPopulation: 20000
-    currentSentiment: 100
+    currentPopulation: 23504
+    currentSentiment: 91.03113
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 6798
-    currentSellPrice: 6402
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
+    currentLord: 0
+    currentBuyPrice: 7060.6655
+    castleTaxRatePercent: 2.2
+    userDeployedTroops: 565
+    averagePurchasePrice: 12.586968
     historyPopulation7Day:
-    - 17248.166
-    - 17134.523
-    - 17380.592
-    - 19467.537
-    - 20454.64
-    - 18101.049
-    - 19295.04
+    - 19887.066
+    - 20316.23
+    - 20499.662
+    - 23050.998
+    - 20919.732
+    - 23745.938
+    - 23267.436
     historySentiment7Day:
-    - 96.784256
+    - 78.93555
+    - 87.943954
+    - 90.02962
+    - 90.120544
+    - 97.72213
     - 100
-    - 91.37334
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 6798
+    - 92.69581
+    buyPricePrevDayClose: 7060.6655
   - castleId: C10
-    currentPopulation: 50000
-    currentSentiment: 100
+    currentPopulation: 45728
+    currentSentiment: 62.962643
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 41715
-    currentSellPrice: 39285
+    currentLord: 1
+    currentBuyPrice: 23321.162
+    castleTaxRatePercent: 4
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 43048.03
-    - 40663.27
-    - 47379.152
-    - 47179.727
-    - 47084.72
-    - 47660.562
-    - 49241.87
+    - 40607.95
+    - 43099.92
+    - 38411.68
+    - 42484.016
+    - 46413.797
+    - 41356.957
+    - 46564.35
     historySentiment7Day:
-    - 96.11066
-    - 89.58106
-    - 94.42202
-    - 98.44879
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 41715
+    - 52.292614
+    - 54.948914
+    - 67.30464
+    - 58.67067
+    - 59.747635
+    - 69.06169
+    - 67.22601
+    buyPricePrevDayClose: 23321.162
   - castleId: C11
-    currentPopulation: 45000
-    currentSentiment: 100
-    isWar: 0
+    currentPopulation: 33661
+    currentSentiment: 67.313736
+    isWar: 1
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 34414.875
-    currentSellPrice: 32410.125
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
+    currentLord: 1
+    currentBuyPrice: 16823.92
+    castleTaxRatePercent: 3.8
+    userDeployedTroops: 6147
+    averagePurchasePrice: 100.16152
     historyPopulation7Day:
-    - 36110.85
-    - 41503.67
-    - 37401.707
-    - 38519.734
-    - 43589.484
-    - 43865.137
-    - 46894.918
+    - 30770.586
+    - 27112.988
+    - 32435.242
+    - 32604.8
+    - 34151.117
+    - 31714.945
+    - 36113.266
     historySentiment7Day:
-    - 94.00375
-    - 92.080605
-    - 100
-    - 94.631424
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 34414.875
+    - 66.118546
+    - 65.78439
+    - 68.99695
+    - 72.249886
+    - 63.563156
+    - 74.705826
+    - 77.14027
+    buyPricePrevDayClose: 16823.92
   - castleId: C12
-    currentPopulation: 15000
-    currentSentiment: 100
+    currentPopulation: 13721
+    currentSentiment: 91.95821
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 3862.5
-    currentSellPrice: 3637.5
+    currentGovernorId: G03
+    currentLord: 1
+    currentBuyPrice: 3154.3965
+    castleTaxRatePercent: 1.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 12853.53
-    - 13543.914
-    - 12455.356
-    - 13077.657
-    - 14848.158
-    - 15769.14
-    - 16166.717
+    - 11130.068
+    - 12172.946
+    - 12600.479
+    - 12916.078
+    - 12699.088
+    - 13320.876
+    - 13086.494
     historySentiment7Day:
-    - 90.161865
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 3862.5
+    - 89.29849
+    - 83.41891
+    - 82.9751
+    - 91.18743
+    - 92.30521
+    - 99.77983
+    - 94.786964
+    buyPricePrevDayClose: 3154.3965
   - castleId: C13
-    currentPopulation: 85000
-    currentSentiment: 100
+    currentPopulation: 64217
+    currentSentiment: 57.330643
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
-    currentLord: 3
-    currentBuyPrice: 119068
-    currentSellPrice: 112132
+    currentLord: 2
+    currentBuyPrice: 50069.79
+    castleTaxRatePercent: 4.8
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 72319.54
-    - 76067.63
-    - 71682.17
-    - 74399.2
-    - 78507.15
-    - 79339.29
-    - 82793.13
+    - 55192.5
+    - 53631.914
+    - 60283.695
+    - 62779.74
+    - 63014.953
+    - 63079.734
+    - 67143.77
     historySentiment7Day:
-    - 98.33931
-    - 99.2734
-    - 96.85386
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 119068
+    - 53.206757
+    - 53.482513
+    - 60.063053
+    - 56.47279
+    - 65.361824
+    - 57.881824
+    - 69.35486
+    buyPricePrevDayClose: 50069.79
   - castleId: C14
-    currentPopulation: 60000
-    currentSentiment: 100
+    currentPopulation: 56309
+    currentSentiment: 93.52205
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
     currentLord: 3
-    currentBuyPrice: 54229.5
-    currentSellPrice: 51070.5
+    currentBuyPrice: 46210.316
+    castleTaxRatePercent: 4
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 47485.887
-    - 54012.727
-    - 51478.746
-    - 57672.12
-    - 55756.25
-    - 62845.734
-    - 63514.46
+    - 49797.555
+    - 47831.188
+    - 53689.203
+    - 48512.52
+    - 53303.96
+    - 52428.066
+    - 52789.277
     historySentiment7Day:
-    - 89.35135
-    - 89.87274
-    - 94.25741
-    - 97.76912
-    - 95.19143
-    - 100
-    - 100
-    buyPricePrevDayClose: 54229.5
-  - castleId: C16
-    currentPopulation: 75000
-    currentSentiment: 100
+    - 88.54404
+    - 93.96839
+    - 97.51505
+    - 95.20417
+    - 91.54423
+    - 92.54558
+    - 96.32846
+    buyPricePrevDayClose: 46210.316
+  - castleId: C15
+    currentPopulation: 33011
+    currentSentiment: 61.344257
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 73001.25
-    currentSellPrice: 68748.75
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 62324.875
-    - 61721.883
-    - 68236.945
-    - 73911.79
-    - 71730.19
-    - 72800.7
-    - 69776.61
-    historySentiment7Day:
-    - 90.34359
-    - 92.06432
-    - 95.37649
-    - 98.16004
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 73001.25
-  - castleId: C17
-    currentPopulation: 30000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 13596
-    currentSellPrice: 12804
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 25044.281
-    - 27961.125
-    - 27523.217
-    - 28929.465
-    - 30514.197
-    - 28750.37
-    - 30787.3
-    historySentiment7Day:
-    - 97.74304
-    - 100
-    - 98.74326
-    - 100
-    - 96.74723
-    - 100
-    - 100
-    buyPricePrevDayClose: 13596
-  - castleId: C18
-    currentPopulation: 10000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 2060
-    currentSellPrice: 1940
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 9031.924
-    - 9185.807
-    - 8897.418
-    - 8604.887
-    - 9800.199
-    - 9631.094
-    - 10372.167
-    historySentiment7Day:
-    - 100
-    - 90.8777
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 2060
-  - castleId: C19
-    currentPopulation: 45000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 27810.002
-    currentSellPrice: 26190.002
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 38144.117
-    - 39580.605
-    - 43586.977
-    - 42501.727
-    - 42676.598
-    - 41197.36
-    - 43258.27
-    historySentiment7Day:
-    - 87.22126
-    - 94.85351
-    - 98.54245
-    - 97.08391
-    - 95.718475
-    - 100
-    - 100
-    buyPricePrevDayClose: 27810.002
-  - castleId: C20
-    currentPopulation: 5000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 695.25
-    currentSellPrice: 654.75
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 4017.8567
-    - 4399.6416
-    - 4710.231
-    - 4591.182
-    - 4422.14
-    - 4923.4116
-    - 5266.015
-    historySentiment7Day:
-    - 94.59069
-    - 90.10196
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 695.25
-  - castleId: C21
-    currentPopulation: 15000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 6798
-    currentSellPrice: 6402
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 12511.413
-    - 14083.249
-    - 13463.504
-    - 13740.175
-    - 14883.576
-    - 14671.931
-    - 15322.75
-    historySentiment7Day:
-    - 87.87637
-    - 95.10347
-    - 100
-    - 96.47577
-    - 95.430916
-    - 100
-    - 99.800415
-    buyPricePrevDayClose: 6798
-  - castleId: C22
-    currentPopulation: 30000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 15295.5
-    currentSellPrice: 14404.5
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 25802.193
-    - 25461.426
-    - 28579.285
-    - 25795.566
-    - 29451.818
-    - 31400.531
-    - 31576.17
-    historySentiment7Day:
-    - 96.36617
-    - 100
-    - 100
-    - 93.24905
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 15295.5
-  - castleId: C23
-    currentPopulation: 25000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 9913.75
-    currentSellPrice: 9336.25
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 22616.121
-    - 20474.979
-    - 23769.305
-    - 24840.2
-    - 22948.096
-    - 24540.775
-    - 26586.346
-    historySentiment7Day:
-    - 94.7943
-    - 96.971634
-    - 100
-    - 100
-    - 95.67737
-    - 98.731064
-    - 100
-    buyPricePrevDayClose: 9913.75
-  - castleId: C24
-    currentPopulation: 30000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 13596
-    currentSellPrice: 12804
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 25985.184
-    - 27132.924
-    - 28160.121
-    - 29774.31
-    - 30580.115
-    - 28936.328
-    - 28575.701
-    historySentiment7Day:
-    - 90.581894
-    - 92.29841
-    - 99.15051
-    - 93.2962
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 13596
-  - castleId: C25
-    currentPopulation: 20000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 6180
-    currentSellPrice: 5820
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 17384.771
-    - 18288.252
-    - 18297.441
-    - 18779.36
-    - 19037.219
-    - 20139.725
-    - 19767.47
-    historySentiment7Day:
-    - 93.486084
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 6180
-  - castleId: C26
-    currentPopulation: 35000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 19467
-    currentSellPrice: 18333
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 31663.426
-    - 30777.984
-    - 29125.373
-    - 32209.074
-    - 34638.973
-    - 32122.225
-    - 36814.6
-    historySentiment7Day:
-    - 89.001366
-    - 100
-    - 92.783615
-    - 97.95918
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 19467
-  - castleId: C27
-    currentPopulation: 40000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 24720
-    currentSellPrice: 23280
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 33744.215
-    - 36646.8
-    - 35813.074
-    - 34995.355
-    - 41009.656
-    - 40333.32
-    - 39252.902
-    historySentiment7Day:
-    - 95.18021
-    - 94.03146
-    - 98.67971
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 24720
-  - castleId: C28
-    currentPopulation: 20000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 7931
-    currentSellPrice: 7469
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 18073.807
-    - 16359.423
-    - 18394.373
-    - 18990.633
-    - 17940.133
-    - 19815.133
-    - 21169.193
-    historySentiment7Day:
-    - 90.299614
-    - 97.10746
-    - 92.436966
-    - 93.648834
-    - 100
-    - 98.13674
-    - 100
-    buyPricePrevDayClose: 7931
-  - castleId: C29
-    currentPopulation: 10000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 1854
-    currentSellPrice: 1746
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 9054.729
-    - 9318.333
-    - 9137.237
-    - 9171.352
-    - 9098.283
-    - 9896.915
-    - 10304.122
-    historySentiment7Day:
-    - 97.34667
-    - 100
-    - 94.389114
-    - 97.68703
-    - 96.81345
-    - 100
-    - 99.660614
-    buyPricePrevDayClose: 1854
-  - castleId: C30
-    currentPopulation: 35000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 19467
-    currentSellPrice: 18333
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 32040.945
-    - 31215.346
-    - 33100.906
-    - 30131.74
-    - 30786.232
-    - 32587.916
-    - 37042.74
-    historySentiment7Day:
-    - 89.50989
-    - 98.55657
-    - 100
-    - 96.26537
-    - 96.34405
-    - 98.13394
-    - 100
-    buyPricePrevDayClose: 19467
-  - castleId: C31
-    currentPopulation: 25000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 9913.75
-    currentSellPrice: 9336.25
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 22168.178
-    - 21424.602
-    - 21660.334
-    - 21393.346
-    - 24262.55
-    - 25038.217
-    - 25535.068
-    historySentiment7Day:
-    - 95.563805
-    - 100
-    - 100
-    - 95.50928
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 9913.75
-  - castleId: C32
-    currentPopulation: 15000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 3862.5
-    currentSellPrice: 3637.5
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 11924.917
-    - 12788.238
-    - 14081.72
-    - 14719.945
-    - 13915.119
-    - 14639.841
-    - 14427.093
-    historySentiment7Day:
-    - 96.836555
-    - 97.30219
-    - 100
-    - 100
-    - 100
-    - 98.8556
-    - 99.815384
-    buyPricePrevDayClose: 3862.5
-  - castleId: C33
-    currentPopulation: 12000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 3708
-    currentSellPrice: 3492
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 10153.635
-    - 10675.041
-    - 11618.046
-    - 11645.787
-    - 11383.585
-    - 12167.965
-    - 12195.509
-    historySentiment7Day:
-    - 89.55631
-    - 91.19758
-    - 93.86552
-    - 95.291954
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 3708
-  - castleId: C34
-    currentPopulation: 20000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 6180
-    currentSellPrice: 5820
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 18137.363
-    - 18403.11
-    - 19081.127
-    - 19892.666
-    - 18576.426
-    - 18840.232
-    - 18813.285
-    historySentiment7Day:
-    - 91.53639
-    - 89.310394
-    - 95.790764
-    - 100
-    - 98.17451
-    - 97.087326
-    - 100
-    buyPricePrevDayClose: 6180
-  - castleId: C35
-    currentPopulation: 30000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 13596
-    currentSellPrice: 12804
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 25695.033
-    - 26066.213
-    - 26869.816
-    - 26532.379
-    - 28021.164
-    - 31490.73
-    - 28208.297
-    historySentiment7Day:
-    - 96.04792
-    - 100
-    - 100
-    - 93.36005
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 13596
-  - castleId: C36
-    currentPopulation: 40000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 3
-    currentBuyPrice: 24720
-    currentSellPrice: 23280
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 35165.195
-    - 33921.6
-    - 33798.38
-    - 36198.434
-    - 38301.344
-    - 36215.43
-    - 43090.137
-    historySentiment7Day:
-    - 95.77828
-    - 92.61197
-    - 100
-    - 94.06898
-    - 95.54973
-    - 100
-    - 100
-    buyPricePrevDayClose: 24720
-  - castleId: C37
-    currentPopulation: 12000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 2224.8
-    currentSellPrice: 2095.2
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 10717.521
-    - 10573.03
-    - 10044.088
-    - 11438.709
-    - 12155.141
-    - 12549.538
-    - 12669.871
-    historySentiment7Day:
-    - 98.027954
-    - 100
-    - 99.939674
-    - 96.706856
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 2224.8
-  - castleId: C38
-    currentPopulation: 15000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 3862.5
-    currentSellPrice: 3637.5
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 13690.431
-    - 12380.989
-    - 12550.465
-    - 13191.83
-    - 14502.675
-    - 13656.145
-    - 14127.797
-    historySentiment7Day:
-    - 100
-    - 93.372986
-    - 99.95628
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 3862.5
-  - castleId: C39
-    currentPopulation: 35000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 3
-    currentBuyPrice: 17844.75
-    currentSellPrice: 16805.25
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 28913.734
-    - 31740.059
-    - 32292.49
-    - 34605.203
-    - 31499.023
-    - 31730.076
-    - 32494.656
-    historySentiment7Day:
-    - 88.75486
-    - 91.63917
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 17844.75
-  - castleId: C40
-    currentPopulation: 20000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 3
-    currentBuyPrice: 6180
-    currentSellPrice: 5820
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 17654.023
-    - 17340.88
-    - 17316.146
-    - 17786.67
-    - 19360.37
-    - 19702.85
-    - 20717.838
-    historySentiment7Day:
-    - 96.30202
-    - 91.20282
-    - 99.86344
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 6180
-  - castleId: C41
-    currentPopulation: 15000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 3
-    currentBuyPrice: 3862.5
-    currentSellPrice: 3637.5
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 13126.467
-    - 13845.285
-    - 12671.357
-    - 13706.014
-    - 14041.674
-    - 15471.068
-    - 16158.697
-    historySentiment7Day:
-    - 95.55922
-    - 100
-    - 95.513664
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 3862.5
-  - castleId: C42
-    currentPopulation: 25000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 9913.75
-    currentSellPrice: 9336.25
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 21234.781
-    - 22091.523
-    - 22326.697
-    - 23042.41
-    - 23655.223
-    - 22807.771
-    - 23625.49
-    historySentiment7Day:
-    - 100
-    - 99.49872
-    - 100
-    - 100
-    - 98.36888
-    - 100
-    - 100
-    buyPricePrevDayClose: 9913.75
-  - castleId: C43
-    currentPopulation: 12000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 2224.8
-    currentSellPrice: 2095.2
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 10108.631
-    - 9691.919
-    - 11120.989
-    - 10731.574
-    - 10550.447
-    - 12382.443
-    - 12201.9
-    historySentiment7Day:
-    - 90.33588
-    - 99.89715
-    - 96.36036
-    - 98.38808
-    - 96.50659
-    - 100
-    - 100
-    buyPricePrevDayClose: 2224.8
-  - castleId: C44
-    currentPopulation: 30000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 2
-    currentBuyPrice: 13596
-    currentSellPrice: 12804
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 24443.94
-    - 25924.746
-    - 28143.967
-    - 29255.154
-    - 30140.914
-    - 28559.164
-    - 28507.492
-    historySentiment7Day:
-    - 95.10514
-    - 89.51501
-    - 94.21348
-    - 97.992935
-    - 96.74437
-    - 97.12632
-    - 100
-    buyPricePrevDayClose: 13596
-  - castleId: C45
-    currentPopulation: 10000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 1854
-    currentSellPrice: 1746
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 8303.951
-    - 9182.055
-    - 8373.303
-    - 9121.366
-    - 9966.949
-    - 9675.643
-    - 9322.199
-    historySentiment7Day:
-    - 92.281845
-    - 91.093925
-    - 95.19713
-    - 94.02658
-    - 97.00138
-    - 100
-    - 100
-    buyPricePrevDayClose: 1854
-  - castleId: C46
-    currentPopulation: 45000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 34414.875
-    currentSellPrice: 32410.125
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 36217.695
-    - 40440.008
-    - 41432.566
-    - 44359.45
-    - 40987.57
-    - 40496.223
-    - 48060.035
-    historySentiment7Day:
-    - 95.45382
-    - 98.90573
-    - 95.579216
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 34414.875
-  - castleId: C47
-    currentPopulation: 30000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 13596
-    currentSellPrice: 12804
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 26575.436
-    - 24660.494
-    - 25774.385
-    - 26804.525
-    - 30705.062
-    - 27327.062
-    - 31807.258
-    historySentiment7Day:
-    - 99.213
-    - 92.503204
-    - 92.44805
-    - 100
-    - 100
-    - 100
-    - 99.52616
-    buyPricePrevDayClose: 13596
-  - castleId: C48
-    currentPopulation: 25000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 4
-    currentBuyPrice: 9913.75
-    currentSellPrice: 9336.25
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 22652.385
-    - 21483.615
-    - 23267.633
-    - 24339.355
-    - 22832.012
-    - 26103.297
-    - 24130.58
-    historySentiment7Day:
-    - 91.82776
-    - 91.80549
-    - 93.89694
-    - 100
-    - 100
-    - 99.41345
-    - 100
-    buyPricePrevDayClose: 9913.75
-  - castleId: C49
-    currentPopulation: 35000
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 1
-    currentBuyPrice: 19467
-    currentSellPrice: 18333
-    userDeployedTroops: 0
-    averagePurchasePrice: 0
-    historyPopulation7Day:
-    - 27653.363
-    - 32037.81
-    - 30297.979
-    - 34488.734
-    - 32059.018
-    - 31966.506
-    - 33902.01
-    historySentiment7Day:
-    - 95.51519
-    - 95.513214
-    - 94.53861
-    - 100
-    - 100
-    - 100
-    - 100
-    buyPricePrevDayClose: 19467
-  - castleId: C50
-    currentPopulation: 0
-    currentSentiment: 100
-    isWar: 0
-    isDisaster: 0
-    isFavorableEvent: 0
-    currentGovernorId: 
-    currentLord: 150
+    currentGovernorId: G01
+    currentLord: 0
     currentBuyPrice: 0
-    currentSellPrice: 0
+    castleTaxRatePercent: 0
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
+    - 28632.781
+    - 30329.94
+    - 28355.412
+    - 31730.355
+    - 32260.549
+    - 33049.03
+    - 32015.031
     historySentiment7Day:
-    - 89.13368
-    - 98.43998
-    - 92.938034
-    - 100
-    - 96.36555
-    - 99.15411
-    - 99.77881
+    - 49.783276
+    - 51.26051
+    - 53.571217
+    - 61.38292
+    - 62.324608
+    - 59.717205
+    - 68.630264
     buyPricePrevDayClose: 0
+  - castleId: C16
+    currentPopulation: 87163
+    currentSentiment: 46.802086
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 2
+    currentBuyPrice: 38550.43
+    castleTaxRatePercent: 4.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 73908.68
+    - 79016.61
+    - 75690.07
+    - 86224.336
+    - 83679.914
+    - 90495.1
+    - 85869.36
+    historySentiment7Day:
+    - 38.40755
+    - 36.426308
+    - 41.837475
+    - 44.64412
+    - 46.788235
+    - 53.715004
+    - 54.737316
+    buyPricePrevDayClose: 38550.43
+  - castleId: C17
+    currentPopulation: 31212
+    currentSentiment: 88.08572
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G02
+    currentLord: 1
+    currentBuyPrice: 12097.059
+    castleTaxRatePercent: 2.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 25604.559
+    - 26740.88
+    - 30137
+    - 26659.984
+    - 29817.834
+    - 31399.824
+    - 33487.824
+    historySentiment7Day:
+    - 85.93149
+    - 77.464676
+    - 92.975945
+    - 87.22679
+    - 96.36986
+    - 95.70178
+    - 99.02488
+    buyPricePrevDayClose: 12097.059
+  - castleId: C18
+    currentPopulation: 8807
+    currentSentiment: 72.70014
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G01
+    currentLord: 0
+    currentBuyPrice: 1280.5403
+    castleTaxRatePercent: 0.8
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 7167.6133
+    - 7706.02
+    - 8379.295
+    - 8000.464
+    - 8750.03
+    - 8298.61
+    - 8964.147
+    historySentiment7Day:
+    - 62.261074
+    - 70.45447
+    - 76.181885
+    - 69.392235
+    - 69.149864
+    - 73.83489
+    - 85.25598
+    buyPricePrevDayClose: 1280.5403
+  - castleId: C19
+    currentPopulation: 42045
+    currentSentiment: 61.15495
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 1
+    currentBuyPrice: 15427.56
+    castleTaxRatePercent: 3.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 34770.92
+    - 37827.844
+    - 39041.223
+    - 40293.2
+    - 40796.887
+    - 39148.69
+    - 39360.777
+    historySentiment7Day:
+    - 50.870834
+    - 50.201046
+    - 63.119846
+    - 54.82217
+    - 68.015625
+    - 59.7632
+    - 66.05557
+    buyPricePrevDayClose: 15427.56
+  - castleId: C20
+    currentPopulation: 6018
+    currentSentiment: 49.54931
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 0
+    currentBuyPrice: 402.55344
+    castleTaxRatePercent: 0.7
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 5440.945
+    - 5104.849
+    - 5501.583
+    - 5819.413
+    - 5732.961
+    - 5967.8345
+    - 6410.7515
+    historySentiment7Day:
+    - 37.510696
+    - 45.687107
+    - 54.189907
+    - 46.77684
+    - 56.08699
+    - 59.475433
+    - 57.914795
+    buyPricePrevDayClose: 402.55344
+  - castleId: C21
+    currentPopulation: 14131
+    currentSentiment: 92.991196
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G04
+    currentLord: 1
+    currentBuyPrice: 5781.858
+    castleTaxRatePercent: 2.5
+    userDeployedTroops: 2901
+    averagePurchasePrice: 85.86171
+    historyPopulation7Day:
+    - 11941.786
+    - 11873.311
+    - 13621.919
+    - 13530.45
+    - 12549.751
+    - 14599.965
+    - 14530.45
+    historySentiment7Day:
+    - 83.10582
+    - 84.06352
+    - 92.287254
+    - 96.48086
+    - 99.93024
+    - 94.119354
+    - 100
+    buyPricePrevDayClose: 5781.858
+  - castleId: C22
+    currentPopulation: 32311
+    currentSentiment: 49.60282
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 1
+    currentGovernorId: G01
+    currentLord: 3
+    currentBuyPrice: 7933.448
+    castleTaxRatePercent: 2.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 27741.719
+    - 29343.436
+    - 30488.906
+    - 31674.135
+    - 30850.016
+    - 32458.365
+    - 33620.43
+    historySentiment7Day:
+    - 46.21309
+    - 46.02707
+    - 47.478527
+    - 51.684837
+    - 55.125187
+    - 47.380424
+    - 51.649082
+    buyPricePrevDayClose: 7933.448
+  - castleId: C23
+    currentPopulation: 24529
+    currentSentiment: 49.748882
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 4
+    currentBuyPrice: 4698.1177
+    castleTaxRatePercent: 2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 21868.166
+    - 19887.742
+    - 22420.432
+    - 21797.434
+    - 23381.646
+    - 24775.783
+    - 23307.625
+    historySentiment7Day:
+    - 49.20971
+    - 48.28565
+    - 42.511856
+    - 44.480267
+    - 48.12712
+    - 59.33368
+    - 59.163895
+    buyPricePrevDayClose: 4698.1177
+  - castleId: C24
+    currentPopulation: 23795
+    currentSentiment: 71.22018
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 4
+    currentBuyPrice: 7456.6104
+    castleTaxRatePercent: 2.2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 19620.088
+    - 20249.896
+    - 20183.795
+    - 20403.96
+    - 23928.02
+    - 22529.598
+    - 22698.5
+    historySentiment7Day:
+    - 65.2931
+    - 61.28237
+    - 74.34229
+    - 77.88762
+    - 71.09825
+    - 79.59677
+    - 77.344925
+    buyPricePrevDayClose: 7456.6104
+  - castleId: C25
+    currentPopulation: 22803
+    currentSentiment: 29.19916
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 0
+    currentBuyPrice: 1997.4852
+    castleTaxRatePercent: 1.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 20061.455
+    - 18870.764
+    - 21928.062
+    - 21661.11
+    - 21408.918
+    - 23719.516
+    - 24460.354
+    historySentiment7Day:
+    - 18.576021
+    - 21.464401
+    - 33.838238
+    - 30.478746
+    - 34.22254
+    - 28.903254
+    - 33.00486
+    buyPricePrevDayClose: 1997.4852
+  - castleId: C26
+    currentPopulation: 35553
+    currentSentiment: 90.00935
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 3
+    currentBuyPrice: 17280.555
+    castleTaxRatePercent: 3.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 28023.086
+    - 30555.576
+    - 30770.02
+    - 33353.395
+    - 34278.914
+    - 32970.734
+    - 32927.78
+    historySentiment7Day:
+    - 83.579506
+    - 81.60173
+    - 89.54529
+    - 95.97505
+    - 89.19942
+    - 90.05684
+    - 100
+    buyPricePrevDayClose: 17280.555
+  - castleId: C27
+    currentPopulation: 35349
+    currentSentiment: 68.65487
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G01
+    currentLord: 3
+    currentBuyPrice: 14561.286
+    castleTaxRatePercent: 3.2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 31475.922
+    - 32128.479
+    - 32962.633
+    - 32995.76
+    - 33754.047
+    - 31821.635
+    - 36587.098
+    historySentiment7Day:
+    - 55.86481
+    - 59.536392
+    - 64.203354
+    - 71.03991
+    - 74.40966
+    - 71.55268
+    - 73.40918
+    buyPricePrevDayClose: 14561.286
+  - castleId: C28
+    currentPopulation: 17387
+    currentSentiment: 94.1185
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G02
+    currentLord: 3
+    currentBuyPrice: 6300.2876
+    castleTaxRatePercent: 2.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 13856.59
+    - 15016.07
+    - 15972.156
+    - 16633.404
+    - 15985.726
+    - 16483.664
+    - 17804.63
+    historySentiment7Day:
+    - 89.5751
+    - 91.53594
+    - 93.55625
+    - 94.13812
+    - 100
+    - 100
+    - 100
+    buyPricePrevDayClose: 6300.2876
+  - castleId: C29
+    currentPopulation: 11951
+    currentSentiment: 99.94196
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G03
+    currentLord: 2
+    currentBuyPrice: 2149.9314
+    castleTaxRatePercent: 0.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 10098.882
+    - 10196.032
+    - 9895.62
+    - 10910.14
+    - 11023.258
+    - 12128.037
+    - 11418.078
+    historySentiment7Day:
+    - 98.735504
+    - 92.0441
+    - 100
+    - 100
+    - 100
+    - 100
+    - 100
+    buyPricePrevDayClose: 2149.9314
+  - castleId: C30
+    currentPopulation: 41483
+    currentSentiment: 73.79682
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 0
+    currentBuyPrice: 16531.094
+    castleTaxRatePercent: 3
+    userDeployedTroops: 2027
+    averagePurchasePrice: 43.52108
+    historyPopulation7Day:
+    - 35032.457
+    - 34296.062
+    - 38324.1
+    - 39975.754
+    - 39455.1
+    - 41699.77
+    - 40799.344
+    historySentiment7Day:
+    - 65.97681
+    - 67.511536
+    - 71.8406
+    - 80.56926
+    - 75.99487
+    - 72.50495
+    - 82.88597
+    buyPricePrevDayClose: 16531.094
+  - castleId: C31
+    currentPopulation: 22671
+    currentSentiment: 33.34217
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G01
+    currentLord: 0
+    currentBuyPrice: 2910.2163
+    castleTaxRatePercent: 2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 20698.377
+    - 19467.666
+    - 21892.646
+    - 21934.105
+    - 21599.184
+    - 23197.441
+    - 24071.898
+    historySentiment7Day:
+    - 26.822716
+    - 28.217043
+    - 30.444935
+    - 38.1036
+    - 41.17871
+    - 37.73488
+    - 36.466923
+    buyPricePrevDayClose: 2910.2163
+  - castleId: C32
+    currentPopulation: 15637
+    currentSentiment: 45.363415
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 4
+    currentBuyPrice: 1773.3693
+    castleTaxRatePercent: 1
+    userDeployedTroops: 345
+    averagePurchasePrice: 48.06652
+    historyPopulation7Day:
+    - 13549.523
+    - 13760.994
+    - 15077.751
+    - 15610.34
+    - 15644.579
+    - 15018.49
+    - 14774.048
+    historySentiment7Day:
+    - 42.519524
+    - 37.129128
+    - 40.19749
+    - 51.45356
+    - 41.808407
+    - 46.711006
+    - 53.41017
+    buyPricePrevDayClose: 1773.3693
+  - castleId: C33
+    currentPopulation: 10044
+    currentSentiment: 97.46527
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G01
+    currentLord: 2
+    currentBuyPrice: 2936.8235
+    castleTaxRatePercent: 0.8
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 7954.2383
+    - 9280.485
+    - 9073.464
+    - 9591.596
+    - 9926.452
+    - 9413.459
+    - 10410.888
+    historySentiment7Day:
+    - 95.261856
+    - 98.88224
+    - 100
+    - 96.27728
+    - 98.78728
+    - 99.529526
+    - 100
+    buyPricePrevDayClose: 2936.8235
+  - castleId: C34
+    currentPopulation: 16385
+    currentSentiment: 72.28601
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 2
+    currentBuyPrice: 3553.2188
+    castleTaxRatePercent: 1.2
+    userDeployedTroops: 5582
+    averagePurchasePrice: 94.52858
+    historyPopulation7Day:
+    - 13269.27
+    - 13271.961
+    - 13661.233
+    - 15121.609
+    - 16483.256
+    - 16373.916
+    - 17153.42
+    historySentiment7Day:
+    - 65.70337
+    - 70.9211
+    - 72.90461
+    - 66.55846
+    - 75.63041
+    - 76.704414
+    - 81.39696
+    buyPricePrevDayClose: 3553.2188
+  - castleId: C35
+    currentPopulation: 35116
+    currentSentiment: 96.32194
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 0
+    currentBuyPrice: 14882.742
+    castleTaxRatePercent: 2.2
+    userDeployedTroops: 5275
+    averagePurchasePrice: 100.82799
+    historyPopulation7Day:
+    - 31072.307
+    - 30957.795
+    - 31179.02
+    - 31961.854
+    - 34365.535
+    - 31893.736
+    - 35308.242
+    historySentiment7Day:
+    - 89.6324
+    - 91.52469
+    - 91.363495
+    - 94.28894
+    - 93.634155
+    - 95.62671
+    - 100
+    buyPricePrevDayClose: 14882.742
+  - castleId: C36
+    currentPopulation: 37097
+    currentSentiment: 88.23705
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G01
+    currentLord: 3
+    currentBuyPrice: 19639.98
+    castleTaxRatePercent: 3
+    userDeployedTroops: 7078
+    averagePurchasePrice: 22.43466
+    historyPopulation7Day:
+    - 31192.832
+    - 31629.611
+    - 30935.62
+    - 33486.727
+    - 35663.79
+    - 35774.992
+    - 34891.31
+    historySentiment7Day:
+    - 76.451904
+    - 79.737305
+    - 89.23721
+    - 81.515495
+    - 84.06245
+    - 97.89463
+    - 100
+    buyPricePrevDayClose: 19639.98
+  - castleId: C37
+    currentPopulation: 12072
+    currentSentiment: 94.85039
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 0
+    currentBuyPrice: 2061.0608
+    castleTaxRatePercent: 0.7
+    userDeployedTroops: 6338
+    averagePurchasePrice: 98.14084
+    historyPopulation7Day:
+    - 10776.405
+    - 10778.863
+    - 11605.521
+    - 11138.735
+    - 11493.379
+    - 12361.041
+    - 11750.637
+    historySentiment7Day:
+    - 86.53086
+    - 91.658745
+    - 89.975685
+    - 98.91471
+    - 100
+    - 95.549835
+    - 100
+    buyPricePrevDayClose: 2061.0608
+  - castleId: C38
+    currentPopulation: 12173
+    currentSentiment: 99.97166
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 2
+    currentBuyPrice: 3042.3875
+    castleTaxRatePercent: 1.2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 10984.809
+    - 10676.523
+    - 10251.6045
+    - 12073.5
+    - 12256.317
+    - 11783.054
+    - 11613.686
+    historySentiment7Day:
+    - 88.376114
+    - 91.79473
+    - 92.92399
+    - 100
+    - 97.58427
+    - 98.69091
+    - 99.15396
+    buyPricePrevDayClose: 3042.3875
+  - castleId: C39
+    currentPopulation: 27263
+    currentSentiment: 96.86803
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 1
+    currentGovernorId: 
+    currentLord: 4
+    currentBuyPrice: 13072.52
+    castleTaxRatePercent: 2.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 23660.143
+    - 22003.996
+    - 23974.633
+    - 23323.053
+    - 25779.703
+    - 25660.031
+    - 25760.668
+    historySentiment7Day:
+    - 84.58794
+    - 88.14614
+    - 91.2613
+    - 100
+    - 98.476974
+    - 97.43126
+    - 100
+    buyPricePrevDayClose: 13072.52
+  - castleId: C40
+    currentPopulation: 18918
+    currentSentiment: 86.7206
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 2
+    currentBuyPrice: 4921.7407
+    castleTaxRatePercent: 1.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 15557.6455
+    - 16675.775
+    - 16053.92
+    - 18555.285
+    - 18740.844
+    - 18529.87
+    - 18623.395
+    historySentiment7Day:
+    - 85.454506
+    - 82.784294
+    - 78.90351
+    - 81.395805
+    - 87.69763
+    - 91.89709
+    - 89.17911
+    buyPricePrevDayClose: 4921.7407
+  - castleId: C41
+    currentPopulation: 18723
+    currentSentiment: 40.492867
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 2
+    currentBuyPrice: 1895.3698
+    castleTaxRatePercent: 1.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 17051.096
+    - 17542.756
+    - 16998.611
+    - 18577.395
+    - 18544.709
+    - 18555.818
+    - 17336.494
+    historySentiment7Day:
+    - 40.30181
+    - 30.845566
+    - 39.16934
+    - 44.593235
+    - 47.94192
+    - 39.24892
+    - 43.93807
+    buyPricePrevDayClose: 1895.3698
+  - castleId: C42
+    currentPopulation: 23057
+    currentSentiment: 61.73163
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 3
+    currentBuyPrice: 5479.883
+    castleTaxRatePercent: 2.2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 20692.584
+    - 21483.602
+    - 19867.434
+    - 22084.59
+    - 22043.123
+    - 22489.9
+    - 21346.994
+    historySentiment7Day:
+    - 61.836487
+    - 56.121002
+    - 65.057106
+    - 66.82088
+    - 61.859528
+    - 60.669163
+    - 67.77575
+    buyPricePrevDayClose: 5479.883
+  - castleId: C43
+    currentPopulation: 10189
+    currentSentiment: 64.62032
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G04
+    currentLord: 4
+    currentBuyPrice: 1185.1497
+    castleTaxRatePercent: 0.8
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 8719.871
+    - 9481.822
+    - 9060.519
+    - 8756.695
+    - 9933.531
+    - 9821.446
+    - 10602.504
+    historySentiment7Day:
+    - 61.445045
+    - 64.24827
+    - 68.84243
+    - 70.57546
+    - 62.587418
+    - 71.24088
+    - 75.55591
+    buyPricePrevDayClose: 1185.1497
+  - castleId: C44
+    currentPopulation: 30550
+    currentSentiment: 77.780136
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 1
+    currentBuyPrice: 10455.205
+    castleTaxRatePercent: 2
+    userDeployedTroops: 1051
+    averagePurchasePrice: 111.33267
+    historyPopulation7Day:
+    - 23932.914
+    - 27164.016
+    - 29593.645
+    - 30274.44
+    - 30517.293
+    - 30762.904
+    - 29494.246
+    historySentiment7Day:
+    - 75.11171
+    - 68.05057
+    - 80.019165
+    - 76.2522
+    - 80.30894
+    - 79.927826
+    - 90.137024
+    buyPricePrevDayClose: 10455.205
+  - castleId: C45
+    currentPopulation: 8582
+    currentSentiment: 65.70934
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G02
+    currentLord: 1
+    currentBuyPrice: 1015.0516
+    castleTaxRatePercent: 0.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 6717.2603
+    - 7657.512
+    - 8202.959
+    - 7341.16
+    - 8611.101
+    - 8371.542
+    - 7922.62
+    historySentiment7Day:
+    - 55.202007
+    - 65.29823
+    - 64.9786
+    - 68.76879
+    - 69.514244
+    - 63.81632
+    - 75.94188
+    buyPricePrevDayClose: 1015.0516
+  - castleId: C46
+    currentPopulation: 45099
+    currentSentiment: 94.76045
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G02
+    currentLord: 4
+    currentBuyPrice: 31731.492
+    castleTaxRatePercent: 4
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 39284.438
+    - 37744.625
+    - 37788.727
+    - 40514.266
+    - 43463.355
+    - 44399.664
+    - 46086.945
+    historySentiment7Day:
+    - 81.96354
+    - 94.957596
+    - 92.01967
+    - 92.1427
+    - 90.59956
+    - 100
+    - 95.65342
+    buyPricePrevDayClose: 31731.492
+  - castleId: C47
+    currentPopulation: 35427
+    currentSentiment: 25.176674
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 1
+    currentBuyPrice: 3924.5095
+    castleTaxRatePercent: 2.5
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 31380.334
+    - 32624.76
+    - 32840.906
+    - 34205.844
+    - 34017.676
+    - 33530.297
+    - 33126.582
+    historySentiment7Day:
+    - 13.768461
+    - 22.32136
+    - 28.444317
+    - 31.420565
+    - 22.907572
+    - 35.990044
+    - 36.27386
+    buyPricePrevDayClose: 3924.5095
+  - castleId: C48
+    currentPopulation: 27389
+    currentSentiment: 67.92152
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G01
+    currentLord: 2
+    currentBuyPrice: 7162.1646
+    castleTaxRatePercent: 2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 24424.713
+    - 24650.139
+    - 25441.97
+    - 25947.729
+    - 27384.59
+    - 24988.963
+    - 25651.951
+    historySentiment7Day:
+    - 68.565475
+    - 62.633656
+    - 72.32795
+    - 64.42925
+    - 72.014084
+    - 65.67029
+    - 80.65502
+    buyPricePrevDayClose: 7162.1646
+  - castleId: C49
+    currentPopulation: 31346
+    currentSentiment: 18.709583
+    isWar: 0
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: 
+    currentLord: 4
+    currentBuyPrice: 3166.9414
+    castleTaxRatePercent: 3.2
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 25629.553
+    - 28503.855
+    - 27023.809
+    - 29663.857
+    - 28531.705
+    - 28325.842
+    - 32900.52
+    historySentiment7Day:
+    - 18.61306
+    - 15.166187
+    - 18.171871
+    - 13.797127
+    - 27.637363
+    - 23.56894
+    - 25.896074
+    buyPricePrevDayClose: 3166.9414
+  - castleId: C50
+    currentPopulation: 5567
+    currentSentiment: 76.9434
+    isWar: 1
+    isDisaster: 0
+    isFavorableEvent: 0
+    currentGovernorId: G04
+    currentLord: 4
+    currentBuyPrice: 578.2642
+    castleTaxRatePercent: 0.8
+    userDeployedTroops: 0
+    averagePurchasePrice: 0
+    historyPopulation7Day:
+    - 4818.887
+    - 4709.23
+    - 5170.9683
+    - 5409.7837
+    - 5038.82
+    - 5741.919
+    - 5425.214
+    historySentiment7Day:
+    - 69.441284
+    - 73.75952
+    - 81.50351
+    - 71.52681
+    - 81.84935
+    - 76.0952
+    - 80.066696
+    buyPricePrevDayClose: 578.2642

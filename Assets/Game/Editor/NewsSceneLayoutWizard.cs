@@ -16,8 +16,34 @@ public static class NewsSceneLayoutWizard
     public const string ScenePath = "Assets/Game/0Scene/NewsScene.unity";
 
     const string MenuPath = "StockThreeKingdoms/Layout/NewsTab/NewsScene 레이아웃 자동 생성";
+    const string MenuAppendDetail = "StockThreeKingdoms/Layout/NewsTab/뉴스 상세 팝업만 추가(기존 씬)";
     const float ContentTopInset = 160f;
     const float ContentBottomInset = 180f;
+
+    [MenuItem(MenuAppendDetail, false, 11)]
+    public static void AppendNewsDetailPopupOnly()
+    {
+        EnsureSceneFileExists();
+        EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        var canvas = Object.FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            EditorUtility.DisplayDialog("NewsScene", "Canvas가 없습니다. 먼저 전체 레이아웃을 생성하세요.", "확인");
+            return;
+        }
+        var contentRoot = EnsureContentRoot(canvas.transform as RectTransform);
+        if (contentRoot.Find("NewsDetailOverlay") != null)
+        {
+            EditorUtility.DisplayDialog("NewsScene", "NewsDetailOverlay가 이미 있습니다.", "확인");
+            return;
+        }
+        CreateNewsDetailOverlay(contentRoot);
+        var tabRoot = GameObject.Find("NewsTabRoot");
+        if (tabRoot != null && tabRoot.GetComponent<NewsSceneFeedController>() == null)
+            Undo.AddComponent<NewsSceneFeedController>(tabRoot);
+        EditorSceneManager.MarkSceneDirty(contentRoot.gameObject.scene);
+        Debug.Log("[NewsSceneLayoutWizard] 상세 팝업 추가 완료. 씬을 저장하세요.");
+    }
 
     [MenuItem(MenuPath, false, 0)]
     public static void CreateNewsSceneLayout()
@@ -80,6 +106,9 @@ public static class NewsSceneLayoutWizard
 
         CreateCategoryTabBar(root.transform);
         CreateNewsScrollArea(root.transform);
+        CreateNewsDetailOverlay(contentRoot);
+        if (root.GetComponent<NewsSceneFeedController>() == null)
+            Undo.AddComponent<NewsSceneFeedController>(root);
 
         EditorSceneManager.MarkSceneDirty(root.scene);
         Selection.activeGameObject = root;
@@ -266,6 +295,176 @@ public static class NewsSceneLayoutWizard
             "요약 두 줄까지 표시합니다. EventMasterData·WorldNews와 연결하세요.",
             "방금 전", new Color(0.25f, 0.27f, 0.32f, 1f), false, false);
         template.SetActive(false);
+    }
+
+    static void CreateNewsDetailOverlay(Transform contentRoot)
+    {
+        var overlay = new GameObject("NewsDetailOverlay", typeof(RectTransform), typeof(NewsDetailPopup));
+        Undo.RegisterCreatedObjectUndo(overlay, "NewsDetailOverlay");
+        overlay.transform.SetParent(contentRoot, false);
+        StretchFull(overlay.GetComponent<RectTransform>());
+        overlay.SetActive(false);
+
+        var dimGo = new GameObject("Dimmer", typeof(RectTransform), typeof(Image), typeof(Button));
+        Undo.RegisterCreatedObjectUndo(dimGo, "Dimmer");
+        dimGo.transform.SetParent(overlay.transform, false);
+        StretchFull(dimGo.GetComponent<RectTransform>());
+        var dimImg = dimGo.GetComponent<Image>();
+        dimImg.color = new Color(0.02f, 0.02f, 0.04f, 0.78f);
+        dimImg.raycastTarget = true;
+        var dimBtn = dimGo.GetComponent<Button>();
+        dimBtn.targetGraphic = dimImg;
+
+        var popupRoot = new GameObject("PopupRoot", typeof(RectTransform), typeof(Image));
+        Undo.RegisterCreatedObjectUndo(popupRoot, "PopupRoot");
+        popupRoot.transform.SetParent(overlay.transform, false);
+        var prRt = popupRoot.GetComponent<RectTransform>();
+        prRt.anchorMin = new Vector2(0.06f, 0.07f);
+        prRt.anchorMax = new Vector2(0.94f, 0.93f);
+        prRt.offsetMin = Vector2.zero;
+        prRt.offsetMax = Vector2.zero;
+        var prImg = popupRoot.GetComponent<Image>();
+        prImg.sprite = TryGetUiSquareSprite();
+        prImg.type = Image.Type.Sliced;
+        prImg.color = new Color(0.94f, 0.9f, 0.82f, 1f);
+
+        var scrollGo = new GameObject("ScrollView", typeof(RectTransform), typeof(Image), typeof(ScrollRect));
+        Undo.RegisterCreatedObjectUndo(scrollGo, "ScrollView");
+        scrollGo.transform.SetParent(popupRoot.transform, false);
+        StretchFull(scrollGo.GetComponent<RectTransform>());
+        scrollGo.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+        var scroll = scrollGo.GetComponent<ScrollRect>();
+        scroll.horizontal = false;
+        scroll.vertical = true;
+        scroll.movementType = ScrollRect.MovementType.Clamped;
+
+        var viewport = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(Mask));
+        Undo.RegisterCreatedObjectUndo(viewport, "Viewport");
+        viewport.transform.SetParent(scrollGo.transform, false);
+        var vpRt = viewport.GetComponent<RectTransform>();
+        StretchFull(vpRt);
+        viewport.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.02f);
+        viewport.GetComponent<Mask>().showMaskGraphic = false;
+
+        var content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+        Undo.RegisterCreatedObjectUndo(content, "DetailContent");
+        content.transform.SetParent(viewport.transform, false);
+        var cRt = content.GetComponent<RectTransform>();
+        cRt.anchorMin = new Vector2(0f, 1f);
+        cRt.anchorMax = new Vector2(1f, 1f);
+        cRt.pivot = new Vector2(0.5f, 1f);
+        cRt.sizeDelta = new Vector2(0f, 0f);
+        var cv = content.GetComponent<VerticalLayoutGroup>();
+        cv.spacing = 12f;
+        cv.padding = new RectOffset(20, 20, 18, 28);
+        cv.childAlignment = TextAnchor.UpperCenter;
+        cv.childControlWidth = true;
+        cv.childControlHeight = true;
+        cv.childForceExpandWidth = true;
+        cv.childForceExpandHeight = false;
+        content.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        scroll.content = cRt;
+        scroll.viewport = vpRt;
+
+        var header = CreateTmp(content.transform, "HeaderTitle", "속보", 34, FontStyles.Bold, TextAlignmentOptions.Center,
+            new Color(0.55f, 0.42f, 0.18f, 1f));
+        header.GetComponent<LayoutElement>().minHeight = 44f;
+
+        var headlineRow = new GameObject("HeadlineRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(headlineRow, "HeadlineRow");
+        headlineRow.transform.SetParent(content.transform, false);
+        headlineRow.AddComponent<LayoutElement>().minHeight = 56f;
+        var hr = headlineRow.GetComponent<HorizontalLayoutGroup>();
+        hr.spacing = 10f;
+        hr.childAlignment = TextAnchor.MiddleLeft;
+        hr.childControlWidth = true;
+        hr.childControlHeight = true;
+        hr.padding = new RectOffset(0, 0, 0, 0);
+
+        var mega = CreateTmp(headlineRow.transform, "Megaphone", "📢", 36, FontStyles.Normal, TextAlignmentOptions.Left,
+            new Color(0.35f, 0.35f, 0.38f, 1f));
+        mega.GetComponent<LayoutElement>().minWidth = 48f;
+        mega.GetComponent<LayoutElement>().preferredWidth = 52f;
+
+        var head = CreateTmp(headlineRow.transform, "Headline", "[속보] 하북 지역 대홍수 발생!", 26, FontStyles.Bold,
+            TextAlignmentOptions.Left, new Color(0.12f, 0.1f, 0.08f, 1f));
+        head.enableWordWrapping = true;
+        head.GetComponent<LayoutElement>().flexibleWidth = 1f;
+
+        var sub = CreateTmp(content.transform, "Subline", "2분 전 · 관련 성: 업성(C04), 평원(C06)", 20, FontStyles.Normal,
+            TextAlignmentOptions.Left, new Color(0.35f, 0.34f, 0.32f, 1f));
+        sub.enableWordWrapping = true;
+        sub.GetComponent<LayoutElement>().minHeight = 28f;
+
+        var hero = new GameObject("HeroImage", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(hero, "HeroImage");
+        hero.transform.SetParent(content.transform, false);
+        hero.GetComponent<LayoutElement>().minHeight = 180f;
+        hero.GetComponent<LayoutElement>().preferredHeight = 200f;
+        var hi = hero.GetComponent<Image>();
+        hi.sprite = TryGetUiSquareSprite();
+        hi.color = new Color(0.4f, 0.48f, 0.55f, 1f);
+
+        var lblDetail = CreateTmp(content.transform, "DetailSectionLabel", "상세 묘사", 22, FontStyles.Bold,
+            TextAlignmentOptions.Left, new Color(0.28f, 0.22f, 0.16f, 1f));
+        lblDetail.GetComponent<LayoutElement>().minHeight = 30f;
+
+        var body = CreateTmp(content.transform, "Body",
+            "황하 범람으로 하북 일대 농경지가 침수되었습니다. 보급로가 끊기며 인근 성의 민심이 급격히 악화되고 있습니다.",
+            22, FontStyles.Normal, TextAlignmentOptions.TopLeft, new Color(0.2f, 0.19f, 0.17f, 1f));
+        body.enableWordWrapping = true;
+        body.GetComponent<LayoutElement>().minHeight = 120f;
+
+        var report = new GameObject("ReportBlock", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(report, "ReportBlock");
+        report.transform.SetParent(content.transform, false);
+        report.GetComponent<LayoutElement>().minHeight = 200f;
+        var rv = report.GetComponent<VerticalLayoutGroup>();
+        rv.spacing = 8f;
+        rv.padding = new RectOffset(12, 12, 14, 14);
+        rv.childAlignment = TextAnchor.UpperLeft;
+        rv.childControlWidth = true;
+        rv.childControlHeight = true;
+        var reportBg = report.AddComponent<Image>();
+        reportBg.sprite = TryGetUiSquareSprite();
+        reportBg.type = Image.Type.Sliced;
+        reportBg.color = new Color(0.82f, 0.76f, 0.64f, 0.55f);
+
+        var repTitle = CreateTmp(report.transform, "ReportTitle", "투자 분석 리포트 (MTS Impact)", 22, FontStyles.Bold,
+            TextAlignmentOptions.Left, new Color(0.22f, 0.16f, 0.1f, 1f));
+        repTitle.GetComponent<LayoutElement>().minHeight = 32f;
+
+        CreateTmp(report.transform, "ImpactRange", "영향 범위: 하북 본토 전역", 20, FontStyles.Normal, TextAlignmentOptions.Left,
+            new Color(0.25f, 0.22f, 0.18f, 1f)).enableWordWrapping = true;
+        CreateTmp(report.transform, "DebuffHint", "적용 디버프: ⚔ 📜 (아이콘 자리)", 20, FontStyles.Normal, TextAlignmentOptions.Left,
+            new Color(0.3f, 0.25f, 0.2f, 1f)).enableWordWrapping = true;
+        CreateTmp(report.transform, "StatLine1", "E02 민심 악화   -20", 20, FontStyles.Bold, TextAlignmentOptions.Left,
+            new Color(0.45f, 0.18f, 0.15f, 1f)).enableWordWrapping = true;
+        CreateTmp(report.transform, "StatLine2", "E06 시세 할인   -20%", 20, FontStyles.Bold, TextAlignmentOptions.Left,
+            new Color(0.45f, 0.18f, 0.15f, 1f)).enableWordWrapping = true;
+        CreateTmp(report.transform, "Duration", "지속 기간: 5일", 20, FontStyles.Normal, TextAlignmentOptions.Left,
+            new Color(0.28f, 0.26f, 0.22f, 1f)).enableWordWrapping = true;
+
+        var strip = new GameObject("CastleButtonStrip", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(strip, "CastleButtonStrip");
+        strip.transform.SetParent(content.transform, false);
+        strip.GetComponent<LayoutElement>().minHeight = 56f;
+        var sh = strip.GetComponent<HorizontalLayoutGroup>();
+        sh.spacing = 10f;
+        sh.childAlignment = TextAnchor.MiddleCenter;
+        sh.childControlWidth = true;
+        sh.childForceExpandWidth = true;
+
+        var closeGo = new GameObject("CloseButton", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(closeGo, "CloseButton");
+        closeGo.transform.SetParent(content.transform, false);
+        closeGo.GetComponent<LayoutElement>().minHeight = 56f;
+        var cImg = closeGo.GetComponent<Image>();
+        cImg.sprite = TryGetUiSquareSprite();
+        cImg.color = new Color(0.32f, 0.26f, 0.2f, 1f);
+        CreateTmp(closeGo.transform, "CloseLabel", "확인 / Close", 24, FontStyles.Bold, TextAlignmentOptions.Center,
+            new Color(0.95f, 0.92f, 0.88f, 1f));
     }
 
     static GameObject CreateNewsListRow(Transform parent, string name, string title, string summary, string timeAgo,

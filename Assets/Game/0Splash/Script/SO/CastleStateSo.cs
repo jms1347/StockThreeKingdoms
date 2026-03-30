@@ -20,7 +20,7 @@ public class CastleStateSo : ScriptableObject
         public string currentGovernorId;
         public Faction currentLord;
         public float currentBuyPrice;
-        public float currentSellPrice;
+        public float castleTaxRatePercent;
         public int userDeployedTroops;
         public float averagePurchasePrice;
         public List<float> historyPopulation7Day = new List<float>();

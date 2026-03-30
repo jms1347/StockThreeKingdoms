@@ -231,8 +231,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
         if (troops <= 0) return;
         if (quickDeployTroopFixed > 0)
             troops = Mathf.Min(quickDeployTroopFixed, troops);
-        dm.AddUserCastleDeployment(_boundCastleId.Trim(), troops,
-            dm.EvaluateBuyPriceForCastle(_boundCastleId.Trim()));
+            dm.AddUserCastleDeployment(_boundCastleId.Trim(), troops,
+            dm.EvaluateCastleQuoteForCastle(_boundCastleId.Trim()));
     }
 
     void OnRecallClicked()
@@ -456,7 +456,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
             gradeAccentBarImage.color = GradeAccentColor(g);
 
         if (buyLabelText != null)
-            buyLabelText.text = "매수가";
+            buyLabelText.text = "입성료";
 
         bool scrollRefreshSamePrice = !string.IsNullOrEmpty(_lastBoundCastleForPrice)
                                       && string.Equals(_lastBoundCastleForPrice, castleId, StringComparison.Ordinal)

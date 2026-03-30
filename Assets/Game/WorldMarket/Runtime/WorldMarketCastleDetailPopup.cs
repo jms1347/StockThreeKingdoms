@@ -26,6 +26,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] TextMeshProUGUI buyPriceBigText;
     [SerializeField] TextMeshProUGUI sellCaptionText;
     [SerializeField] TextMeshProUGUI sellPriceText;
+    [SerializeField] TextMeshProUGUI taxRateHintText;
     [SerializeField] TextMeshProUGUI changePctText;
     [SerializeField] UIPopSentiment7DayChart chart7Dual;
     [SerializeField] TextMeshProUGUI popStatText;
@@ -223,8 +224,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         int pop = st.currentPopulation;
         float sentiment = st.currentSentiment;
-        float buy = dm.EvaluateBuyPriceForCastle(_castleId);
-        float sell = dm.EvaluateSellPriceForCastle(_castleId);
+        float quote = dm.EvaluateCastleQuoteForCastle(_castleId);
+        float taxPct = dm.GetCastleTaxRatePercent(_castleId);
         Faction lord = st.currentLord;
         string govId = st.currentGovernorId;
 
@@ -255,20 +256,41 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         }
 
         if (buyCaptionText != null)
-            buyCaptionText.text = "입성비";
+            buyCaptionText.text = "입성료";
         if (buyPriceBigText != null)
-            buyPriceBigText.text = $"{Mathf.RoundToInt(buy):N0} G";
+            buyPriceBigText.text = $"{Mathf.RoundToInt(quote):N0} G";
         if (sellCaptionText != null)
-            sellCaptionText.text = "퇴성비";
+        {
+            sellCaptionText.text = "입성 세율";
+            sellCaptionText.alignment = TextAlignmentOptions.TopRight;
+        }
         if (sellPriceText != null)
-            sellPriceText.text = $"{Mathf.RoundToInt(sell):N0} G";
+        {
+            sellPriceText.text = $"{taxPct:0.#}%";
+            sellPriceText.alignment = TextAlignmentOptions.TopRight;
+        }
+
+        if (taxRateHintText != null)
+        {
+            taxRateHintText.enableWordWrapping = true;
+            taxRateHintText.alignment = TextAlignmentOptions.TopRight;
+            taxRateHintText.text = taxPct <= 0.001f
+                ? "0%는 병력 투입 시 세액이 더 붙지 않는다는 뜻입니다."
+                : "";
+        }
 
         float pct = dm.CalculateChangeRate24h(st);
         if (changePctText != null)
         {
+            changePctText.enableWordWrapping = true;
+            changePctText.overflowMode = TextOverflowModes.Overflow;
+            changePctText.alignment = TextAlignmentOptions.Left;
             bool up = pct > 0.001f;
             bool flat = Mathf.Abs(pct) < 0.02f;
-            changePctText.text = flat ? "0.00%" : $"{(up ? "+" : "")}{pct:F2}%";
+            // 입성료가 전일 기준가 대비 몇 % 변했는지(세율과 무관)
+            changePctText.text = flat
+                ? "전일 대비 0.00%"
+                : $"전일 대비 {(up ? "+" : "")}{pct:F2}%";
             changePctText.color = flat ? new Color(0.7f, 0.72f, 0.76f) : (up ? RiseColor : FallColor);
         }
 
@@ -529,13 +551,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (deploySliderValueText == null) return;
         int n = Mathf.RoundToInt(v);
         var dm = DataManager.InstanceOrNull;
-        float buy = dm != null && !string.IsNullOrWhiteSpace(_castleId)
-            ? dm.EvaluateBuyPriceForCastle(_castleId)
-            : 0f;
-        long cost = (long)Mathf.RoundToInt(buy) * n;
-        deploySliderValueText.text = cost > 0L
-            ? $"투입 병력: {n:N0}명 · 비용 {cost:N0} G"
-            : $"투입 병력: {n:N0}명";
+        if (dm != null && !string.IsNullOrWhiteSpace(_castleId) &&
+            dm.TryComputeDeployGoldBreakdown(_castleId, n, out var principal, out var tax, out var total))
+            deploySliderValueText.text =
+                $"투입 {n:N0}명 · 입성료×병력 {principal:N0} G + 세액 {tax:N0} G = 총 지불 {total:N0} G";
+        else
+            deploySliderValueText.text = $"투입 병력: {n:N0}명";
     }
 
     void OnDeployConfirm()
@@ -545,7 +566,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (!dm.castleStateDataMap.TryGetValue(_castleId, out var st) || st == null) return;
         int n = Mathf.RoundToInt(deploySlider.value);
         if (n <= 0) return;
-        dm.AddUserCastleDeployment(_castleId, n, dm.EvaluateBuyPriceForCastle(_castleId));
+        dm.AddUserCastleDeployment(_castleId, n, dm.EvaluateCastleQuoteForCastle(_castleId));
         deployDialogRoot.gameObject.SetActive(false);
         Refresh();
     }
@@ -643,8 +664,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         headerCardImg.color = new Color(0.05f, 0.10f, 0.17f, 0.97f);
         headerCardImg.raycastTarget = false;
         var headerCardLe = headerCard.GetComponent<LayoutElement>();
-        headerCardLe.minHeight = 168f;
-        headerCardLe.preferredHeight = 176f;
+        headerCardLe.minHeight = 200f;
+        headerCardLe.preferredHeight = 212f;
         headerCardLe.flexibleHeight = 0f;
         var hcv = headerCard.GetComponent<VerticalLayoutGroup>();
         hcv.padding = new RectOffset(14, 14, 12, 12);
@@ -756,10 +777,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         var priceRow = new GameObject("PriceRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         priceRow.transform.SetParent(headerCard.transform, false);
-        priceRow.GetComponent<LayoutElement>().minHeight = 64f;
+        var priceRowLe = priceRow.GetComponent<LayoutElement>();
+        priceRowLe.minHeight = 120f;
+        priceRowLe.preferredHeight = 148f;
         var prh = priceRow.GetComponent<HorizontalLayoutGroup>();
-        prh.spacing = 8;
-        prh.childAlignment = TextAnchor.MiddleLeft;
+        prh.spacing = 12;
+        prh.childAlignment = TextAnchor.UpperLeft;
         prh.childControlWidth = true;
         prh.childForceExpandWidth = true;
         prh.padding = new RectOffset(0, 0, 4, 0);
@@ -773,27 +796,42 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         bsv.childControlWidth = true;
         bsv.childForceExpandWidth = true;
 
-        buyCaptionText = CreateTmp(buyStack.transform, "BuyCap", "입성비", 19, FontStyles.Bold, TextAlignmentOptions.Left);
+        buyCaptionText = CreateTmp(buyStack.transform, "BuyCap", "입성료", 19, FontStyles.Bold, TextAlignmentOptions.Left);
         buyCaptionText.color = new Color(0.72f, 0.78f, 0.88f, 1f);
         buyPriceBigText = CreateTmp(buyStack.transform, "BuyBig", "0 G", 34, FontStyles.Bold, TextAlignmentOptions.Left);
         buyPriceBigText.color = Color.white;
 
-        var sellStack = new GameObject("SellStack", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
-        sellStack.transform.SetParent(priceRow.transform, false);
-        sellStack.GetComponent<LayoutElement>().flexibleWidth = 1f;
-        var ssv = sellStack.GetComponent<VerticalLayoutGroup>();
-        ssv.spacing = 2;
-        ssv.childAlignment = TextAnchor.UpperRight;
-        ssv.childControlWidth = true;
-        ssv.childForceExpandWidth = true;
-
-        sellCaptionText = CreateTmp(sellStack.transform, "SellCap", "퇴성비", 19, FontStyles.Bold, TextAlignmentOptions.TopRight);
-        sellCaptionText.color = new Color(0.72f, 0.78f, 0.88f, 1f);
-        sellPriceText = CreateTmp(sellStack.transform, "SellVal", "0 G", 34, FontStyles.Bold, TextAlignmentOptions.TopRight);
-        sellPriceText.color = new Color(0.88f, 0.90f, 0.94f, 1f);
-
-        changePctText = CreateTmp(headerCard.transform, "Chg", "+0.00%", 22, FontStyles.Bold, TextAlignmentOptions.Left);
+        changePctText = CreateTmp(buyStack.transform, "Chg", "전일 대비 0.00%", 17, FontStyles.Bold, TextAlignmentOptions.Left);
         changePctText.color = new Color(0.7f, 0.72f, 0.76f, 1f);
+        changePctText.enableWordWrapping = true;
+        changePctText.overflowMode = TextOverflowModes.Overflow;
+        var chgLe = changePctText.GetComponent<LayoutElement>();
+        chgLe.flexibleWidth = 1f;
+        chgLe.minHeight = 24f;
+        chgLe.preferredHeight = 28f;
+
+        var taxStack = new GameObject("TaxStack", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        taxStack.transform.SetParent(priceRow.transform, false);
+        var taxLe = taxStack.GetComponent<LayoutElement>();
+        taxLe.flexibleWidth = 0f;
+        taxLe.minWidth = 168f;
+        taxLe.preferredWidth = 200f;
+        var tsv = taxStack.GetComponent<VerticalLayoutGroup>();
+        tsv.spacing = 4;
+        tsv.childAlignment = TextAnchor.UpperRight;
+        tsv.childControlWidth = true;
+        tsv.childForceExpandWidth = true;
+
+        sellCaptionText = CreateTmp(taxStack.transform, "TaxCap", "입성 세율", 17, FontStyles.Bold, TextAlignmentOptions.TopRight);
+        sellCaptionText.color = new Color(0.72f, 0.78f, 0.88f, 1f);
+        sellPriceText = CreateTmp(taxStack.transform, "TaxVal", "0%", 22, FontStyles.Bold, TextAlignmentOptions.TopRight);
+        sellPriceText.color = new Color(0.88f, 0.90f, 0.94f, 1f);
+        taxRateHintText = CreateTmp(taxStack.transform, "TaxHint", "", 13, FontStyles.Normal, TextAlignmentOptions.TopRight);
+        taxRateHintText.color = new Color(0.62f, 0.66f, 0.72f, 1f);
+        taxRateHintText.enableWordWrapping = true;
+        var taxHintLe = taxRateHintText.GetComponent<LayoutElement>();
+        taxHintLe.minWidth = 160f;
+        taxHintLe.preferredWidth = 200f;
 
         var scrollGo = new GameObject("Scroll", typeof(RectTransform), typeof(ScrollRect), typeof(Image), typeof(LayoutElement));
         scrollGo.transform.SetParent(panel.transform, false);
@@ -906,10 +944,10 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         relocateHintText.color = new Color(0.78f, 0.82f, 0.88f, 1f);
         relocateHintText.enableWordWrapping = true;
         relocateHintText.overflowMode = TextOverflowModes.Overflow;
-        var hintLe = hintGo.GetComponent<LayoutElement>();
-        hintLe.minHeight = 88f;
-        hintLe.preferredHeight = 96f;
-        hintLe.flexibleWidth = 1f;
+        var relocateHintLe = hintGo.GetComponent<LayoutElement>();
+        relocateHintLe.minHeight = 88f;
+        relocateHintLe.preferredHeight = 96f;
+        relocateHintLe.flexibleWidth = 1f;
         var hintRt = hintGo.GetComponent<RectTransform>();
         hintRt.sizeDelta = new Vector2(0f, 96f);
 

@@ -85,9 +85,6 @@ public partial class DataManager : Singleton<DataManager>
     public bool IsReady { get; private set; } = false;
     public bool IsStateReady { get; private set; } = false;
 
-    [Header("시세 (매수/매도 스프레드)")]
-    [SerializeField, Range(0f, 0.2f)] float tradeSpread = 0.03f; // 매수/매도 스프레드(기본 3%)
-
     float _nextSaveAt;
     bool _stateDirty;
 
@@ -285,6 +282,8 @@ public partial class DataManager : Singleton<DataManager>
         if (!loaded)
             BuildStateDataFromMaster();
 
+        SyncCastleTaxRateFromMaster();
+
         RecalculateAllPrices();
 
         foreach (var kv in castleStateDataMap)
@@ -294,7 +293,7 @@ public partial class DataManager : Singleton<DataManager>
             castleMasterDataMap.TryGetValue(s.id, out var master);
             EnsureCastleHistorySeeded(s, master);
             if (s.buyPricePrevDayClose < 0.5f)
-                s.buyPricePrevDayClose = CalculateBuyPrice(s);
+                s.buyPricePrevDayClose = CalculateCastleQuote(s);
         }
 
         IsStateReady = true;
@@ -336,6 +335,7 @@ public partial class DataManager : Singleton<DataManager>
             s.historyPopulation7Day = new List<float>();
             s.historySentiment7Day = new List<float>();
             s.buyPricePrevDayClose = 0f;
+            s.castleTaxRatePercent = master.initialTaxRatePercent;
             castleStateDataMap[s.id] = s;
         }
 
@@ -347,8 +347,22 @@ public partial class DataManager : Singleton<DataManager>
         _stateDirty = true;
     }
 
+    /// <summary>저장에 세율이 없던 성은 마스터 <see cref="CastleMasterData.initialTaxRatePercent"/>로 보강.</summary>
+    void SyncCastleTaxRateFromMaster()
+    {
+        if (castleStateDataMap == null || castleMasterDataMap == null) return;
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null) continue;
+            if (!castleMasterDataMap.TryGetValue(s.id, out var m) || m == null) continue;
+            if (s.castleTaxRatePercent <= 0f && m.initialTaxRatePercent > 0f)
+                s.castleTaxRatePercent = m.initialTaxRatePercent;
+        }
+    }
+
     /// <summary>
-    /// <see cref="userPortfolioLiveSo"/> 보유(없으면 런타임 맵) + 라이브 매도가 기준 수익률(%). 미보유·평단 0이면 false.
+    /// <see cref="userPortfolioLiveSo"/> 보유(없으면 런타임 맵) + 성채 호가 기준 수익률(%). 미보유·평단 0이면 false.
     /// </summary>
     public bool TryGetCastleRoiSellBasis(string castleId, out float roiPercent)
     {
@@ -366,15 +380,15 @@ public partial class DataManager : Singleton<DataManager>
 
         if (avg < 1e-4f) return false;
 
-        float sell = 0f;
+        float mark = 0f;
         if (TryGetLiveCastleState(castleId, out var live) && live != null)
-            sell = live.currentSellPrice;
+            mark = live.currentBuyPrice;
         else if (castleStateDataMap.TryGetValue(castleId, out var s) && s != null)
-            sell = s.currentSellPrice;
+            mark = s.currentBuyPrice;
         else
             return false;
 
-        roiPercent = (sell - avg) / avg * 100f;
+        roiPercent = (mark - avg) / avg * 100f;
         return true;
     }
 
@@ -473,7 +487,7 @@ public partial class DataManager : Singleton<DataManager>
                     currentGovernorId = s.currentGovernorId ?? "",
                     currentLord = s.currentLord,
                     currentBuyPrice = s.currentBuyPrice,
-                    currentSellPrice = s.currentSellPrice,
+                    castleTaxRatePercent = s.castleTaxRatePercent,
                     userDeployedTroops = s.userDeployedTroops,
                     averagePurchasePrice = s.averagePurchasePrice,
                     historyPopulation7Day = s.historyPopulation7Day != null ? new List<float>(s.historyPopulation7Day) : new List<float>(),
@@ -648,7 +662,8 @@ public partial class DataManager : Singleton<DataManager>
                         populationHistory = new List<int>(10) { master.initPopulation },
                         historyPopulation7Day = new List<float>(),
                         historySentiment7Day = new List<float>(),
-                        buyPricePrevDayClose = 0f
+                        buyPricePrevDayClose = 0f,
+                        castleTaxRatePercent = master.initialTaxRatePercent
                     };
                     castleStateDataMap[id] = s;
                 }
@@ -877,11 +892,11 @@ public partial class DataManager : Singleton<DataManager>
         int maxByGold = int.MaxValue;
         var gm = GameManager.InstanceOrNull;
         long gold = gm?.currentGold ?? 0L;
-        int unitGold = Mathf.Max(0, Mathf.RoundToInt(EvaluateBuyPriceForCastle(castleId)));
+        int unitGold = Mathf.Max(0, Mathf.RoundToInt(EvaluateCastleQuoteForCastle(castleId)));
         if (unitGold > 0)
         {
-            long affordable = gold / unitGold;
-            maxByGold = affordable > int.MaxValue ? int.MaxValue : (int)affordable;
+            float taxP = s.castleTaxRatePercent;
+            maxByGold = MaxAffordableDeployTroopsForGold(gold, unitGold, taxP);
         }
 
         return Mathf.Min(maxByCastle, poolCap, maxByGold);
@@ -896,7 +911,7 @@ public partial class DataManager : Singleton<DataManager>
         gui.SetTopBarNumbers(name, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
     }
 
-    /// <summary> 병력 추가 시 가중 평균으로 averagePurchasePrice 갱신. </summary>
+    /// <summary>병력 추가 시 본금+입성 관부를 차감하고, 관부 포함 실제 단가로 <see cref="CastleStateData.averagePurchasePrice"/>를 가중 갱신.</summary>
     public void AddUserCastleDeployment(string castleId, int additionalTroops, float pricePerTroop)
     {
         if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || additionalTroops <= 0) return;
@@ -913,7 +928,13 @@ public partial class DataManager : Singleton<DataManager>
         if (additionalTroops <= 0) return;
 
         long unitGold = Math.Max(0L, (long)Mathf.RoundToInt(pricePerTroop));
-        long goldCost = unitGold * additionalTroops;
+        long principalGold = unitGold * additionalTroops;
+        double taxRate = Mathf.Clamp(s.castleTaxRatePercent, 0f, 500f) / 100.0;
+        long taxGold = (long)Math.Round(principalGold * taxRate);
+        long goldCost = principalGold + taxGold;
+        float effectivePerTroop = additionalTroops > 0
+            ? (float)((principalGold + taxGold) / (double)additionalTroops)
+            : pricePerTroop;
         var gmSpend = GameManager.InstanceOrNull;
         if (goldCost > 0L)
         {
@@ -925,10 +946,10 @@ public partial class DataManager : Singleton<DataManager>
         if (newTotal > int.MaxValue) newTotal = int.MaxValue;
 
         if (s.userDeployedTroops <= 0)
-            s.averagePurchasePrice = pricePerTroop;
+            s.averagePurchasePrice = effectivePerTroop;
         else
         {
-            double sumCost = s.averagePurchasePrice * s.userDeployedTroops + pricePerTroop * additionalTroops;
+            double sumCost = s.averagePurchasePrice * s.userDeployedTroops + effectivePerTroop * additionalTroops;
             s.averagePurchasePrice = (float)(sumCost / newTotal);
         }
 
@@ -993,7 +1014,7 @@ public partial class DataManager : Singleton<DataManager>
     }
 
     // ========================================================================
-    // Price calculation (Buy/Sell split) + Buff hooks
+    // 성채 호가 + 태수 버프 (입성·회수 동일 호가, 관부는 입성 시에만)
     // ========================================================================
     public void RecalculateAllPrices()
     {
@@ -1001,23 +1022,63 @@ public partial class DataManager : Singleton<DataManager>
         {
             var s = kv.Value;
             if (s == null) continue;
-            s.currentBuyPrice = CalculateBuyPrice(s);
-            s.currentSellPrice = CalculateSellPrice(s);
+            s.currentBuyPrice = CalculateCastleQuote(s);
         }
     }
 
-    float CalculateBuyPrice(CastleStateData s)
+    /// <summary>병 1단위 호가(금화). JSON 호환을 위해 <see cref="CastleStateData.currentBuyPrice"/>에 저장.</summary>
+    float CalculateCastleQuote(CastleStateData s)
     {
         float basePrice = CalculateBasePrice(s);
-        float buffMul = 1f + GetGovernorValueBonus(s.currentGovernorId, isBuy: true);
-        return Mathf.Max(0f, basePrice * buffMul * (1f + tradeSpread));
+        float buffMul = 1f + GetGovernorQuoteModifier(s.currentGovernorId);
+        return Mathf.Max(0f, basePrice * buffMul);
     }
 
-    float CalculateSellPrice(CastleStateData s)
+    /// <summary>입성 n명 시 본금·관부·합계 금화.</summary>
+    public bool TryComputeDeployGoldBreakdown(string castleId, int troops, out long principalGold, out long taxGold, out long totalGold)
     {
-        float basePrice = CalculateBasePrice(s);
-        float buffMul = 1f + GetGovernorValueBonus(s.currentGovernorId, isBuy: false);
-        return Mathf.Max(0f, basePrice * buffMul * (1f - tradeSpread));
+        principalGold = taxGold = totalGold = 0;
+        if (string.IsNullOrWhiteSpace(castleId) || troops <= 0) return false;
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.ContainsKey(castleId)) return false;
+        float q = EvaluateCastleQuoteForCastle(castleId);
+        long unit = Math.Max(0L, (long)Mathf.RoundToInt(q));
+        principalGold = unit * troops;
+        double rate = Mathf.Clamp(GetCastleTaxRatePercent(castleId), 0f, 500f) / 100.0;
+        taxGold = (long)Math.Round(principalGold * rate);
+        totalGold = principalGold + taxGold;
+        return true;
+    }
+
+    public float GetCastleTaxRatePercent(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return 0f;
+        if (!castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null) return 0f;
+        return Mathf.Max(0f, s.castleTaxRatePercent);
+    }
+
+    static int MaxAffordableDeployTroopsForGold(long gold, long unitQuote, float taxPercent)
+    {
+        if (gold <= 0L || unitQuote <= 0L) return 0;
+        int lo = 0;
+        int hi = (int)Math.Min((long)int.MaxValue, gold / unitQuote + 2L);
+        int best = 0;
+        while (lo <= hi)
+        {
+            int mid = lo + (hi - lo) / 2;
+            long principal = unitQuote * mid;
+            double rate = Mathf.Clamp(taxPercent, 0f, 500f) / 100.0;
+            long tax = (long)Math.Round(principal * rate);
+            long total = principal + tax;
+            if (total <= gold)
+            {
+                best = mid;
+                lo = mid + 1;
+            }
+            else hi = mid - 1;
+        }
+
+        return best;
     }
 
     float CalculateBasePrice(CastleStateData s)
@@ -1046,17 +1107,15 @@ public partial class DataManager : Singleton<DataManager>
         }
     }
 
-    float GetGovernorValueBonus(string governorId, bool isBuy)
+    float GetGovernorQuoteModifier(string governorId)
     {
         var buff = GetGovernorBuff(governorId);
         if (buff == null) return 0f;
 
-        // 기본: ValueMultiplier는 Buy/Sell 모두 적용
         if (buff.type == BuffType.CastleValue)
             return buff.value;
 
-        // ParValueModifier: 액면가(매수 기준) 할인 — value=0.1이면 매수가 10% 유리 (multiplier -0.1)
-        if (isBuy && buff.type == BuffType.PriceValue)
+        if (buff.type == BuffType.PriceValue)
             return -Mathf.Abs(buff.value);
 
         return 0f;
@@ -1065,10 +1124,8 @@ public partial class DataManager : Singleton<DataManager>
     BuffMasterData GetGovernorBuff(string governorId)
     {
         if (string.IsNullOrWhiteSpace(governorId)) return null;
-        if (!generalMasterDataMap.TryGetValue(governorId.Trim(), out var g) || g == null) return null;
-        if (string.IsNullOrWhiteSpace(g.buffId)) return null;
-        if (!buffMasterDataMap.TryGetValue(g.buffId.Trim(), out var buff) || buff == null) return null;
-        return buff;
+        // 장수 마스터 G열은 악명(int)으로 통합됨. 구 시트의 버프 코드(B01 등) 기반 태수 버프 연동은 사용하지 않습니다.
+        return null;
     }
 
     // ========================================================================
@@ -1076,11 +1133,19 @@ public partial class DataManager : Singleton<DataManager>
     // ========================================================================
     void AddNews(string text)
     {
-        var item = new WorldNewsItem
+        AddNewsItem(new WorldNewsItem
         {
             unixTime = TimeManager.GetUnixNow(),
             text = text
-        };
+        });
+    }
+
+    /// <summary>뉴스 한 건 추가(상세 팝업 필드 포함 가능).</summary>
+    public void AddNewsItem(WorldNewsItem item)
+    {
+        if (item == null) return;
+        if (item.unixTime <= 0)
+            item.unixTime = TimeManager.GetUnixNow();
         if (worldNews == null) worldNews = new List<WorldNewsItem>();
         worldNews.Add(item);
         while (worldNews.Count > 80)

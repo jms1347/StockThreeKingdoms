@@ -18,6 +18,7 @@ MonoBehaviour:
     regionId: "\uB099\uC591"
     grade: 0
     initialNationId: WEI
+    initialTaxRatePercent: 5
     baseValue: 1000
     maxTroops: 500000
     initPopulation: 100000
@@ -29,6 +30,7 @@ MonoBehaviour:
     regionId: "\uD5C8\uCC3D"
     grade: 1
     initialNationId: WEI
+    initialTaxRatePercent: 4.5
     baseValue: 800
     maxTroops: 350000
     initPopulation: 70000
@@ -40,6 +42,7 @@ MonoBehaviour:
     regionId: "\uC9C4\uB958"
     grade: 2
     initialNationId: WEI
+    initialTaxRatePercent: 3.5
     baseValue: 500
     maxTroops: 200000
     initPopulation: 40000
@@ -51,6 +54,7 @@ MonoBehaviour:
     regionId: "\uC5C5\uC131"
     grade: 1
     initialNationId: WEI
+    initialTaxRatePercent: 4
     baseValue: 750
     maxTroops: 400000
     initPopulation: 80000
@@ -62,6 +66,7 @@ MonoBehaviour:
     regionId: "\uBD81\uD3C9"
     grade: 3
     initialNationId: OTHERS
+    initialTaxRatePercent: 2
     baseValue: 400
     maxTroops: 150000
     initPopulation: 30000
@@ -73,6 +78,7 @@ MonoBehaviour:
     regionId: "\uC591\uD3C9"
     grade: 4
     initialNationId: OTHERS
+    initialTaxRatePercent: 1.2
     baseValue: 300
     maxTroops: 100000
     initPopulation: 20000
@@ -84,6 +90,7 @@ MonoBehaviour:
     regionId: "\uC7A5\uC548"
     grade: 0
     initialNationId: WEI
+    initialTaxRatePercent: 5
     baseValue: 900
     maxTroops: 450000
     initPopulation: 90000
@@ -95,6 +102,7 @@ MonoBehaviour:
     regionId: "\uC11C\uB7C9"
     grade: 3
     initialNationId: OTHERS
+    initialTaxRatePercent: 2
     baseValue: 350
     maxTroops: 120000
     initPopulation: 25000
@@ -106,6 +114,7 @@ MonoBehaviour:
     regionId: "\uCC9C\uC218"
     grade: 3
     initialNationId: OTHERS
+    initialTaxRatePercent: 2.2
     baseValue: 300
     maxTroops: 100000
     initPopulation: 20000
@@ -117,6 +126,7 @@ MonoBehaviour:
     regionId: "\uC591\uC591"
     grade: 1
     initialNationId: OTHERS
+    initialTaxRatePercent: 4
     baseValue: 600
     maxTroops: 250000
     initPopulation: 50000
@@ -128,6 +138,7 @@ MonoBehaviour:
     regionId: "\uAC15\uB989"
     grade: 1
     initialNationId: SHU
+    initialTaxRatePercent: 3.8
     baseValue: 550
     maxTroops: 220000
     initPopulation: 45000
@@ -139,6 +150,7 @@ MonoBehaviour:
     regionId: "\uBB34\uB989"
     grade: 4
     initialNationId: SHU
+    initialTaxRatePercent: 1.5
     baseValue: 250
     maxTroops: 80000
     initPopulation: 15000
@@ -150,6 +162,7 @@ MonoBehaviour:
     regionId: "\uAC74\uC5C5"
     grade: 0
     initialNationId: WU
+    initialTaxRatePercent: 4.8
     baseValue: 850
     maxTroops: 420000
     initPopulation: 85000
@@ -161,6 +174,7 @@ MonoBehaviour:
     regionId: "\uC624\uAD70"
     grade: 1
     initialNationId: WU
+    initialTaxRatePercent: 4
     baseValue: 650
     maxTroops: 300000
     initPopulation: 60000
@@ -172,6 +186,7 @@ MonoBehaviour:
     regionId: "\uC131\uB3C4"
     grade: 1
     initialNationId: SHU
+    initialTaxRatePercent: 4.5
     baseValue: 700
     maxTroops: 380000
     initPopulation: 75000
@@ -183,6 +198,7 @@ MonoBehaviour:
     regionId: "\uAC15\uC8FC"
     grade: 3
     initialNationId: SHU
+    initialTaxRatePercent: 2.5
     baseValue: 400
     maxTroops: 150000
     initPopulation: 30000
@@ -194,6 +210,7 @@ MonoBehaviour:
     regionId: "\uAC74\uB155"
     grade: 4
     initialNationId: OTHERS
+    initialTaxRatePercent: 0.8
     baseValue: 200
     maxTroops: 50000
     initPopulation: 10000
@@ -205,6 +222,7 @@ MonoBehaviour:
     regionId: "\uC11C\uC8FC"
     grade: 2
     initialNationId: OTHERS
+    initialTaxRatePercent: 3.5
     baseValue: 500
     maxTroops: 200000
     initPopulation: 45000
@@ -216,6 +234,7 @@ MonoBehaviour:
     regionId: "\uC18C\uD328"
     grade: 5
     initialNationId: OTHERS
+    initialTaxRatePercent: 0.7
     baseValue: 150
     maxTroops: 30000
     initPopulation: 5000
@@ -227,6 +246,7 @@ MonoBehaviour:
     regionId: "\uD638\uB85C\uAD00"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2.5
     baseValue: 400
     maxTroops: 100000
     initPopulation: 15000
@@ -238,6 +258,7 @@ MonoBehaviour:
     regionId: "\uC644"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2.5
     baseValue: 450
     maxTroops: 150000
     initPopulation: 30000
@@ -249,6 +270,7 @@ MonoBehaviour:
     regionId: "\uC5EC\uB0A8"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2
     baseValue: 350
     maxTroops: 120000
     initPopulation: 25000
@@ -260,6 +282,7 @@ MonoBehaviour:
     regionId: "\uBCF5\uC591"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2.2
     baseValue: 400
     maxTroops: 150000
     initPopulation: 30000
@@ -271,6 +294,7 @@ MonoBehaviour:
     regionId: "\uC2E0\uC57C"
     grade: 4
     initialNationId: WEI
+    initialTaxRatePercent: 1.5
     baseValue: 300
     maxTroops: 100000
     initPopulation: 20000
@@ -282,6 +306,7 @@ MonoBehaviour:
     regionId: "\uC218\uCD98"
     grade: 2
     initialNationId: WEI
+    initialTaxRatePercent: 3.5
     baseValue: 450
     maxTroops: 180000
     initPopulation: 35000
@@ -293,6 +318,7 @@ MonoBehaviour:
     regionId: "\uB0A8\uD53C"
     grade: 2
     initialNationId: WEI
+    initialTaxRatePercent: 3.2
     baseValue: 500
     maxTroops: 200000
     initPopulation: 40000
@@ -304,6 +330,7 @@ MonoBehaviour:
     regionId: "\uACC4"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2.5
     baseValue: 350
     maxTroops: 100000
     initPopulation: 20000
@@ -315,6 +342,7 @@ MonoBehaviour:
     regionId: "\uB099\uB791"
     grade: 5
     initialNationId: OTHERS
+    initialTaxRatePercent: 0.5
     baseValue: 200
     maxTroops: 50000
     initPopulation: 10000
@@ -326,6 +354,7 @@ MonoBehaviour:
     regionId: "\uD3C9\uC6D0"
     grade: 2
     initialNationId: WEI
+    initialTaxRatePercent: 3
     baseValue: 450
     maxTroops: 180000
     initPopulation: 35000
@@ -337,6 +366,7 @@ MonoBehaviour:
     regionId: "\uC548\uC815"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2
     baseValue: 350
     maxTroops: 120000
     initPopulation: 25000
@@ -348,6 +378,7 @@ MonoBehaviour:
     regionId: "\uBB34\uC704"
     grade: 4
     initialNationId: OTHERS
+    initialTaxRatePercent: 1
     baseValue: 250
     maxTroops: 80000
     initPopulation: 15000
@@ -359,6 +390,7 @@ MonoBehaviour:
     regionId: "\uB3C8\uD669"
     grade: 4
     initialNationId: OTHERS
+    initialTaxRatePercent: 0.8
     baseValue: 300
     maxTroops: 70000
     initPopulation: 12000
@@ -370,6 +402,7 @@ MonoBehaviour:
     regionId: "\uBB34\uB3C4"
     grade: 4
     initialNationId: SHU
+    initialTaxRatePercent: 1.2
     baseValue: 300
     maxTroops: 100000
     initPopulation: 20000
@@ -381,6 +414,7 @@ MonoBehaviour:
     regionId: "\uAC15\uD558"
     grade: 3
     initialNationId: WEI
+    initialTaxRatePercent: 2.2
     baseValue: 400
     maxTroops: 150000
     initPopulation: 30000
@@ -392,6 +426,7 @@ MonoBehaviour:
     regionId: "\uC7A5\uC0AC"
     grade: 2
     initialNationId: WU
+    initialTaxRatePercent: 3
     baseValue: 500
     maxTroops: 200000
     initPopulation: 40000
@@ -403,6 +438,7 @@ MonoBehaviour:
     regionId: "\uC601\uB989"
     grade: 5
     initialNationId: OTHERS
+    initialTaxRatePercent: 0.7
     baseValue: 200
     maxTroops: 60000
     initPopulation: 12000
@@ -414,6 +450,7 @@ MonoBehaviour:
     regionId: "\uACC4\uC591"
     grade: 4
     initialNationId: OTHERS
+    initialTaxRatePercent: 1.2
     baseValue: 250
     maxTroops: 80000
     initPopulation: 15000
@@ -425,6 +462,7 @@ MonoBehaviour:
     regionId: "\uD68C\uACC4"
     grade: 3
     initialNationId: WU
+    initialTaxRatePercent: 2.5
     baseValue: 450
     maxTroops: 180000
     initPopulation: 35000
@@ -436,6 +474,7 @@ MonoBehaviour:
     regionId: "\uAC74\uC548"
     grade: 4
     initialNationId: WU
+    initialTaxRatePercent: 1.5
     baseValue: 300
     maxTroops: 100000
     initPopulation: 20000
@@ -447,6 +486,7 @@ MonoBehaviour:
     regionId: "\uC608\uC7A5"
     grade: 4
     initialNationId: WU
+    initialTaxRatePercent: 1.5
     baseValue: 250
     maxTroops: 80000
     initPopulation: 15000
@@ -458,6 +498,7 @@ MonoBehaviour:
     regionId: "\uC790\uB3D9"
     grade: 3
     initialNationId: SHU
+    initialTaxRatePercent: 2.2
     baseValue: 350
     maxTroops: 120000
     initPopulation: 25000
@@ -469,6 +510,7 @@ MonoBehaviour:
     regionId: "\uAC15\uC591"
     grade: 5
     initialNationId: SHU
+    initialTaxRatePercent: 0.8
     baseValue: 200
     maxTroops: 60000
     initPopulation: 12000
@@ -480,6 +522,7 @@ MonoBehaviour:
     regionId: "\uC601\uC548"
     grade: 3
     initialNationId: SHU
+    initialTaxRatePercent: 2
     baseValue: 400
     maxTroops: 150000
     initPopulation: 30000
@@ -491,6 +534,7 @@ MonoBehaviour:
     regionId: "\uC6B4\uB0A8"
     grade: 5
     initialNationId: OTHERS
+    initialTaxRatePercent: 0.5
     baseValue: 200
     maxTroops: 50000
     initPopulation: 10000
@@ -502,6 +546,7 @@ MonoBehaviour:
     regionId: "\uD558\uBE44"
     grade: 1
     initialNationId: OTHERS
+    initialTaxRatePercent: 4
     baseValue: 550
     maxTroops: 220000
     initPopulation: 45000
@@ -513,6 +558,7 @@ MonoBehaviour:
     regionId: "\uBD81\uD574"
     grade: 3
     initialNationId: OTHERS
+    initialTaxRatePercent: 2.5
     baseValue: 400
     maxTroops: 150000
     initPopulation: 30000
@@ -524,6 +570,7 @@ MonoBehaviour:
     regionId: "\uAD11\uB989"
     grade: 3
     initialNationId: OTHERS
+    initialTaxRatePercent: 2
     baseValue: 350
     maxTroops: 120000
     initPopulation: 25000
@@ -535,6 +582,7 @@ MonoBehaviour:
     regionId: "\uD569\uBE44"
     grade: 2
     initialNationId: WEI
+    initialTaxRatePercent: 3.2
     baseValue: 450
     maxTroops: 180000
     initPopulation: 35000
@@ -542,13 +590,14 @@ MonoBehaviour:
     posY: 380
     adjacentIdsRaw: C03,C13,C26,C48
   - id: C50
-    name: "\uB0AD\uC57C"
-    regionId: "\uAE30\uD0C0"
+    name: R12
+    regionId: "\uB0AD\uC57C"
     grade: 5
-    initialNationId: 150
-    baseValue: 30000
-    maxTroops: 5000
-    initPopulation: 0
-    posX: 0
-    posY: 0
-    adjacentIdsRaw: 
+    initialNationId: OTHERS
+    initialTaxRatePercent: 0.8
+    baseValue: 150
+    maxTroops: 30000
+    initPopulation: 5000
+    posX: 820
+    posY: 600
+    adjacentIdsRaw: C47

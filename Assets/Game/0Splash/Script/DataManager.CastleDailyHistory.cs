@@ -31,7 +31,7 @@ public partial class DataManager
             castleMasterDataMap.TryGetValue(s.id, out var master);
             PushHistory7(s.historyPopulation7Day, s.currentPopulation);
             PushHistory7(s.historySentiment7Day, s.currentSentiment);
-            float px = CalculateBuyPrice(s);
+            float px = CalculateCastleQuote(s);
             s.buyPricePrevDayClose = px;
         }
 
@@ -39,28 +39,21 @@ public partial class DataManager
         _stateDirty = true;
     }
 
-    /// <summary>전일 종가(또는 마지막 일괄 스냅샷) 대비 매수가 등락률(%).</summary>
+    /// <summary>전일 종가(또는 마지막 일괄 스냅샷) 대비 성채 호가 등락률(%).</summary>
     public float CalculateChangeRate24h(CastleStateData s)
     {
         if (s == null) return 0f;
-        float cur = CalculateBuyPrice(s);
+        float cur = CalculateCastleQuote(s);
         float @ref = s.buyPricePrevDayClose;
         if (@ref < 0.5f) return 0f;
         return (cur - @ref) / @ref * 100f;
     }
 
-    public float EvaluateBuyPriceForCastle(string castleId)
+    public float EvaluateCastleQuoteForCastle(string castleId)
     {
         if (string.IsNullOrWhiteSpace(castleId) || !castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null)
             return 0f;
-        return CalculateBuyPrice(s);
-    }
-
-    public float EvaluateSellPriceForCastle(string castleId)
-    {
-        if (string.IsNullOrWhiteSpace(castleId) || !castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null)
-            return 0f;
-        return CalculateSellPrice(s);
+        return CalculateCastleQuote(s);
     }
 
     /// <summary>이주 비용 포인트(명세 CalculateStepCost와 동일 의미).</summary>
@@ -82,8 +75,7 @@ public partial class DataManager
     {
         if (string.IsNullOrWhiteSpace(castleId) || !castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null)
             return;
-        s.currentBuyPrice = CalculateBuyPrice(s);
-        s.currentSellPrice = CalculateSellPrice(s);
+        s.currentBuyPrice = CalculateCastleQuote(s);
     }
 
     /// <summary>스프레드·버프 반영 전 내재가(액면가×인구·민심·등급).</summary>
@@ -190,6 +182,6 @@ public partial class DataManager
         while (s.historySentiment7Day.Count > 7) s.historySentiment7Day.RemoveAt(0);
 
         if (s.buyPricePrevDayClose < 0.5f)
-            s.buyPricePrevDayClose = CalculateBuyPrice(s);
+            s.buyPricePrevDayClose = CalculateCastleQuote(s);
     }
 }

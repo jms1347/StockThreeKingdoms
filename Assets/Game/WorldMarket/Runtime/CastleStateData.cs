@@ -51,16 +51,17 @@ public class CastleStateData
     public List<float> historyPopulation7Day = new List<float>();
     /// <summary>7일 일간 스냅샷(민심 0~200, 100 기준).</summary>
     public List<float> historySentiment7Day = new List<float>();
-    /// <summary>전일 종가에 가까운 매수가 앵커 — <see cref="DataManager.CalculateChangeRate24h"/>용.</summary>
+    /// <summary>전일 종가에 가까운 성채 호가 앵커 — <see cref="DataManager.CalculateChangeRate24h"/>용.</summary>
     public float buyPricePrevDayClose;
 
-    // 매수가/매도가 분리
+    /// <summary>성채 호가(병 1단위 금화). 매도·수익률 기준도 동일 호가(관부 없음).</summary>
     public float currentBuyPrice;
-    public float currentSellPrice;
+    /// <summary>해 성 입성 관부율(%). 마스터 초기값에서 시드 후 성별로 유지.</summary>
+    public float castleTaxRatePercent;
 
     // 유저 투자 (천하 탭)
     public int userDeployedTroops;
-    /// <summary>병력 1단위당 평균 매수(진입) 가격. 수익률 = 현재가 대비.</summary>
+    /// <summary>병력 1단위당 평균 실질 진입 비용(호가+입성 관부 분담). 수익률은 성채 호가 대비.</summary>
     public float averagePurchasePrice;
 
     public bool IsUserInvested => userDeployedTroops > 0;
@@ -70,7 +71,47 @@ public class CastleStateData
 public class WorldNewsItem
 {
     public long unixTime;
+    /// <summary>리스트 요약·본문 폴백용 한 줄 또는 전체 문자열.</summary>
     public string text;
+
+    /// <summary>상세 팝업 헤드라인 (비어 있으면 <see cref="text"/> 첫 줄 사용).</summary>
+    public string detailTitle;
+    /// <summary>예: "2분 전 · 관련 성: 업성(C04)" (비어 있으면 런타임에서 시간·성 ID 추정).</summary>
+    public string detailSubline;
+    /// <summary>상세 본문 (비어 있으면 <see cref="text"/> 전체 또는 나머지 줄).</summary>
+    public string detailBody;
+    /// <summary>쉼표 구분 성 ID: C04,C06</summary>
+    public string relatedCastleIdsRaw;
+    public string impactRangeText;
+    public string debuffIconsHint;
+    public string statLine1;
+    public string statLine2;
+    public string durationText;
+
+    public string GetEffectiveDetailTitle()
+    {
+        if (!string.IsNullOrWhiteSpace(detailTitle)) return detailTitle.Trim();
+        if (string.IsNullOrWhiteSpace(text)) return "소식";
+        int nl = text.IndexOf('\n');
+        return nl >= 0 ? text.Substring(0, nl).Trim() : text.Trim();
+    }
+
+    public string GetEffectiveSummaryForList()
+    {
+        if (string.IsNullOrWhiteSpace(text)) return "";
+        int nl = text.IndexOf('\n');
+        if (nl < 0) return text.Trim();
+        string rest = text.Substring(nl + 1).Trim();
+        return string.IsNullOrEmpty(rest) ? text.Substring(0, nl).Trim() : rest;
+    }
+
+    public string GetEffectiveDetailBody()
+    {
+        if (!string.IsNullOrWhiteSpace(detailBody)) return detailBody.Trim();
+        if (string.IsNullOrWhiteSpace(text)) return "";
+        int nl = text.IndexOf('\n');
+        return nl >= 0 && nl < text.Length - 1 ? text.Substring(nl + 1).Trim() : text.Trim();
+    }
 }
 
 [Serializable]

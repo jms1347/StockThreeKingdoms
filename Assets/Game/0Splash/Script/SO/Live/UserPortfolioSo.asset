@@ -12,8 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c4a90db64d7b347ba85055b410b8df, type: 3}
   m_Name: UserPortfolioSo
   m_EditorClassIdentifier: Assembly-CSharp::UserPortfolioSo
-  totalGold: 56351
-  holdings: []
+  totalGold: 239634712
+  holdings:
+  - castleId: C08
+    troopCount: 4994
+    averagePurchasePrice: 66.3355
+  - castleId: C09
+    troopCount: 565
+    averagePurchasePrice: 12.586968
+  - castleId: C11
+    troopCount: 6147
+    averagePurchasePrice: 100.16152
+  - castleId: C21
+    troopCount: 2901
+    averagePurchasePrice: 85.86171
+  - castleId: C30
+    troopCount: 2027
+    averagePurchasePrice: 43.52108
+  - castleId: C32
+    troopCount: 345
+    averagePurchasePrice: 48.06652
+  - castleId: C34
+    troopCount: 5582
+    averagePurchasePrice: 94.52858
+  - castleId: C35
+    troopCount: 5275
+    averagePurchasePrice: 100.82799
+  - castleId: C36
+    troopCount: 7078
+    averagePurchasePrice: 22.43466
+  - castleId: C37
+    troopCount: 6338
+    averagePurchasePrice: 98.14084
+  - castleId: C44
+    troopCount: 1051
+    averagePurchasePrice: 111.33267
   homeCastleId: C01
-  travelGaugePoints: 4262.485
-  currentStepCount: 33000
+  travelGaugePoints: 4582.8887
+  currentStepCount: 0

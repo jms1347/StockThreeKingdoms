@@ -900,7 +900,7 @@ public static class WorldMarketLayoutWizard
         ev.childAlignment = TextAnchor.UpperLeft;
         CreateTMP(execText.transform, "GovernorName", "Governor\nCao Cao (SS Grade)", 28, FontStyles.Bold, TextAlignmentOptions.Left);
         CreateTMP(execText.transform, "Charm", "Charm: 94", 26, FontStyles.Italic, TextAlignmentOptions.Left);
-        CreateTMP(execText.transform, "Buff", "[Golden Apple]\nCastle Value +20%", 24, FontStyles.Normal, TextAlignmentOptions.Left, color: new Color(0.95f, 0.88f, 0.55f));
+        CreateTMP(execText.transform, "Infamy", "악명: 45 (0~100)", 24, FontStyles.Normal, TextAlignmentOptions.Left, color: new Color(0.95f, 0.88f, 0.55f));
 
         // Action buttons
         var actions = new GameObject("Actions", typeof(RectTransform), typeof(LayoutElement));

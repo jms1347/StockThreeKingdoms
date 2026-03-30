@@ -15,9 +15,9 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 {
     // ★ 구글 시트 URL (웹에 게시 -> TSV 형식으로 추출한 URL을 넣으세요)
     const string levelRuleDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=0&range=A2:I";
-    /// <summary>A:id, B:name, C:regionId, D:grade, E:initialNationId, F:baseValue, G:maxTroops, H:initPopulation, I:posX, J:posY, K:adjacentIdsRaw</summary>
-    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:K";
-    /// <summary>A:id, B:name, C:grade, D:power, E:intel, F:charm, G:buffId, H:initialNationId, I:initialCastleId</summary>
+    /// <summary>A:id, B:name, C:regionId, D:grade, E:initialNationId, F:initialTaxRate%, G:baseValue, H:maxTroops, I:initPopulation, J:posX, K:posY, L:adjacentIdsRaw</summary>
+    const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:L";
+    /// <summary>A:id, B:name, C:grade, D:power, E:intel, F:charm, G:infamy(0~100), H:initialNationId, I:initialCastleId</summary>
     const string generalMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1008843975&range=A2:I";
     const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:E";
     /// <summary>세력(Nation) 마스터 TSV URL. A:id, B:name, C:colorCode, D:capitalId, E:description (예: range=A2:E)</summary>
@@ -177,7 +177,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 8) continue;
+            if (cells.Length < 9) continue;
 
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
@@ -196,12 +196,13 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             else if (!Enum.TryParse(gradeRaw, true, out castleData.grade))
                 castleData.grade = Grade.D;
 
-            float.TryParse(cells[5].Trim(), out castleData.baseValue);
-            int.TryParse(cells[6].Trim(), out castleData.maxTroops);
-            int.TryParse(cells[7].Trim(), out castleData.initPopulation);
-            float.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out castleData.posX);
-            float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out castleData.posY);
-            castleData.adjacentIdsRaw = cells.Length > 10 ? cells[10].Trim() : "";
+            float.TryParse(cells[5].Trim(), out castleData.initialTaxRatePercent);
+            float.TryParse(cells[6].Trim(), out castleData.baseValue);
+            int.TryParse(cells[7].Trim(), out castleData.maxTroops);
+            int.TryParse(cells[8].Trim(), out castleData.initPopulation);
+            float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out castleData.posX);
+            float.TryParse(cells.Length > 10 ? cells[10].Trim() : "0", out castleData.posY);
+            castleData.adjacentIdsRaw = cells.Length > 11 ? cells[11].Trim() : "";
 
             dm.castleMasterDataMap[castleData.id] = castleData;
         }
@@ -216,6 +217,18 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         if (Enum.TryParse(raw, true, out Faction f))
             return f;
         return Faction.NONE;
+    }
+
+    /// <summary>장수 마스터 시트 G열(7번째, 0-based index 6). 0~100으로 클램프. 레거시 "B12" 형태는 숫자 부분만 사용.</summary>
+    static int ParseGeneralMasterInfamyCell(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return 0;
+        raw = raw.Trim();
+        if (int.TryParse(raw, out int n))
+            return Mathf.Clamp(n, 0, 100);
+        if (raw.Length > 1 && (raw[0] == 'B' || raw[0] == 'b') && int.TryParse(raw.Substring(1), out int legacy))
+            return Mathf.Clamp(legacy, 0, 100);
+        return 0;
     }
 
     void SetGeneralMasterData(DataManager dm, string data)
@@ -244,7 +257,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                buffId = cells.Length > 6 ? cells[6].Trim() : "",
+                infamy = ParseGeneralMasterInfamyCell(cells.Length > 6 ? cells[6] : ""),
                 initialNationId = cells.Length > 7 ? cells[7].Trim() : "",
                 initialCastleId = cells.Length > 8 ? cells[8].Trim() : ""
             };
@@ -547,7 +560,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 8) continue;
+            if (cells.Length < 9) continue;
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
             var item = new CastleMasterData
@@ -560,12 +573,13 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             string gradeRaw = cells.Length > 3 ? cells[3].Trim() : "";
             if (int.TryParse(gradeRaw, out int gi) && Enum.IsDefined(typeof(Grade), gi)) item.grade = (Grade)gi;
             else if (!Enum.TryParse(gradeRaw, true, out item.grade)) item.grade = Grade.D;
-            float.TryParse(cells[5].Trim(), out item.baseValue);
-            int.TryParse(cells[6].Trim(), out item.maxTroops);
-            int.TryParse(cells[7].Trim(), out item.initPopulation);
-            float.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out item.posX);
-            float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out item.posY);
-            item.adjacentIdsRaw = cells.Length > 10 ? cells[10].Trim() : "";
+            float.TryParse(cells[5].Trim(), out item.initialTaxRatePercent);
+            float.TryParse(cells[6].Trim(), out item.baseValue);
+            int.TryParse(cells[7].Trim(), out item.maxTroops);
+            int.TryParse(cells[8].Trim(), out item.initPopulation);
+            float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out item.posX);
+            float.TryParse(cells.Length > 10 ? cells[10].Trim() : "0", out item.posY);
+            item.adjacentIdsRaw = cells.Length > 11 ? cells[11].Trim() : "";
             list.Add(item);
         }
         return list;
@@ -588,7 +602,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                buffId = cells.Length > 6 ? cells[6].Trim() : "",
+                infamy = ParseGeneralMasterInfamyCell(cells.Length > 6 ? cells[6] : ""),
                 initialNationId = cells.Length > 7 ? cells[7].Trim() : "",
                 initialCastleId = cells.Length > 8 ? cells[8].Trim() : ""
             };

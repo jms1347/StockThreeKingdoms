@@ -12,7 +12,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(RectTransform))]
 public class UIPopSentiment7DayChart : MonoBehaviour
 {
-    [SerializeField] float lineWidthPixels = 8f;
+    [SerializeField] float lineWidthPixels = 14f;
     [SerializeField] Color populationLineColor = new Color(0.38f, 0.65f, 0.98f, 1f);
     [SerializeField] Color sentimentLineColor = new Color(1f, 0.82f, 0.35f, 1f);
     [SerializeField] float labelOffsetAbovePoint = 24f;
