@@ -25,8 +25,18 @@ public class BalanceConfig
     public double soldierGradeMultPerLevel = 0.1;
 }
 
+/// <summary>TimeManager(-200)보다 먼저 Awake되어 <see cref="RealMinutesPerGameDay"/>를 씁니다.</summary>
+[DefaultExecutionOrder(-250)]
 public class GameManager : Singleton<GameManager>
 {
+    [Header("시간")]
+    [Tooltip("실시간으로 1게임일이 지나는 데 걸리는 분. 1440 = 24시간. 짧게 두면 테스트에 유리.")]
+    [Range(1, 1440)]
+    [SerializeField] int minutesPerGameDay = 1440;
+
+    /// <summary>1~1440분. <see cref="TimeManager"/> 가상 Unix·일 경계에 사용.</summary>
+    public int RealMinutesPerGameDay => Mathf.Clamp(minutesPerGameDay, 1, 1440);
+
     [Header("밸런스 (유저 레벨 기반 계산)")]
     public BalanceConfig balance = new BalanceConfig();
 

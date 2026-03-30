@@ -12,6 +12,10 @@ public class SingletonLoader : MonoBehaviour
     public GameObject popupManagerPrefab;
     public GameObject gameManagerPrefab;
     public GameObject globalUiManagerPrefab;
+    [Tooltip("월드 뉴스. DataManager 이후·EventManager보다 먼저 로드 권장.")]
+    public GameObject newsManagerPrefab;
+    [Tooltip("이벤트 마스터 연동. EventMasterDataSo는 프리팹에 할당됨.")]
+    public GameObject eventManagerPrefab;
 
     [Header("Scene Transition")]
     [Tooltip("매니저 로드 완료 후 이동할 다음 씬의 이름입니다.")]
@@ -33,6 +37,8 @@ public class SingletonLoader : MonoBehaviour
         // 예시: public class GoogleSheetManager : Singleton<GoogleSheetManager> { ... }
         GoogleSheetManager.Load(googlesheetManagerPrefab);
         DataManager.Load(dataManagerPrefab);
+        NewsManager.Load(newsManagerPrefab);
+        EventManager.Load(eventManagerPrefab);
         // TranslationManager.Load(translationManagerPrefab);
         // SoundManager.Load(soundManagerPrefab);
         // FadeManager.Load(fadeManagerPrefab);

@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e875fb0c08d9a34eb733a65452cc9ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minutesPerGameDay: 1
   balance:
     clickPowerBaseCost: 50
     clickPowerCostMult: 1.15
@@ -59,6 +60,8 @@ MonoBehaviour:
     soldierGradeCostMult: 1.25
     soldierGradeBaseMult: 1
     soldierGradeMultPerLevel: 0.1
+  balanceConfigSo: {fileID: 0}
+  userDataDefaultsSo: {fileID: 0}
   currentUser:
     userName: "\uCD08\uBCF4 \uAD70\uC8FC"
     honorPoints: 0

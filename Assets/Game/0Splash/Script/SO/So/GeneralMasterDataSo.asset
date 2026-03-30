@@ -19,7 +19,7 @@ MonoBehaviour:
     power: 72
     intel: 92
     charm: 99
-    infamy: 12
+    infamy: 78
     initialNationId: WEI
     initialCastleId: C01
     governorPortrait: {fileID: 0}
@@ -29,7 +29,7 @@ MonoBehaviour:
     power: 75
     intel: 78
     charm: 100
-    infamy: 24
+    infamy: 2
     initialNationId: SHU
     initialCastleId: C16
     governorPortrait: {fileID: 0}
@@ -39,7 +39,7 @@ MonoBehaviour:
     power: 68
     intel: 82
     charm: 95
-    infamy: 22
+    infamy: 15
     initialNationId: WU
     initialCastleId: C13
     governorPortrait: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
     power: 98
     intel: 82
     charm: 93
-    infamy: 26
+    infamy: 5
     initialNationId: SHU
     initialCastleId: C11
     governorPortrait: {fileID: 0}
@@ -59,7 +59,7 @@ MonoBehaviour:
     power: 38
     intel: 100
     charm: 95
-    infamy: 13
+    infamy: 1
     initialNationId: SHU
     initialCastleId: C16
     governorPortrait: {fileID: 0}
@@ -69,7 +69,7 @@ MonoBehaviour:
     power: 100
     intel: 25
     charm: 40
-    infamy: 10
+    infamy: 96
     initialNationId: OTHERS
     initialCastleId: C20
     governorPortrait: {fileID: 0}
@@ -79,7 +79,7 @@ MonoBehaviour:
     power: 62
     intel: 98
     charm: 88
-    infamy: 15
+    infamy: 72
     initialNationId: WEI
     initialCastleId: C01
     governorPortrait: {fileID: 0}
@@ -89,7 +89,7 @@ MonoBehaviour:
     power: 71
     intel: 96
     charm: 94
-    infamy: 18
+    infamy: 8
     initialNationId: WU
     initialCastleId: C15
     governorPortrait: {fileID: 0}
@@ -99,7 +99,7 @@ MonoBehaviour:
     power: 96
     intel: 75
     charm: 92
-    infamy: 16
+    infamy: 3
     initialNationId: SHU
     initialCastleId: C16
     governorPortrait: {fileID: 0}
@@ -109,7 +109,7 @@ MonoBehaviour:
     power: 97
     intel: 32
     charm: 45
-    infamy: 4
+    infamy: 35
     initialNationId: SHU
     initialCastleId: C44
     governorPortrait: {fileID: 0}
@@ -119,7 +119,7 @@ MonoBehaviour:
     power: 15
     intel: 97
     charm: 78
-    infamy: 2
+    infamy: 18
     initialNationId: WEI
     initialCastleId: C02
     governorPortrait: {fileID: 0}
@@ -129,7 +129,7 @@ MonoBehaviour:
     power: 32
     intel: 98
     charm: 65
-    infamy: 6
+    infamy: 12
     initialNationId: SHU
     initialCastleId: C10
     governorPortrait: {fileID: 0}
@@ -139,7 +139,7 @@ MonoBehaviour:
     power: 65
     intel: 95
     charm: 90
-    infamy: 9
+    infamy: 8
     initialNationId: WU
     initialCastleId: C14
     governorPortrait: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
     power: 92
     intel: 84
     charm: 80
-    infamy: 11
+    infamy: 48
     initialNationId: WEI
     initialCastleId: C04
     governorPortrait: {fileID: 0}
@@ -159,7 +159,7 @@ MonoBehaviour:
     power: 22
     intel: 98
     charm: 52
-    infamy: 25
+    infamy: 70
     initialNationId: WEI
     initialCastleId: C22
     governorPortrait: {fileID: 0}
@@ -169,7 +169,7 @@ MonoBehaviour:
     power: 25
     intel: 72
     charm: 99
-    infamy: 3
+    infamy: 55
     initialNationId: OTHERS
     initialCastleId: C46
     governorPortrait: {fileID: 0}
@@ -179,7 +179,7 @@ MonoBehaviour:
     power: 91
     intel: 68
     charm: 82
-    infamy: 20
+    infamy: 25
     initialNationId: WEI
     initialCastleId: C02
     governorPortrait: {fileID: 0}
@@ -189,7 +189,7 @@ MonoBehaviour:
     power: 96
     intel: 45
     charm: 82
-    infamy: 5
+    infamy: 65
     initialNationId: SHU
     initialCastleId: C08
     governorPortrait: {fileID: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
     power: 93
     intel: 65
     charm: 75
-    infamy: 21
+    infamy: 5
     initialNationId: SHU
     initialCastleId: C36
     governorPortrait: {fileID: 0}
@@ -209,7 +209,7 @@ MonoBehaviour:
     power: 89
     intel: 90
     charm: 85
-    infamy: 29
+    infamy: 15
     initialNationId: SHU
     initialCastleId: C16
     governorPortrait: {fileID: 0}
@@ -219,7 +219,7 @@ MonoBehaviour:
     power: 93
     intel: 45
     charm: 68
-    infamy: 7
+    infamy: 75
     initialNationId: WU
     initialCastleId: C13
     governorPortrait: {fileID: 0}
@@ -229,7 +229,7 @@ MonoBehaviour:
     power: 92
     intel: 62
     charm: 75
-    infamy: 23
+    infamy: 10
     initialNationId: WU
     initialCastleId: C39
     governorPortrait: {fileID: 0}
@@ -239,7 +239,7 @@ MonoBehaviour:
     power: 94
     intel: 20
     charm: 55
-    infamy: 10
+    infamy: 12
     initialNationId: WEI
     initialCastleId: C01
     governorPortrait: {fileID: 0}
@@ -249,7 +249,7 @@ MonoBehaviour:
     power: 92
     intel: 60
     charm: 70
-    infamy: 16
+    infamy: 15
     initialNationId: WEI
     initialCastleId: C31
     governorPortrait: {fileID: 0}
@@ -259,7 +259,7 @@ MonoBehaviour:
     power: 91
     intel: 55
     charm: 45
-    infamy: 26
+    infamy: 68
     initialNationId: SHU
     initialCastleId: C17
     governorPortrait: {fileID: 0}
@@ -269,7 +269,7 @@ MonoBehaviour:
     power: 90
     intel: 72
     charm: 72
-    infamy: 28
+    infamy: 18
     initialNationId: WEI
     initialCastleId: C04
     governorPortrait: {fileID: 0}
@@ -279,7 +279,7 @@ MonoBehaviour:
     power: 88
     intel: 92
     charm: 75
-    infamy: 9
+    infamy: 20
     initialNationId: WEI
     initialCastleId: C34
     governorPortrait: {fileID: 0}
@@ -289,7 +289,7 @@ MonoBehaviour:
     power: 62
     intel: 91
     charm: 70
-    infamy: 14
+    infamy: 75
     initialNationId: WEI
     initialCastleId: C26
     governorPortrait: {fileID: 0}
@@ -299,7 +299,7 @@ MonoBehaviour:
     power: 55
     intel: 92
     charm: 90
-    infamy: 21
+    infamy: 2
     initialNationId: WU
     initialCastleId: C13
     governorPortrait: {fileID: 0}
@@ -309,7 +309,7 @@ MonoBehaviour:
     power: 12
     intel: 96
     charm: 94
-    infamy: 12
+    infamy: 4
     initialNationId: WEI
     initialCastleId: C02
     governorPortrait: {fileID: 0}
@@ -319,7 +319,7 @@ MonoBehaviour:
     power: 88
     intel: 70
     charm: 72
-    infamy: 0
+    infamy: 30
     initialNationId: WEI
     initialCastleId: C27
     governorPortrait: {fileID: 0}
@@ -329,7 +329,7 @@ MonoBehaviour:
     power: 86
     intel: 72
     charm: 78
-    infamy: 0
+    infamy: 22
     initialNationId: WEI
     initialCastleId: C21
     governorPortrait: {fileID: 0}
@@ -339,7 +339,7 @@ MonoBehaviour:
     power: 90
     intel: 65
     charm: 75
-    infamy: 0
+    infamy: 25
     initialNationId: WEI
     initialCastleId: C24
     governorPortrait: {fileID: 0}

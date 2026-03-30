@@ -11,6 +11,8 @@ public class HomeSceneBootstrapper : MonoBehaviour
     public GameObject globalUiManagerPrefab;
     public GameObject dataManagerPrefab;
     public GameObject googleSheetManagerPrefab;
+    public GameObject newsManagerPrefab;
+    public GameObject eventManagerPrefab;
 
     void Awake()
     {
@@ -19,6 +21,8 @@ public class HomeSceneBootstrapper : MonoBehaviour
         if (globalUiManagerPrefab != null) GlobalUIManager.Load(globalUiManagerPrefab);
         if (dataManagerPrefab != null) DataManager.Load(dataManagerPrefab);
         if (googleSheetManagerPrefab != null) GoogleSheetManager.Load(googleSheetManagerPrefab);
+        if (newsManagerPrefab != null) NewsManager.Load(newsManagerPrefab);
+        if (eventManagerPrefab != null) EventManager.Load(eventManagerPrefab);
     }
 }
 
