@@ -114,7 +114,7 @@ public class PendingRumorWorldEvent
     public List<string> pendingBreakingNewsCodes = new List<string>();
     /// <summary>당첨 행의 버프 코드(확정 시 적용·<see cref="CastleStateData.activeBuffs"/> 등록).</summary>
     public List<string> buffCodesToApply = new List<string>();
-    /// <summary>affinity에 Rumor 포함 시: 확정일에 <see cref="WorldEventCenter.CalculateFinalProb"/>로 재주사위. 아니면 레거시 가짜 소문 확률.</summary>
+    /// <summary>세이브 호환 필드. 현재는 항상 태수+EventStatModifier 기반 확정 주사위를 쓰며 이 값은 무시됩니다.</summary>
     public bool confirmUsesEventProbabilityRoll;
 }
 

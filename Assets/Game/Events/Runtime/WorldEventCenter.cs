@@ -10,8 +10,9 @@ using UnityEngine;
 /// <item><description>당첨 가중치: 태수 <see cref="GeneralMasterDataSo"/> 스탯 + <see cref="EventStatModifierSo"/> 행(eventId)의 flat/perStat 보정 →
 /// <see cref="CalculateFinalWeight"/> 후 /100으로 일일 확률·소문 확정 재주사위(임시, 추후 조정 가능).</description></item>
 /// <item><description>발생 시 버프: <see cref="BuffMasterDataSo"/> 코드를 <see cref="WorldEventBuffApplier"/>로 적용(일차·duration 규칙은 버프 마스터).</description></item>
-/// <item><description>기사: <see cref="NewsMasterDataSo"/> 코드가 소문(<see cref="EventMasterData.rumorNewsCodes"/>)·속보(<see cref="EventMasterData.breakingNewsCodes"/>)에 매핑.
-/// <c>Direct</c> 태그는 즉시 속보, 그 외는 소문 → N일 뒤 확률로 팩트화 또는 허위.</description></item>
+/// <item><description>기사: <see cref="NewsMasterDataSo"/>는 문구만 제공(기사별 확률 없음). 소문 확정 시 팩트 확률은
+/// 해당 성 태수 <see cref="GeneralMasterDataSo"/> + <see cref="EventStatModifierSo"/>(eventId)로 <see cref="CalculateFinalWeight"/>와 동일 식 → /100 클램프 후 1회 주사위.</description></item>
+/// <item><description><c>Direct</c> 태그는 즉시 속보, 그 외는 소문 → N일 뒤 위 확률로 팩트화 또는 허위(eventId 없을 때만 레거시 가짜 소문 구간 사용).</description></item>
 /// <item><description>거리: 본영~이벤트 성 거리에 따라 속보의 <see cref="WorldNewsItem.isVerifiedFact"/>가 꺼질 수 있음(<see cref="WorldNewsReach"/>, 임시).</description></item>
 /// </list>
 /// </summary>
@@ -23,8 +24,8 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
     [Tooltip("이벤트 ID별 소문/속보 문구·리포터 에셋(시트와 병합)")]
     [SerializeField] NewsTemplateSo newsTemplateSo;
 
-    [Header("소문 확정")]
-    [Tooltip("사실무근(가짜)로 끝날 확률 — 확정 시각마다 이 구간에서 임계값을 한 번 뽑습니다.")]
+    [Header("소문 확정 (폴백만)")]
+    [Tooltip("eventId가 비어 있는 예약 등에만 사용. 정상 소문은 태수+EventStatModifier로 팩트 확률을 씁니다.")]
     [SerializeField] float fakeRumorChanceMin = 0.10f;
     [SerializeField] float fakeRumorChanceMax = 0.20f;
 
@@ -259,6 +260,33 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         }
     }
 
+    /// <summary>
+    /// 소문 확정일: 기사(뉴스 코드)마다 확률을 두지 않고, 해당 성 태수 스탯 + <see cref="EventStatModifierData"/>로
+    /// <see cref="CalculateFinalProb"/> 가중치를 만든 뒤 <c>/100</c> 클램프하여 1회 팩트 판정.
+    /// </summary>
+    bool EvaluateRumorRealizationIsFake(DataManager dm, PendingRumorWorldEvent p, CastleStateData primaryState)
+    {
+        if (string.IsNullOrWhiteSpace(p.eventId))
+            return RollLegacyFakeRumorIsFake();
+
+        var rowAtConfirm = SelectRandomSatisfiedRow(dm, p.eventId, primaryState, out bool anySat);
+        if (!anySat || rowAtConfirm == null)
+            return true;
+
+        float finalWeight = CalculateFinalProb(rowAtConfirm, primaryState, dm);
+        float factChance = Mathf.Clamp01(finalWeight / EventPickWeightToChanceDivisor);
+        return UnityEngine.Random.value >= factChance;
+    }
+
+    /// <summary>eventId 없는 레거시·비정상 예약용.</summary>
+    bool RollLegacyFakeRumorIsFake()
+    {
+        float lo = Mathf.Min(fakeRumorChanceMin, fakeRumorChanceMax);
+        float hi = Mathf.Max(fakeRumorChanceMin, fakeRumorChanceMax);
+        float fakeThreshold = UnityEngine.Random.Range(lo, hi);
+        return UnityEngine.Random.value < fakeThreshold;
+    }
+
     void ProcessPendingRumorConfirmations(DataManager dm)
     {
         if (dm.pendingRumorWorldEvents == null || dm.pendingRumorWorldEvents.Count == 0)
@@ -289,32 +317,13 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
                 continue;
             }
 
-            bool isFake;
-            if (p.confirmUsesEventProbabilityRoll)
+            if (!dm.castleStateDataMap.TryGetValue(primary, out var primaryState) || primaryState == null)
             {
-                if (!dm.castleStateDataMap.TryGetValue(primary, out var primaryState) || primaryState == null)
-                {
-                    dm.pendingRumorWorldEvents.RemoveAt(i);
-                    continue;
-                }
+                dm.pendingRumorWorldEvents.RemoveAt(i);
+                continue;
+            }
 
-                var rowAtConfirm = SelectRandomSatisfiedRow(dm, p.eventId, primaryState, out bool anySat);
-                if (!anySat || rowAtConfirm == null)
-                    isFake = true;
-                else
-                {
-                    float finalProb = CalculateFinalProb(rowAtConfirm, primaryState, dm);
-                    float pRoll = Mathf.Clamp01(finalProb / EventPickWeightToChanceDivisor);
-                    isFake = UnityEngine.Random.value >= pRoll;
-                }
-            }
-            else
-            {
-                float lo = Mathf.Min(fakeRumorChanceMin, fakeRumorChanceMax);
-                float hi = Mathf.Max(fakeRumorChanceMin, fakeRumorChanceMax);
-                float fakeThreshold = UnityEngine.Random.Range(lo, hi);
-                isFake = UnityEngine.Random.value < fakeThreshold;
-            }
+            bool isFake = EvaluateRumorRealizationIsFake(dm, p, primaryState);
 
             if (!isFake)
             {
@@ -520,7 +529,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
             largePopulationDelta = pLarge,
             pendingBreakingNewsCodes = breakingSnapshot,
             buffCodesToApply = buffToApply,
-            confirmUsesEventProbabilityRoll = AffinityContainsToken(ev.affinityTagsRaw, "Rumor")
+            confirmUsesEventProbabilityRoll = true
         });
 
         OnEventSample?.Invoke(triggerState, ev);
