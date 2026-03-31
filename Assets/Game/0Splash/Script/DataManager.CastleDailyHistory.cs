@@ -38,6 +38,7 @@ public partial class DataManager
         _lastUtcDayBucket = day;
         _stateDirty = true;
 
+        WorldEventBuffApplier.TickActiveBuffsForNewUtcDay(this, (int)day);
         WorldEventCenter.InstanceOrNull?.CheckDailyEventsFromDataManager();
     }
 

@@ -13,241 +13,3503 @@ MonoBehaviour:
   m_Name: BuffMasterDataSo
   m_EditorClassIdentifier: Assembly-CSharp::BuffMasterDataSo
   list:
-  - id: B01
+  - id: B001
     name: "\uD669\uAE08 \uBCF4\uB9AC"
-    type: 4
-    value: 0.03
-    description: "\uC131\uC758 \uBC31\uC131 \uC218 \uC99D\uAC00 \uC18D\uB3C4\uAC00
-      3% \uAC00\uC18D\uB429\uB2C8\uB2E4."
-  - id: B02
+    statType: 4
+    curveType: 3
+    value: 1.03
+    durationDays: 1
+    description: 30
+  - id: B002
     name: "\uBE44\uB2E8\uAE38 \uD1B5\uD589\uAD8C"
-    type: 1
+    statType: 1
+    curveType: 1
     value: 1.15
-    description: "\uC131\uC758 \uAE30\uBCF8 \uAC00\uCE58\uB97C 15% \uC99D\uAC00\uC2DC\uD0B5\uB2C8\uB2E4."
-  - id: B03
+    durationDays: 1
+    description: 1
+  - id: B003
     name: "\uACF5\uC790\uC758 \uACBD\uC804"
-    type: 3
+    statType: 3
+    curveType: 2
     value: 0.4
-    description: "\uB9E4 \uD2F1\uB2F9 \uBBFC\uC2EC \uD68C\uBCF5\uB7C9\uC774 0.4 \uCD94\uAC00\uB429\uB2C8\uB2E4."
-  - id: B04
+    durationDays: 1
+    description: 15
+  - id: B004
     name: "\uC815\uC608\uBCD1\uC758 \uD22C\uAD6C"
-    type: 6
+    statType: 6
+    curveType: 2
     value: 0.2
-    description: "\uC804\uC7C1 \uC2DC \uBCD1\uC0AC \uC190\uC2E4(\uC2AC\uB9AC\uD53C\uC9C0)\uC744
-      20% \uBC29\uC5B4\uD569\uB2C8\uB2E4."
-  - id: B05
+    durationDays: 1
+    description: 14
+  - id: B005
     name: "\uD669\uC2E4\uC758 \uCE59\uB839"
-    type: 7
+    statType: 7
+    curveType: 1
     value: 0.5
-    description: "\uC720\uC800\uC5D0\uAC8C \uC9C0\uAE09\uB418\uB294 \uBC30\uB2F9\uAE08\uC774
-      50% \uCD94\uAC00\uB429\uB2C8\uB2E4."
-  - id: B06
+    durationDays: 1
+    description: 1
+  - id: B006
     name: "\uC0C1\uC778\uC5F0\uD569 \uC778\uC7A5"
-    type: 3
+    statType: 3
+    curveType: 2
     value: 0.1
-    description: "\uC131 \uD22C\uC785 \uC2DC \uBC1C\uC0DD\uD558\uB294 \uAC00\uC785\uBE44\uC6A9\uC774
-      10% \uD560\uC778\uB429\uB2C8\uB2E4."
-  - id: B07
+    durationDays: 1
+    description: 10
+  - id: B007
     name: "\uBCBD\uC625 \uBC18\uC9C0"
-    type: 1
+    statType: 1
+    curveType: 3
     value: 1.05
-    description: "\uC131\uC758 \uAC00\uCE58 \uBC30\uC728\uC774 5% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
-  - id: B08
+    durationDays: 1
+    description: 10
+  - id: B008
     name: "\uCE58\uC720\uC758 \uC57D\uCD08"
-    type: 3
+    statType: 3
+    curveType: 4
     value: 0.8
-    description: "\uC804\uC5FC\uBCD1 \uB4F1 \uC7AC\uD574 \uC2DC \uBBFC\uC2EC \uD558\uB77D\uC744
-      0.8 \uC0C1\uC1C4\uD569\uB2C8\uB2E4."
-  - id: B09
+    durationDays: 1
+    description: 10
+  - id: B009
     name: "\uB300\uC6B4\uD558 \uC124\uACC4\uB3C4"
-    type: 2
+    statType: 2
+    curveType: 2
     value: 0.08
-    description: "\uC218\uB85C \uC815\uBE44\uB85C \uC778\uAD6C \uC720\uC785\uC774
-      8% \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  - id: B10
+    durationDays: 1
+    description: 20
+  - id: B010
     name: "\uAC15\uCCA0 \uC131\uBB38"
-    type: 6
+    statType: 6
+    curveType: 1
     value: 0.4
-    description: "\uC801\uAD70 \uCE68\uACF5 \uC2DC \uD568\uB77D \uD655\uB960\uC744
-      40% \uB0AE\uCDA5\uB2C8\uB2E4."
-  - id: B11
+    durationDays: 1
+    description: 1
+  - id: B011
     name: "\uB454\uC804\uC81C \uC2DC\uD589\uB839"
-    type: 2
-    value: 0.05
-    description: "\uC790\uAE09\uC790\uC871 \uCCB4\uACC4\uB85C \uC778\uAD6C\uAC00
-      \uB9E4\uB2EC 5% \uB354 \uB298\uC5B4\uB0A9\uB2C8\uB2E4."
-  - id: B12
-    name: "\uBA85\uBB38\uC758 \uC871\uBCF4"
-    type: 1
-    value: 1.25
-    description: "\uBA85\uB9DD \uB192\uC740 \uAC00\uBB38\uC758 \uC9C0\uC9C0\uB85C
-      \uC131 \uAC00\uCE58\uAC00 25% \uD3ED\uB4F1\uD569\uB2C8\uB2E4."
-  - id: B13
-    name: "\uD0DC\uD3C9\uC694\uC220\uC11C"
-    type: 3
-    value: 1.2
-    description: "\uAE30\uB3C4\uB85C \uBBFC\uC2EC\uC744 \uB2E4\uC2A4\uB824 \uD68C\uBCF5\uB7C9\uC774
-      1.2 \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  - id: B14
-    name: "\uC740\uAD11 \uCC44\uAD74\uAD8C"
-    type: 7
-    value: 0.25
-    description: "\uC740\uAD11 \uBC1C\uACAC\uC73C\uB85C \uBC30\uB2F9\uAE08\uC774
-      25% \uCD94\uAC00 \uC9C0\uAE09\uB429\uB2C8\uB2E4."
-  - id: B15
-    name: "\uAC70\uC0C1\uC758 \uC7A5\uBD80"
-    type: 3
-    value: 0.2
-    description: "\uB300\uADDC\uBAA8 \uAC70\uB798 \uB178\uD558\uC6B0\uB85C \uAC00\uC785\uBE44\uAC00
-      20% \uD560\uC778\uB429\uB2C8\uB2E4."
-  - id: B16
-    name: "\uCCA0\uBCBD\uC758 \uBC29\uD328"
-    type: 2
-    value: 0.15
-    description: "\uC804\uC7C1 \uC911\uC5D0\uB3C4 \uC720\uC800 \uC790\uC0B0\uC758
-      \uC548\uC804\uC131\uC744 15% \uBCF4\uC7A5\uD569\uB2C8\uB2E4."
-  - id: B17
-    name: "\uD48D\uB144\uC758 \uAE30\uC6D0\uD328"
-    type: 2
-    value: 0.1
-    description: "\uD48D\uC791 \uC18C\uC2DD\uC5D0 \uC720\uBBFC\uB4E4\uC774 \uBAB0\uB824\uC640
-      \uC778\uAD6C\uAC00 10% \uC99D\uAC00\uD569\uB2C8\uB2E4."
-  - id: B18
-    name: "\uCCAD\uB8E1\uC758 \uBCF4\uC8FC"
-    type: 1
-    value: 1.5
-    description: "\uC804\uC124\uC801\uC778 \uBCF4\uBB3C\uC758 \uAE30\uC6B4\uC73C\uB85C
-      \uC131 \uAC00\uCE58\uAC00 50% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
-  - id: B19
-    name: "\uC758\uC220 \uAD50\uBCF8"
-    type: 3
-    value: 0.3
-    description: "\uC758\uB8CC \uC2DC\uC124 \uD655\uCDA9\uC73C\uB85C \uBBFC\uC2EC\uC774
-      \uC548\uC815\uC801\uC73C\uB85C \uC720\uC9C0\uB429\uB2C8\uB2E4."
-  - id: B20
-    name: "\uBE44\uCD95 \uC2DD\uB7C9\uACE0"
-    type: 3
-    value: 0.5
-    description: "\uB18D\uC131\uC804 \uC2DC \uC790\uC0B0 \uAC00\uCE58 \uD558\uB77D\uC744
-      50% \uBC29\uC5B4\uD569\uB2C8\uB2E4."
-  - id: B21
-    name: "\uC18C\uAE08 \uC804\uB9E4\uAD8C"
-    type: 7
-    value: 0.35
-    description: "\uD544\uC218\uC7AC \uC804\uB9E4\uB97C \uD1B5\uD574 \uBC30\uB2F9\uAE08\uC774
-      35% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
-  - id: B22
-    name: "\uB099\uC591\uC758 \uBE44\uB2E8"
-    type: 1
-    value: 1.1
-    description: "\uACE0\uAE09 \uD2B9\uC0B0\uBB3C \uD6A8\uACFC\uB85C \uC131 \uAC00\uCE58\uAC00
-      10% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
-  - id: B23
-    name: "\uB4F1\uC6A9\uBB38 \uC11C\uC2E0"
-    type: 2
-    value: 0.04
-    description: "\uC778\uC7AC\uB4E4\uC774 \uBAA8\uC5EC\uB4E4\uBA70 \uC778\uAD6C
-      \uC131\uC7A5\uC138\uAC00 4% \uAC00\uC18D\uB429\uB2C8\uB2E4."
-  - id: B24
-    name: "\uC601\uC6C5\uC758 \uB3D9\uC0C1"
-    type: 3
-    value: 0.5
-    description: "\uC601\uC6C5\uC758 \uC704\uC5C4\uC73C\uB85C \uBBFC\uC2EC\uC774
-      \uB9E4 \uD2F1 0.5\uC529 \uC790\uB3D9 \uD68C\uBCF5\uB429\uB2C8\uB2E4."
-  - id: B25
-    name: "\uD669\uAE08 \uC5F4\uC1E0"
-    type: 2
-    value: 0.15
-    description: "\uBAA8\uB4E0 \uC131 \uC9C4\uC785 \uC2DC \uAC00\uC785\uBE44\uAC00
-      15% \uD560\uC778\uB429\uB2C8\uB2E4."
-  - id: B26
-    name: "\uC7A5\uAD70\uC758 \uAE43\uBC1C"
-    type: 2
-    value: 0.3
-    description: "\uAD70\uAE30 \uD655\uB9BD\uC73C\uB85C \uC804\uC7C1 \uB9AC\uC2A4\uD06C\uB97C
-      30% \uBC29\uC5B4\uD569\uB2C8\uB2E4."
-  - id: B27
-    name: "\uCC9C\uBB38 \uAD00\uCE21\uAE30"
-    type: 3
-    value: 0.2
-    description: "\uCC9C\uAE30\uB97C \uC77D\uC5B4 \uC7AC\uD574 \uC608\uBC29 \uBC0F
-      \uBBFC\uC2EC \uD68C\uBCF5\uC744 \uB3D5\uC2B5\uB2C8\uB2E4."
-  - id: B28
-    name: "\uBE44\uC625\uD55C \uD1F4\uBE44"
-    type: 4
-    value: 0.06
-    description: "\uB18D\uC9C0 \uAC1C\uB7C9\uC73C\uB85C \uC778\uAD6C \uC720\uC785
-      \uC18D\uB3C4\uAC00 6% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
-  - id: B29
-    name: "\uC5B4\uC0AC\uD328"
-    type: 7
-    value: 0.15
-    description: "\uD22C\uBA85\uD55C \uC138\uC815 \uAD00\uB9AC\uB85C \uBC30\uB2F9\uAE08\uC774
-      15% \uCD94\uAC00\uB429\uB2C8\uB2E4."
-  - id: B30
-    name: "\uCC9C\uD558 \uD1B5\uC77C\uBCF4"
-    type: 1
-    value: 2
-    description: "\uC0C1\uC9D5\uC801\uC778 \uAC00\uCE58\uB85C \uC778\uD574 \uC131
-      \uAC00\uCE58\uAC00 100% \uC0C1\uC2B9\uD569\uB2C8\uB2E4."
-  - id: E01
-    name: "\uBBFC\uC2EC \uAC1C\uC120"
-    type: 3
-    value: 15
-    description: "\uBBFC\uC2EC\uC744 15\uB9CC\uD07C \uC989\uC2DC \uD68C\uBCF5\uC2DC\uD0B5\uB2C8\uB2E4."
-  - id: E02
-    name: "\uBBFC\uC2EC \uC545\uD654"
-    type: 3
-    value: -20
-    description: "\uBBFC\uC2EC\uC744 20\uB9CC\uD07C \uC989\uC2DC \uD558\uB77D\uC2DC\uD0B5\uB2C8\uB2E4."
-  - id: E03
-    name: "\uC778\uAD6C \uC720\uC785 \uAC00\uC18D"
-    type: 4
+    statType: 2
+    curveType: 3
     value: 1.05
-    description: "\uBC31\uC131 \uC218 \uC99D\uAC00 \uC18D\uB3C4\uAC00 5% \uBE68\uB77C\uC9D1\uB2C8\uB2E4."
-  - id: E04
-    name: "\uC778\uAD6C \uC720\uCD9C \uBC1C\uC0DD"
-    type: 4
-    value: 0.95
-    description: "\uBC31\uC131 \uC218 \uC99D\uAC00 \uC18D\uB3C4\uAC00 5% \uB290\uB824\uC9D1\uB2C8\uB2E4."
-  - id: E05
-    name: "\uC2DC\uC138 \uACFC\uC5F4"
-    type: 2
-    value: 1.3
-    description: "\uC131 \uC561\uBA74\uAC00\uAC00 30% \uC0C1\uC2B9\uD558\uC5EC \uC2DC\uC138\uAC00
-      \uACFC\uC5F4\uB429\uB2C8\uB2E4."
-  - id: E06
-    name: "\uC2DC\uC138 \uD560\uC778"
-    type: 2
-    value: 0.8
-    description: "\uC131 \uC561\uBA74\uAC00\uAC00 20% \uD558\uB77D\uD558\uC5EC \uC2DC\uC138\uAC00
-      \uC800\uB834\uD574\uC9D1\uB2C8\uB2E4."
-  - id: E07
-    name: "\uD2B9\uBCC4 \uBC30\uB2F9 \uC2E4\uC2DC"
-    type: 8
+    durationDays: 1
+    description: 15
+  - id: B012
+    name: "\uBA85\uBB38\uC758 \uC871\uBCF4"
+    statType: 1
+    curveType: 1
+    value: 1.25
+    durationDays: 1
+    description: 1
+  - id: B013
+    name: "\uD0DC\uD3C9\uC694\uC220\uC11C"
+    statType: 3
+    curveType: 2
+    value: 1.2
+    durationDays: 1
+    description: 15
+  - id: B014
+    name: "\uC740\uAD11 \uCC44\uAD74\uAD8C"
+    statType: 7
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 7
+  - id: B015
+    name: "\uAC70\uC0C1\uC758 \uC7A5\uBD80"
+    statType: 3
+    curveType: 1
+    value: 0.2
+    durationDays: 1
+    description: 1
+  - id: B016
+    name: "\uCCA0\uBCBD\uC758 \uBC29\uD328"
+    statType: 2
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 14
+  - id: B017
+    name: "\uD48D\uB144\uC758 \uAE30\uC6D0\uD328"
+    statType: 2
+    curveType: 4
+    value: 0.1
+    durationDays: 1
+    description: 10
+  - id: B018
+    name: "\uCCAD\uB8E1\uC758 \uBCF4\uC8FC"
+    statType: 1
+    curveType: 1
     value: 1.5
-    description: "\uBC30\uB2F9\uAE08\uC774 \uD3C9\uC18C\uBCF4\uB2E4 50% \uB354 \uB9CE\uC774
-      \uC9C0\uAE09\uB429\uB2C8\uB2E4."
-  - id: E08
-    name: "\uBC30\uB2F9\uAE08 \uC0AD\uAC10"
-    type: 8
+    durationDays: 1
+    description: 1
+  - id: B019
+    name: "\uC758\uC220 \uAD50\uBCF8"
+    statType: 3
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 20
+  - id: B020
+    name: "\uBE44\uCD95 \uC2DD\uB7C9\uACE0"
+    statType: 3
+    curveType: 4
     value: 0.5
-    description: "\uBC30\uB2F9\uAE08\uC774 \uD3C9\uC18C\uC758 \uC808\uBC18\uC73C\uB85C
-      \uC904\uC5B4\uB4ED\uB2C8\uB2E4."
-  - id: E09
-    name: "\uCCA0\uD1B5 \uBC29\uC5B4"
-    type: 6
+    durationDays: 1
+    description: 5
+  - id: B021
+    name: "\uC18C\uAE08 \uC804\uB9E4\uAD8C"
+    statType: 7
+    curveType: 3
+    value: 1.35
+    durationDays: 1
+    description: 10
+  - id: B022
+    name: "\uB099\uC591\uC758 \uBE44\uB2E8"
+    statType: 1
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 10
+  - id: B023
+    name: "\uB4F1\uC6A9\uBB38 \uC11C\uC2E0"
+    statType: 2
+    curveType: 2
+    value: 0.04
+    durationDays: 1
+    description: 20
+  - id: B024
+    name: "\uC601\uC6C5\uC758 \uB3D9\uC0C1"
+    statType: 3
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 30
+  - id: B025
+    name: "\uD669\uAE08 \uC5F4\uC1E0"
+    statType: 2
+    curveType: 1
+    value: 0.15
+    durationDays: 1
+    description: 1
+  - id: B026
+    name: "\uC7A5\uAD70\uC758 \uAE43\uBC1C"
+    statType: 2
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 14
+  - id: B027
+    name: "\uCC9C\uBB38 \uAD00\uCE21\uAE30"
+    statType: 3
+    curveType: 4
+    value: 0.2
+    durationDays: 1
+    description: 10
+  - id: B028
+    name: "\uBE44\uC625\uD55C \uD1F4\uBE44"
+    statType: 4
+    curveType: 3
+    value: 1.06
+    durationDays: 1
+    description: 30
+  - id: B029
+    name: "\uC5B4\uC0AC\uD328"
+    statType: 7
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 10
+  - id: B030
+    name: "\uCC9C\uD558 \uD1B5\uC77C\uBCF4"
+    statType: 1
+    curveType: 1
     value: 2
-    description: "\uC131\uC758 \uBC29\uC5B4\uB825\uC774 2\uBC30\uB85C \uAC15\uD654\uB429\uB2C8\uB2E4."
-  - id: E10
-    name: "\uBC29\uC5B4\uBCBD \uBD95\uAD34"
-    type: 6
+    durationDays: 1
+    description: 1
+  - id: B031
+    name: "\uC548\uC815\uC801 \uC9C0\uC9C0\uCE35"
+    statType: 3
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 50
+  - id: B032
+    name: "\uAE30\uC2B5 \uBC29\uC5B4\uC220"
+    statType: 6
+    curveType: 1
+    value: 0.35
+    durationDays: 1
+    description: 1
+  - id: B033
+    name: "\uAE08\uAD11 \uB9E5 \uBC1C\uACAC"
+    statType: 1
+    curveType: 3
+    value: 1.12
+    durationDays: 1
+    description: 5
+  - id: B034
+    name: "\uC720\uC5B8\uBE44\uC5B4 \uC720\uD3EC"
+    statType: 3
+    curveType: 2
+    value: -0.5
+    durationDays: 1
+    description: 10
+  - id: B035
+    name: "\uBE44\uB2E8 \uBB34\uC5ED \uAC1C\uC2DC"
+    statType: 1
+    curveType: 2
+    value: 0.08
+    durationDays: 1
+    description: 20
+  - id: B036
+    name: "\uB300\uC0C1\uC778\uC758 \uAE30\uBD80"
+    statType: 7
+    curveType: 1
+    value: 1000
+    durationDays: 1
+    description: 1
+  - id: B037
+    name: "\uC131\uBCBD \uADE0\uC5F4 \uBC1C\uC0DD"
+    statType: 6
+    curveType: 2
+    value: -0.1
+    durationDays: 1
+    description: 15
+  - id: B038
+    name: "\uC778\uAD6C \uBC00\uC9D1 \uACFC\uBD80\uD558"
+    statType: 4
+    curveType: 3
+    value: 0.95
+    durationDays: 1
+    description: 10
+  - id: B039
+    name: "\uC2E0\uAE30\uC220 \uC720\uCD9C"
+    statType: 1
+    curveType: 1
+    value: -0.2
+    durationDays: 1
+    description: 1
+  - id: B040
+    name: "\uACFC\uAC70\uC81C \uC2E4\uC2DC"
+    statType: 2
+    curveType: 2
+    value: 0.12
+    durationDays: 1
+    description: 12
+  - id: B041
+    name: "\uC138\uAE08 \uBA74\uC81C\uB839"
+    statType: 3
+    curveType: 1
+    value: 25
+    durationDays: 1
+    description: 1
+  - id: B042
+    name: "\uAD70\uB7C9\uBBF8 \uD6A1\uB839"
+    statType: 0
+    curveType: 1
     value: 0.5
-    description: "\uC131\uC758 \uBC29\uC5B4\uB825\uC774 \uC808\uBC18\uC73C\uB85C
-      \uC57D\uD654\uB429\uB2C8\uB2E4."
-  - id: E11
-    name: "\uAC70\uB798 \uC815\uC9C0"
-    type: 10
+    durationDays: 1
+    description: 1
+  - id: B043
+    name: "\uC9C0\uD558 \uACBD\uC81C \uD65C\uC131\uD654"
+    statType: 2
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 15
+  - id: B044
+    name: "\uAC15\uCCA0 \uAC80 \uBCF4\uAE09"
+    statType: 5
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 20
+  - id: B045
+    name: "\uD669\uC81C\uC758 \uD558\uC0AC\uD488"
+    statType: 1
+    curveType: 4
+    value: 15
+    durationDays: 1
+    description: 7
+  - id: B046
+    name: "\uC6B0\uBB3C \uC624\uC5FC \uC0AC\uAC74"
+    statType: 3
+    curveType: 2
+    value: -1.2
+    durationDays: 1
+    description: 5
+  - id: B047
+    name: "\uB300\uC0C1\uC778 \uC219\uC18C \uAC74\uCD95"
+    statType: 4
+    curveType: 2
+    value: 200
+    durationDays: 1
+    description: 10
+  - id: B048
+    name: "\uCCA0\uBCBD \uC218\uBE44 \uC9C4\uC601"
+    statType: 6
+    curveType: 3
+    value: 1.02
+    durationDays: 1
+    description: 30
+  - id: B049
+    name: "\uC0AC\uC7AC\uAE30 \uB2E8\uC18D"
+    statType: 2
+    curveType: 1
+    value: -10
+    durationDays: 1
+    description: 1
+  - id: B050
+    name: "\uD669\uAE08 \uC794\uCE58"
+    statType: 0
+    curveType: 3
+    value: 1.06
+    durationDays: 1
+    description: 12
+  - id: B051
+    name: "\uAC00\uBB44\uC758 \uC9D5\uC870"
+    statType: 4
+    curveType: 3
+    value: 0.98
+    durationDays: 1
+    description: 20
+  - id: B052
+    name: "\uC2E0\uD615 \uD22C\uC11D\uAE30 \uBC30\uCE58"
+    statType: 5
+    curveType: 1
+    value: 0.45
+    durationDays: 1
+    description: 1
+  - id: B053
+    name: "\uAD00\uB9AC\uC758 \uCCAD\uB834"
+    statType: 7
+    curveType: 2
+    value: 50
+    durationDays: 1
+    description: 20
+  - id: B054
+    name: "\uC18C\uBB38\uB09C \uC628\uCC9C \uBC1C\uACAC"
+    statType: 1
+    curveType: 2
+    value: 0.03
+    durationDays: 1
+    description: 40
+  - id: B055
+    name: "\uACC4\uC5C4\uB839 \uC120\uD3EC"
+    statType: 10
+    curveType: 1
     value: 1
-    description: "\uD574\uB2F9 \uC131\uC758 \uBAA8\uB4E0 \uBCD1\uC0AC \uD22C\uC785
-      \uBC0F \uD68C\uAD70\uC774 \uAE08\uC9C0\uB429\uB2C8\uB2E4."
+    durationDays: 1
+    description: 3
+  - id: B056
+    name: "\uC720\uBB3C \uB3C4\uB09C \uC0AC\uAC74"
+    statType: 1
+    curveType: 1
+    value: -15
+    durationDays: 1
+    description: 1
+  - id: B057
+    name: "\uB3C4\uC11C\uAD00 \uAC74\uB9BD"
+    statType: 2
+    curveType: 4
+    value: 4
+    durationDays: 1
+    description: 15
+  - id: B058
+    name: "\uC6A9\uBCD1\uB300\uC758 \uBC30\uC2E0"
+    statType: 6
+    curveType: 1
+    value: -0.3
+    durationDays: 1
+    description: 1
+  - id: B059
+    name: "\uBE44\uB2E8\uAE38 \uD655\uC7A5"
+    statType: 4
+    curveType: 3
+    value: 1.08
+    durationDays: 1
+    description: 8
+  - id: B060
+    name: "\uBE44\uC790\uAE08 \uC801\uBC1C"
+    statType: 7
+    curveType: 1
+    value: -5000
+    durationDays: 1
+    description: 1
+  - id: B061
+    name: "\uC6B0\uD638\uC801 \uD569\uBCD1\uC124"
+    statType: 1
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 25
+  - id: B062
+    name: "\uC7A5\uD130\uC758 \uC18C\uB9AC\uAFBC"
+    statType: 3
+    curveType: 2
+    value: 0.08
+    durationDays: 1
+    description: 30
+  - id: B063
+    name: "\uBCF4\uAE09\uB85C \uCC28\uB2E8"
+    statType: 2
+    curveType: 3
+    value: 0.94
+    durationDays: 1
+    description: 10
+  - id: B064
+    name: "\uAC15\uCCA0 \uAC11\uC637 \uB300\uB7C9 \uC0DD\uC0B0"
+    statType: 6
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 12
+  - id: B065
+    name: "\uD2B9\uBCC4 \uD558\uC0AC \uBC30\uB2F9"
+    statType: 0
+    curveType: 1
+    value: 2.5
+    durationDays: 1
+    description: 1
+  - id: B066
+    name: "\uAE30\uC6B0\uC81C \uB300\uC131\uACF5"
+    statType: 4
+    curveType: 4
+    value: 500
+    durationDays: 1
+    description: 5
+  - id: B067
+    name: "\uC131\uBB38 \uBCF4\uAC15 \uACF5\uC0AC"
+    statType: 6
+    curveType: 1
+    value: 0.5
+    durationDays: 1
+    description: 1
+  - id: B068
+    name: "\uC554\uC2DC\uC7A5 \uC18C\uD0D5"
+    statType: 2
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 25
+  - id: B069
+    name: "\uD0DC\uC218\uC758 \uC0AC\uCE58"
+    statType: 3
+    curveType: 2
+    value: -3
+    durationDays: 1
+    description: 7
+  - id: B070
+    name: "\uBE44\uBC00 \uBCD1\uAE30 \uAC1C\uBC1C"
+    statType: 5
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 10
+  - id: B071
+    name: "\uC804\uC124\uC758 \uC601\uD5D8\uD55C \uC0D8"
+    statType: 3
+    curveType: 1
+    value: 50
+    durationDays: 1
+    description: 1
+  - id: B072
+    name: "\uAE30\uB2A5\uC131 \uBE44\uB2E8 \uC720\uD589"
+    statType: 1
+    curveType: 4
+    value: 12
+    durationDays: 1
+    description: 10
+  - id: B073
+    name: "\uC870\uACF5 \uBC14\uCE58\uAE30"
+    statType: 0
+    curveType: 1
+    value: 0.3
+    durationDays: 1
+    description: 1
+  - id: B074
+    name: "\uC778\uAD6C \uC720\uCD9C \uC5D1\uC18C\uB354\uC2A4"
+    statType: 4
+    curveType: 3
+    value: 0.85
+    durationDays: 1
+    description: 5
+  - id: B075
+    name: "\uC131\uBCBD \uC57C\uAC04 \uACBD\uACC4"
+    statType: 6
+    curveType: 2
+    value: 0.07
+    durationDays: 1
+    description: 40
+  - id: B076
+    name: "\uB300\uC0C1\uC778 \uC5F0\uD569\uC758 \uC9C0\uC9C0"
+    statType: 2
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 5
+  - id: B077
+    name: "\uAC00\uC9DC \uC625\uC0C8 \uD30C\uB3D9"
+    statType: 1
+    curveType: 1
+    value: -35
+    durationDays: 1
+    description: 1
+  - id: B078
+    name: "\uD3C9\uD654 \uC870\uC57D \uCCB4\uACB0"
+    statType: 5
+    curveType: 2
+    value: -0.2
+    durationDays: 1
+    description: 30
+  - id: B079
+    name: "\uC778\uC7AC \uCC9C\uAC70 \uC2DC\uC2A4\uD15C"
+    statType: 2
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 20
+  - id: B080
+    name: "\uD669\uAE08 \uB9C8\uCC28 \uC6B4\uD589"
+    statType: 7
+    curveType: 3
+    value: 1.15
+    durationDays: 1
+    description: 6
+  - id: B081
+    name: "\uBD80\uC11C\uC9C4 \uD574\uC790"
+    statType: 6
+    curveType: 2
+    value: -0.25
+    durationDays: 1
+    description: 8
+  - id: B082
+    name: "\uB9C8\uC744 \uAC00\uC625 \uC218\uB9AC"
+    statType: 3
+    curveType: 2
+    value: 0.6
+    durationDays: 1
+    description: 15
+  - id: B083
+    name: "\uCD08\uB300\uD615 \uD48D\uB144"
+    statType: 1
+    curveType: 3
+    value: 1.07
+    durationDays: 1
+    description: 15
+  - id: B084
+    name: "\uC2DC\uC2A4\uD15C \uC11C\uBC84 \uC7A5\uC560"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 1
+  - id: B085
+    name: "\uC2E0\uADDC \uD56D\uB85C \uAC1C\uCC99"
+    statType: 4
+    curveType: 2
+    value: 50
+    durationDays: 1
+    description: 50
+  - id: B086
+    name: "\uBA85\uC7A5\uC758 \uADC0\uD658"
+    statType: 5
+    curveType: 1
+    value: 0.6
+    durationDays: 1
+    description: 1
+  - id: B087
+    name: "\uBC30\uB2F9\uAE08 \uBCF5\uB9AC \uB7A0\uB9AC"
+    statType: 0
+    curveType: 3
+    value: 1.03
+    durationDays: 1
+    description: 30
+  - id: B088
+    name: "\uC7AC\uAC1C\uBC1C \uAD6C\uC5ED \uC9C0\uC815"
+    statType: 2
+    curveType: 4
+    value: 20
+    durationDays: 1
+    description: 12
+  - id: B089
+    name: "\uD749\uAC00 \uC18C\uBB38 \uD655\uC0B0"
+    statType: 1
+    curveType: 2
+    value: -0.4
+    durationDays: 1
+    description: 10
+  - id: B090
+    name: "\uD669\uC2E4 \uC9C1\uC18D \uD638\uC704\uB300"
+    statType: 6
+    curveType: 3
+    value: 1.06
+    durationDays: 1
+    description: 10
+  - id: B091
+    name: "\uD0DC\uC218\uC758 \uACB8\uC190"
+    statType: 3
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 25
+  - id: B092
+    name: "\uC778\uAD6C \uC790\uC5F0 \uAC10\uC18C"
+    statType: 4
+    curveType: 2
+    value: -20
+    durationDays: 1
+    description: 100
+  - id: B093
+    name: "\uAE08\uC735 \uC0AC\uAE30 \uC801\uBC1C"
+    statType: 7
+    curveType: 1
+    value: -10000
+    durationDays: 1
+    description: 1
+  - id: B094
+    name: "\uBE44\uB2E8 \uAC12 \uD3ED\uB4F1"
+    statType: 1
+    curveType: 1
+    value: 25
+    durationDays: 1
+    description: 1
+  - id: B095
+    name: "\uC2DD\uB7C9 \uAC15\uC81C \uC9D5\uBC1C"
+    statType: 3
+    curveType: 1
+    value: -50
+    durationDays: 1
+    description: 1
+  - id: B096
+    name: "\uC815\uC608 \uAD81\uBCD1\uB2E8 \uD6C8\uB828"
+    statType: 5
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 30
+  - id: B097
+    name: "\uBE44\uBC00 \uAE08\uACE0 \uBC1C\uACAC"
+    statType: 7
+    curveType: 4
+    value: 2000
+    durationDays: 1
+    description: 5
+  - id: B098
+    name: "\uC561\uBA74\uAC00 \uAC70\uD488 \uBD95\uAD34"
+    statType: 2
+    curveType: 3
+    value: 0.88
+    durationDays: 1
+    description: 8
+  - id: B099
+    name: "\uCC9C\uD558 \uC81C\uC77C \uBB34\uC220\uB300\uD68C"
+    statType: 3
+    curveType: 2
+    value: 4
+    durationDays: 1
+    description: 5
+  - id: B100
+    name: "\uC131\uB0B4 \uC9C8\uC11C \uD655\uB9BD"
+    statType: 10
+    curveType: 1
+    value: 0
+    durationDays: 1
+    description: 1
+  - id: B101
+    name: "\uD669\uAE08 \uBCF4\uB9AC(S)"
+    statType: 4
+    curveType: 2
+    value: 10
+    durationDays: 1
+    description: 60
+  - id: B102
+    name: "\uBE44\uB2E8\uAE38(S)"
+    statType: 1
+    curveType: 2
+    value: 0.01
+    durationDays: 1
+    description: 100
+  - id: B103
+    name: "\uACF5\uC790\uC758 \uB3C4(S)"
+    statType: 3
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 40
+  - id: B104
+    name: "\uC815\uC608 \uD22C\uAD6C(S)"
+    statType: 6
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 50
+  - id: B105
+    name: "\uD669\uC2E4 \uCE59\uB839(S)"
+    statType: 7
+    curveType: 2
+    value: 10
+    durationDays: 1
+    description: 30
+  - id: B106
+    name: "\uC0C1\uC778 \uC778\uC7A5(S)"
+    statType: 2
+    curveType: 2
+    value: -0.01
+    durationDays: 1
+    description: 40
+  - id: B107
+    name: "\uBCBD\uC625 \uBC18\uC9C0(S)"
+    statType: 1
+    curveType: 3
+    value: 1.01
+    durationDays: 1
+    description: 50
+  - id: B108
+    name: "\uCE58\uC720 \uC57D\uCD08(S)"
+    statType: 3
+    curveType: 4
+    value: 0.2
+    durationDays: 1
+    description: 20
+  - id: B109
+    name: "\uB300\uC6B4\uD558(S)"
+    statType: 2
+    curveType: 2
+    value: 0.02
+    durationDays: 1
+    description: 60
+  - id: B110
+    name: "\uAC15\uCCA0 \uC131\uBB38(S)"
+    statType: 6
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 20
+  - id: B111
+    name: "\uB454\uC804\uC81C(S)"
+    statType: 4
+    curveType: 3
+    value: 1.01
+    durationDays: 1
+    description: 40
+  - id: B112
+    name: "\uC871\uBCF4(S)"
+    statType: 1
+    curveType: 1
+    value: 5
+    durationDays: 1
+    description: 1
+  - id: B113
+    name: "\uC694\uC220\uC11C(S)"
+    statType: 3
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 30
+  - id: B114
+    name: "\uCC44\uAD74\uAD8C(S)"
+    statType: 7
+    curveType: 2
+    value: 100
+    durationDays: 1
+    description: 10
+  - id: B115
+    name: "\uC7A5\uBD80(S)"
+    statType: 2
+    curveType: 1
+    value: -2
+    durationDays: 1
+    description: 1
+  - id: B116
+    name: "\uBC29\uD328(S)"
+    statType: 6
+    curveType: 2
+    value: 0.03
+    durationDays: 1
+    description: 100
+  - id: B117
+    name: "\uAE30\uC6D0\uD328(S)"
+    statType: 4
+    curveType: 4
+    value: 20
+    durationDays: 1
+    description: 15
+  - id: B118
+    name: "\uBCF4\uC8FC(S)"
+    statType: 1
+    curveType: 1
+    value: 12
+    durationDays: 1
+    description: 1
+  - id: B119
+    name: "\uAD50\uBCF8(S)"
+    statType: 3
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 25
+  - id: B120
+    name: "\uC2DD\uB7C9\uACE0(S)"
+    statType: 6
+    curveType: 4
+    value: 0.1
+    durationDays: 1
+    description: 10
+  - id: B121
+    name: "\uC804\uB9E4\uAD8C(S)"
+    statType: 0
+    curveType: 3
+    value: 1.02
+    durationDays: 1
+    description: 20
+  - id: B122
+    name: "\uBE44\uB2E8(S)"
+    statType: 1
+    curveType: 3
+    value: 1.02
+    durationDays: 1
+    description: 15
+  - id: B123
+    name: "\uC11C\uC2E0(S)"
+    statType: 2
+    curveType: 2
+    value: 0.01
+    durationDays: 1
+    description: 50
+  - id: B124
+    name: "\uB3D9\uC0C1(S)"
+    statType: 3
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 20
+  - id: B125
+    name: "\uC5F4\uC1E0(S)"
+    statType: 2
+    curveType: 1
+    value: -5
+    durationDays: 1
+    description: 1
+  - id: B126
+    name: "\uAE43\uBC1C(S)"
+    statType: 5
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 30
+  - id: B127
+    name: "\uAD00\uCE21\uAE30(S)"
+    statType: 3
+    curveType: 4
+    value: 0.05
+    durationDays: 1
+    description: 30
+  - id: B128
+    name: "\uD1F4\uBE44(S)"
+    statType: 4
+    curveType: 3
+    value: 1.02
+    durationDays: 1
+    description: 25
+  - id: B129
+    name: "\uC5B4\uC0AC\uD328(S)"
+    statType: 7
+    curveType: 2
+    value: 30
+    durationDays: 1
+    description: 15
+  - id: B130
+    name: "\uD1B5\uC77C\uBCF4(S)"
+    statType: 1
+    curveType: 1
+    value: 15
+    durationDays: 1
+    description: 1
+  - id: B131
+    name: "\uC548\uB7C9\uC758 \uAE30\uC138(S)"
+    statType: 5
+    curveType: 2
+    value: 0.02
+    durationDays: 1
+    description: 40
+  - id: B132
+    name: "\uC131\uBCBD \uB367\uCE60 \uACF5\uC0AC(S)"
+    statType: 6
+    curveType: 2
+    value: 0.04
+    durationDays: 1
+    description: 35
+  - id: B133
+    name: "\uC18C\uADDC\uBAA8 \uC0C1\uB2E8 \uBC29\uBB38(S)"
+    statType: 1
+    curveType: 2
+    value: 0.02
+    durationDays: 1
+    description: 45
+  - id: B134
+    name: "\uD5A5\uCD0C\uC758 \uC778\uC7AC \uCD94\uCC9C(S)"
+    statType: 2
+    curveType: 2
+    value: 0.03
+    durationDays: 1
+    description: 30
+  - id: B135
+    name: "\uC11C\uB2F9 \uAC74\uB9BD(S)"
+    statType: 3
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 50
+  - id: B136
+    name: "\uACE1\uBB3C \uCC3D\uACE0 \uC218\uB9AC(S)"
+    statType: 4
+    curveType: 2
+    value: 5
+    durationDays: 1
+    description: 80
+  - id: B137
+    name: "\uB18D\uAE30\uAD6C \uAC1C\uB7C9(S)"
+    statType: 7
+    curveType: 2
+    value: 20
+    durationDays: 1
+    description: 25
+  - id: B138
+    name: "\uC8FC\uB9C9\uC758 \uD65C\uAE30(S)"
+    statType: 3
+    curveType: 4
+    value: 3
+    durationDays: 1
+    description: 12
+  - id: B139
+    name: "\uC57C\uAC04 \uC21C\uCC30 \uAC15\uD654(S)"
+    statType: 6
+    curveType: 1
+    value: 0.15
+    durationDays: 1
+    description: 1
+  - id: B140
+    name: "\uD558\uAE09 \uAD00\uB9AC\uC758 \uC2E4\uC218(S)"
+    statType: 2
+    curveType: 2
+    value: -0.05
+    durationDays: 1
+    description: 20
+  - id: B141
+    name: "\uC7A5\uD130\uC758 \uC18C\uBB38(S)"
+    statType: 1
+    curveType: 3
+    value: 1.01
+    durationDays: 1
+    description: 30
+  - id: B142
+    name: "\uC6B0\uBB3C \uCCAD\uC18C(S)"
+    statType: 3
+    curveType: 1
+    value: 5
+    durationDays: 1
+    description: 1
+  - id: B143
+    name: "\uC18C\uADDC\uBAA8 \uB9D0 \uC0AC\uC721(S)"
+    statType: 5
+    curveType: 2
+    value: 0.03
+    durationDays: 1
+    description: 25
+  - id: B144
+    name: "\uD30C\uBC1C\uB9C8 \uC815\uBE44(S)"
+    statType: 0
+    curveType: 2
+    value: 0.01
+    durationDays: 1
+    description: 40
+  - id: B145
+    name: "\uB178\uC778\uC758 \uC9C0\uD61C(S)"
+    statType: 3
+    curveType: 2
+    value: 0.08
+    durationDays: 1
+    description: 60
+  - id: B146
+    name: "\uC131\uBCBD \uD48D\uD654(S)"
+    statType: 6
+    curveType: 2
+    value: -0.02
+    durationDays: 1
+    description: 50
+  - id: B147
+    name: "\uC720\uBBFC \uC720\uC785(S)"
+    statType: 4
+    curveType: 4
+    value: 100
+    durationDays: 1
+    description: 10
+  - id: B148
+    name: "\uC2DC\uC7A5 \uBB3C\uAC00 \uC548\uC815(S)"
+    statType: 2
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 35
+  - id: B149
+    name: "\uAD70\uAE30 \uAD50\uC721(S)"
+    statType: 5
+    curveType: 3
+    value: 1.01
+    durationDays: 1
+    description: 20
+  - id: B150
+    name: "\uC774\uC6C3 \uC131\uACFC\uC758 \uD654\uCE5C(S)"
+    statType: 3
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 30
+  - id: B151
+    name: "\uD669\uAE08 \uBCF4\uB9AC(M)"
+    statType: 4
+    curveType: 2
+    value: 50
+    durationDays: 1
+    description: 20
+  - id: B152
+    name: "\uBE44\uB2E8\uAE38(M)"
+    statType: 1
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 10
+  - id: B153
+    name: "\uACF5\uC790\uC758 \uB3C4(M)"
+    statType: 3
+    curveType: 2
+    value: 1.5
+    durationDays: 1
+    description: 10
+  - id: B154
+    name: "\uC815\uC608 \uD22C\uAD6C(M)"
+    statType: 6
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 15
+  - id: B155
+    name: "\uD669\uC2E4 \uCE59\uB839(M)"
+    statType: 7
+    curveType: 2
+    value: 200
+    durationDays: 1
+    description: 10
+  - id: B156
+    name: "\uC0C1\uC778 \uC778\uC7A5(M)"
+    statType: 2
+    curveType: 1
+    value: -10
+    durationDays: 1
+    description: 1
+  - id: B157
+    name: "\uBCBD\uC625 \uBC18\uC9C0(M)"
+    statType: 1
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 12
+  - id: B158
+    name: "\uCE58\uC720 \uC57D\uCD08(M)"
+    statType: 3
+    curveType: 4
+    value: 2
+    durationDays: 1
+    description: 10
+  - id: B159
+    name: "\uB300\uC6B4\uD558(M)"
+    statType: 2
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 20
+  - id: B160
+    name: "\uAC15\uCCA0 \uC131\uBB38(M)"
+    statType: 6
+    curveType: 1
+    value: 0.3
+    durationDays: 1
+    description: 1
+  - id: B161
+    name: "\uB454\uC804\uC81C(M)"
+    statType: 4
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 15
+  - id: B162
+    name: "\uC871\uBCF4(M)"
+    statType: 1
+    curveType: 1
+    value: 15
+    durationDays: 1
+    description: 1
+  - id: B163
+    name: "\uC694\uC220\uC11C(M)"
+    statType: 3
+    curveType: 2
+    value: 1
+    durationDays: 1
+    description: 15
+  - id: B164
+    name: "\uCC44\uAD74\uAD8C(M)"
+    statType: 7
+    curveType: 2
+    value: 500
+    durationDays: 1
+    description: 5
+  - id: B165
+    name: "\uC7A5\uBD80(M)"
+    statType: 2
+    curveType: 1
+    value: -8
+    durationDays: 1
+    description: 1
+  - id: B166
+    name: "\uBC29\uD328(M)"
+    statType: 6
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 30
+  - id: B167
+    name: "\uAE30\uC6D0\uD328(M)"
+    statType: 4
+    curveType: 4
+    value: 150
+    durationDays: 1
+    description: 10
+  - id: B168
+    name: "\uBCF4\uC8FC(M)"
+    statType: 1
+    curveType: 1
+    value: 25
+    durationDays: 1
+    description: 1
+  - id: B169
+    name: "\uAD50\uBCF8(M)"
+    statType: 3
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 20
+  - id: B170
+    name: "\uC2DD\uB7C9\uACE0(M)"
+    statType: 6
+    curveType: 4
+    value: 0.3
+    durationDays: 1
+    description: 7
+  - id: B171
+    name: "\uC804\uB9E4\uAD8C(M)"
+    statType: 0
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 10
+  - id: B172
+    name: "\uBE44\uB2E8(M)"
+    statType: 1
+    curveType: 3
+    value: 1.06
+    durationDays: 1
+    description: 8
+  - id: B173
+    name: "\uC11C\uC2E0(M)"
+    statType: 2
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 30
+  - id: B174
+    name: "\uB3D9\uC0C1(M)"
+    statType: 3
+    curveType: 2
+    value: 1.2
+    durationDays: 1
+    description: 12
+  - id: B175
+    name: "\uC5F4\uC1E0(M)"
+    statType: 2
+    curveType: 1
+    value: -15
+    durationDays: 1
+    description: 1
+  - id: B176
+    name: "\uAE43\uBC1C(M)"
+    statType: 5
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 20
+  - id: B177
+    name: "\uAD00\uCE21\uAE30(M)"
+    statType: 3
+    curveType: 4
+    value: 0.4
+    durationDays: 1
+    description: 15
+  - id: B178
+    name: "\uD1F4\uBE44(M)"
+    statType: 4
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 20
+  - id: B179
+    name: "\uC5B4\uC0AC\uD328(M)"
+    statType: 7
+    curveType: 2
+    value: 150
+    durationDays: 1
+    description: 10
+  - id: B180
+    name: "\uD1B5\uC77C\uBCF4(M)"
+    statType: 1
+    curveType: 1
+    value: 35
+    durationDays: 1
+    description: 1
+  - id: B181
+    name: "\uC5B4\uC0AC\uD328(M)"
+    statType: 7
+    curveType: 2
+    value: 150
+    durationDays: 1
+    description: 10
+  - id: B182
+    name: "\uD1B5\uC77C\uBCF4(M)"
+    statType: 1
+    curveType: 1
+    value: 35
+    durationDays: 1
+    description: 1
+  - id: B183
+    name: "\uCE60\uBCF4\uC2DC\uC758 \uAC10\uB3D9"
+    statType: 3
+    curveType: 2
+    value: 1.2
+    durationDays: 1
+    description: 7
+  - id: B184
+    name: "\uBC31\uB9C8\uC758 \uC885 \uAE30\uBCD1 \uD6C8\uB828"
+    statType: 5
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 20
+  - id: B185
+    name: "\uD574\uC790 \uAE4A\uC774 \uD30C\uAE30"
+    statType: 6
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 30
+  - id: B186
+    name: "\uBE44\uB2E8 \uBB34\uC5ED\uB85C \uD655\uBCF4"
+    statType: 1
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 15
+  - id: B187
+    name: "\uC2E0\uADDC \uC2DC\uC7A5 \uAC1C\uBC29"
+    statType: 2
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 40
+  - id: B188
+    name: "\uC778\uAD6C \uC720\uC785 \uC7A5\uB824\uCC45"
+    statType: 4
+    curveType: 2
+    value: 300
+    durationDays: 1
+    description: 14
+  - id: B189
+    name: "\uD669\uC2E4 \uD558\uC0AC\uAE08"
+    statType: 7
+    curveType: 1
+    value: 1500
+    durationDays: 1
+    description: 1
+  - id: B190
+    name: "\uCD95\uC81C \uBD84\uC704\uAE30"
+    statType: 0
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 10
+  - id: B191
+    name: "\uC7A5\uAD70\uC758 \uD638\uB839"
+    statType: 6
+    curveType: 1
+    value: 0.45
+    durationDays: 1
+    description: 1
+  - id: B192
+    name: "\uB454\uC804\uC81C \uC815\uCC29"
+    statType: 4
+    curveType: 3
+    value: 1.03
+    durationDays: 1
+    description: 25
+  - id: B193
+    name: "\uBBFC\uC2EC \uC548\uC815\uD654"
+    statType: 3
+    curveType: 4
+    value: 10
+    durationDays: 1
+    description: 10
+  - id: B194
+    name: "\uAC00\uC785\uBE44 \uC778\uD558 \uC815\uCC45"
+    statType: 2
+    curveType: 1
+    value: -15
+    durationDays: 1
+    description: 1
+  - id: B195
+    name: "\uACF5\uC131 \uBCD1\uAE30 \uAC1C\uB7C9"
+    statType: 5
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 12
+  - id: B196
+    name: "\uC131 \uAC00\uCE58 \uC7AC\uD3C9\uAC00"
+    statType: 1
+    curveType: 2
+    value: 0.4
+    durationDays: 1
+    description: 50
+  - id: B197
+    name: "\uBB34\uC5ED \uBCF4\uB108\uC2A4"
+    statType: 7
+    curveType: 2
+    value: 100
+    durationDays: 1
+    description: 20
+  - id: B198
+    name: "\uD589\uC815 \uB9C8\uBE44"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 2
+  - id: B199
+    name: "\uB300\uADDC\uBAA8 \uC774\uC8FC"
+    statType: 4
+    curveType: 1
+    value: 2000
+    durationDays: 1
+    description: 1
+  - id: B200
+    name: "\uCC9C\uD558\uC758 \uAE30\uC6B4"
+    statType: 1
+    curveType: 4
+    value: 50
+    durationDays: 1
+    description: 5
+  - id: B201
+    name: "\uD669\uAE08 \uBCF4\uB9AC(L)"
+    statType: 4
+    curveType: 3
+    value: 1.15
+    durationDays: 1
+    description: 5
+  - id: B202
+    name: "\uBE44\uB2E8\uAE38(L)"
+    statType: 1
+    curveType: 3
+    value: 1.2
+    durationDays: 1
+    description: 3
+  - id: B203
+    name: "\uACF5\uC790\uC758 \uB3C4(L)"
+    statType: 3
+    curveType: 1
+    value: 40
+    durationDays: 1
+    description: 1
+  - id: B204
+    name: "\uC815\uC608 \uD22C\uAD6C(L)"
+    statType: 6
+    curveType: 1
+    value: 0.7
+    durationDays: 1
+    description: 1
+  - id: B205
+    name: "\uD669\uC2E4 \uCE59\uB839(L)"
+    statType: 7
+    curveType: 1
+    value: 5000
+    durationDays: 1
+    description: 1
+  - id: B206
+    name: "\uC0C1\uC778 \uC778\uC7A5(L)"
+    statType: 2
+    curveType: 1
+    value: -40
+    durationDays: 1
+    description: 1
+  - id: B207
+    name: "\uBCBD\uC625 \uBC18\uC9C0(L)"
+    statType: 1
+    curveType: 3
+    value: 1.3
+    durationDays: 1
+    description: 4
+  - id: B208
+    name: "\uCE58\uC720 \uC57D\uCD08(L)"
+    statType: 3
+    curveType: 1
+    value: 30
+    durationDays: 1
+    description: 1
+  - id: B209
+    name: "\uB300\uC6B4\uD558(L)"
+    statType: 2
+    curveType: 3
+    value: 1.15
+    durationDays: 1
+    description: 6
+  - id: B210
+    name: "\uAC15\uCCA0 \uC131\uBB38(L)"
+    statType: 6
+    curveType: 1
+    value: 0.9
+    durationDays: 1
+    description: 1
+  - id: B211
+    name: "\uB454\uC804\uC81C(L)"
+    statType: 4
+    curveType: 3
+    value: 1.25
+    durationDays: 1
+    description: 4
+  - id: B212
+    name: "\uC871\uBCF4(L)"
+    statType: 1
+    curveType: 1
+    value: 60
+    durationDays: 1
+    description: 1
+  - id: B213
+    name: "\uC694\uC220\uC11C(L)"
+    statType: 3
+    curveType: 3
+    value: 1.4
+    durationDays: 1
+    description: 5
+  - id: B214
+    name: "\uCC44\uAD74\uAD8C(L)"
+    statType: 7
+    curveType: 1
+    value: 8000
+    durationDays: 1
+    description: 1
+  - id: B215
+    name: "\uC7A5\uBD80(L)"
+    statType: 2
+    curveType: 1
+    value: -25
+    durationDays: 1
+    description: 1
+  - id: B216
+    name: "\uBC29\uD328(L)"
+    statType: 6
+    curveType: 1
+    value: 0.5
+    durationDays: 1
+    description: 1
+  - id: B217
+    name: "\uAE30\uC6D0\uD328(L)"
+    statType: 4
+    curveType: 1
+    value: 4000
+    durationDays: 1
+    description: 1
+  - id: B218
+    name: "\uBCF4\uC8FC(L)"
+    statType: 1
+    curveType: 1
+    value: 100
+    durationDays: 1
+    description: 1
+  - id: B219
+    name: "\uAD50\uBCF8(L)"
+    statType: 3
+    curveType: 4
+    value: 15
+    durationDays: 1
+    description: 5
+  - id: B220
+    name: "\uC2DD\uB7C9\uACE0(L)"
+    statType: 6
+    curveType: 1
+    value: 0.8
+    durationDays: 1
+    description: 1
+  - id: B221
+    name: "\uC804\uB9E4\uAD8C(L)"
+    statType: 0
+    curveType: 3
+    value: 1.5
+    durationDays: 1
+    description: 3
+  - id: B222
+    name: "\uBE44\uB2E8(L)"
+    statType: 1
+    curveType: 4
+    value: 40
+    durationDays: 1
+    description: 10
+  - id: B223
+    name: "\uC11C\uC2E0(L)"
+    statType: 2
+    curveType: 1
+    value: 25
+    durationDays: 1
+    description: 1
+  - id: B224
+    name: "\uB3D9\uC0C1(L)"
+    statType: 3
+    curveType: 3
+    value: 1.2
+    durationDays: 1
+    description: 10
+  - id: B225
+    name: "\uC5F4\uC1E0(L)"
+    statType: 2
+    curveType: 1
+    value: -35
+    durationDays: 1
+    description: 1
+  - id: B226
+    name: "\uAE43\uBC1C(L)"
+    statType: 5
+    curveType: 1
+    value: 0.6
+    durationDays: 1
+    description: 1
+  - id: B227
+    name: "\uAD00\uCE21\uAE30(L)"
+    statType: 3
+    curveType: 1
+    value: 20
+    durationDays: 1
+    description: 1
+  - id: B228
+    name: "\uD1F4\uBE44(L)"
+    statType: 4
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 10
+  - id: B229
+    name: "\uC5B4\uC0AC\uD328(L)"
+    statType: 7
+    curveType: 1
+    value: 3000
+    durationDays: 1
+    description: 1
+  - id: B230
+    name: "\uD1B5\uC77C\uBCF4(L)"
+    statType: 1
+    curveType: 1
+    value: 120
+    durationDays: 1
+    description: 1
+  - id: B231
+    name: "\uAC00\uCE58 \uAE09\uB77D"
+    statType: 1
+    curveType: 1
+    value: -50
+    durationDays: 1
+    description: 1
+  - id: B232
+    name: "\uC561\uBA74\uAC00 \uBD95\uAD34"
+    statType: 2
+    curveType: 3
+    value: 0.75
+    durationDays: 1
+    description: 5
+  - id: B233
+    name: "\uBBFC\uC2EC \uD3ED\uB3D9"
+    statType: 3
+    curveType: 1
+    value: -60
+    durationDays: 1
+    description: 1
+  - id: B234
+    name: "\uC778\uAD6C \uB300\uD0C8\uCD9C"
+    statType: 4
+    curveType: 3
+    value: 0.5
+    durationDays: 1
+    description: 3
+  - id: B235
+    name: "\uBC30\uB2F9 \uBAB0\uC218"
+    statType: 7
+    curveType: 1
+    value: -8000
+    durationDays: 1
+    description: 1
+  - id: B236
+    name: "\uC218\uBE44 \uB300\uCC38\uD328"
+    statType: 6
+    curveType: 2
+    value: -0.5
+    durationDays: 1
+    description: 10
+  - id: B237
+    name: "\uACF5\uACA9 \uB300\uC2E4\uD328"
+    statType: 5
+    curveType: 2
+    value: -0.4
+    durationDays: 1
+    description: 10
+  - id: B238
+    name: "\uC7A5\uAE30 \uAC70\uB798\uC815\uC9C0"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 30
+  - id: B239
+    name: "\uBC30\uB2F9 \uBC30\uC728 \uC804\uBA78"
+    statType: 0
+    curveType: 1
+    value: 0.01
+    durationDays: 1
+    description: 1
+  - id: B240
+    name: "\uC2E0\uC6A9 \uB4F1\uAE09 \uCD94\uB77D"
+    statType: 1
+    curveType: 3
+    value: 0.8
+    durationDays: 1
+    description: 10
+  - id: B241
+    name: "\uBBF8\uC138 \uC870\uC815 \uD558\uB77D"
+    statType: 1
+    curveType: 2
+    value: -0.02
+    durationDays: 1
+    description: 50
+  - id: B242
+    name: "\uC561\uBA74\uAC00 \uD560\uC778(S)"
+    statType: 2
+    curveType: 2
+    value: -0.1
+    durationDays: 1
+    description: 20
+  - id: B243
+    name: "\uBBFC\uC2EC \uADE0\uC5F4(S)"
+    statType: 3
+    curveType: 2
+    value: -0.2
+    durationDays: 1
+    description: 30
+  - id: B244
+    name: "\uAD70\uAE30 \uBB38\uB780(S)"
+    statType: 5
+    curveType: 2
+    value: -0.05
+    durationDays: 1
+    description: 40
+  - id: B245
+    name: "\uBC30\uB2F9 \uC0AD\uAC10(S)"
+    statType: 7
+    curveType: 2
+    value: -20
+    durationDays: 1
+    description: 50
+  - id: B246
+    name: "\uD22C\uC790 \uC2EC\uB9AC \uC704\uCD95"
+    statType: 1
+    curveType: 4
+    value: -10
+    durationDays: 1
+    description: 10
+  - id: B247
+    name: "\uC720\uBBFC \uC774\uD0C8(S)"
+    statType: 4
+    curveType: 2
+    value: -30
+    durationDays: 1
+    description: 30
+  - id: B248
+    name: "\uC131\uBCBD \uD48D\uD654(S)"
+    statType: 6
+    curveType: 2
+    value: -0.02
+    durationDays: 1
+    description: 100
+  - id: B249
+    name: "\uC561\uBA74\uAC00 \uC870\uC815(M)"
+    statType: 2
+    curveType: 1
+    value: -12
+    durationDays: 1
+    description: 1
+  - id: B250
+    name: "\uC2DC\uC7A5 \uB0C9\uAC01\uAE30"
+    statType: 1
+    curveType: 3
+    value: 0.98
+    durationDays: 1
+    description: 40
+  - id: B251
+    name: "\uB300\uAE30\uADFC \uBC1C\uC0DD"
+    statType: 4
+    curveType: 3
+    value: 0.9
+    durationDays: 1
+    description: 20
+  - id: B252
+    name: "\uC5ED\uBCD1\uC758 \uC528\uC557"
+    statType: 3
+    curveType: 2
+    value: -5
+    durationDays: 1
+    description: 12
+  - id: B253
+    name: "\uAD6D\uACE0 \uC720\uCD9C \uC0AC\uACE0"
+    statType: 7
+    curveType: 1
+    value: -3000
+    durationDays: 1
+    description: 1
+  - id: B254
+    name: "\uC0C1\uAD8C \uB9C8\uBE44"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 7
+  - id: B255
+    name: "\uACF5\uC131 \uC2E4\uD328\uC758 \uCDA9\uACA9"
+    statType: 5
+    curveType: 1
+    value: -0.5
+    durationDays: 1
+    description: 1
+  - id: B256
+    name: "\uC131\uBB38 \uD30C\uAD34"
+    statType: 6
+    curveType: 1
+    value: -0.8
+    durationDays: 1
+    description: 1
+  - id: B257
+    name: "\uBC30\uB2F9\uAE08 \uB3D9\uACB0"
+    statType: 0
+    curveType: 1
+    value: 0
+    durationDays: 1
+    description: 1
+  - id: B258
+    name: "\uC2E0\uC6A9 \uAC70\uD488 \uBD95\uAD34"
+    statType: 1
+    curveType: 4
+    value: -30
+    durationDays: 1
+    description: 8
+  - id: B259
+    name: "\uC720\uC5B8\uBE44\uC5B4\uC758 \uB2AA"
+    statType: 3
+    curveType: 3
+    value: 0.92
+    durationDays: 1
+    description: 15
+  - id: B260
+    name: "\uCD08\uAC15\uB825 \uACC4\uC5C4\uB839"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 14
+  - id: B261
+    name: "\uBC88\uC601\uC758 \uC2DC\uC791"
+    statType: 1
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 100
+  - id: B262
+    name: "\uC778\uAD6C\uC758 \uC911\uC2EC\uC9C0"
+    statType: 4
+    curveType: 2
+    value: 100
+    durationDays: 1
+    description: 50
+  - id: B263
+    name: "\uD0DC\uD3C9\uC131\uB300 \uC120\uD3EC"
+    statType: 3
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 100
+  - id: B264
+    name: "\uD669\uAE08 \uBC30\uB2F9 \uC5F4\uCC28"
+    statType: 0
+    curveType: 2
+    value: 0.02
+    durationDays: 1
+    description: 60
+  - id: B265
+    name: "\uCCA0\uC639\uC131\uC758 \uC644\uC131"
+    statType: 6
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 120
+  - id: B266
+    name: "\uCC9C\uD558 \uC0C1\uB2E8\uC758 \uBCF8\uBD80"
+    statType: 2
+    curveType: 3
+    value: 1.01
+    durationDays: 1
+    description: 100
+  - id: B267
+    name: "\uC804\uC124\uC758 \uBB34\uAE30\uCC3D\uACE0"
+    statType: 5
+    curveType: 2
+    value: 0.02
+    durationDays: 1
+    description: 200
+  - id: B268
+    name: "\uBC30\uB2F9 \uC7AD\uD31F\uC758 \uC804\uC870"
+    statType: 7
+    curveType: 3
+    value: 1.08
+    durationDays: 1
+    description: 20
+  - id: B269
+    name: "\uC131 \uAC00\uCE58 \uC7AC\uD3C9\uAC00(L)"
+    statType: 1
+    curveType: 1
+    value: 150
+    durationDays: 1
+    description: 1
+  - id: B270
+    name: "\uC778\uAD6C \uB300\uC774\uC8FC(L)"
+    statType: 4
+    curveType: 1
+    value: 10000
+    durationDays: 1
+    description: 1
+  - id: B271
+    name: "\uAE34\uAE09 \uC7AC\uB09C \uC9C0\uC6D0"
+    statType: 7
+    curveType: 1
+    value: 15000
+    durationDays: 1
+    description: 1
+  - id: B272
+    name: "\uC2DC\uC138 \uC548\uC815 \uC870\uC815"
+    statType: 2
+    curveType: 1
+    value: -50
+    durationDays: 1
+    description: 1
+  - id: B273
+    name: "\uC804\uC124\uC758 \uB300\uCD95\uC81C"
+    statType: 3
+    curveType: 1
+    value: 100
+    durationDays: 1
+    description: 1
+  - id: B274
+    name: "\uBB34\uC801\uC758 \uC218\uBE44\uB300"
+    statType: 6
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 1
+  - id: B275
+    name: "\uBD88\uBA78\uC758 \uACF5\uACA9\uB300"
+    statType: 5
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 1
+  - id: B276
+    name: "\uBC30\uB2F9 10\uBC30 \uC774\uBCA4\uD2B8"
+    statType: 0
+    curveType: 1
+    value: 10
+    durationDays: 1
+    description: 1
+  - id: B277
+    name: "\uC131\uBB38 \uB300\uAC1C\uBC29"
+    statType: 10
+    curveType: 1
+    value: 0
+    durationDays: 1
+    description: 1
+  - id: B278
+    name: "\uAC00\uC18D \uC131\uC7A5 \uB7A0\uB9AC"
+    statType: 1
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 15
+  - id: B279
+    name: "\uC778\uAD6C \uC99D\uAC00\uC758 \uC815\uC810"
+    statType: 4
+    curveType: 3
+    value: 1.2
+    durationDays: 1
+    description: 7
+  - id: B280
+    name: "\uBC30\uB2F9\uAE08 \uBCF5\uB9AC \uB7A0\uB9AC(L)"
+    statType: 0
+    curveType: 3
+    value: 1.2
+    durationDays: 1
+    description: 5
+  - id: B281
+    name: "\uC18C\uADDC\uBAA8 \uD558\uB77D \uC870\uC815"
+    statType: 1
+    curveType: 2
+    value: -0.05
+    durationDays: 1
+    description: 20
+  - id: B282
+    name: "\uC561\uBA74\uAC00 \uBBF8\uC138 \uADE0\uC5F4"
+    statType: 2
+    curveType: 2
+    value: -0.03
+    durationDays: 1
+    description: 30
+  - id: B283
+    name: "\uBBFC\uC2EC\uC758 \uD53C\uB85C\uB3C4"
+    statType: 3
+    curveType: 2
+    value: -0.8
+    durationDays: 1
+    description: 15
+  - id: B284
+    name: "\uBCF4\uAE09\uB85C \uB9C8\uBE44(M)"
+    statType: 5
+    curveType: 2
+    value: -0.15
+    durationDays: 1
+    description: 20
+  - id: B285
+    name: "\uC131\uBCBD \uD48D\uD654(M)"
+    statType: 6
+    curveType: 2
+    value: -0.12
+    durationDays: 1
+    description: 25
+  - id: B286
+    name: "\uC778\uAD6C\uC758 \uC810\uC9C4\uC801 \uC720\uCD9C"
+    statType: 4
+    curveType: 2
+    value: -100
+    durationDays: 1
+    description: 10
+  - id: B287
+    name: "\uBC30\uB2F9\uAE08 \uAC00\uB791\uBE44 \uD558\uB77D"
+    statType: 7
+    curveType: 2
+    value: -50
+    durationDays: 1
+    description: 30
+  - id: B288
+    name: "\uC2DC\uC138 \uACFC\uC5F4 \uD6A1\uBCF4"
+    statType: 1
+    curveType: 4
+    value: -20
+    durationDays: 1
+    description: 15
+  - id: B289
+    name: "\uC561\uBA74\uAC00 \uAC00\uC18D \uBD95\uAD34"
+    statType: 2
+    curveType: 3
+    value: 0.92
+    durationDays: 1
+    description: 12
+  - id: B290
+    name: "\uBBFC\uC2EC \uAC00\uC18D \uC774\uBC18"
+    statType: 3
+    curveType: 3
+    value: 0.9
+    durationDays: 1
+    description: 10
+  - id: B291
+    name: "\uCD5C\uC545\uC758 \uB5A1\uB77D"
+    statType: 1
+    curveType: 1
+    value: -80
+    durationDays: 1
+    description: 1
+  - id: B292
+    name: "\uC778\uAD6C \uC808\uBC18 \uC2E4\uC885"
+    statType: 4
+    curveType: 1
+    value: -0.5
+    durationDays: 1
+    description: 1
+  - id: B293
+    name: "\uBC30\uB2F9\uAE08 \uC804\uBA74 \uBAB0\uC218"
+    statType: 7
+    curveType: 1
+    value: -20000
+    durationDays: 1
+    description: 1
+  - id: B294
+    name: "\uC601\uAD6C \uAC70\uB798 \uC815\uC9C0\uC124"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 60
+  - id: B295
+    name: "\uACF5\uACA9\uB825 \uC804\uBA74 \uC0C1\uC2E4"
+    statType: 5
+    curveType: 1
+    value: -0.9
+    durationDays: 1
+    description: 1
+  - id: B296
+    name: "\uC218\uBE44\uB825 \uC804\uBA74 \uC0C1\uC2E4"
+    statType: 6
+    curveType: 1
+    value: -0.9
+    durationDays: 1
+    description: 1
+  - id: B297
+    name: "\uBC30\uB2F9 \uBC30\uC728 \uC804\uBA78(L)"
+    statType: 0
+    curveType: 1
+    value: 0.001
+    durationDays: 1
+    description: 1
+  - id: B298
+    name: "\uAC00\uC18D \uD558\uB77D\uC758 \uB05D"
+    statType: 1
+    curveType: 3
+    value: 0.7
+    durationDays: 1
+    description: 8
+  - id: B299
+    name: "\uC561\uBA74\uAC00 \uC81C\uB85C\uD654"
+    statType: 2
+    curveType: 1
+    value: -100
+    durationDays: 1
+    description: 1
+  - id: B300
+    name: "\uCC9C\uD558 \uB300\uD30C\uB780"
+    statType: 1
+    curveType: 3
+    value: 0.5
+    durationDays: 1
+    description: 5
+  - id: B301
+    name: "\uC801\uD1A0\uB9C8\uC758 \uC9C8\uC8FC"
+    statType: 1
+    curveType: 3
+    value: 1.15
+    durationDays: 1
+    description: 7
+  - id: B302
+    name: "\uC7A5\uD310\uD30C\uC758 \uC77C\uAC08"
+    statType: 6
+    curveType: 1
+    value: 0.85
+    durationDays: 1
+    description: 1
+  - id: B303
+    name: "\uCE60\uC885\uCE60\uAE08\uC758 \uC608\uBC95"
+    statType: 3
+    curveType: 2
+    value: 2.5
+    durationDays: 1
+    description: 14
+  - id: B304
+    name: "\uC5F0\uD658\uACC4\uC758 \uD568\uC815"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 5
+  - id: B305
+    name: "\uC624\uD558\uC544\uBABD\uC758 \uAC01\uC131"
+    statType: 2
+    curveType: 3
+    value: 1.08
+    durationDays: 1
+    description: 20
+  - id: B306
+    name: "\uC870\uC870\uC758 \uB454\uC804\uC81C \uD655\uC7A5"
+    statType: 4
+    curveType: 2
+    value: 500
+    durationDays: 1
+    description: 30
+  - id: B307
+    name: "\uC190\uAD8C\uC758 \uC218\uC131 \uC804\uB7B5"
+    statType: 6
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 50
+  - id: B308
+    name: "\uC720\uBE44\uC758 \uC0BC\uACE0\uCD08\uB824"
+    statType: 0
+    curveType: 4
+    value: 3
+    durationDays: 1
+    description: 10
+  - id: B309
+    name: "\uB3D9\uD0C1\uC758 \uB099\uC591 \uBC29\uD654"
+    statType: 1
+    curveType: 1
+    value: -100
+    durationDays: 1
+    description: 1
+  - id: B310
+    name: "\uD669\uAC74\uC801\uC758 \uB09C"
+    statType: 3
+    curveType: 2
+    value: -3
+    durationDays: 1
+    description: 15
+  - id: B311
+    name: "\uB3C4\uC6D0\uACB0\uC758\uC758 \uC57D\uC18D"
+    statType: 7
+    curveType: 2
+    value: 1000
+    durationDays: 1
+    description: 3
+  - id: B312
+    name: "\uBC31\uB9C8\uC758 \uC885 \uAE30\uBCD1\uB300"
+    statType: 5
+    curveType: 1
+    value: 0.5
+    durationDays: 1
+    description: 1
+  - id: B313
+    name: "\uBBF8\uC778\uACC4\uC758 \uC720\uD639"
+    statType: 2
+    curveType: 3
+    value: 0.9
+    durationDays: 1
+    description: 10
+  - id: B314
+    name: "\uC625\uC0C8\uC758 \uC8FC\uC778"
+    statType: 1
+    curveType: 1
+    value: 200
+    durationDays: 1
+    description: 1
+  - id: B315
+    name: "\uC11C\uB7C9 \uAE30\uBCD1\uC758 \uB3CC\uACA9"
+    statType: 5
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 12
+  - id: B316
+    name: "\uACE0\uC721\uC9C0\uACC4\uC758 \uACB0\uB2E8"
+    statType: 3
+    curveType: 2
+    value: -5
+    durationDays: 1
+    description: 5
+  - id: B317
+    name: "\uD654\uC6A9\uB3C4\uC758 \uC790\uBE44"
+    statType: 6
+    curveType: 2
+    value: -0.3
+    durationDays: 1
+    description: 7
+  - id: B318
+    name: "\uACF5\uBA85\uB4F1\uC758 \uAE30\uC801"
+    statType: 1
+    curveType: 4
+    value: 50
+    durationDays: 1
+    description: 10
+  - id: B319
+    name: "\uC870\uC6B4\uC758 \uB2E8\uAE30\uD544\uB9C8"
+    statType: 6
+    curveType: 1
+    value: 0.95
+    durationDays: 1
+    description: 1
+  - id: B320
+    name: "\uD5C8\uCC3D\uC73C\uB85C\uC758 \uCC9C\uB3C4"
+    statType: 4
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 15
+  - id: B321
+    name: "\uB9F9\uD68D\uC758 \uCF54\uB07C\uB9AC \uBD80\uB300"
+    statType: 5
+    curveType: 1
+    value: 0.7
+    durationDays: 1
+    description: 1
+  - id: B322
+    name: "\uC774\uAD81\uC758 \uBCC0"
+    statType: 7
+    curveType: 2
+    value: -500
+    durationDays: 1
+    description: 20
+  - id: B323
+    name: "\uB4F1\uC560\uC758 \uC808\uBCBD \uB4F1\uBC18"
+    statType: 5
+    curveType: 1
+    value: 0.8
+    durationDays: 1
+    description: 1
+  - id: B324
+    name: "\uC721\uC190\uC758 \uD654\uACC4"
+    statType: 1
+    curveType: 1
+    value: -150
+    durationDays: 1
+    description: 1
+  - id: B325
+    name: "\uAC10\uB155\uC758 \uBC31\uAE30 \uAE30\uC2B5"
+    statType: 5
+    curveType: 2
+    value: 0.4
+    durationDays: 1
+    description: 3
+  - id: B326
+    name: "\uC6D0\uC18C\uC758 \uBA85\uBB38 \uC704\uC138"
+    statType: 2
+    curveType: 4
+    value: 30
+    durationDays: 1
+    description: 20
+  - id: B327
+    name: "\uC704\uCD09\uC624 \uC0BC\uAD6D \uC815\uB9BD"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 3
+  - id: B328
+    name: "\uCD09\uC758 \uBE44\uB2E8 \uC218\uCD9C"
+    statType: 0
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 30
+  - id: B329
+    name: "\uAC15\uC720\uC758 \uAD6C\uBC8C\uC911\uC6D0"
+    statType: 7
+    curveType: 2
+    value: -200
+    durationDays: 1
+    description: 40
+  - id: B330
+    name: "\uC0AC\uB9C8\uC758\uC758 \uB0AD\uACE0\uC9C0\uC0C1"
+    statType: 1
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 100
+  - id: B331
+    name: "\uAD00\uC6B0\uC758 \uCCAD\uB8E1\uC5B8\uC6D4\uB3C4"
+    statType: 5
+    curveType: 1
+    value: 0.6
+    durationDays: 1
+    description: 1
+  - id: B332
+    name: "\uC7A5\uB8CC\uC758 \uD569\uBE44 \uC218\uC131"
+    statType: 6
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 5
+  - id: B333
+    name: "\uC81C\uAC08\uB7C9\uC758 \uCD9C\uC0AC\uD45C"
+    statType: 3
+    curveType: 1
+    value: 40
+    durationDays: 1
+    description: 1
+  - id: B334
+    name: "\uC11C\uC8FC\uC758 \uB300\uB3C4\uC0B4"
+    statType: 4
+    curveType: 1
+    value: -5000
+    durationDays: 1
+    description: 1
+  - id: B335
+    name: "\uC190\uCC45\uC758 \uAC15\uB3D9 \uD3C9\uC815"
+    statType: 2
+    curveType: 2
+    value: 2
+    durationDays: 1
+    description: 15
+  - id: B336
+    name: "\uC5EC\uD3EC\uC758 \uBC29\uCC9C\uD654\uADF9"
+    statType: 5
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 1
+  - id: B337
+    name: "\uC7A5\uAC01\uC758 \uD0DC\uD3C9\uC694\uC220"
+    statType: 3
+    curveType: 4
+    value: 25
+    durationDays: 1
+    description: 10
+  - id: B338
+    name: "\uC21C\uC6B1\uC758 \uBE48 \uCC2C\uD569"
+    statType: 3
+    curveType: 1
+    value: -30
+    durationDays: 1
+    description: 1
+  - id: B339
+    name: "\uAC00\uD6C4\uC758 \uC774\uAC04\uCC45"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 7
+  - id: B340
+    name: "\uC624\uC7A5\uC6D0\uC758 \uC9C0\uB294 \uBCC4"
+    statType: 1
+    curveType: 3
+    value: 0.85
+    durationDays: 1
+    description: 10
+  - id: B341
+    name: "\uC804\uC704\uC758 \uD638\uC704"
+    statType: 6
+    curveType: 1
+    value: 0.75
+    durationDays: 1
+    description: 1
+  - id: B342
+    name: "\uACFD\uAC00\uC758 \uC720\uCC45"
+    statType: 2
+    curveType: 2
+    value: 0.8
+    durationDays: 1
+    description: 25
+  - id: B343
+    name: "\uBBF8\uCD95\uC758 \uB9C9\uB300\uD55C \uAE30\uBD80"
+    statType: 7
+    curveType: 1
+    value: 5000
+    durationDays: 1
+    description: 1
+  - id: B344
+    name: "\uBC29\uB355\uC758 \uAD00\uC744 \uB4E0 \uCD9C\uC815"
+    statType: 5
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 10
+  - id: B345
+    name: "\uC720\uC120\uC758 \uBC29\uD0D5\uD55C \uC0DD\uD65C"
+    statType: 3
+    curveType: 2
+    value: -1.5
+    durationDays: 1
+    description: 30
+  - id: B346
+    name: "\uC0AC\uB9C8\uC18C\uC758 \uC57C\uC2EC"
+    statType: 1
+    curveType: 3
+    value: 1.06
+    durationDays: 1
+    description: 15
+  - id: B347
+    name: "\uC655\uC724\uC758 \uC5F0\uD658\uACC4 \uC131\uACF5"
+    statType: 2
+    curveType: 1
+    value: 45
+    durationDays: 1
+    description: 1
+  - id: B348
+    name: "\uC7A5\uC1A1\uC758 \uC11C\uCC9C\uC9C0\uD615\uB3C4"
+    statType: 4
+    curveType: 4
+    value: 1000
+    durationDays: 1
+    description: 5
+  - id: B349
+    name: "\uC8FC\uC720\uC758 \uC624\uB098\uB77C \uC218\uAD70"
+    statType: 6
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 40
+  - id: B350
+    name: "\uC5C4\uC548\uC758 \uD56D\uBCF5"
+    statType: 3
+    curveType: 1
+    value: 20
+    durationDays: 1
+    description: 1
+  - id: B351
+    name: "\uBC95\uC815\uC758 \uAE30\uC2B5 \uCC45\uB7B5"
+    statType: 5
+    curveType: 1
+    value: 0.45
+    durationDays: 1
+    description: 1
+  - id: B352
+    name: "\uC815\uC6B1\uC758 \uC2ED\uBA74\uB9E4\uBCF5"
+    statType: 6
+    curveType: 1
+    value: 0.65
+    durationDays: 1
+    description: 1
+  - id: B353
+    name: "\uB9C8\uC18D\uC758 \uB4F1\uC0B0 \uC2E4\uCC45"
+    statType: 6
+    curveType: 1
+    value: -0.7
+    durationDays: 1
+    description: 1
+  - id: B354
+    name: "\uD669\uC6D4\uC601\uC758 \uBAA9\uC6B0\uC720\uB9C8"
+    statType: 0
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 20
+  - id: B355
+    name: "\uD654\uD0C0\uC758 \uBA85\uC57D"
+    statType: 3
+    curveType: 1
+    value: 35
+    durationDays: 1
+    description: 1
+  - id: B356
+    name: "\uC870\uC2DD\uC758 \uCE60\uBCF4\uC2DC"
+    statType: 3
+    curveType: 2
+    value: 0.4
+    durationDays: 1
+    description: 40
+  - id: B357
+    name: "\uB178\uC219\uC758 \uC678\uAD50 \uC815\uCC45"
+    statType: 7
+    curveType: 2
+    value: 300
+    durationDays: 1
+    description: 15
+  - id: B358
+    name: "\uC870\uD64D\uC758 \uC790\uAE08 \uC9C0\uC6D0"
+    statType: 2
+    curveType: 1
+    value: 25
+    durationDays: 1
+    description: 1
+  - id: B359
+    name: "\uAD00\uD765\uACFC \uC7A5\uD3EC\uC758 \uD328\uAE30"
+    statType: 5
+    curveType: 2
+    value: 0.12
+    durationDays: 1
+    description: 30
+  - id: B360
+    name: "\uC11C\uD669\uC758 \uC5C4\uACA9\uD55C \uAD70\uAE30"
+    statType: 6
+    curveType: 2
+    value: 0.08
+    durationDays: 1
+    description: 50
+  - id: B361
+    name: "\uD5C8\uC800\uC758 \uD638\uCE58 \uC704\uC5C4"
+    statType: 6
+    curveType: 1
+    value: 0.8
+    durationDays: 1
+    description: 1
+  - id: B362
+    name: "\uC720\uBE44\uC758 \uC778\uB355"
+    statType: 4
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 25
+  - id: B363
+    name: "\uC9C4\uAD81\uC758 \uAE30\uCC45"
+    statType: 1
+    curveType: 4
+    value: 40
+    durationDays: 1
+    description: 12
+  - id: B364
+    name: "\uC6D0\uC220\uC758 \uBAB0\uB77D"
+    statType: 1
+    curveType: 1
+    value: -70
+    durationDays: 1
+    description: 1
+  - id: B365
+    name: "\uB178\uC7A5\uB4E4\uC758 \uD5CC\uC2E0"
+    statType: 6
+    curveType: 2
+    value: 0.05
+    durationDays: 1
+    description: 100
+  - id: B366
+    name: "\uC704\uC5F0\uC758 \uC790\uC624\uACE1 \uAE30\uC2B5"
+    statType: 5
+    curveType: 3
+    value: 1.15
+    durationDays: 1
+    description: 5
+  - id: B367
+    name: "\uB9F9\uB2EC\uC758 \uBCC0\uC808"
+    statType: 3
+    curveType: 2
+    value: -2.5
+    durationDays: 1
+    description: 10
+  - id: B368
+    name: "\uC591\uD638\uC640 \uC721\uD56D\uC758 \uD3C9\uD654"
+    statType: 2
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 60
+  - id: B369
+    name: "\uC2ED\uC0C1\uC2DC\uC758 \uC218\uD0C8"
+    statType: 7
+    curveType: 2
+    value: -400
+    durationDays: 1
+    description: 25
+  - id: B370
+    name: "\uC554\uC0B4 \uC2DC\uB3C4 \uD63C\uB780"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 2
+  - id: B371
+    name: "\uAD00\uD3C9\uC758 \uCDA9\uC758"
+    statType: 6
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 40
+  - id: B372
+    name: "\uBD09\uCD94\uC758 \uB4F1\uC7A5"
+    statType: 1
+    curveType: 1
+    value: 55
+    durationDays: 1
+    description: 1
+  - id: B373
+    name: "\uD0DC\uC0AC\uC790\uC758 \uC2E0\uAD81"
+    statType: 5
+    curveType: 1
+    value: 0.55
+    durationDays: 1
+    description: 1
+  - id: B374
+    name: "\uC190\uAD8C\uC758 \uCD95\uC81C"
+    statType: 3
+    curveType: 2
+    value: 1.2
+    durationDays: 1
+    description: 10
+  - id: B375
+    name: "\uD608\uB300\uC870 \uC0AC\uAC74"
+    statType: 3
+    curveType: 1
+    value: -15
+    durationDays: 1
+    description: 1
+  - id: B376
+    name: "\uB9C8\uCD08\uC758 \uBCF5\uC218\uC804"
+    statType: 5
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 10
+  - id: B377
+    name: "\uD615\uC8FC\uC758 \uD3C9\uD654"
+    statType: 0
+    curveType: 4
+    value: 1.5
+    durationDays: 1
+    description: 20
+  - id: B378
+    name: "\uACC4\uB975\uC758 \uD63C\uB780"
+    statType: 3
+    curveType: 2
+    value: -0.5
+    durationDays: 1
+    description: 20
+  - id: B379
+    name: "\uBC18\uB780 \uBAA8\uC758 \uC801\uBC1C"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 10
+  - id: B380
+    name: "\uD669\uBCF4\uC22D\uC758 \uD1A0\uBC8C\uAD70"
+    statType: 5
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 15
+  - id: B381
+    name: "\uB208 \uC18D\uC758 \uAE30\uC2B5"
+    statType: 5
+    curveType: 1
+    value: 0.6
+    durationDays: 1
+    description: 1
+  - id: B382
+    name: "\uB3C4\uACB8\uC758 \uC591\uBCF4"
+    statType: 1
+    curveType: 1
+    value: 30
+    durationDays: 1
+    description: 1
+  - id: B383
+    name: "\uC7A5\uC18C\uC758 \uD589\uC815 \uAD00\uB9AC"
+    statType: 7
+    curveType: 2
+    value: 150
+    durationDays: 1
+    description: 50
+  - id: B384
+    name: "\uBB34\uB9AC\uD55C \uAD81\uAD90 \uAC74\uCD95"
+    statType: 7
+    curveType: 2
+    value: -1000
+    durationDays: 1
+    description: 12
+  - id: B385
+    name: "\uC655\uD3C9\uC758 \uC9C0\uD615 \uD65C\uC6A9"
+    statType: 6
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 20
+  - id: B386
+    name: "\uB4F1\uC9C0\uC758 \uC678\uAD50 \uC131\uACF5"
+    statType: 2
+    curveType: 2
+    value: 0.4
+    durationDays: 1
+    description: 30
+  - id: B387
+    name: "\uAC70\uC810 \uC0C1\uC2E4"
+    statType: 1
+    curveType: 1
+    value: -40
+    durationDays: 1
+    description: 1
+  - id: B388
+    name: "\uC81C\uAC08\uD0C4\uC758 \uBC18\uB780"
+    statType: 3
+    curveType: 3
+    value: 0.95
+    durationDays: 1
+    description: 14
+  - id: B389
+    name: "\uBB38\uC559\uC758 \uC6A9\uB9F9"
+    statType: 6
+    curveType: 1
+    value: 0.7
+    durationDays: 1
+    description: 1
+  - id: B390
+    name: "\uCDA9\uC2E0\uC758 \uC9C1\uC5B8"
+    statType: 3
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 60
+  - id: B391
+    name: "\uAD00\uB9AC\uC758 \uC808\uAC1C"
+    statType: 2
+    curveType: 4
+    value: 15
+    durationDays: 1
+    description: 15
+  - id: B392
+    name: "\uBE44\uC758\uC758 \uD3C9\uD654 \uD1B5\uCE58"
+    statType: 3
+    curveType: 2
+    value: 1
+    durationDays: 1
+    description: 20
+  - id: B393
+    name: "\uC7A5\uC218 \uAC04 \uC774\uAC04\uACC4"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 4
+  - id: B394
+    name: "\uAD00\uB9AC\uC758 \uC624\uB9CC\uD568"
+    statType: 3
+    curveType: 2
+    value: -2
+    durationDays: 1
+    description: 10
+  - id: B395
+    name: "\uAC00\uBB44 \uB300\uCC45 \uC131\uACF5"
+    statType: 4
+    curveType: 2
+    value: 200
+    durationDays: 1
+    description: 10
+  - id: B396
+    name: "\uC218\uC131 \uBCD1\uBC95\uC758 \uBC1C\uB2EC"
+    statType: 6
+    curveType: 3
+    value: 1.03
+    durationDays: 1
+    description: 30
+  - id: B397
+    name: "\uB9C8\uB7C9\uC758 \uC7AC\uB2A5"
+    statType: 0
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 15
+  - id: B398
+    name: "\uB099\uBD09\uD30C\uC758 \uBCF5\uBCD1"
+    statType: 5
+    curveType: 1
+    value: -0.8
+    durationDays: 1
+    description: 1
+  - id: B399
+    name: "\uC81C\uAC08\uADFC\uC758 \uD654\uD569"
+    statType: 2
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 100
+  - id: B400
+    name: "\uCC9C\uD558\uC0BC\uBD84\uC9C0\uACC4 \uC644\uC131"
+    statType: 1
+    curveType: 1
+    value: 150
+    durationDays: 1
+    description: 1
+  - id: B401
+    name: "\uAD00\uC6B0\uC758 \uC624\uAD00\uCC38\uC721\uC7A5"
+    statType: 5
+    curveType: 1
+    value: 0.75
+    durationDays: 1
+    description: 1
+  - id: B402
+    name: "\uC81C\uAC08\uB7C9\uC758 \uB3D9\uB0A8\uD48D"
+    statType: 1
+    curveType: 3
+    value: 1.12
+    durationDays: 1
+    description: 3
+  - id: B403
+    name: "\uB0A8\uB9CC \uBB34\uC220 \uB300\uD68C"
+    statType: 3
+    curveType: 2
+    value: 2
+    durationDays: 1
+    description: 20
+  - id: B404
+    name: "\uB4F1\uAC11\uBCD1\uC758 \uC57D\uC810"
+    statType: 6
+    curveType: 1
+    value: -0.6
+    durationDays: 1
+    description: 1
+  - id: B405
+    name: "\uC721\uC190\uC758 \uC11D\uBCD1\uD314\uC9C4"
+    statType: 6
+    curveType: 1
+    value: 0.85
+    durationDays: 1
+    description: 1
+  - id: B406
+    name: "\uC870\uC6B4\uC758 \uD55C\uC218 \uC804\uD22C"
+    statType: 5
+    curveType: 1
+    value: 0.65
+    durationDays: 1
+    description: 1
+  - id: B407
+    name: "\uB9C8\uCD08\uC758 \uAE30\uBCD1 \uB300\uAC01\uC131"
+    statType: 5
+    curveType: 3
+    value: 1.08
+    durationDays: 1
+    description: 10
+  - id: B408
+    name: "\uD5C8\uC800\uC640 \uB9C8\uCD08\uC758 \uACB0\uD22C"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 2
+  - id: B409
+    name: "\uC720\uBE44\uC758 \uC601\uC548\uAD81 \uC720\uC5B8"
+    statType: 3
+    curveType: 2
+    value: -2.5
+    durationDays: 1
+    description: 15
+  - id: B410
+    name: "\uC704\uC5F0\uC758 \uBC18\uACE8\uC0C1 \uC758\uC2EC"
+    statType: 3
+    curveType: 2
+    value: -1.2
+    durationDays: 1
+    description: 20
+  - id: B411
+    name: "\uCD09\uB3C4\uB09C\uC758 \uD5D8\uB85C"
+    statType: 5
+    curveType: 2
+    value: -0.15
+    durationDays: 1
+    description: 30
+  - id: B412
+    name: "\uC6A9\uACE8\uCC28 \uBCF4\uAE09"
+    statType: 4
+    curveType: 2
+    value: 150
+    durationDays: 1
+    description: 40
+  - id: B413
+    name: "\uAC15\uC720\uC758 \uCCA0\uB871\uC0B0 \uD3EC\uC704"
+    statType: 6
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 25
+  - id: B414
+    name: "\uC0AC\uB9C8\uC758\uC758 \uACE0\uD3C9\uB989 \uC0AC\uBCC0"
+    statType: 2
+    curveType: 1
+    value: 50
+    durationDays: 1
+    description: 1
+  - id: B415
+    name: "\uC624\uB098\uB77C\uC758 \uAC70\uB300 \uD568\uC120"
+    statType: 6
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 60
+  - id: B416
+    name: "\uC7A5\uBE44\uC758 \uB3C5\uC218 \uACF5\uC131"
+    statType: 5
+    curveType: 1
+    value: 0.5
+    durationDays: 1
+    description: 1
+  - id: B417
+    name: "\uAD00\uC6B0\uC758 \uC218\uBAB0 \uC791\uC804"
+    statType: 5
+    curveType: 1
+    value: 0.9
+    durationDays: 1
+    description: 1
+  - id: B418
+    name: "\uBC29\uD1B5\uC758 \uC5F0\uD658\uACC4 \uBE44\uCC45"
+    statType: 1
+    curveType: 4
+    value: 35
+    durationDays: 1
+    description: 15
+  - id: B419
+    name: "\uC8FC\uC720\uC758 \uBBF8\uC8FC\uB791 \uBA85\uC131"
+    statType: 3
+    curveType: 2
+    value: 0.8
+    durationDays: 1
+    description: 45
+  - id: B420
+    name: "\uC5EC\uBABD\uC758 \uBC31\uC758\uB3C4\uAC15"
+    statType: 5
+    curveType: 1
+    value: 0.8
+    durationDays: 1
+    description: 1
+  - id: B421
+    name: "\uC870\uC870\uC758 \uB2E8\uAC00\uD589"
+    statType: 3
+    curveType: 1
+    value: 25
+    durationDays: 1
+    description: 1
+  - id: B422
+    name: "\uC0AC\uB9C8\uC5FC\uC758 \uCC9C\uD558 \uD1B5\uC77C"
+    statType: 1
+    curveType: 1
+    value: 200
+    durationDays: 1
+    description: 1
+  - id: B423
+    name: "\uC624\uB098\uB77C\uC758 \uC774\uAD81 \uC18C\uB3D9"
+    statType: 0
+    curveType: 3
+    value: 0.96
+    durationDays: 1
+    description: 15
+  - id: B424
+    name: "\uC81C\uAC08\uB7C9\uC758 \uBAA9\uC6B0\uC720\uB9C8"
+    statType: 7
+    curveType: 2
+    value: 250
+    durationDays: 1
+    description: 30
+  - id: B425
+    name: "\uC870\uC870\uC758 \uB2E8\uB3C4\uBD80\uD68C"
+    statType: 2
+    curveType: 1
+    value: -20
+    durationDays: 1
+    description: 1
+  - id: B426
+    name: "\uACAC\uD76C\uC758 \uB099\uC2E0\uBD80 \uC778\uAE30"
+    statType: 1
+    curveType: 2
+    value: 0.6
+    durationDays: 1
+    description: 50
+  - id: B427
+    name: "\uAC00\uD6C4\uC758 \uC7A5\uC218 \uADC0\uC21C\uCC45"
+    statType: 4
+    curveType: 1
+    value: 1500
+    durationDays: 1
+    description: 1
+  - id: B428
+    name: "\uC815\uC6B1\uC758 \uC704\uC870 \uD3B8\uC9C0"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 5
+  - id: B429
+    name: "\uC704\uC5F0\uC758 \uC790\uC624\uACE1 \uB17C\uC7C1"
+    statType: 2
+    curveType: 2
+    value: -0.3
+    durationDays: 1
+    description: 40
+  - id: B430
+    name: "\uC885\uD68C\uC758 \uAC80\uAC01 \uB300\uCE58"
+    statType: 6
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 20
+  - id: B431
+    name: "\uB4F1\uC560\uC758 \uAC15\uC720 \uC6B0\uD68C"
+    statType: 5
+    curveType: 1
+    value: 0.7
+    durationDays: 1
+    description: 1
+  - id: B432
+    name: "\uC190\uACAC\uC758 \uC625\uC0C8 \uBC1C\uACAC"
+    statType: 1
+    curveType: 1
+    value: 150
+    durationDays: 1
+    description: 1
+  - id: B433
+    name: "\uB3D9\uD0C1\uC758 \uBBF8\uC624\uC131 \uCD95\uC870"
+    statType: 7
+    curveType: 2
+    value: -1500
+    durationDays: 1
+    description: 10
+  - id: B434
+    name: "\uC6D0\uC220\uC758 \uD669\uC81C \uCC38\uCE6D"
+    statType: 3
+    curveType: 3
+    value: 0.9
+    durationDays: 1
+    description: 12
+  - id: B435
+    name: "\uAD00\uC6B0\uC758 \uD654\uD0C0 \uCE58\uB8CC"
+    statType: 6
+    curveType: 1
+    value: 0.4
+    durationDays: 1
+    description: 1
+  - id: B436
+    name: "\uC81C\uAC08\uB7C9\uC758 \uB9CC\uB450 \uBC1C\uBA85"
+    statType: 3
+    curveType: 1
+    value: 30
+    durationDays: 1
+    description: 1
+  - id: B437
+    name: "\uB2E8\uC591\uBCD1 \uBAA8\uC9D1"
+    statType: 6
+    curveType: 2
+    value: 0.12
+    durationDays: 1
+    description: 50
+  - id: B438
+    name: "\uC870\uBE44\uC758 \uAD6C\uD488\uAD00\uC778\uBC95"
+    statType: 2
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 40
+  - id: B439
+    name: "\uC720\uBE44\uC758 \uC774\uB989 \uB300\uD328"
+    statType: 1
+    curveType: 1
+    value: -120
+    durationDays: 1
+    description: 1
+  - id: B440
+    name: "\uC721\uC190\uC758 \uD654\uACC4 \uC131\uACF5"
+    statType: 5
+    curveType: 1
+    value: 0.85
+    durationDays: 1
+    description: 1
+  - id: B441
+    name: "\uC21C\uC6B1\uC758 \uC655\uB3C4 \uC815\uCE58"
+    statType: 3
+    curveType: 2
+    value: 0.4
+    durationDays: 1
+    description: 80
+  - id: B442
+    name: "\uACFD\uAC00\uC758 \uC2ED\uC2B9\uC2ED\uD328\uB860"
+    statType: 2
+    curveType: 3
+    value: 1.03
+    durationDays: 1
+    description: 25
+  - id: B443
+    name: "\uC804\uC704\uC758 \uC30D\uCCA0\uADF9"
+    statType: 6
+    curveType: 1
+    value: 0.6
+    durationDays: 1
+    description: 1
+  - id: B444
+    name: "\uAC10\uB155\uC758 \uC624\uBC31 \uAE30\uBCD1"
+    statType: 5
+    curveType: 1
+    value: 0.55
+    durationDays: 1
+    description: 1
+  - id: B445
+    name: "\uC190\uCC45\uC758 \uC625\uC0C8 \uB2F4\uBCF4"
+    statType: 2
+    curveType: 1
+    value: 40
+    durationDays: 1
+    description: 1
+  - id: B446
+    name: "\uC81C\uAC08\uB7C9\uC758 \uD314\uC9C4\uB3C4"
+    statType: 6
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 10
+  - id: B447
+    name: "\uC870\uC870\uC758 \uC758\uC2EC\uBCD1"
+    statType: 3
+    curveType: 2
+    value: -1.5
+    durationDays: 1
+    description: 20
+  - id: B448
+    name: "\uC720\uC120\uC758 \uB4F1\uC6A9 \uC9C0\uC5F0"
+    statType: 2
+    curveType: 2
+    value: -0.2
+    durationDays: 1
+    description: 50
+  - id: B449
+    name: "\uAC15\uC720\uC758 \uBD81\uBC8C \uAC15\uD589"
+    statType: 7
+    curveType: 2
+    value: -300
+    durationDays: 1
+    description: 60
+  - id: B450
+    name: "\uC704\uB098\uB77C\uC758 \uB454\uC804 \uC131\uACF5"
+    statType: 4
+    curveType: 2
+    value: 350
+    durationDays: 1
+    description: 30
+  - id: B451
+    name: "\uC885\uC774\uC758 \uBC1C\uBA85"
+    statType: 1
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 100
+  - id: B452
+    name: "\uD654\uACF5\uC6A9 \uAE30\uB984 \uBE44\uCD95"
+    statType: 5
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 15
+  - id: B453
+    name: "\uCD09\uB098\uB77C\uC758 \uC18C\uAE08 \uC804\uB9E4"
+    statType: 7
+    curveType: 2
+    value: 400
+    durationDays: 1
+    description: 25
+  - id: B454
+    name: "\uC704\uB098\uB77C\uC758 \uCCAD\uB3D9\uAE30 \uBC1C\uC804"
+    statType: 2
+    curveType: 3
+    value: 1.02
+    durationDays: 1
+    description: 40
+  - id: B455
+    name: "\uC190\uAD8C\uC758 \uB300\uB9CC \uD0D0\uC0AC"
+    statType: 4
+    curveType: 1
+    value: 800
+    durationDays: 1
+    description: 1
+  - id: B456
+    name: "\uC720\uBE44\uC758 \uB3D7\uC790\uB9AC \uC7A5\uC0AC"
+    statType: 2
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 50
+  - id: B457
+    name: "\uC7A5\uBE44\uC758 \uD654\uAC00 \uC7AC\uB2A5"
+    statType: 3
+    curveType: 2
+    value: 0.3
+    durationDays: 1
+    description: 30
+  - id: B458
+    name: "\uC81C\uAC08\uB7C9\uC758 \uCD9C\uC0AC\uD45C \uB0AD\uB3C5"
+    statType: 3
+    curveType: 1
+    value: 45
+    durationDays: 1
+    description: 1
+  - id: B459
+    name: "\uC870\uC870\uC758 \uC11C\uB7C9 \uD3C9\uC815"
+    statType: 1
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 35
+  - id: B460
+    name: "\uC0AC\uB9C8\uC758\uC758 \uC704\uC7A5\uBCD1 \uC5F0\uAE30"
+    statType: 10
+    curveType: 1
+    value: 1
+    durationDays: 1
+    description: 3
+  - id: B461
+    name: "\uC9C4\uB098\uB77C\uC758 \uAC74\uAD6D"
+    statType: 1
+    curveType: 1
+    value: 180
+    durationDays: 1
+    description: 1
+  - id: B462
+    name: "\uC624\uB098\uB77C\uC758 \uC7A5\uAE30 \uD56D\uC804"
+    statType: 6
+    curveType: 2
+    value: 0.08
+    durationDays: 1
+    description: 100
+  - id: B463
+    name: "\uCD09\uB098\uB77C\uC758 \uD55C\uC911 \uAC70\uC810"
+    statType: 6
+    curveType: 3
+    value: 1.02
+    durationDays: 1
+    description: 40
+  - id: B464
+    name: "\uD669\uAC74\uC801 \uC794\uB2F9 \uC18C\uD0D5"
+    statType: 3
+    curveType: 1
+    value: 20
+    durationDays: 1
+    description: 1
+  - id: B465
+    name: "\uC2ED\uC0C1\uC2DC\uC758 \uB1CC\uBB3C \uC694\uAD6C"
+    statType: 7
+    curveType: 2
+    value: -600
+    durationDays: 1
+    description: 15
+  - id: B466
+    name: "\uC6D0\uC220\uC758 \uC625\uC0C8 \uC790\uB791"
+    statType: 1
+    curveType: 2
+    value: -0.5
+    durationDays: 1
+    description: 20
+  - id: B467
+    name: "\uC720\uBE44\uC758 \uC2E0\uC57C \uC8FC\uB454"
+    statType: 4
+    curveType: 2
+    value: 120
+    durationDays: 1
+    description: 30
+  - id: B468
+    name: "\uC870\uC870\uC758 \uC778\uC7AC \uBAA8\uC9D1\uB839"
+    statType: 2
+    curveType: 4
+    value: 30
+    durationDays: 1
+    description: 15
+  - id: B469
+    name: "\uC81C\uAC08\uB7C9\uC758 \uB0A8\uB9CC \uD3C9\uC815"
+    statType: 0
+    curveType: 2
+    value: 0.04
+    durationDays: 1
+    description: 50
+  - id: B470
+    name: "\uC190\uAD8C\uC758 \uD569\uBE44 \uC6D0\uC815"
+    statType: 5
+    curveType: 2
+    value: -0.1
+    durationDays: 1
+    description: 40
+  - id: B471
+    name: "\uAD00\uC6B0\uC758 \uCD98\uCD94\uC790\uACBD"
+    statType: 3
+    curveType: 2
+    value: 0.2
+    durationDays: 1
+    description: 100
+  - id: B472
+    name: "\uC7A5\uBE44\uC758 \uC7A5\uD310\uAD50 \uD638\uB839"
+    statType: 6
+    curveType: 1
+    value: 0.9
+    durationDays: 1
+    description: 1
+  - id: B473
+    name: "\uC870\uC870\uC758 \uC801\uBCBD \uB300\uD328"
+    statType: 1
+    curveType: 1
+    value: -150
+    durationDays: 1
+    description: 1
+  - id: B474
+    name: "\uC720\uBE44\uC758 \uCD09 \uB545 \uC785\uC131"
+    statType: 2
+    curveType: 3
+    value: 1.05
+    durationDays: 1
+    description: 20
+  - id: B475
+    name: "\uB9C8\uCD08\uC758 \uC11C\uB7C9 \uAE30\uBCD1\uB300"
+    statType: 5
+    curveType: 1
+    value: 0.7
+    durationDays: 1
+    description: 1
+  - id: B476
+    name: "\uD669\uCDA9\uC758 \uC815\uAD70\uC0B0 \uC2B9\uB9AC"
+    statType: 5
+    curveType: 1
+    value: 0.6
+    durationDays: 1
+    description: 1
+  - id: B477
+    name: "\uC704\uC5F0\uC758 \uC790\uC624\uACE1 \uBE44\uCC45"
+    statType: 5
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 5
+  - id: B478
+    name: "\uBC29\uD1B5\uC758 \uC5F0\uD658\uACC4"
+    statType: 1
+    curveType: 2
+    value: 0.8
+    durationDays: 1
+    description: 30
+  - id: B479
+    name: "\uC11C\uC11C\uC758 \uBAA8\uCE5C \uD3B8\uC9C0"
+    statType: 3
+    curveType: 1
+    value: -25
+    durationDays: 1
+    description: 1
+  - id: B480
+    name: "\uC870\uC870\uC758 \uB454\uC804\uC81C \uD655\uB300"
+    statType: 4
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 25
+  - id: B481
+    name: "\uC0AC\uB9C8\uC758\uC758 \uC9C0\uAD6C\uC804"
+    statType: 6
+    curveType: 2
+    value: 0.15
+    durationDays: 1
+    description: 80
+  - id: B482
+    name: "\uC81C\uAC08\uB7C9\uC758 \uC624\uC7A5\uC6D0 \uAE30\uB3C4"
+    statType: 3
+    curveType: 2
+    value: -2
+    durationDays: 1
+    description: 10
+  - id: B483
+    name: "\uAC15\uC720\uC758 \uAD6C\uBC8C\uC911\uC6D0"
+    statType: 7
+    curveType: 2
+    value: -400
+    durationDays: 1
+    description: 45
+  - id: B484
+    name: "\uB4F1\uC560\uC758 \uCD09 \uC815\uBC8C"
+    statType: 1
+    curveType: 1
+    value: 160
+    durationDays: 1
+    description: 1
+  - id: B485
+    name: "\uC720\uC120\uC758 \uD56D\uBCF5"
+    statType: 2
+    curveType: 1
+    value: -80
+    durationDays: 1
+    description: 1
+  - id: B486
+    name: "\uC190\uCC45\uC758 \uAC15\uB3D9 \uD3C9\uC815"
+    statType: 2
+    curveType: 2
+    value: 1.5
+    durationDays: 1
+    description: 20
+  - id: B487
+    name: "\uC8FC\uC720\uC758 \uD654\uACF5 \uC791\uC804"
+    statType: 5
+    curveType: 1
+    value: 0.85
+    durationDays: 1
+    description: 1
+  - id: B488
+    name: "\uB178\uC219\uC758 \uC5F0\uD569 \uC81C\uC548"
+    statType: 0
+    curveType: 4
+    value: 2
+    durationDays: 1
+    description: 15
+  - id: B489
+    name: "\uC721\uC190\uC758 \uC774\uB989 \uC218\uC131"
+    statType: 6
+    curveType: 1
+    value: 0.75
+    durationDays: 1
+    description: 1
+  - id: B490
+    name: "\uC624\uB098\uB77C\uC758 \uC7A5\uAC15 \uBC29\uC5B4\uC120"
+    statType: 6
+    curveType: 2
+    value: 0.1
+    durationDays: 1
+    description: 120
+  - id: B491
+    name: "\uC870\uC870\uC758 \uC704\uC655 \uB4F1\uADF9"
+    statType: 2
+    curveType: 1
+    value: 65
+    durationDays: 1
+    description: 1
+  - id: B492
+    name: "\uC21C\uC6B1\uC758 \uBE48 \uCC2C\uD569"
+    statType: 3
+    curveType: 1
+    value: -40
+    durationDays: 1
+    description: 1
+  - id: B493
+    name: "\uACFD\uAC00\uC758 \uC694\uB3D9 \uD3C9\uC815"
+    statType: 5
+    curveType: 2
+    value: 0.25
+    durationDays: 1
+    description: 20
+  - id: B494
+    name: "\uD558\uD6C4\uB3C8\uC758 \uB208 \uD654\uC0B4"
+    statType: 3
+    curveType: 1
+    value: 20
+    durationDays: 1
+    description: 1
+  - id: B495
+    name: "\uC804\uC704\uC758 \uC644\uC131 \uC804\uD22C"
+    statType: 6
+    curveType: 1
+    value: 0.8
+    durationDays: 1
+    description: 1
+  - id: B496
+    name: "\uC7A5\uB8CC\uC758 \uD569\uBE44 \uC704\uC5C4"
+    statType: 6
+    curveType: 3
+    value: 1.1
+    durationDays: 1
+    description: 7
+  - id: B497
+    name: "\uC11C\uD669\uC758 \uACF5\uBA85\uC815\uB300"
+    statType: 3
+    curveType: 2
+    value: 0.5
+    durationDays: 1
+    description: 40
+  - id: B498
+    name: "\uC870\uBE44\uC758 \uD669\uC81C \uCC2C\uD0C8"
+    statType: 1
+    curveType: 1
+    value: 110
+    durationDays: 1
+    description: 1
+  - id: B499
+    name: "\uC0AC\uB9C8\uC18C\uC758 \uC57C\uC2EC"
+    statType: 2
+    curveType: 3
+    value: 1.04
+    durationDays: 1
+    description: 30
+  - id: B500
+    name: "\uCC9C\uD558 \uD1B5\uC77C\uC758 \uB300\uC5C5"
+    statType: 1
+    curveType: 1
+    value: 300
+    durationDays: 1
+    description: 1

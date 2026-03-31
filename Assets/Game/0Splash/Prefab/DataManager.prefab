@@ -1,5 +1,60 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2683261279279534649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8141139333595693622}
+  - component: {fileID: 8886188626148939620}
+  m_Layer: 0
+  m_Name: SoDataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8141139333595693622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2683261279279534649}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2880104545894461855}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8886188626148939620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2683261279279534649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5a09ed792dad044b50be6593bcf62b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixedSoDataManager
+  levelRuleDataSo: {fileID: 11400000, guid: 83d847c7921cdc643addafd8c615fc7c, type: 2}
+  castleMasterDataSo: {fileID: 11400000, guid: cd27aa09cb3f02541bf3cf7883c66663, type: 2}
+  generalMasterDataSo: {fileID: 11400000, guid: be3b6826230f7614c8a24a3dc655983a, type: 2}
+  buffMasterDataSo: {fileID: 11400000, guid: f5580141b7387d6488d5e698d11373f9, type: 2}
+  nationMasterDataSo: {fileID: 11400000, guid: 94607bde24f024c4db10a7b9a088c631, type: 2}
+  regionMasterDataSo: {fileID: 11400000, guid: b3a91c2d4e5f60718293a4b5c6d7e8f9, type: 2}
+  eventMasterDataSo: {fileID: 11400000, guid: a7c3e2d1b4f5069786a5342bc1def002, type: 2}
+  conditionDataSo: {fileID: 11400000, guid: c4d8e1f92a0b3c5d6e7f8091a2b3c4d5, type: 2}
+  eventStatModifierSo: {fileID: 11400000, guid: 6e6cbc186ff3b964782936c62ce9c2ea, type: 2}
+  newsMasterDataSo: {fileID: 11400000, guid: 9d5574312f22f634fa532612dd5778c6, type: 2}
+  globalEconomyDefaultsSo: {fileID: 0}
 --- !u!1 &7174210814265474002
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,7 +84,8 @@ Transform:
   m_LocalPosition: {x: 1065, y: 735, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8141139333595693622}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3044450683856118005
@@ -44,15 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d9fbc77f8c4614d99b3da43ca71e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataManager
-  levelRuleDataSo: {fileID: 11400000, guid: 83d847c7921cdc643addafd8c615fc7c, type: 2}
-  castleMasterDataSo: {fileID: 11400000, guid: cd27aa09cb3f02541bf3cf7883c66663, type: 2}
-  generalMasterDataSo: {fileID: 11400000, guid: be3b6826230f7614c8a24a3dc655983a, type: 2}
-  buffMasterDataSo: {fileID: 11400000, guid: f5580141b7387d6488d5e698d11373f9, type: 2}
-  nationMasterDataSo: {fileID: 11400000, guid: 94607bde24f024c4db10a7b9a088c631, type: 2}
-  regionMasterDataSo: {fileID: 11400000, guid: b3a91c2d4e5f60718293a4b5c6d7e8f9, type: 2}
-  eventMasterDataSo: {fileID: 11400000, guid: a7c3e2d1b4f5069786a5342bc1def002, type: 2}
-  conditionDataSo: {fileID: 11400000, guid: c4d8e1f92a0b3c5d6e7f8091a2b3c4d5, type: 2}
-  globalEconomyDefaultsSo: {fileID: 0}
+  fixedSoDataManager: {fileID: 8886188626148939620}
   castleWorldInitialScenarioSo: {fileID: 0}
   castleStateLiveSo: {fileID: 11400000, guid: c54af1baa5e7d1642b670ee3e05eae74, type: 2}
   userPortfolioLiveSo: {fileID: 11400000, guid: ce248535c15b60945b9d0d9ed501decb, type: 2}

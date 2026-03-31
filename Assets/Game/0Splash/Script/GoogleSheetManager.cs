@@ -20,8 +20,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:L";
     /// <summary>A:id, B:name, C:grade, D:power, E:intel, F:charm, G:infamy(0~100), H:initialNationId, I:initialCastleId</summary>
     const string generalMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1008843975&range=A2:I";
-    /// <summary>A:id, B:name, C:CastleStatType, D:CurveType, E:value, F:description</summary>
-    const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:F";
+    /// <summary>A:id, B:name, C:CastleStatType, D:CurveType, E:value, F:description, G:durationDays(일, 비우면 1)</summary>
+    const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:G";
     /// <summary>세력(Nation) 마스터 TSV URL. A:id, B:name, C:colorCode, D:capitalId, E:description (예: range=A2:E)</summary>
     const string nationMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1621681501&range=A2:E";
     /// <summary>지역(섹터) 마스터 TSV URL. A:지역코드, B:섹터명, C:특징, D:배정 성 예시 (낙양(C01) 형식, range=A2:D 등)</summary>
@@ -30,7 +30,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     const string conditionLibraryDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=537776857&range=A2:E";
     /// <summary>이벤트 통합 TSV. A~F: EventMaster, G:rumorNewsCodes, H:breakingNewsCodes(콤마), M: affinity, N: ConditionIDs, O~S: 레거시/미사용 열.</summary>
     const string eventMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=902917272&range=A2:S";
-    /// <summary>NewsMaster TSV. A:newsCode, B:headline, C:script, D:iconResourcePath(선택). 비우면 다운로드 생략.</summary>
+    /// <summary>NewsMaster TSV. A:newsCode, B:headline, C:script. 비우면 다운로드 생략.</summary>
     const string newsMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=301270709&range=A2:D";
     /// <summary>EventStatModifier TSV. A:eventId, B:flatProbBonus, C:perMight, D:perIntel, E:perCharm, F:perInfamy. 비우면 다운로드 생략(SO·기존 맵 유지).</summary>
     const string eventStatModifierDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1830339338&range=A2:F";
@@ -331,7 +331,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                description = cells.Length > 5 ? cells[5].Trim() : ""
+                description = cells.Length > 5 ? cells[5].Trim() : "",
+                durationDays = 1
             };
 
             if (!TryParseCastleStatTypeCell(cells.Length > 2 ? cells[2] : "", out buff.statType))
@@ -342,27 +343,17 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             float.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
                 out buff.value);
 
+            if (cells.Length > 6 && int.TryParse(cells[6].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                    out int dur) && dur >= 1)
+                buff.durationDays = dur;
+
             dm.buffMasterDataMap[buff.id] = buff;
         }
     }
 
-    /// <summary>시트 C열 <see cref="CastleStatType"/> (이름 또는 정수).</summary>
-    public static bool TryParseCastleStatTypeCell(string raw, out CastleStatType statType)
-    {
-        statType = CastleStatType.None;
-        if (string.IsNullOrWhiteSpace(raw)) return false;
-        string t = raw.Trim();
-        if (Enum.TryParse(t, true, out statType))
-            return true;
-        if (int.TryParse(t, NumberStyles.Integer, CultureInfo.InvariantCulture, out int n) &&
-            Enum.IsDefined(typeof(CastleStatType), n))
-        {
-            statType = (CastleStatType)n;
-            return true;
-        }
-
-        return false;
-    }
+    /// <summary>시트 C열 <see cref="CastleStatType"/> — 정수·영문·또는 enum 주석과 동일한 한글(예: 성 가치). <see cref="CastleStatTypeSheetParser"/>.</summary>
+    public static bool TryParseCastleStatTypeCell(string raw, out CastleStatType statType) =>
+        CastleStatTypeSheetParser.TryParse(raw, out statType);
 
     /// <summary>시트 D열 <see cref="CurveType"/> (이름 또는 정수).</summary>
     public static bool TryParseCurveTypeCell(string raw, out CurveType curveType)
@@ -509,11 +500,23 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
                     desc = cells[4].Trim();
             }
 
+            if (!ConditionTypeSheetParser.TryParse(attr, out ConditionType ct))
+            {
+                Debug.LogWarning($"[GoogleSheetManager] Condition 라이브러리: 알 수 없는 targetAttr (condId={cid}, B={attr})");
+                continue;
+            }
+
+            if (!ConditionOperatorSheetParser.TryParse(op, out ConditionOperator cop))
+            {
+                Debug.LogWarning($"[GoogleSheetManager] Condition 라이브러리: 알 수 없는 op (condId={cid}, C={op})");
+                continue;
+            }
+
             list.Add(new ConditionData
             {
                 conditionId = cid,
-                targetAttr = attr,
-                targetOp = op,
+                conditionType = ct,
+                conditionOperator = cop,
                 targetValue = tv,
                 description = desc
             });
@@ -608,8 +611,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     }
 
     /// <summary>
-    /// NewsMaster TSV. 표준: A:newsCode, B:newsType(None/Rumor/Breaking/FactCheck/System 또는 0~4), C:headline, D:script, E:iconResourcePath.
-    /// B가 타입으로 파싱되지 않으면 레거시: B=headline, C=script, D=icon.
+    /// NewsMaster TSV. 표준: A:newsCode, B:newsType, C:headline, D:script.
+    /// B가 타입으로 파싱되지 않으면 레거시: B=headline, C=script (추가 열은 무시).
     /// </summary>
     public static List<NewsMasterData> ParseNewsMasterTsv(string data)
     {
@@ -778,29 +781,23 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     public static bool TryParseEventConditionOp(string token, out EventConditionOp op)
     {
         op = EventConditionOp.Eq;
-        if (string.IsNullOrWhiteSpace(token)) return false;
-        switch (token.Trim())
+        if (!ConditionOperatorSheetParser.TryParse(token, out ConditionOperator co))
+            return false;
+        op = EventConditionOpFrom(co);
+        return true;
+    }
+
+    static EventConditionOp EventConditionOpFrom(ConditionOperator co)
+    {
+        switch (co)
         {
-            case "==":
-                op = EventConditionOp.Eq;
-                return true;
-            case "!=":
-                op = EventConditionOp.Ne;
-                return true;
-            case ">":
-                op = EventConditionOp.Gt;
-                return true;
-            case "<":
-                op = EventConditionOp.Lt;
-                return true;
-            case ">=":
-                op = EventConditionOp.Ge;
-                return true;
-            case "<=":
-                op = EventConditionOp.Le;
-                return true;
-            default:
-                return false;
+            case ConditionOperator.LessThan: return EventConditionOp.Lt;
+            case ConditionOperator.LessOrEqual: return EventConditionOp.Le;
+            case ConditionOperator.GreaterThan: return EventConditionOp.Gt;
+            case ConditionOperator.GreaterOrEqual: return EventConditionOp.Ge;
+            case ConditionOperator.Equal: return EventConditionOp.Eq;
+            case ConditionOperator.NotEqual: return EventConditionOp.Ne;
+            default: return EventConditionOp.Eq;
         }
     }
 
@@ -1078,7 +1075,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                description = cells.Length > 5 ? cells[5].Trim() : ""
+                description = cells.Length > 5 ? cells[5].Trim() : "",
+                durationDays = 1
             };
 
             if (!TryParseCastleStatTypeCell(cells.Length > 2 ? cells[2] : "", out item.statType))
@@ -1092,6 +1090,10 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 
             float.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
                 out item.value);
+
+            if (cells.Length > 6 && int.TryParse(cells[6].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                    out int dur) && dur >= 1)
+                item.durationDays = dur;
 
             list.Add(item);
         }

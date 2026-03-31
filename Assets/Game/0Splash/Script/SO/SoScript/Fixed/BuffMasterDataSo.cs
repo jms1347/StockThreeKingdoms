@@ -1,66 +1,102 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
+
+/// <summary>
+/// Buff row keyed by BuffCode on events. Drives castle stat moves with <see cref="CurveType"/> pacing
+/// and <see cref="BuffMasterData.durationDays"/> so effects spread across UTC days (market volatility).
+/// </summary>
 public enum CastleStatType
 {
     None = 0,
-
-    // 1. 가치 및 시세 관련 (MTS 핵심)
-    CastleValue = 1,       // 성 가치(시세) 배율 증가 (최종가 영향)
-    PriceValue = 2,      // 성 액면가 조정 (시세 과열/할인 - 기초가액 영향)
-
-    // 2. 심리 및 성장 관련
-    SentimentRecovery = 3,     // 민심 직접 가감 (합연산: +10, -20 등)
-    PopulationGrowth = 4,      // 백성 수 증가 속도 가속 (곱연산: 1.1f 등)
-
-    // 3. 전쟁 및 방어 관련
+    CastleValue = 1,
+    PriceValue = 2,
+    SentimentRecovery = 3,
+    PopulationGrowth = 4,
     WarAttackLossReduction = 5,
     WarDefenseLossReduction = 6,
-
-    // 4. 보상 관련
-    DividendBonus = 7,         // 배당금 추가 보너스 (합연산)
-    DividendMultiplier = 8,    // 배당 배율 조정 (곱연산: 1.5f, 0.5f)
-
-            TradeLock = 10,            // 거래 정지 (1: 정지, 0: 정상)
-
+    DividendBonus = 7,
+    DividendMultiplier = 8,
+    TradeLock = 10,
 }
+
+/// <summary>Google sheet column C: English or int enum, or exact Korean label (see TryParseKoreanExact).</summary>
+public static class CastleStatTypeSheetParser
+{
+    public static bool TryParse(string raw, out CastleStatType statType)
+    {
+        statType = CastleStatType.None;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+
+        string t = raw.Trim();
+
+        if (Enum.TryParse(t, true, out statType) && Enum.IsDefined(typeof(CastleStatType), statType))
+            return true;
+
+        if (int.TryParse(t, NumberStyles.Integer, CultureInfo.InvariantCulture, out int n) &&
+            Enum.IsDefined(typeof(CastleStatType), n))
+        {
+            statType = (CastleStatType)n;
+            return true;
+        }
+
+        return TryParseKoreanExact(t, out statType);
+    }
+
+    static bool TryParseKoreanExact(string t, out CastleStatType statType)
+    {
+        statType = CastleStatType.None;
+        if (t == "\uC131 \uAC00\uCE58") { statType = CastleStatType.CastleValue; return true; }
+        if (t == "\uC131 \uC561\uBA74\uAC00") { statType = CastleStatType.PriceValue; return true; }
+        if (t == "\uBBFC\uC2EC") { statType = CastleStatType.SentimentRecovery; return true; }
+        if (t == "\uBC31\uC131\uC218") { statType = CastleStatType.PopulationGrowth; return true; }
+        if (t == "\uACF5\uACA9\uC2DC \uBCD1\uC0AC \uC190\uC2E4\uB960") { statType = CastleStatType.WarAttackLossReduction; return true; }
+        if (t == "\uC218\uBE44\uC2DC \uBCD1\uC0AC \uC190\uC2E4\uB960") { statType = CastleStatType.WarDefenseLossReduction; return true; }
+        if (t == "\uBC30\uB2F9\uAE08(\uD569)") { statType = CastleStatType.DividendBonus; return true; }
+        if (t == "\uBC30\uB2F9\uAE08(\uACE1)") { statType = CastleStatType.DividendMultiplier; return true; }
+        if (t == "\uAC70\uB798 \uC815\uC9C0") { statType = CastleStatType.TradeLock; return true; }
+        return false;
+    }
+}
+
+/// <summary>
+/// Per-day weight shape: Instant/Linear flat; Exponential heavier late; Logarithmic heavier early.
+/// </summary>
 public enum CurveType
 {
     None = 0,
-
-    // 1. 즉시 발생 (급등/급락)
-    // 적용 시점에 단 한 번 수치를 변화시킴. (예: 횡령 적발 -30%, 보조금 +1000)
+    /// <summary>Spread effect across days; each day random in [0, cap] (default).</summary>
     Instant = 1,
-
-    // 2. 선형 변화 (서서히/보통)
-    // 매일 일정한 수치(Flat Value)를 더하거나 뺌. (예: 매일 인구 +50명)
-    // 공식: $Stat_{t+1} = Stat_t + Value$
+    /// <summary>Flat weights; each day random in [0, cap].</summary>
     Linear = 2,
-
-    // 3. 지수 변화 (가속도/복리)
-    // 매일 일정한 비율(Percentage)을 곱함. 시간이 갈수록 각도가 가팔라짐.
-    // 공식: $Stat_{t+1} = Stat_t \times Value$ (Value가 1.05면 매일 5% 가속)
+    /// <summary>Later days get larger share of total (accel).</summary>
     Exponential = 3,
-
-    // 4. 감쇠 변화 (초기 급등 후 둔화)
-    // 초반에 강력하게 변하다가 뒤로 갈수록 변화 폭이 줄어듦. (예: 신기술 출시 초기 거품)
-    // 공식: $Stat_{t+1} = Stat_t + (Value / Time)$
+    /// <summary>Early days get larger share, then taper (decel).</summary>
     Logarithmic = 4
 }
 
 [System.Serializable]
 public class BuffMasterData
 {
-    public string id;          // B01, B02...
-    public string name;        // 버프 이름 (예: "황금 사과")
-    public CastleStatType statType;      // 위의 Enum 사용
-    public CurveType curveType;      // 위의 Enum 사용
-    public float value;        // 적용 수치 (예: 0.2f 또는 1.1f)
-    public string description; // "성 가치 배율을 20% 증가시킵니다."
+    public string id;
+    public string name;
+    /// <summary>Castle stat column to affect.</summary>
+    public CastleStatType statType;
+    /// <summary>How daily magnitude is weighted over durationDays.</summary>
+    public CurveType curveType;
+    /// <summary>
+    /// Total scale. Each UTC day sample uses cap ~ 2*|value|*normalizedWeight; draw ~ Uniform(0,cap)*sign(value)
+    /// so expected cumulative magnitude ~ |value|. Negative value: negative direction from zero.
+    /// </summary>
+    public float value;
+    /// <summary>Number of UTC day buckets. 1 = only the sample at event confirm.</summary>
+    public int durationDays = 1;
+    public string description;
 }
 
 [CreateAssetMenu(fileName = "BuffMasterDataSo", menuName = "ScriptableObject/BuffMasterDataSo")]
 public class BuffMasterDataSo : ScriptableObject
 {
     public List<BuffMasterData> list = new List<BuffMasterData>();
-
 }

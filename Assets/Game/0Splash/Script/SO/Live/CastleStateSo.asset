@@ -26,18 +26,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 100000
-    - 100000
-    - 100000
-    - 100000
-    - 100000
-    - 100000
+    - 86564.016
+    - 90476.53
+    - 86529.55
+    - 89217.39
+    - 90672.07
+    - 96288.64
     - 100000
     historySentiment7Day:
     - 100
-    - 100
-    - 100
-    - 100
+    - 97.46948
+    - 97.1377
+    - 95.62906
     - 100
     - 100
     - 100
@@ -55,18 +55,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 70000
-    - 70000
-    - 70000
-    - 70000
-    - 70000
-    - 70000
+    - 56413.676
+    - 65461.22
+    - 65955.945
+    - 69797.55
+    - 72657.71
+    - 73326.01
     - 70000
     historySentiment7Day:
     - 100
-    - 100
-    - 100
-    - 100
+    - 92.608315
+    - 96.840866
+    - 95.98383
     - 100
     - 100
     - 100
@@ -84,19 +84,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 40000
-    - 40000
-    - 40000
-    - 40000
-    - 40000
-    - 40000
+    - 36994.05
+    - 37347.133
+    - 36421.58
+    - 39346.254
+    - 40008.97
+    - 39578.418
     - 40000
     historySentiment7Day:
+    - 95.146904
+    - 97.44281
+    - 98.911766
     - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 99.596245
     - 100
     - 100
     buyPricePrevDayClose: 24000
@@ -113,16 +113,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 80000
-    - 80000
-    - 80000
-    - 80000
-    - 80000
-    - 80000
+    - 74864.28
+    - 73947.586
+    - 70213.58
+    - 71732.92
+    - 78962.93
+    - 85146.59
     - 80000
     historySentiment7Day:
-    - 100
-    - 100
+    - 90.605804
+    - 93.48355
     - 100
     - 100
     - 100
@@ -142,17 +142,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 24457.611
+    - 27360.25
+    - 28854.604
+    - 28768.416
+    - 29925.162
+    - 30320.074
     - 30000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
+    - 90.42565
+    - 99.67905
+    - 98.19022
     - 100
     - 100
     - 100
@@ -171,17 +171,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
+    - 17835.676
+    - 17734.26
+    - 19333.68
+    - 17603.48
+    - 18412.412
+    - 21487.365
     - 20000
     historySentiment7Day:
+    - 95.38918
     - 100
-    - 100
-    - 100
+    - 99.08347
     - 100
     - 100
     - 100
@@ -200,18 +200,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 90000
-    - 90000
-    - 90000
-    - 90000
-    - 90000
-    - 90000
+    - 73950.92
+    - 83353.22
+    - 89580.016
+    - 86105.6
+    - 94028.805
+    - 92216.484
     - 90000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
+    - 89.52518
+    - 93.755
+    - 94.81261
+    - 99.80764
     - 100
     - 100
     - 100
@@ -229,18 +229,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
+    - 20445.47
+    - 23894.88
+    - 21854.75
+    - 22748.025
+    - 24924.475
+    - 24495.033
     - 25000
     historySentiment7Day:
+    - 89.84682
+    - 97.89619
     - 100
-    - 100
-    - 100
-    - 100
+    - 99.38952
     - 100
     - 100
     - 100
@@ -258,16 +258,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
+    - 17134.523
+    - 17380.592
+    - 19467.537
+    - 20454.64
+    - 18101.049
+    - 19295.04
     - 20000
     historySentiment7Day:
     - 100
-    - 100
+    - 91.37334
     - 100
     - 100
     - 100
@@ -287,17 +287,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 50000
-    - 50000
-    - 50000
-    - 50000
-    - 50000
-    - 50000
+    - 40663.27
+    - 47379.152
+    - 47179.727
+    - 47084.72
+    - 47660.562
+    - 49241.87
     - 50000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
+    - 89.58106
+    - 94.42202
+    - 98.44879
     - 100
     - 100
     - 100
@@ -316,17 +316,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
+    - 41503.67
+    - 37401.707
+    - 38519.734
+    - 43589.484
+    - 43865.137
+    - 46894.918
     - 45000
     historySentiment7Day:
+    - 92.080605
     - 100
-    - 100
-    - 100
+    - 94.631424
     - 100
     - 100
     - 100
@@ -345,12 +345,12 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
+    - 13543.914
+    - 12455.356
+    - 13077.657
+    - 14848.158
+    - 15769.14
+    - 16166.717
     - 15000
     historySentiment7Day:
     - 100
@@ -374,16 +374,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 85000
-    - 85000
-    - 85000
-    - 85000
-    - 85000
-    - 85000
+    - 76067.63
+    - 71682.17
+    - 74399.2
+    - 78507.15
+    - 79339.29
+    - 82793.13
     - 85000
     historySentiment7Day:
-    - 100
-    - 100
+    - 99.2734
+    - 96.85386
     - 100
     - 100
     - 100
@@ -403,18 +403,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 60000
-    - 60000
-    - 60000
-    - 60000
-    - 60000
-    - 60000
+    - 54012.727
+    - 51478.746
+    - 57672.12
+    - 55756.25
+    - 62845.734
+    - 63514.46
     - 60000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
+    - 89.87274
+    - 94.25741
+    - 97.76912
+    - 95.19143
     - 100
     - 100
     - 100
@@ -432,17 +432,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 75000
-    - 75000
-    - 75000
-    - 75000
-    - 75000
-    - 75000
+    - 61721.883
+    - 68236.945
+    - 73911.79
+    - 71730.19
+    - 72800.7
+    - 69776.61
     - 75000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
+    - 92.06432
+    - 95.37649
+    - 98.16004
     - 100
     - 100
     - 100
@@ -461,18 +461,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 27961.125
+    - 27523.217
+    - 28929.465
+    - 30514.197
+    - 28750.37
+    - 30787.3
     - 30000
     historySentiment7Day:
     - 100
+    - 98.74326
     - 100
-    - 100
-    - 100
+    - 96.74723
     - 100
     - 100
     - 100
@@ -490,15 +490,15 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 10000
-    - 10000
-    - 10000
-    - 10000
-    - 10000
-    - 10000
+    - 9185.807
+    - 8897.418
+    - 8604.887
+    - 9800.199
+    - 9631.094
+    - 10372.167
     - 10000
     historySentiment7Day:
-    - 100
+    - 90.8777
     - 100
     - 100
     - 100
@@ -519,18 +519,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
+    - 39580.605
+    - 43586.977
+    - 42501.727
+    - 42676.598
+    - 41197.36
+    - 43258.27
     - 45000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
+    - 94.85351
+    - 98.54245
+    - 97.08391
+    - 95.718475
     - 100
     - 100
     - 100
@@ -548,15 +548,15 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 5000
-    - 5000
-    - 5000
-    - 5000
-    - 5000
-    - 5000
+    - 4399.6416
+    - 4710.231
+    - 4591.182
+    - 4422.14
+    - 4923.4116
+    - 5266.015
     - 5000
     historySentiment7Day:
-    - 100
+    - 90.10196
     - 100
     - 100
     - 100
@@ -577,20 +577,20 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
+    - 14083.249
+    - 13463.504
+    - 13740.175
+    - 14883.576
+    - 14671.931
+    - 15322.75
     - 15000
     historySentiment7Day:
+    - 95.10347
     - 100
+    - 96.47577
+    - 95.430916
     - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 99.800415
     - 100
     buyPricePrevDayClose: 6600
   - castleId: C22
@@ -606,17 +606,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 25461.426
+    - 28579.285
+    - 25795.566
+    - 29451.818
+    - 31400.531
+    - 31576.17
     - 30000
     historySentiment7Day:
     - 100
     - 100
-    - 100
+    - 93.24905
     - 100
     - 100
     - 100
@@ -635,19 +635,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
+    - 20474.979
+    - 23769.305
+    - 24840.2
+    - 22948.096
+    - 24540.775
+    - 26586.346
     - 25000
     historySentiment7Day:
+    - 96.971634
     - 100
     - 100
-    - 100
-    - 100
-    - 100
+    - 95.67737
+    - 98.731064
     - 100
     - 100
     buyPricePrevDayClose: 9625
@@ -664,17 +664,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 27132.924
+    - 28160.121
+    - 29774.31
+    - 30580.115
+    - 28936.328
+    - 28575.701
     - 30000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
+    - 92.29841
+    - 99.15051
+    - 93.2962
     - 100
     - 100
     - 100
@@ -693,12 +693,12 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
+    - 18288.252
+    - 18297.441
+    - 18779.36
+    - 19037.219
+    - 20139.725
+    - 19767.47
     - 20000
     historySentiment7Day:
     - 100
@@ -722,17 +722,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
+    - 30777.984
+    - 29125.373
+    - 32209.074
+    - 34638.973
+    - 32122.225
+    - 36814.6
     - 35000
     historySentiment7Day:
     - 100
-    - 100
-    - 100
+    - 92.783615
+    - 97.95918
     - 100
     - 100
     - 100
@@ -751,16 +751,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 40000
-    - 40000
-    - 40000
-    - 40000
-    - 40000
-    - 40000
+    - 36646.8
+    - 35813.074
+    - 34995.355
+    - 41009.656
+    - 40333.32
+    - 39252.902
     - 40000
     historySentiment7Day:
-    - 100
-    - 100
+    - 94.03146
+    - 98.67971
     - 100
     - 100
     - 100
@@ -780,19 +780,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
+    - 16359.423
+    - 18394.373
+    - 18990.633
+    - 17940.133
+    - 19815.133
+    - 21169.193
     - 20000
     historySentiment7Day:
+    - 97.10746
+    - 92.436966
+    - 93.648834
     - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 98.13674
     - 100
     - 100
     buyPricePrevDayClose: 7700
@@ -809,20 +809,20 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 10000
-    - 10000
-    - 10000
-    - 10000
-    - 10000
-    - 10000
+    - 9318.333
+    - 9137.237
+    - 9171.352
+    - 9098.283
+    - 9896.915
+    - 10304.122
     - 10000
     historySentiment7Day:
     - 100
+    - 94.389114
+    - 97.68703
+    - 96.81345
     - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 99.660614
     - 100
     buyPricePrevDayClose: 1800
   - castleId: C30
@@ -838,19 +838,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
+    - 31215.346
+    - 33100.906
+    - 30131.74
+    - 30786.232
+    - 32587.916
+    - 37042.74
     - 35000
     historySentiment7Day:
+    - 98.55657
     - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 96.26537
+    - 96.34405
+    - 98.13394
     - 100
     - 100
     buyPricePrevDayClose: 18900
@@ -867,17 +867,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
+    - 21424.602
+    - 21660.334
+    - 21393.346
+    - 24262.55
+    - 25038.217
+    - 25535.068
     - 25000
     historySentiment7Day:
     - 100
     - 100
-    - 100
+    - 95.50928
     - 100
     - 100
     - 100
@@ -896,20 +896,20 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
+    - 12788.238
+    - 14081.72
+    - 14719.945
+    - 13915.119
+    - 14639.841
+    - 14427.093
     - 15000
     historySentiment7Day:
+    - 97.30219
     - 100
     - 100
     - 100
-    - 100
-    - 100
-    - 100
+    - 98.8556
+    - 99.815384
     - 100
     buyPricePrevDayClose: 3750
   - castleId: C33
@@ -925,17 +925,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 12000
-    - 12000
-    - 12000
-    - 12000
-    - 12000
-    - 12000
+    - 10675.041
+    - 11618.046
+    - 11645.787
+    - 11383.585
+    - 12167.965
+    - 12195.509
     - 12000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
+    - 91.19758
+    - 93.86552
+    - 95.291954
     - 100
     - 100
     - 100
@@ -954,19 +954,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
+    - 18403.11
+    - 19081.127
+    - 19892.666
+    - 18576.426
+    - 18840.232
+    - 18813.285
     - 20000
     historySentiment7Day:
+    - 89.310394
+    - 95.790764
     - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 98.17451
+    - 97.087326
     - 100
     - 100
     buyPricePrevDayClose: 6000
@@ -983,17 +983,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 26066.213
+    - 26869.816
+    - 26532.379
+    - 28021.164
+    - 31490.73
+    - 28208.297
     - 30000
     historySentiment7Day:
     - 100
     - 100
-    - 100
+    - 93.36005
     - 100
     - 100
     - 100
@@ -1012,18 +1012,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 40000
-    - 40000
-    - 40000
-    - 40000
-    - 40000
-    - 40000
+    - 33921.6
+    - 33798.38
+    - 36198.434
+    - 38301.344
+    - 36215.43
+    - 43090.137
     - 40000
     historySentiment7Day:
+    - 92.61197
     - 100
-    - 100
-    - 100
-    - 100
+    - 94.06898
+    - 95.54973
     - 100
     - 100
     - 100
@@ -1041,17 +1041,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 12000
-    - 12000
-    - 12000
-    - 12000
-    - 12000
-    - 12000
+    - 10573.03
+    - 10044.088
+    - 11438.709
+    - 12155.141
+    - 12549.538
+    - 12669.871
     - 12000
     historySentiment7Day:
     - 100
-    - 100
-    - 100
+    - 99.939674
+    - 96.706856
     - 100
     - 100
     - 100
@@ -1070,16 +1070,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
+    - 12380.989
+    - 12550.465
+    - 13191.83
+    - 14502.675
+    - 13656.145
+    - 14127.797
     - 15000
     historySentiment7Day:
-    - 100
-    - 100
+    - 93.372986
+    - 99.95628
     - 100
     - 100
     - 100
@@ -1099,15 +1099,15 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
+    - 31740.059
+    - 32292.49
+    - 34605.203
+    - 31499.023
+    - 31730.076
+    - 32494.656
     - 35000
     historySentiment7Day:
-    - 100
+    - 91.63917
     - 100
     - 100
     - 100
@@ -1128,16 +1128,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
-    - 20000
+    - 17340.88
+    - 17316.146
+    - 17786.67
+    - 19360.37
+    - 19702.85
+    - 20717.838
     - 20000
     historySentiment7Day:
-    - 100
-    - 100
+    - 91.20282
+    - 99.86344
     - 100
     - 100
     - 100
@@ -1157,16 +1157,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
-    - 15000
+    - 13845.285
+    - 12671.357
+    - 13706.014
+    - 14041.674
+    - 15471.068
+    - 16158.697
     - 15000
     historySentiment7Day:
     - 100
-    - 100
+    - 95.513664
     - 100
     - 100
     - 100
@@ -1186,18 +1186,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
+    - 22091.523
+    - 22326.697
+    - 23042.41
+    - 23655.223
+    - 22807.771
+    - 23625.49
     - 25000
     historySentiment7Day:
+    - 99.49872
     - 100
     - 100
-    - 100
-    - 100
+    - 98.36888
     - 100
     - 100
     - 100
@@ -1215,18 +1215,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 12000
-    - 12000
-    - 12000
-    - 12000
-    - 12000
-    - 12000
+    - 9691.919
+    - 11120.989
+    - 10731.574
+    - 10550.447
+    - 12382.443
+    - 12201.9
     - 12000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
+    - 99.89715
+    - 96.36036
+    - 98.38808
+    - 96.50659
     - 100
     - 100
     - 100
@@ -1244,19 +1244,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 25924.746
+    - 28143.967
+    - 29255.154
+    - 30140.914
+    - 28559.164
+    - 28507.492
     - 30000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 89.51501
+    - 94.21348
+    - 97.992935
+    - 96.74437
+    - 97.12632
     - 100
     - 100
     buyPricePrevDayClose: 13200
@@ -1273,18 +1273,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 10000
-    - 10000
-    - 10000
-    - 10000
-    - 10000
-    - 10000
+    - 9182.055
+    - 8373.303
+    - 9121.366
+    - 9966.949
+    - 9675.643
+    - 9322.199
     - 10000
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
+    - 91.093925
+    - 95.19713
+    - 94.02658
+    - 97.00138
     - 100
     - 100
     - 100
@@ -1302,16 +1302,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
+    - 40440.008
+    - 41432.566
+    - 44359.45
+    - 40987.57
+    - 40496.223
+    - 48060.035
     - 45000
     historySentiment7Day:
-    - 100
-    - 100
+    - 98.90573
+    - 95.579216
     - 100
     - 100
     - 100
@@ -1331,20 +1331,20 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
-    - 30000
+    - 24660.494
+    - 25774.385
+    - 26804.525
+    - 30705.062
+    - 27327.062
+    - 31807.258
     - 30000
     historySentiment7Day:
+    - 92.503204
+    - 92.44805
     - 100
     - 100
     - 100
-    - 100
-    - 100
-    - 100
+    - 99.52616
     - 100
     buyPricePrevDayClose: 13200
   - castleId: C48
@@ -1360,19 +1360,19 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
-    - 25000
+    - 21483.615
+    - 23267.633
+    - 24339.355
+    - 22832.012
+    - 26103.297
+    - 24130.58
     - 25000
     historySentiment7Day:
+    - 91.80549
+    - 93.89694
     - 100
     - 100
-    - 100
-    - 100
-    - 100
+    - 99.41345
     - 100
     - 100
     buyPricePrevDayClose: 9625
@@ -1389,16 +1389,16 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
+    - 32037.81
+    - 30297.979
+    - 34488.734
+    - 32059.018
+    - 31966.506
+    - 33902.01
     - 35000
     historySentiment7Day:
-    - 100
-    - 100
+    - 95.513214
+    - 94.53861
     - 100
     - 100
     - 100
@@ -1418,17 +1418,17 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     historyPopulation7Day:
-    - 5000
-    - 5000
-    - 5000
-    - 5000
-    - 5000
-    - 5000
+    - 4456.605
+    - 4617.878
+    - 4580.762
+    - 5002.061
+    - 5226.8604
+    - 5161.694
     - 5000
     historySentiment7Day:
     - 100
-    - 100
-    - 100
+    - 99.7845
+    - 96.300026
     - 100
     - 100
     - 100

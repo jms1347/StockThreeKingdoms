@@ -13,24 +13,24 @@ MonoBehaviour:
   m_Name: NationMasterDataSo
   m_EditorClassIdentifier: Assembly-CSharp::NationMasterDataSo
   list:
-  - id: OTHERS
-    name: "\uAD70\uC6C5"
-    colorCode: '#8C94A8'
-    capitalId: C45
-    description: "\uAC01\uC9C0\uC758 \uC18C\uC218 \uC138\uB825 \uBC0F \uBC18\uB780\uAD70"
-  - id: SHU
-    name: "\uCD09"
-    colorCode: '#59CC8C'
-    capitalId: C20
-    description: "\uC720\uBE44\uAC00 \uC138\uC6B4 \uC11C\uB0A8\uBC29\uC758 \uC2E0\uD765\uAD6D"
   - id: WEI
     name: "\uC704"
     colorCode: '#338CFF'
     capitalId: C01
     description: "\uC870\uC870\uAC00 \uAC74\uAD6D\uD55C \uBD81\uBC29\uC758 \uAC15\uB300\uAD6D"
+  - id: SHU
+    name: "\uCD09"
+    colorCode: '#59CC8C'
+    capitalId: C20
+    description: "\uC720\uBE44\uAC00 \uC138\uC6B4 \uC11C\uB0A8\uBC29\uC758 \uC2E0\uD765\uAD6D"
   - id: WU
     name: "\uC624"
     colorCode: '#F26659'
     capitalId: C35
     description: "\uC190\uAD8C\uC774 \uB2E4\uC2A4\uB9AC\uB294 \uAC15\uB3D9\uC758
       \uC6B0\uB7C9\uC8FC"
+  - id: OTHERS
+    name: "\uAD70\uC6C5"
+    colorCode: '#8C94A8'
+    capitalId: C45
+    description: "\uAC01\uC9C0\uC758 \uC18C\uC218 \uC138\uB825 \uBC0F \uBC18\uB780\uAD70"

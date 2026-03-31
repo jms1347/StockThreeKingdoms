@@ -13,2719 +13,6503 @@ MonoBehaviour:
   m_Name: EventMasterDataSo
   m_EditorClassIdentifier: Assembly-CSharp::EventMasterDataSo
   list:
-  - id: EV01
-    name: "\uD48D\uB144 \uC608\uACE0"
-    scope: 0
-    minDays: 3
-    maxDays: 7
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV02
-    name: "\uD749\uC791 \uC6B0\uB824"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E02
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV03
-    name: "\uC131\uBCBD \uBCF4\uC218"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV04
-    name: "\uC804\uC5FC\uBCD1 \uC9D5\uC870"
-    scope: 0
-    minDays: 4
-    maxDays: 8
-    buffCodes:
-    - E11
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV05
-    name: "\uAE08\uAD11 \uBC1C\uACAC"
-    scope: 1
-    minDays: 7
-    maxDays: 14
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV06
-    name: "\uB3C4\uC801 \uCD9C\uBAB0"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E10
-    - E06
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV07
-    name: "\uC0C1\uB85C \uAC1C\uCC99"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV08
-    name: "\uAC00\uD639\uD55C \uC218\uD0C8"
-    scope: 1
-    minDays: 3
-    maxDays: 7
-    buffCodes:
-    - E08
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV09
-    name: "\uD2B9\uBCC4 \uAC10\uC138"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV10
-    name: "\uBA85\uC2E0 \uBD80\uC784"
-    scope: 1
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV100
-    name: "\uB300\uC7A5\uC815 \uB05D"
-    scope: 0
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - '-'
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV101
-    name: "\uC218\uBE44\uB300 \uD0C8\uC601"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E10
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV102
-    name: "\uC131\uBCBD \uC99D\uCD95"
-    scope: 1
-    minDays: 7
-    maxDays: 14
-    buffCodes:
-    - E05
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV103
-    name: "\uCCA9\uC790 \uAD50\uB780"
+  - id: EV_001
+    name: "\uC0AC\uAC74_1_A"
     scope: 0
     minDays: 2
-    maxDays: 4
+    maxDays: 10
     buffCodes:
-    - E07
-    - E10
+    - B287
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV104
-    name: "\uBCF4\uAE09\uB85C \uB9E4\uBCF5"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E10
-    - E06
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV105
-    name: "\uAD70\uC218\uD488 \uD6A1\uB839"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_108
+  - id: EV_001
+    name: "\uC0AC\uAC74_1_B"
     scope: 1
     minDays: 4
-    maxDays: 7
+    maxDays: 11
     buffCodes:
-    - E08
-    - E10
+    - B275
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV106
-    name: "\uC815\uC608\uBCD1 \uD6C8\uB828"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV107
-    name: "\uD0C8\uCDE8 \uC7A5\uBE44"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E05
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV108
-    name: "\uC131\uBB38 \uD30C\uC190"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E10
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV109
-    name: "\uAD70\uAE30 \uBB38\uB780"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV11
-    name: "\uD0DC\uC218 \uBE44\uB9AC"
-    scope: 1
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E08
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV110
-    name: "\uC804\uC220 \uC720\uCD9C"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E10
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV111
-    name: "\uC6A9\uBCD1 \uACC4\uC57D"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV112
-    name: "\uC57C\uAC04 \uC21C\uCC30"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E01
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV113
-    name: "\uD3EC\uC0C1\uAE08 \uC9C0\uAE09"
-    scope: 1
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV114
-    name: "\uAD70\uB9C8 \uC804\uC5FC\uBCD1"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E10
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV115
-    name: "\uBD09\uD654\uB300 \uBCF5\uAD6C"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV116
-    name: "\uD568\uC815 \uC124\uCE58"
-    scope: 1
-    minDays: 4
-    maxDays: 8
-    buffCodes:
-    - E05
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV117
-    name: "\uB3C5 \uD654\uC0B4"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E05
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV118
-    name: "\uAD70\uC0AC \uD6C8\uB828"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E09
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV119
-    name: "\uBC30\uC2E0\uC790 \uCC98\uB2E8"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E01
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV12
-    name: "\uB300\uADDC\uBAA8 \uCD95\uC81C"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E03
-    - E01
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV120
-    name: "\uD734\uC804 \uD611\uC815"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV121
-    name: "\uAE08\uAD11 \uACE0\uAC08"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E04
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV122
-    name: "\uBE44\uB2E8 \uD48D\uC791"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV123
-    name: "\uC18C\uAE08 \uBD80\uC871"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E10
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV124
-    name: "\uD2B9\uC0B0\uD488 \uC778\uC99D"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV125
-    name: "\uC0C1\uB2E8 \uD1B5\uD589\uC138"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E08
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV126
-    name: "\uD48D\uB144 \uC804\uC870"
-    scope: 0
-    minDays: 3
-    maxDays: 7
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV127
-    name: "\uD55C\uD30C \uC8FC\uC758"
-    scope: 0
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E02
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV128
-    name: "\uADC0\uD55C \uBCF4\uC11D"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV129
-    name: "\uC0AC\uC7AC\uAE30 \uAE08\uC9C0"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - '[NONE]'
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV13
-    name: "\uBBFC\uB780 \uC870\uC9D0"
-    scope: 1
-    minDays: 4
-    maxDays: 6
-    buffCodes:
-    - E11
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV130
-    name: "\uC0C8\uB85C\uC6B4 \uC2DC\uC7A5"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV131
-    name: "\uCC28(\u8336) \uBB34\uC5ED"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV132
-    name: "\uBA85\uBB38\uAC00 \uD6C4\uC6D0"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV133
-    name: "\uC0AC\uCE58 \uD48D\uC870"
-    scope: 1
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E05
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV134
-    name: "\uC2E0\uB3C4\uC2DC \uAC74\uC124"
-    scope: 0
-    minDays: 15
-    maxDays: 30
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV135
-    name: "\uC0C1\uB2E8 \uC5F0\uD569"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV136
-    name: "\uAC00\uC9DC \uD654\uD3D0"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E04
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV137
-    name: "\uAD6C\uD73C\uBBF8 \uBC29\uCD9C"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV138
-    name: "\uC138\uAE08 \uD6A1\uB839"
-    scope: 1
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E08
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV139
-    name: "\uBB3C\uB958 \uAC70\uC810"
-    scope: 1
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV14
-    name: "\uD669\uC81C \uBC29\uBB38"
-    scope: 1
-    minDays: 10
-    maxDays: 15
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV140
-    name: "\uAE30\uC6B0\uC81C \uAC70\uD589"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV141
-    name: "\uAE08\uC735 \uAE34\uCD95"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E08
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV142
-    name: "\uC911\uC559 \uC9C0\uC6D0"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV143
-    name: "\uB3C5\uC810 \uACC4\uC57D"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV144
-    name: "\uD56D\uAD6C \uD3D0\uC1C4"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E10
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV145
-    name: "\uC138\uC561 \uB3D9\uACB0"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E01
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV146
-    name: "\uBE44\uB2E8 \uBC8C\uB808"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E04
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV147
-    name: "\uAD70\uC8FC \uD558\uC0AC\uD488"
-    scope: 1
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - E01
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV148
-    name: "\uC778\uAD6C \uC870\uC0AC"
-    scope: 1
-    minDays: 2
-    maxDays: 3
-    buffCodes:
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV149
-    name: "\uC804\uB7B5\uC801 \uD6C4\uD1F4"
-    scope: 1
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E10
-    - E06
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV15
-    name: "\uC704\uC870 \uC5FD\uC804"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E04
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV150
-    name: "\uC870\uD310\uC18C \uC124\uB9BD"
-    scope: 1
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E07
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV151
-    name: "\uD1A0\uC9C0 \uC870\uC0AC"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV152
-    name: "\uC554\uC2DC\uC7A5 \uB2E8\uC18D"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E01
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV153
-    name: "\uAD6C\uD73C \uC791\uBB3C"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV154
-    name: "\uC0AC\uCC44 \uADFC\uC808"
-    scope: 1
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E03
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV155
-    name: "\uD654\uD3D0 \uC8FC\uC870\uC18C"
-    scope: 1
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E07
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV156
-    name: "\uD2B9\uBCC4 \uC870\uC138"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E08
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV157
-    name: "\uAE08\uC735 \uC0AC\uAE30"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_193
+  - id: EV_002
+    name: "\uC0AC\uAC74_2_A"
     scope: 0
     minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E04
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV158
-    name: "\uBD80\uC720\uC138 \uBD80\uACFC"
-    scope: 1
-    minDays: 5
-    maxDays: 8
-    buffCodes:
-    - E08
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV159
-    name: "\uC790\uAE08 \uC138\uD0C1"
-    scope: 1
-    minDays: 3
     maxDays: 6
     buffCodes:
-    - E04
-    - E07
+    - B091
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV16
-    name: "\uBD89\uC740 \uD61C\uC131"
-    scope: 0
-    minDays: 3
-    maxDays: 7
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV160
-    name: "\uCC44\uAD8C \uC18C\uAC01"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV161
-    name: "\uC7A5\uC218 \uB9E4\uC218"
-    scope: 1
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV162
-    name: "\uBE44\uBC00 \uB3D9\uB9F9"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV163
-    name: "\uC655\uC2E4 \uD63C\uC0AC"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV164
-    name: "\uC885\uAD50 \uB09C\uB3D9"
-    scope: 0
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E11
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV165
-    name: "\uBA85\uC0AC \uCD08\uBE59"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV166
-    name: "\uC790\uAC1D \uCE68\uD22C"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV167
-    name: "\uBC18\uB780 \uBAA8\uC758"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E11
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV168
-    name: "\uC120\uC815 \uACF5\uD3EC"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV169
-    name: "\uAD70\uC8FC \uC2DC\uD574"
-    scope: 1
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - E11
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV17
-    name: "\uC2E0\uD615 \uBCD1\uAE30"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E05
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV170
-    name: "\uC5ED\uC0AC \uAE30\uB85D"
-    scope: 1
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV18
-    name: "\uC18C\uAE08 \uC804\uB9E4"
-    scope: 1
-    minDays: 5
-    maxDays: 8
-    buffCodes:
-    - E04
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV181
-    name: "\uC554\uC0B4 \uC804\uC870"
-    scope: 1
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV182
-    name: "\uC6B4\uC11D \uB099\uD558"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E10
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV183
-    name: "\uAE30\uC6B0\uC81C \uC2E4\uD328"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E02
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV184
-    name: "\uAE38\uC870 \uD604\uC0C1"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV185
-    name: "\uD669\uCDA9 \uCC3D\uAD90"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E04
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV186
-    name: "\uC11C\uAD11 \uD3EC\uCC29"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV187
-    name: "\uC804\uC5FC\uBCD1 \uADF9\uBCF5"
-    scope: 0
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV188
-    name: "\uD61C\uC131\uC758 \uAF2C\uB9AC"
-    scope: 0
-    minDays: 3
-    maxDays: 7
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV189
-    name: "\uB2E8\uBE44 \uAC15\uC6B0"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV19
-    name: "\uBA85\uB9C8 \uBC30\uCD9C"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV190
-    name: "\uD48D\uD3C9 \uD53C\uD574"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV191
-    name: "\uD0DC\uC218 \uBC30\uC2E0"
-    scope: 1
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E10
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV192
-    name: "\uC778\uC7AC \uBAA8\uC9D1"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV193
-    name: "\uBCF4\uBB3C \uD558\uC0AC"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV194
-    name: "\uCC38\uBAA8 \uC720\uCD9C"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E08
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV195
-    name: "\uC790\uBE44\uC758 \uC18C\uBB38"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV20
-    name: "\uC218\uBB38 \uBD95\uAD34"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E04
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV21
-    name: "\uCCA9\uC790 \uAC80\uAC70"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E01
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV211
-    name: "\uAC00\uBB44 \uC885\uB8CC"
-    scope: 0
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV212
-    name: "\uD669\uCDA9 \uD6C4\uC720\uC99D"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E10
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV213
-    name: "\uAE30\uB9B0 \uCD9C\uD604"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV214
-    name: "\uCE58\uB8CC\uC81C \uBCF4\uAE09"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV215
-    name: "\uAC80\uC740 \uC548\uAC1C"
-    scope: 0
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV216
-    name: "\uD669\uD558 \uBC94\uB78C"
-    scope: 0
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E04
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV217
-    name: "\uC7AC\uB09C \uC9C0\uC6D0"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV218
-    name: "\uD0DC\uC218 \uC2DC\uD574"
-    scope: 1
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV219
-    name: "\uBA85\uBB38 \uD63C\uC57D"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV22
-    name: "\uBCD1\uAE30 \uBD80\uC871"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_156
+  - id: EV_002
+    name: "\uC0AC\uAC74_2_B"
     scope: 1
     minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E10
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV220
-    name: "\uB300\uC7A5\uC815 \uC885\uB8CC"
-    scope: 0
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - '-'
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV23
-    name: "\uD654\uC7AC \uBC1C\uC0DD"
-    scope: 1
-    minDays: 2
-    maxDays: 3
-    buffCodes:
-    - E04
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV24
-    name: "\uADC0\uC778 \uBC29\uBB38"
-    scope: 1
-    minDays: 5
     maxDays: 10
     buffCodes:
-    - E03
-    - E05
+    - B049
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV25
-    name: "\uC2DD\uB7C9 \uC9D5\uBC1C"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_178
+  - id: EV_003
+    name: "\uC0AC\uAC74_3_A"
     scope: 1
     minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E08
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV26
-    name: "\uAD11\uC0B0 \uBD95\uAD34"
-    scope: 1
-    minDays: 4
-    maxDays: 8
-    buffCodes:
-    - E04
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV27
-    name: "\uAE30\uC6B0\uC81C \uC131\uACF5"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV28
-    name: "\uAC00\uC9DC \uB274\uC2A4"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV29
-    name: "\uBB34\uAE30 \uBC1C\uBA85"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E05
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV30
-    name: "\uBE44\uB2E8 \uD2B9\uC218"
-    scope: 1
-    minDays: 4
-    maxDays: 8
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV31
-    name: "\uC6A9\uBCD1 \uBC18\uB780"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E10
-    - E06
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV32
-    name: "\uBCF4\uBB3C \uBC1C\uACAC"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV33
-    name: "\uC0AC\uC7AC\uAE30 \uC801\uBC1C"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E01
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV34
-    name: "\uC554\uC0B4 \uC2DC\uB3C4"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E07
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV35
-    name: "\uC7A5\uC218 \uC601\uC785"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV36
-    name: "\uD658\uC804 \uC0AC\uAE30"
-    scope: 0
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E04
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV37
-    name: "\uC6B0\uBB3C \uC624\uC5FC"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E11
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV38
-    name: "\uB300\uBD80\uD638 \uAE30\uBD80"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV39
-    name: "\uC778\uAD6C \uC720\uC785"
-    scope: 1
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV40
-    name: "\uAE30\uBC00 \uC720\uCD9C"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E10
-    - E09
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV41
-    name: "\uAE08\uB9AC \uC778\uC0C1"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E08
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV42
-    name: "\uAE08\uB9AC \uC778\uD558"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV43
-    name: "\uC804\uD6C4 \uBCF5\uAD6C"
-    scope: 1
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E03
-    - E01
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV44
-    name: "\uAD34\uBB38\uC11C \uBC1C\uACAC"
-    scope: 0
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E07
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV45
-    name: "\uC57C\uC2DC\uC7A5 \uAC1C\uC7A5"
-    scope: 1
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV46
-    name: "\uC18C\uBB38 \uC804\uD30C"
-    scope: 0
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - '-'
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV47
-    name: "\uC2E0\uADDC \uD0DC\uC218"
-    scope: 1
-    minDays: 1
-    maxDays: 1
-    buffCodes:
-    - '-'
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV48
-    name: "\uACFC\uAC70 \uC2DC\uD5D8"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    - E01
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV49
-    name: "\uAC00\uBB44 \uC9C0\uC18D"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E02
-    - E10
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV50
-    name: "\uD3C9\uD654 \uD611\uC815"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV51
-    name: "\uAE08\uC758\uD658\uD5A5"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV52
-    name: "\uC2DD\uB7C9 \uBCC0\uC9C8"
-    scope: 1
-    minDays: 2
-    maxDays: 4
-    buffCodes:
-    - E10
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV53
-    name: "\uC778\uC7AC \uC720\uCD9C"
-    scope: 1
-    minDays: 4
-    maxDays: 7
-    buffCodes:
-    - E08
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV54
-    name: "\uC131\uBB38 \uD3D0\uC1C4"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E10
-    - E06
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV55
-    name: "\uBE44\uB2E8 \uB9E4\uC9D1"
-    scope: 1
-    minDays: 5
-    maxDays: 8
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV56
-    name: "\uAC00\uC9DC \uC554\uD589"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E04
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV57
-    name: "\uC740\uAD11 \uBC1C\uACAC"
-    scope: 1
-    minDays: 7
     maxDays: 12
     buffCodes:
-    - E05
-    - E03
+    - B184
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV58
-    name: "\uC6A9\uBCD1 \uAD6C\uC778"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E09
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV59
-    name: "\uC2DC\uC7A5 \uC870\uC791"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_199
+  - id: EV_003
+    name: "\uC0AC\uAC74_3_B"
     scope: 0
-    minDays: 2
-    maxDays: 4
+    minDays: 5
+    maxDays: 10
     buffCodes:
-    - E08
-    - E04
+    - B069
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV60
-    name: "\uAE38\uC870 \uD604\uC0C1"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_183
+  - id: EV_004
+    name: "\uC0AC\uAC74_4_A"
     scope: 0
-    minDays: 10
-    maxDays: 15
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV61
-    name: "\uC218\uAD70 \uC591\uC131"
-    scope: 1
-    minDays: 6
-    maxDays: 12
-    buffCodes:
-    - E09
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV62
-    name: "\uAC00\uC9DC \uC57D"
-    scope: 1
-    minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E04
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV63
-    name: "\uCCA0\uAD11 \uC0B0\uC9C0"
-    scope: 1
     minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E09
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV64
-    name: "\uD0DC\uC218 \uC0DD\uC77C"
-    scope: 1
-    minDays: 1
-    maxDays: 3
-    buffCodes:
-    - E03
-    - E01
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV65
-    name: "\uC0B0\uC0AC\uD0DC"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E02
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV66
-    name: "\uBE44\uBC00 \uCC3D\uACE0"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV67
-    name: "\uAD70\uAE30 \uBB38\uB780"
-    scope: 1
-    minDays: 4
     maxDays: 7
     buffCodes:
-    - E10
-    - E09
+    - B012
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV68
-    name: "\uBE44\uB2E8\uBC8C\uB808"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_068
+  - id: EV_004
+    name: "\uC0AC\uAC74_4_B"
     scope: 1
-    minDays: 3
+    minDays: 5
     maxDays: 6
     buffCodes:
-    - E04
-    - E02
+    - B049
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV69
-    name: "\uD654\uD3D0 \uAC1C\uD601"
-    scope: 0
-    minDays: 10
-    maxDays: 20
-    buffCodes:
-    - E08
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV70
-    name: "\uB3C4\uC11C \uBCF4\uAE09"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_216
+  - id: EV_005
+    name: "\uC0AC\uAC74_5_A"
     scope: 1
     minDays: 5
-    maxDays: 10
+    maxDays: 7
     buffCodes:
-    - E01
-    - E03
+    - B187
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV71
-    name: "\uC6B0\uBB3C \uACE0\uAC08"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E02
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV72
-    name: "\uBA85\uC0AC \uC740\uAC70"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV73
-    name: "\uC704\uC870 \uBC29\uC9C0"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV74
-    name: "\uBCBC\uB77D \uC18C\uB3D9"
-    scope: 1
-    minDays: 1
-    maxDays: 2
-    buffCodes:
-    - E10
-    - E07
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV75
-    name: "\uAC00\uC131\uBE44 \uBB34\uAE30"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_037
+  - id: EV_005
+    name: "\uC0AC\uAC74_5_B"
     scope: 1
     minDays: 4
     maxDays: 8
     buffCodes:
-    - E05
-    - E01
+    - B292
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV76
-    name: "\uC5ED\uBCD1 \uD1F4\uCE58"
-    scope: 0
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV77
-    name: "\uD22C\uAE30 \uACFC\uC5F4"
-    scope: 1
-    minDays: 3
-    maxDays: 5
-    buffCodes:
-    - E05
-    - E08
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV78
-    name: "\uC778\uAD6C \uC870\uC0AC"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_083
+  - id: EV_006
+    name: "\uC0AC\uAC74_6_A"
     scope: 1
     minDays: 2
-    maxDays: 3
+    maxDays: 10
     buffCodes:
-    - E03
+    - B102
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV79
-    name: "\uC790\uAC1D \uCE68\uD22C"
-    scope: 1
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_104
+  - id: EV_006
+    name: "\uC0AC\uAC74_6_B"
+    scope: 0
     minDays: 1
-    maxDays: 2
+    maxDays: 12
     buffCodes:
-    - E10
-    - E07
+    - B047
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV80
-    name: "\uAE08\uAD11 \uACE0\uAC08"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_116
+  - id: EV_007
+    name: "\uC0AC\uAC74_7_A"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B209
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_096
+  - id: EV_007
+    name: "\uC0AC\uAC74_7_B"
     scope: 1
     minDays: 5
     maxDays: 10
     buffCodes:
-    - E04
-    - E02
+    - B144
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV81
-    name: "\uAD70\uBE44 \uBA74\uC81C"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_190
+  - id: EV_008
+    name: "\uC0AC\uAC74_8_A"
     scope: 0
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B129
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_123
+  - id: EV_008
+    name: "\uC0AC\uAC74_8_B"
+    scope: 1
     minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B261
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_159
+  - id: EV_009
+    name: "\uC0AC\uAC74_9_A"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B049
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_174
+  - id: EV_009
+    name: "\uC0AC\uAC74_9_B"
+    scope: 1
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B040
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_002
+  - id: EV_010
+    name: "\uC0AC\uAC74_10_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B165
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_075
+  - id: EV_010
+    name: "\uC0AC\uAC74_10_B"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B260
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_100
+  - id: EV_011
+    name: "\uC0AC\uAC74_11_A"
+    scope: 0
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B009
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_196
+  - id: EV_011
+    name: "\uC0AC\uAC74_11_B"
+    scope: 1
+    minDays: 4
     maxDays: 10
     buffCodes:
-    - E01
-    - E03
+    - B091
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV82
-    name: "\uC6B4\uD558 \uAC74\uC124"
-    scope: 0
-    minDays: 15
-    maxDays: 30
-    buffCodes:
-    - E03
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV83
-    name: "\uC548\uAC1C \uC790\uC6B1"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_110
+  - id: EV_012
+    name: "\uC0AC\uAC74_12_A"
     scope: 1
     minDays: 1
-    maxDays: 3
+    maxDays: 7
     buffCodes:
-    - E10
-    - E09
+    - B297
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV84
-    name: "\uD559\uBB38 \uD1A0\uB860"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_028
+  - id: EV_012
+    name: "\uC0AC\uAC74_12_B"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B281
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_062
+  - id: EV_013
+    name: "\uC0AC\uAC74_13_A"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B105
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_207
+  - id: EV_013
+    name: "\uC0AC\uAC74_13_B"
+    scope: 0
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B214
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_070
+  - id: EV_014
+    name: "\uC0AC\uAC74_14_A"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B114
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_006
+  - id: EV_014
+    name: "\uC0AC\uAC74_14_B"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B168
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_064
+  - id: EV_015
+    name: "\uC0AC\uAC74_15_A"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B061
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_131
+  - id: EV_015
+    name: "\uC0AC\uAC74_15_B"
+    scope: 0
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B180
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_048
+  - id: EV_016
+    name: "\uC0AC\uAC74_16_A"
+    scope: 1
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B147
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_078
+  - id: EV_016
+    name: "\uC0AC\uAC74_16_B"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B236
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_169
+  - id: EV_017
+    name: "\uC0AC\uAC74_17_A"
+    scope: 0
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B221
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_130
+  - id: EV_017
+    name: "\uC0AC\uAC74_17_B"
     scope: 1
     minDays: 3
-    maxDays: 5
+    maxDays: 12
     buffCodes:
-    - E01
-    - E03
+    - B154
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV85
-    name: "\uAC00\uC9DC \uD0DC\uC218"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_040
+  - id: EV_018
+    name: "\uC0AC\uAC74_18_A"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B036
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_010
+  - id: EV_018
+    name: "\uC0AC\uAC74_18_B"
+    scope: 0
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B015
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_072
+  - id: EV_019
+    name: "\uC0AC\uAC74_19_A"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B268
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_114
+  - id: EV_019
+    name: "\uC0AC\uAC74_19_B"
+    scope: 0
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B239
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_042
+  - id: EV_020
+    name: "\uC0AC\uAC74_20_A"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B025
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_153
+  - id: EV_020
+    name: "\uC0AC\uAC74_20_B"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B268
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_014
+  - id: EV_021
+    name: "\uC0AC\uAC74_21_A"
+    scope: 1
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B013
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_026
+  - id: EV_021
+    name: "\uC0AC\uAC74_21_B"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B156
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_172
+  - id: EV_022
+    name: "\uC0AC\uAC74_22_A"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B180
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_136
+  - id: EV_022
+    name: "\uC0AC\uAC74_22_B"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B242
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_073
+  - id: EV_023
+    name: "\uC0AC\uAC74_23_A"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B209
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_147
+  - id: EV_023
+    name: "\uC0AC\uAC74_23_B"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B277
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_024
+  - id: EV_024
+    name: "\uC0AC\uAC74_24_A"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B254
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_056
+  - id: EV_024
+    name: "\uC0AC\uAC74_24_B"
+    scope: 0
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B083
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_159
+  - id: EV_025
+    name: "\uC0AC\uAC74_25_A"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B260
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_087
+  - id: EV_025
+    name: "\uC0AC\uAC74_25_B"
+    scope: 1
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B256
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_188
+  - id: EV_026
+    name: "\uC0AC\uAC74_26_A"
+    scope: 1
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B216
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_011
+  - id: EV_026
+    name: "\uC0AC\uAC74_26_B"
+    scope: 1
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B017
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_060
+  - id: EV_027
+    name: "\uC0AC\uAC74_27_A"
+    scope: 0
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B184
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_087
+  - id: EV_027
+    name: "\uC0AC\uAC74_27_B"
+    scope: 0
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B165
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_063
+  - id: EV_028
+    name: "\uC0AC\uAC74_28_A"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B234
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_081
+  - id: EV_028
+    name: "\uC0AC\uAC74_28_B"
+    scope: 1
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B066
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_160
+  - id: EV_029
+    name: "\uC0AC\uAC74_29_A"
+    scope: 1
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B268
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_065
+  - id: EV_029
+    name: "\uC0AC\uAC74_29_B"
+    scope: 1
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B205
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_115
+  - id: EV_030
+    name: "\uC0AC\uAC74_30_A"
+    scope: 1
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B182
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_216
+  - id: EV_030
+    name: "\uC0AC\uAC74_30_B"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B239
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_107
+  - id: EV_031
+    name: "\uC0AC\uAC74_31_A"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B263
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_074
+  - id: EV_031
+    name: "\uC0AC\uAC74_31_B"
+    scope: 0
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B092
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_120
+  - id: EV_032
+    name: "\uC0AC\uAC74_32_A"
+    scope: 0
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B025
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_170
+  - id: EV_032
+    name: "\uC0AC\uAC74_32_B"
+    scope: 1
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B207
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_033
+  - id: EV_033
+    name: "\uC0AC\uAC74_33_A"
+    scope: 1
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B175
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_124
+  - id: EV_033
+    name: "\uC0AC\uAC74_33_B"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B258
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_054
+  - id: EV_034
+    name: "\uC0AC\uAC74_34_A"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B177
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_170
+  - id: EV_034
+    name: "\uC0AC\uAC74_34_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B185
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_209
+  - id: EV_035
+    name: "\uC0AC\uAC74_35_A"
+    scope: 1
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B220
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_097
+  - id: EV_035
+    name: "\uC0AC\uAC74_35_B"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B257
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_203
+  - id: EV_036
+    name: "\uC0AC\uAC74_36_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B141
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_104
+  - id: EV_036
+    name: "\uC0AC\uAC74_36_B"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B001
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_015
+  - id: EV_037
+    name: "\uC0AC\uAC74_37_A"
+    scope: 1
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B292
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_150
+  - id: EV_037
+    name: "\uC0AC\uAC74_37_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B049
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_108
+  - id: EV_038
+    name: "\uC0AC\uAC74_38_A"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B244
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_081
+  - id: EV_038
+    name: "\uC0AC\uAC74_38_B"
+    scope: 1
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B123
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_130
+  - id: EV_039
+    name: "\uC0AC\uAC74_39_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B145
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_087
+  - id: EV_039
+    name: "\uC0AC\uAC74_39_B"
+    scope: 0
+    minDays: 2
+    maxDays: 11
+    buffCodes:
+    - B196
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_188
+  - id: EV_040
+    name: "\uC0AC\uAC74_40_A"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B284
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_075
+  - id: EV_040
+    name: "\uC0AC\uAC74_40_B"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B186
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_191
+  - id: EV_041
+    name: "\uC0AC\uAC74_41_A"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B051
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_116
+  - id: EV_041
+    name: "\uC0AC\uAC74_41_B"
+    scope: 1
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B129
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_099
+  - id: EV_042
+    name: "\uC0AC\uAC74_42_A"
+    scope: 0
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B192
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_155
+  - id: EV_042
+    name: "\uC0AC\uAC74_42_B"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B130
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_022
+  - id: EV_043
+    name: "\uC0AC\uAC74_43_A"
+    scope: 1
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B286
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_215
+  - id: EV_043
+    name: "\uC0AC\uAC74_43_B"
+    scope: 0
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B066
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_109
+  - id: EV_044
+    name: "\uC0AC\uAC74_44_A"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B206
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_211
+  - id: EV_044
+    name: "\uC0AC\uAC74_44_B"
+    scope: 1
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B087
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_162
+  - id: EV_045
+    name: "\uC0AC\uAC74_45_A"
+    scope: 1
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B086
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_007
+  - id: EV_045
+    name: "\uC0AC\uAC74_45_B"
+    scope: 1
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B230
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_110
+  - id: EV_046
+    name: "\uC0AC\uAC74_46_A"
+    scope: 1
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B210
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_162
+  - id: EV_046
+    name: "\uC0AC\uAC74_46_B"
+    scope: 1
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B080
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_203
+  - id: EV_047
+    name: "\uC0AC\uAC74_47_A"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B182
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_182
+  - id: EV_047
+    name: "\uC0AC\uAC74_47_B"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B269
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_028
+  - id: EV_048
+    name: "\uC0AC\uAC74_48_A"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B087
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_116
+  - id: EV_048
+    name: "\uC0AC\uAC74_48_B"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B029
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_104
+  - id: EV_049
+    name: "\uC0AC\uAC74_49_A"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B048
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_048
+  - id: EV_049
+    name: "\uC0AC\uAC74_49_B"
+    scope: 0
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B049
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_200
+  - id: EV_050
+    name: "\uC0AC\uAC74_50_A"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B198
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_033
+  - id: EV_050
+    name: "\uC0AC\uAC74_50_B"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B013
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_091
+  - id: EV_051
+    name: "\uC0AC\uAC74_51_A"
+    scope: 1
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B152
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_139
+  - id: EV_051
+    name: "\uC0AC\uAC74_51_B"
+    scope: 0
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B253
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_042
+  - id: EV_052
+    name: "\uC0AC\uAC74_52_A"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B123
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_167
+  - id: EV_052
+    name: "\uC0AC\uAC74_52_B"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B059
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_035
+  - id: EV_053
+    name: "\uC0AC\uAC74_53_A"
+    scope: 0
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B018
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_064
+  - id: EV_053
+    name: "\uC0AC\uAC74_53_B"
     scope: 1
     minDays: 3
     maxDays: 7
     buffCodes:
-    - E08
-    - E07
+    - B121
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV86
-    name: "\uCCA0\uAC11 \uAC11\uC8FC"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E09
-    - E05
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV87
-    name: "\uD669\uCDA9 \uACBD\uBCF4"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_208
+  - id: EV_054
+    name: "\uC0AC\uAC74_54_A"
     scope: 0
     minDays: 3
-    maxDays: 6
-    buffCodes:
-    - E10
-    - E02
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV88
-    name: "\uAD70\uC8FC \uC2DC\uCC30"
-    scope: 1
-    minDays: 5
     maxDays: 10
     buffCodes:
-    - E03
-    - E05
+    - B119
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV89
-    name: "\uBCF4\uAE09 \uBC29\uD574"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E10
-    - E04
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV90
-    name: "\uBA85\uC758 \uB3C4\uCC29"
-    scope: 1
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E11
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV91
-    name: "\uBE44\uBC00 \uB3D9\uB9F9"
-    scope: 0
-    minDays: 5
-    maxDays: 10
-    buffCodes:
-    - E01
-    - E03
-    affinityTagsRaw: 
-    conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV92
-    name: "\uC885\uAD50 \uD3ED\uB3D9"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_010
+  - id: EV_054
+    name: "\uC0AC\uAC74_54_B"
     scope: 1
     minDays: 3
-    maxDays: 6
+    maxDays: 12
     buffCodes:
-    - E11
-    - E10
+    - B154
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV93
-    name: "\uC9D5\uC218 \uC2E4\uC218"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_044
+  - id: EV_055
+    name: "\uC0AC\uAC74_55_A"
     scope: 1
-    minDays: 2
-    maxDays: 4
+    minDays: 4
+    maxDays: 7
     buffCodes:
-    - E08
-    - E04
+    - B147
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV94
-    name: "\uBD04 \uCD95\uC81C"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_203
+  - id: EV_055
+    name: "\uC0AC\uAC74_55_B"
     scope: 0
-    minDays: 5
-    maxDays: 10
+    minDays: 4
+    maxDays: 9
     buffCodes:
-    - E01
-    - E03
+    - B092
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV95
-    name: "\uBCC4\uB625\uBCC4"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_120
+  - id: EV_056
+    name: "\uC0AC\uAC74_56_A"
     scope: 1
     minDays: 1
-    maxDays: 2
+    maxDays: 6
     buffCodes:
-    - E10
-    - E03
+    - B162
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV96
-    name: "\uBD80\uD328 \uCC99\uACB0"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_187
+  - id: EV_056
+    name: "\uC0AC\uAC74_56_B"
+    scope: 1
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B211
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_077
+  - id: EV_057
+    name: "\uC0AC\uAC74_57_A"
+    scope: 1
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B300
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_036
+  - id: EV_057
+    name: "\uC0AC\uAC74_57_B"
     scope: 0
-    minDays: 7
-    maxDays: 14
+    minDays: 5
+    maxDays: 9
     buffCodes:
-    - E01
-    - E08
+    - B112
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV97
-    name: "\uD6C8\uB828 \uC131\uACF5"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_171
+  - id: EV_058
+    name: "\uC0AC\uAC74_58_A"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B278
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_046
+  - id: EV_058
+    name: "\uC0AC\uAC74_58_B"
+    scope: 1
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B014
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_125
+  - id: EV_059
+    name: "\uC0AC\uAC74_59_A"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B116
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_168
+  - id: EV_059
+    name: "\uC0AC\uAC74_59_B"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B066
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_113
+  - id: EV_060
+    name: "\uC0AC\uAC74_60_A"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B245
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_134
+  - id: EV_060
+    name: "\uC0AC\uAC74_60_B"
+    scope: 0
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B235
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_011
+  - id: EV_061
+    name: "\uC0AC\uAC74_61_A"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B110
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_142
+  - id: EV_061
+    name: "\uC0AC\uAC74_61_B"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B034
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_077
+  - id: EV_062
+    name: "\uC0AC\uAC74_62_A"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B154
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_058
+  - id: EV_062
+    name: "\uC0AC\uAC74_62_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B078
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_117
+  - id: EV_063
+    name: "\uC0AC\uAC74_63_A"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B033
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_204
+  - id: EV_063
+    name: "\uC0AC\uAC74_63_B"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B221
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_120
+  - id: EV_064
+    name: "\uC0AC\uAC74_64_A"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B077
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_215
+  - id: EV_064
+    name: "\uC0AC\uAC74_64_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B105
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_212
+  - id: EV_065
+    name: "\uC0AC\uAC74_65_A"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B299
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_197
+  - id: EV_065
+    name: "\uC0AC\uAC74_65_B"
+    scope: 0
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B225
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_110
+  - id: EV_066
+    name: "\uC0AC\uAC74_66_A"
+    scope: 1
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B088
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_020
+  - id: EV_066
+    name: "\uC0AC\uAC74_66_B"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B257
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_115
+  - id: EV_067
+    name: "\uC0AC\uAC74_67_A"
+    scope: 0
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B014
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_090
+  - id: EV_067
+    name: "\uC0AC\uAC74_67_B"
+    scope: 0
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B242
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_192
+  - id: EV_068
+    name: "\uC0AC\uAC74_68_A"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B158
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_036
+  - id: EV_068
+    name: "\uC0AC\uAC74_68_B"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B145
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_086
+  - id: EV_069
+    name: "\uC0AC\uAC74_69_A"
+    scope: 0
+    minDays: 2
+    maxDays: 11
+    buffCodes:
+    - B122
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_187
+  - id: EV_069
+    name: "\uC0AC\uAC74_69_B"
+    scope: 1
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B132
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_098
+  - id: EV_070
+    name: "\uC0AC\uAC74_70_A"
+    scope: 1
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B286
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_007
+  - id: EV_070
+    name: "\uC0AC\uAC74_70_B"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B023
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_139
+  - id: EV_071
+    name: "\uC0AC\uAC74_71_A"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B127
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_026
+  - id: EV_071
+    name: "\uC0AC\uAC74_71_B"
     scope: 1
     minDays: 5
     maxDays: 10
     buffCodes:
-    - E09
-    - E05
+    - B084
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV98
-    name: "\uB300\uD654\uC7AC"
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_217
+  - id: EV_072
+    name: "\uC0AC\uAC74_72_A"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B217
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_144
+  - id: EV_072
+    name: "\uC0AC\uAC74_72_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B287
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_037
+  - id: EV_073
+    name: "\uC0AC\uAC74_73_A"
+    scope: 1
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B173
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_011
+  - id: EV_073
+    name: "\uC0AC\uAC74_73_B"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B020
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_189
+  - id: EV_074
+    name: "\uC0AC\uAC74_74_A"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B182
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_137
+  - id: EV_074
+    name: "\uC0AC\uAC74_74_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B140
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_055
+  - id: EV_075
+    name: "\uC0AC\uAC74_75_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B083
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_183
+  - id: EV_075
+    name: "\uC0AC\uAC74_75_B"
+    scope: 0
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B125
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_153
+  - id: EV_076
+    name: "\uC0AC\uAC74_76_A"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B171
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_054
+  - id: EV_076
+    name: "\uC0AC\uAC74_76_B"
+    scope: 0
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B036
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_037
+  - id: EV_077
+    name: "\uC0AC\uAC74_77_A"
+    scope: 1
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B162
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_025
+  - id: EV_077
+    name: "\uC0AC\uAC74_77_B"
+    scope: 0
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B288
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_065
+  - id: EV_078
+    name: "\uC0AC\uAC74_78_A"
+    scope: 1
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B015
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_122
+  - id: EV_078
+    name: "\uC0AC\uAC74_78_B"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B122
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_056
+  - id: EV_079
+    name: "\uC0AC\uAC74_79_A"
     scope: 1
     minDays: 2
-    maxDays: 4
+    maxDays: 6
     buffCodes:
-    - E04
-    - E11
+    - B127
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
-  - id: EV99
-    name: "\uD3C9\uD654 \uD611\uC57D"
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_057
+  - id: EV_079
+    name: "\uC0AC\uAC74_79_B"
     scope: 0
-    minDays: 10
-    maxDays: 20
+    minDays: 4
+    maxDays: 11
     buffCodes:
-    - E01
-    - E03
+    - B149
     affinityTagsRaw: 
     conditionIds: []
-    flatProbBonus: 0
-    perMight: 0
-    perIntel: 0
-    perCharm: 0
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_212
+  - id: EV_080
+    name: "\uC0AC\uAC74_80_A"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B030
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_032
+  - id: EV_080
+    name: "\uC0AC\uAC74_80_B"
+    scope: 1
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B152
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_052
+  - id: EV_081
+    name: "\uC0AC\uAC74_81_A"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B239
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_186
+  - id: EV_081
+    name: "\uC0AC\uAC74_81_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B055
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_144
+  - id: EV_082
+    name: "\uC0AC\uAC74_82_A"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B051
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_022
+  - id: EV_082
+    name: "\uC0AC\uAC74_82_B"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B005
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_032
+  - id: EV_083
+    name: "\uC0AC\uAC74_83_A"
+    scope: 0
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B175
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_191
+  - id: EV_083
+    name: "\uC0AC\uAC74_83_B"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B202
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_145
+  - id: EV_084
+    name: "\uC0AC\uAC74_84_A"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B028
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_215
+  - id: EV_084
+    name: "\uC0AC\uAC74_84_B"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B231
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_054
+  - id: EV_085
+    name: "\uC0AC\uAC74_85_A"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B286
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_024
+  - id: EV_085
+    name: "\uC0AC\uAC74_85_B"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B278
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_188
+  - id: EV_086
+    name: "\uC0AC\uAC74_86_A"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B115
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_077
+  - id: EV_086
+    name: "\uC0AC\uAC74_86_B"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B078
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_011
+  - id: EV_087
+    name: "\uC0AC\uAC74_87_A"
+    scope: 0
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B009
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_119
+  - id: EV_087
+    name: "\uC0AC\uAC74_87_B"
+    scope: 1
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B140
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_054
+  - id: EV_088
+    name: "\uC0AC\uAC74_88_A"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B037
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_038
+  - id: EV_088
+    name: "\uC0AC\uAC74_88_B"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B123
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_195
+  - id: EV_089
+    name: "\uC0AC\uAC74_89_A"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B004
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_127
+  - id: EV_089
+    name: "\uC0AC\uAC74_89_B"
+    scope: 0
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B021
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_163
+  - id: EV_090
+    name: "\uC0AC\uAC74_90_A"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B100
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_027
+  - id: EV_090
+    name: "\uC0AC\uAC74_90_B"
+    scope: 1
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B059
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_204
+  - id: EV_091
+    name: "\uC0AC\uAC74_91_A"
+    scope: 1
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B283
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_024
+  - id: EV_091
+    name: "\uC0AC\uAC74_91_B"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B011
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_196
+  - id: EV_092
+    name: "\uC0AC\uAC74_92_A"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B148
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_023
+  - id: EV_092
+    name: "\uC0AC\uAC74_92_B"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B263
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_212
+  - id: EV_093
+    name: "\uC0AC\uAC74_93_A"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B287
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_050
+  - id: EV_093
+    name: "\uC0AC\uAC74_93_B"
+    scope: 0
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B087
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_043
+  - id: EV_094
+    name: "\uC0AC\uAC74_94_A"
+    scope: 0
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B214
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_202
+  - id: EV_094
+    name: "\uC0AC\uAC74_94_B"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B284
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_003
+  - id: EV_095
+    name: "\uC0AC\uAC74_95_A"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B044
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_147
+  - id: EV_095
+    name: "\uC0AC\uAC74_95_B"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B197
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_192
+  - id: EV_096
+    name: "\uC0AC\uAC74_96_A"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B273
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_193
+  - id: EV_096
+    name: "\uC0AC\uAC74_96_B"
+    scope: 1
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B081
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_020
+  - id: EV_097
+    name: "\uC0AC\uAC74_97_A"
+    scope: 1
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B219
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_201
+  - id: EV_097
+    name: "\uC0AC\uAC74_97_B"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B151
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_007
+  - id: EV_098
+    name: "\uC0AC\uAC74_98_A"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B092
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_046
+  - id: EV_098
+    name: "\uC0AC\uAC74_98_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B043
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_010
+  - id: EV_099
+    name: "\uC0AC\uAC74_99_A"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B271
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_215
+  - id: EV_099
+    name: "\uC0AC\uAC74_99_B"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B294
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_079
+  - id: EV_100
+    name: "\uC0AC\uAC74_100_A"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B268
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_172
+  - id: EV_100
+    name: "\uC0AC\uAC74_100_B"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B125
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_111
+  - id: EV_101
+    name: "\uC0AC\uAC74_101_A"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B213
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_178
+  - id: EV_101
+    name: "\uC0AC\uAC74_101_B"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B268
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_006
+  - id: EV_102
+    name: "\uC0AC\uAC74_102_A"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B279
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_015
+  - id: EV_102
+    name: "\uC0AC\uAC74_102_B"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B114
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_174
+  - id: EV_103
+    name: "\uC0AC\uAC74_103_A"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B123
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_069
+  - id: EV_103
+    name: "\uC0AC\uAC74_103_B"
+    scope: 0
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B106
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_149
+  - id: EV_104
+    name: "\uC0AC\uAC74_104_A"
+    scope: 1
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B030
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_138
+  - id: EV_104
+    name: "\uC0AC\uAC74_104_B"
+    scope: 1
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B193
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_163
+  - id: EV_105
+    name: "\uC0AC\uAC74_105_A"
+    scope: 1
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B241
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_203
+  - id: EV_105
+    name: "\uC0AC\uAC74_105_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B117
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_065
+  - id: EV_106
+    name: "\uC0AC\uAC74_106_A"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B009
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_185
+  - id: EV_106
+    name: "\uC0AC\uAC74_106_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B071
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_163
+  - id: EV_107
+    name: "\uC0AC\uAC74_107_A"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B027
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_096
+  - id: EV_107
+    name: "\uC0AC\uAC74_107_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B212
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_166
+  - id: EV_108
+    name: "\uC0AC\uAC74_108_A"
+    scope: 0
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B040
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_112
+  - id: EV_108
+    name: "\uC0AC\uAC74_108_B"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B238
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_036
+  - id: EV_109
+    name: "\uC0AC\uAC74_109_A"
+    scope: 0
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B138
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_025
+  - id: EV_109
+    name: "\uC0AC\uAC74_109_B"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B120
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_166
+  - id: EV_110
+    name: "\uC0AC\uAC74_110_A"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B199
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_056
+  - id: EV_110
+    name: "\uC0AC\uAC74_110_B"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B108
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_143
+  - id: EV_111
+    name: "\uC0AC\uAC74_111_A"
+    scope: 0
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B285
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_065
+  - id: EV_111
+    name: "\uC0AC\uAC74_111_B"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B262
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_031
+  - id: EV_112
+    name: "\uC0AC\uAC74_112_A"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B297
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_153
+  - id: EV_112
+    name: "\uC0AC\uAC74_112_B"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B193
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_110
+  - id: EV_113
+    name: "\uC0AC\uAC74_113_A"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B233
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_027
+  - id: EV_113
+    name: "\uC0AC\uAC74_113_B"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B275
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_212
+  - id: EV_114
+    name: "\uC0AC\uAC74_114_A"
+    scope: 1
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B230
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_099
+  - id: EV_114
+    name: "\uC0AC\uAC74_114_B"
+    scope: 0
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B085
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_170
+  - id: EV_115
+    name: "\uC0AC\uAC74_115_A"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B002
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_098
+  - id: EV_115
+    name: "\uC0AC\uAC74_115_B"
+    scope: 1
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B172
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_024
+  - id: EV_116
+    name: "\uC0AC\uAC74_116_A"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B296
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_033
+  - id: EV_116
+    name: "\uC0AC\uAC74_116_B"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B023
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_143
+  - id: EV_117
+    name: "\uC0AC\uAC74_117_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B018
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_211
+  - id: EV_117
+    name: "\uC0AC\uAC74_117_B"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B195
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_208
+  - id: EV_118
+    name: "\uC0AC\uAC74_118_A"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B153
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_020
+  - id: EV_118
+    name: "\uC0AC\uAC74_118_B"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B133
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_011
+  - id: EV_119
+    name: "\uC0AC\uAC74_119_A"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B281
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_016
+  - id: EV_119
+    name: "\uC0AC\uAC74_119_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B296
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_026
+  - id: EV_120
+    name: "\uC0AC\uAC74_120_A"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B275
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_126
+  - id: EV_120
+    name: "\uC0AC\uAC74_120_B"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B275
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_074
+  - id: EV_121
+    name: "\uC0AC\uAC74_121_A"
+    scope: 0
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B209
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_159
+  - id: EV_121
+    name: "\uC0AC\uAC74_121_B"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B126
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_035
+  - id: EV_122
+    name: "\uC0AC\uAC74_122_A"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B194
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_048
+  - id: EV_122
+    name: "\uC0AC\uAC74_122_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B188
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_088
+  - id: EV_123
+    name: "\uC0AC\uAC74_123_A"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B108
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_133
+  - id: EV_123
+    name: "\uC0AC\uAC74_123_B"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B120
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_038
+  - id: EV_124
+    name: "\uC0AC\uAC74_124_A"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B281
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_046
+  - id: EV_124
+    name: "\uC0AC\uAC74_124_B"
+    scope: 1
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B281
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_213
+  - id: EV_125
+    name: "\uC0AC\uAC74_125_A"
+    scope: 1
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B293
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_012
+  - id: EV_125
+    name: "\uC0AC\uAC74_125_B"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B161
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_066
+  - id: EV_126
+    name: "\uC0AC\uAC74_126_A"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B132
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_216
+  - id: EV_126
+    name: "\uC0AC\uAC74_126_B"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B213
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_050
+  - id: EV_127
+    name: "\uC0AC\uAC74_127_A"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B156
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_052
+  - id: EV_127
+    name: "\uC0AC\uAC74_127_B"
+    scope: 1
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B031
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_220
+  - id: EV_128
+    name: "\uC0AC\uAC74_128_A"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B142
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_106
+  - id: EV_128
+    name: "\uC0AC\uAC74_128_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B136
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_169
+  - id: EV_129
+    name: "\uC0AC\uAC74_129_A"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B268
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_074
+  - id: EV_129
+    name: "\uC0AC\uAC74_129_B"
+    scope: 0
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B230
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_218
+  - id: EV_130
+    name: "\uC0AC\uAC74_130_A"
+    scope: 0
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B194
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_178
+  - id: EV_130
+    name: "\uC0AC\uAC74_130_B"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B287
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_173
+  - id: EV_131
+    name: "\uC0AC\uAC74_131_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B088
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_209
+  - id: EV_131
+    name: "\uC0AC\uAC74_131_B"
+    scope: 1
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B060
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_182
+  - id: EV_132
+    name: "\uC0AC\uAC74_132_A"
+    scope: 0
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B295
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_064
+  - id: EV_132
+    name: "\uC0AC\uAC74_132_B"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B250
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_105
+  - id: EV_133
+    name: "\uC0AC\uAC74_133_A"
+    scope: 0
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B160
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_161
+  - id: EV_133
+    name: "\uC0AC\uAC74_133_B"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B095
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_191
+  - id: EV_134
+    name: "\uC0AC\uAC74_134_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B247
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_066
+  - id: EV_134
+    name: "\uC0AC\uAC74_134_B"
+    scope: 1
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B246
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_194
+  - id: EV_135
+    name: "\uC0AC\uAC74_135_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B167
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_192
+  - id: EV_135
+    name: "\uC0AC\uAC74_135_B"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B013
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_203
+  - id: EV_136
+    name: "\uC0AC\uAC74_136_A"
+    scope: 1
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B156
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_135
+  - id: EV_136
+    name: "\uC0AC\uAC74_136_B"
+    scope: 0
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B171
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_062
+  - id: EV_137
+    name: "\uC0AC\uAC74_137_A"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B023
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_014
+  - id: EV_137
+    name: "\uC0AC\uAC74_137_B"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B189
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_119
+  - id: EV_138
+    name: "\uC0AC\uAC74_138_A"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B093
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_017
+  - id: EV_138
+    name: "\uC0AC\uAC74_138_B"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B267
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_141
+  - id: EV_139
+    name: "\uC0AC\uAC74_139_A"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B218
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_101
+  - id: EV_139
+    name: "\uC0AC\uAC74_139_B"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B208
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_157
+  - id: EV_140
+    name: "\uC0AC\uAC74_140_A"
+    scope: 0
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B242
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_069
+  - id: EV_140
+    name: "\uC0AC\uAC74_140_B"
+    scope: 0
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B172
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_161
+  - id: EV_141
+    name: "\uC0AC\uAC74_141_A"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B248
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_043
+  - id: EV_141
+    name: "\uC0AC\uAC74_141_B"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B162
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_057
+  - id: EV_142
+    name: "\uC0AC\uAC74_142_A"
+    scope: 0
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B195
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_129
+  - id: EV_142
+    name: "\uC0AC\uAC74_142_B"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B122
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_088
+  - id: EV_143
+    name: "\uC0AC\uAC74_143_A"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B276
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_130
+  - id: EV_143
+    name: "\uC0AC\uAC74_143_B"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B187
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_170
+  - id: EV_144
+    name: "\uC0AC\uAC74_144_A"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B216
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_027
+  - id: EV_144
+    name: "\uC0AC\uAC74_144_B"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B059
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_220
+  - id: EV_145
+    name: "\uC0AC\uAC74_145_A"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B104
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_075
+  - id: EV_145
+    name: "\uC0AC\uAC74_145_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B254
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_029
+  - id: EV_146
+    name: "\uC0AC\uAC74_146_A"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B135
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_046
+  - id: EV_146
+    name: "\uC0AC\uAC74_146_B"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B271
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_090
+  - id: EV_147
+    name: "\uC0AC\uAC74_147_A"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B144
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_198
+  - id: EV_147
+    name: "\uC0AC\uAC74_147_B"
+    scope: 0
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B043
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_030
+  - id: EV_148
+    name: "\uC0AC\uAC74_148_A"
+    scope: 1
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B205
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_148
+  - id: EV_148
+    name: "\uC0AC\uAC74_148_B"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B235
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_020
+  - id: EV_149
+    name: "\uC0AC\uAC74_149_A"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B238
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_174
+  - id: EV_149
+    name: "\uC0AC\uAC74_149_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B020
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_134
+  - id: EV_150
+    name: "\uC0AC\uAC74_150_A"
+    scope: 1
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B244
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_086
+  - id: EV_150
+    name: "\uC0AC\uAC74_150_B"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B192
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_010
+  - id: EV_151
+    name: "\uC0AC\uAC74_151_A"
+    scope: 0
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B131
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_087
+  - id: EV_151
+    name: "\uC0AC\uAC74_151_B"
+    scope: 0
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B064
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_181
+  - id: EV_152
+    name: "\uC0AC\uAC74_152_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B178
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_139
+  - id: EV_152
+    name: "\uC0AC\uAC74_152_B"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B273
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_069
+  - id: EV_153
+    name: "\uC0AC\uAC74_153_A"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B085
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_011
+  - id: EV_153
+    name: "\uC0AC\uAC74_153_B"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B138
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_198
+  - id: EV_154
+    name: "\uC0AC\uAC74_154_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B300
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_008
+  - id: EV_154
+    name: "\uC0AC\uAC74_154_B"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B061
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_020
+  - id: EV_155
+    name: "\uC0AC\uAC74_155_A"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B292
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_102
+  - id: EV_155
+    name: "\uC0AC\uAC74_155_B"
+    scope: 0
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B130
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_207
+  - id: EV_156
+    name: "\uC0AC\uAC74_156_A"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B249
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_012
+  - id: EV_156
+    name: "\uC0AC\uAC74_156_B"
+    scope: 1
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B233
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_026
+  - id: EV_157
+    name: "\uC0AC\uAC74_157_A"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B062
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_197
+  - id: EV_157
+    name: "\uC0AC\uAC74_157_B"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B232
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_083
+  - id: EV_158
+    name: "\uC0AC\uAC74_158_A"
+    scope: 1
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B183
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_058
+  - id: EV_158
+    name: "\uC0AC\uAC74_158_B"
+    scope: 0
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B152
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_104
+  - id: EV_159
+    name: "\uC0AC\uAC74_159_A"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B241
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_072
+  - id: EV_159
+    name: "\uC0AC\uAC74_159_B"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B128
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_067
+  - id: EV_160
+    name: "\uC0AC\uAC74_160_A"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B299
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_145
+  - id: EV_160
+    name: "\uC0AC\uAC74_160_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B003
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_199
+  - id: EV_161
+    name: "\uC0AC\uAC74_161_A"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B249
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_039
+  - id: EV_161
+    name: "\uC0AC\uAC74_161_B"
+    scope: 0
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B145
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_101
+  - id: EV_162
+    name: "\uC0AC\uAC74_162_A"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B019
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_194
+  - id: EV_162
+    name: "\uC0AC\uAC74_162_B"
+    scope: 1
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B172
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_210
+  - id: EV_163
+    name: "\uC0AC\uAC74_163_A"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B111
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_172
+  - id: EV_163
+    name: "\uC0AC\uAC74_163_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B034
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_042
+  - id: EV_164
+    name: "\uC0AC\uAC74_164_A"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B029
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_134
+  - id: EV_164
+    name: "\uC0AC\uAC74_164_B"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B119
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_133
+  - id: EV_165
+    name: "\uC0AC\uAC74_165_A"
+    scope: 1
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B219
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_198
+  - id: EV_165
+    name: "\uC0AC\uAC74_165_B"
+    scope: 0
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B023
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_029
+  - id: EV_166
+    name: "\uC0AC\uAC74_166_A"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B290
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_080
+  - id: EV_166
+    name: "\uC0AC\uAC74_166_B"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B161
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_127
+  - id: EV_167
+    name: "\uC0AC\uAC74_167_A"
+    scope: 0
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B065
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_215
+  - id: EV_167
+    name: "\uC0AC\uAC74_167_B"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B261
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_165
+  - id: EV_168
+    name: "\uC0AC\uAC74_168_A"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B134
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_162
+  - id: EV_168
+    name: "\uC0AC\uAC74_168_B"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B040
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_138
+  - id: EV_169
+    name: "\uC0AC\uAC74_169_A"
+    scope: 0
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B024
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_014
+  - id: EV_169
+    name: "\uC0AC\uAC74_169_B"
+    scope: 1
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B111
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_102
+  - id: EV_170
+    name: "\uC0AC\uAC74_170_A"
+    scope: 0
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B163
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_108
+  - id: EV_170
+    name: "\uC0AC\uAC74_170_B"
+    scope: 1
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B096
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_135
+  - id: EV_171
+    name: "\uC0AC\uAC74_171_A"
+    scope: 0
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B178
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_084
+  - id: EV_171
+    name: "\uC0AC\uAC74_171_B"
+    scope: 1
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B287
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_040
+  - id: EV_172
+    name: "\uC0AC\uAC74_172_A"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B115
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_186
+  - id: EV_172
+    name: "\uC0AC\uAC74_172_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B075
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_157
+  - id: EV_173
+    name: "\uC0AC\uAC74_173_A"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B045
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_152
+  - id: EV_173
+    name: "\uC0AC\uAC74_173_B"
+    scope: 0
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B201
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_108
+  - id: EV_174
+    name: "\uC0AC\uAC74_174_A"
+    scope: 1
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B294
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_080
+  - id: EV_174
+    name: "\uC0AC\uAC74_174_B"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B136
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_164
+  - id: EV_175
+    name: "\uC0AC\uAC74_175_A"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B194
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_162
+  - id: EV_175
+    name: "\uC0AC\uAC74_175_B"
+    scope: 0
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B113
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_129
+  - id: EV_176
+    name: "\uC0AC\uAC74_176_A"
+    scope: 0
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B007
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_107
+  - id: EV_176
+    name: "\uC0AC\uAC74_176_B"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B240
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_029
+  - id: EV_177
+    name: "\uC0AC\uAC74_177_A"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B164
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_140
+  - id: EV_177
+    name: "\uC0AC\uAC74_177_B"
+    scope: 0
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B125
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_213
+  - id: EV_178
+    name: "\uC0AC\uAC74_178_A"
+    scope: 1
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B052
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_016
+  - id: EV_178
+    name: "\uC0AC\uAC74_178_B"
+    scope: 0
+    minDays: 5
+    maxDays: 11
+    buffCodes:
+    - B254
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_215
+  - id: EV_179
+    name: "\uC0AC\uAC74_179_A"
+    scope: 0
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B055
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_104
+  - id: EV_179
+    name: "\uC0AC\uAC74_179_B"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B131
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_193
+  - id: EV_180
+    name: "\uC0AC\uAC74_180_A"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B135
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_182
+  - id: EV_180
+    name: "\uC0AC\uAC74_180_B"
+    scope: 1
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B145
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_110
+  - id: EV_181
+    name: "\uC0AC\uAC74_181_A"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B145
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_055
+  - id: EV_181
+    name: "\uC0AC\uAC74_181_B"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B156
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_139
+  - id: EV_182
+    name: "\uC0AC\uAC74_182_A"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B156
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_169
+  - id: EV_182
+    name: "\uC0AC\uAC74_182_B"
+    scope: 1
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B155
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_101
+  - id: EV_183
+    name: "\uC0AC\uAC74_183_A"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B273
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_077
+  - id: EV_183
+    name: "\uC0AC\uAC74_183_B"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B059
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_139
+  - id: EV_184
+    name: "\uC0AC\uAC74_184_A"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B072
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_035
+  - id: EV_184
+    name: "\uC0AC\uAC74_184_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B298
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_169
+  - id: EV_185
+    name: "\uC0AC\uAC74_185_A"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B170
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_058
+  - id: EV_185
+    name: "\uC0AC\uAC74_185_B"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B023
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_005
+  - id: EV_186
+    name: "\uC0AC\uAC74_186_A"
+    scope: 1
+    minDays: 2
+    maxDays: 11
+    buffCodes:
+    - B017
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_013
+  - id: EV_186
+    name: "\uC0AC\uAC74_186_B"
+    scope: 0
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B089
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_197
+  - id: EV_187
+    name: "\uC0AC\uAC74_187_A"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B222
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_206
+  - id: EV_187
+    name: "\uC0AC\uAC74_187_B"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B275
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_169
+  - id: EV_188
+    name: "\uC0AC\uAC74_188_A"
+    scope: 0
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B208
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_104
+  - id: EV_188
+    name: "\uC0AC\uAC74_188_B"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B122
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_086
+  - id: EV_189
+    name: "\uC0AC\uAC74_189_A"
+    scope: 1
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B087
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_052
+  - id: EV_189
+    name: "\uC0AC\uAC74_189_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B165
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_202
+  - id: EV_190
+    name: "\uC0AC\uAC74_190_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B091
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_059
+  - id: EV_190
+    name: "\uC0AC\uAC74_190_B"
+    scope: 1
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B035
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_024
+  - id: EV_191
+    name: "\uC0AC\uAC74_191_A"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B084
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_063
+  - id: EV_191
+    name: "\uC0AC\uAC74_191_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B142
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_022
+  - id: EV_192
+    name: "\uC0AC\uAC74_192_A"
+    scope: 0
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B060
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_188
+  - id: EV_192
+    name: "\uC0AC\uAC74_192_B"
+    scope: 1
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B275
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_168
+  - id: EV_193
+    name: "\uC0AC\uAC74_193_A"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B226
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_199
+  - id: EV_193
+    name: "\uC0AC\uAC74_193_B"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B121
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_132
+  - id: EV_194
+    name: "\uC0AC\uAC74_194_A"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B138
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_152
+  - id: EV_194
+    name: "\uC0AC\uAC74_194_B"
+    scope: 0
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B168
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_190
+  - id: EV_195
+    name: "\uC0AC\uAC74_195_A"
+    scope: 0
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B229
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_014
+  - id: EV_195
+    name: "\uC0AC\uAC74_195_B"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B167
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_036
+  - id: EV_196
+    name: "\uC0AC\uAC74_196_A"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B122
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_128
+  - id: EV_196
+    name: "\uC0AC\uAC74_196_B"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B194
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_069
+  - id: EV_197
+    name: "\uC0AC\uAC74_197_A"
+    scope: 1
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B259
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_052
+  - id: EV_197
+    name: "\uC0AC\uAC74_197_B"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B028
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_062
+  - id: EV_198
+    name: "\uC0AC\uAC74_198_A"
+    scope: 0
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B239
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_109
+  - id: EV_198
+    name: "\uC0AC\uAC74_198_B"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B141
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_055
+  - id: EV_199
+    name: "\uC0AC\uAC74_199_A"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B184
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_061
+  - id: EV_199
+    name: "\uC0AC\uAC74_199_B"
+    scope: 0
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B293
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_198
+  - id: EV_200
+    name: "\uC0AC\uAC74_200_A"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B106
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_052
+  - id: EV_200
+    name: "\uC0AC\uAC74_200_B"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B118
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_189
+  - id: EV_201
+    name: "\uC0AC\uAC74_201_A"
+    scope: 1
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B161
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_176
+  - id: EV_201
+    name: "\uC0AC\uAC74_201_B"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B277
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_064
+  - id: EV_202
+    name: "\uC0AC\uAC74_202_A"
+    scope: 1
+    minDays: 1
+    maxDays: 10
+    buffCodes:
+    - B295
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_190
+  - id: EV_202
+    name: "\uC0AC\uAC74_202_B"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B024
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_148
+  - id: EV_203
+    name: "\uC0AC\uAC74_203_A"
+    scope: 1
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B074
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_069
+  - id: EV_203
+    name: "\uC0AC\uAC74_203_B"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B213
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_082
+  - id: EV_204
+    name: "\uC0AC\uAC74_204_A"
+    scope: 1
+    minDays: 4
+    maxDays: 10
+    buffCodes:
+    - B211
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_092
+  - id: EV_204
+    name: "\uC0AC\uAC74_204_B"
+    scope: 0
+    minDays: 2
+    maxDays: 11
+    buffCodes:
+    - B025
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_138
+  - id: EV_205
+    name: "\uC0AC\uAC74_205_A"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B227
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_029
+  - id: EV_205
+    name: "\uC0AC\uAC74_205_B"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B140
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_216
+  - id: EV_206
+    name: "\uC0AC\uAC74_206_A"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B187
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_106
+  - id: EV_206
+    name: "\uC0AC\uAC74_206_B"
+    scope: 1
+    minDays: 5
+    maxDays: 10
+    buffCodes:
+    - B200
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_191
+  - id: EV_207
+    name: "\uC0AC\uAC74_207_A"
+    scope: 1
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B071
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_094
+  - id: EV_207
+    name: "\uC0AC\uAC74_207_B"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B272
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_027
+  - id: EV_208
+    name: "\uC0AC\uAC74_208_A"
+    scope: 1
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B258
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_106
+  - id: EV_208
+    name: "\uC0AC\uAC74_208_B"
+    scope: 0
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B232
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_180
+  - id: EV_209
+    name: "\uC0AC\uAC74_209_A"
+    scope: 0
+    minDays: 2
+    maxDays: 7
+    buffCodes:
+    - B133
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_191
+  - id: EV_209
+    name: "\uC0AC\uAC74_209_B"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B007
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_192
+  - id: EV_210
+    name: "\uC0AC\uAC74_210_A"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B052
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_195
+  - id: EV_210
+    name: "\uC0AC\uAC74_210_B"
+    scope: 1
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B173
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_056
+  - id: EV_211
+    name: "\uC0AC\uAC74_211_A"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B111
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_153
+  - id: EV_211
+    name: "\uC0AC\uAC74_211_B"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B013
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_119
+  - id: EV_212
+    name: "\uC0AC\uAC74_212_A"
+    scope: 0
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B272
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_199
+  - id: EV_212
+    name: "\uC0AC\uAC74_212_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B037
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_209
+  - id: EV_213
+    name: "\uC0AC\uAC74_213_A"
+    scope: 0
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B221
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_018
+  - id: EV_213
+    name: "\uC0AC\uAC74_213_B"
+    scope: 1
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B052
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_150
+  - id: EV_214
+    name: "\uC0AC\uAC74_214_A"
+    scope: 0
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B123
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_022
+  - id: EV_214
+    name: "\uC0AC\uAC74_214_B"
+    scope: 1
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B294
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_121
+  - id: EV_215
+    name: "\uC0AC\uAC74_215_A"
+    scope: 0
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B211
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_130
+  - id: EV_215
+    name: "\uC0AC\uAC74_215_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B027
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_211
+  - id: EV_216
+    name: "\uC0AC\uAC74_216_A"
+    scope: 1
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B091
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_038
+  - id: EV_216
+    name: "\uC0AC\uAC74_216_B"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B298
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_205
+  - id: EV_217
+    name: "\uC0AC\uAC74_217_A"
+    scope: 0
+    minDays: 5
+    maxDays: 12
+    buffCodes:
+    - B153
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_051
+  - id: EV_217
+    name: "\uC0AC\uAC74_217_B"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B233
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_192
+  - id: EV_218
+    name: "\uC0AC\uAC74_218_A"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B132
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_015
+  - id: EV_218
+    name: "\uC0AC\uAC74_218_B"
+    scope: 0
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B147
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_179
+  - id: EV_219
+    name: "\uC0AC\uAC74_219_A"
+    scope: 1
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B171
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_065
+  - id: EV_219
+    name: "\uC0AC\uAC74_219_B"
+    scope: 1
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B281
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_126
+  - id: EV_220
+    name: "\uC0AC\uAC74_220_A"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B120
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_142
+  - id: EV_220
+    name: "\uC0AC\uAC74_220_B"
+    scope: 0
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B009
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_173
+  - id: EV_221
+    name: "\uC0AC\uAC74_221_A"
+    scope: 1
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B222
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_149
+  - id: EV_221
+    name: "\uC0AC\uAC74_221_B"
+    scope: 1
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B248
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_054
+  - id: EV_222
+    name: "\uC0AC\uAC74_222_A"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B237
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_215
+  - id: EV_222
+    name: "\uC0AC\uAC74_222_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B062
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_049
+  - id: EV_223
+    name: "\uC0AC\uAC74_223_A"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B031
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_129
+  - id: EV_223
+    name: "\uC0AC\uAC74_223_B"
+    scope: 0
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B266
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_138
+  - id: EV_224
+    name: "\uC0AC\uAC74_224_A"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B094
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_121
+  - id: EV_224
+    name: "\uC0AC\uAC74_224_B"
+    scope: 1
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B065
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_156
+  - id: EV_225
+    name: "\uC0AC\uAC74_225_A"
+    scope: 1
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B049
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_005
+  - id: EV_225
+    name: "\uC0AC\uAC74_225_B"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B134
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_072
+  - id: EV_226
+    name: "\uC0AC\uAC74_226_A"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B147
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_126
+  - id: EV_226
+    name: "\uC0AC\uAC74_226_B"
+    scope: 0
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B121
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_145
+  - id: EV_227
+    name: "\uC0AC\uAC74_227_A"
+    scope: 0
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B054
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_026
+  - id: EV_227
+    name: "\uC0AC\uAC74_227_B"
+    scope: 0
+    minDays: 1
+    maxDays: 12
+    buffCodes:
+    - B194
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_045
+  - id: EV_228
+    name: "\uC0AC\uAC74_228_A"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B038
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_190
+  - id: EV_228
+    name: "\uC0AC\uAC74_228_B"
+    scope: 1
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B298
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_078
+  - id: EV_229
+    name: "\uC0AC\uAC74_229_A"
+    scope: 1
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B281
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_044
+  - id: EV_229
+    name: "\uC0AC\uAC74_229_B"
+    scope: 0
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B297
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_138
+  - id: EV_230
+    name: "\uC0AC\uAC74_230_A"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B140
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_020
+  - id: EV_230
+    name: "\uC0AC\uAC74_230_B"
+    scope: 1
+    minDays: 4
+    maxDays: 9
+    buffCodes:
+    - B249
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_048
+  - id: EV_231
+    name: "\uC0AC\uAC74_231_A"
+    scope: 1
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B024
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_001
+  - id: EV_231
+    name: "\uC0AC\uAC74_231_B"
+    scope: 0
+    minDays: 2
+    maxDays: 6
+    buffCodes:
+    - B246
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_200
+  - id: EV_232
+    name: "\uC0AC\uAC74_232_A"
+    scope: 1
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B035
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_095
+  - id: EV_232
+    name: "\uC0AC\uAC74_232_B"
+    scope: 0
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B211
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_005
+  - id: EV_233
+    name: "\uC0AC\uAC74_233_A"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B049
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_010
+  - id: EV_233
+    name: "\uC0AC\uAC74_233_B"
+    scope: 1
+    minDays: 2
+    maxDays: 10
+    buffCodes:
+    - B115
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_111
+  - id: EV_234
+    name: "\uC0AC\uAC74_234_A"
+    scope: 0
+    minDays: 3
+    maxDays: 11
+    buffCodes:
+    - B178
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_120
+  - id: EV_234
+    name: "\uC0AC\uAC74_234_B"
+    scope: 1
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B050
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_155
+  - id: EV_235
+    name: "\uC0AC\uAC74_235_A"
+    scope: 0
+    minDays: 2
+    maxDays: 8
+    buffCodes:
+    - B298
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_119
+  - id: EV_235
+    name: "\uC0AC\uAC74_235_B"
+    scope: 1
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B208
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_100
+  - id: EV_236
+    name: "\uC0AC\uAC74_236_A"
+    scope: 1
+    minDays: 1
+    maxDays: 7
+    buffCodes:
+    - B085
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_157
+  - id: EV_236
+    name: "\uC0AC\uAC74_236_B"
+    scope: 0
+    minDays: 3
+    maxDays: 7
+    buffCodes:
+    - B042
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_179
+  - id: EV_237
+    name: "\uC0AC\uAC74_237_A"
+    scope: 1
+    minDays: 3
+    maxDays: 8
+    buffCodes:
+    - B102
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_173
+  - id: EV_237
+    name: "\uC0AC\uAC74_237_B"
+    scope: 0
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B015
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_045
+  - id: EV_238
+    name: "\uC0AC\uAC74_238_A"
+    scope: 1
+    minDays: 5
+    maxDays: 7
+    buffCodes:
+    - B264
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_094
+  - id: EV_238
+    name: "\uC0AC\uAC74_238_B"
+    scope: 1
+    minDays: 3
+    maxDays: 10
+    buffCodes:
+    - B138
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_147
+  - id: EV_239
+    name: "\uC0AC\uAC74_239_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B038
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_049
+  - id: EV_239
+    name: "\uC0AC\uAC74_239_B"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B153
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_200
+  - id: EV_240
+    name: "\uC0AC\uAC74_240_A"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B094
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_009
+  - id: EV_240
+    name: "\uC0AC\uAC74_240_B"
+    scope: 0
+    minDays: 1
+    maxDays: 11
+    buffCodes:
+    - B288
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_001
+  - id: EV_241
+    name: "\uC0AC\uAC74_241_A"
+    scope: 1
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B217
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_131
+  - id: EV_241
+    name: "\uC0AC\uAC74_241_B"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B265
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_125
+  - id: EV_242
+    name: "\uC0AC\uAC74_242_A"
+    scope: 0
+    minDays: 1
+    maxDays: 6
+    buffCodes:
+    - B013
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_212
+  - id: EV_242
+    name: "\uC0AC\uAC74_242_B"
+    scope: 0
+    minDays: 2
+    maxDays: 9
+    buffCodes:
+    - B167
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_122
+  - id: EV_243
+    name: "\uC0AC\uAC74_243_A"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B058
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_120
+  - id: EV_243
+    name: "\uC0AC\uAC74_243_B"
+    scope: 0
+    minDays: 3
+    maxDays: 9
+    buffCodes:
+    - B026
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_172
+  - id: EV_244
+    name: "\uC0AC\uAC74_244_A"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B290
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_022
+  - id: EV_244
+    name: "\uC0AC\uAC74_244_B"
+    scope: 1
+    minDays: 4
+    maxDays: 11
+    buffCodes:
+    - B164
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_015
+  - id: EV_245
+    name: "\uC0AC\uAC74_245_A"
+    scope: 1
+    minDays: 5
+    maxDays: 6
+    buffCodes:
+    - B164
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_068
+  - id: EV_245
+    name: "\uC0AC\uAC74_245_B"
+    scope: 1
+    minDays: 3
+    maxDays: 12
+    buffCodes:
+    - B084
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_173
+  - id: EV_246
+    name: "\uC0AC\uAC74_246_A"
+    scope: 0
+    minDays: 5
+    maxDays: 8
+    buffCodes:
+    - B071
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_067
+  - id: EV_246
+    name: "\uC0AC\uAC74_246_B"
+    scope: 1
+    minDays: 2
+    maxDays: 12
+    buffCodes:
+    - B107
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_130
+  - id: EV_247
+    name: "\uC0AC\uAC74_247_A"
+    scope: 1
+    minDays: 3
+    maxDays: 6
+    buffCodes:
+    - B297
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_163
+  - id: EV_247
+    name: "\uC0AC\uAC74_247_B"
+    scope: 0
+    minDays: 1
+    maxDays: 8
+    buffCodes:
+    - B109
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_123
+  - id: EV_248
+    name: "\uC0AC\uAC74_248_A"
+    scope: 0
+    minDays: 4
+    maxDays: 12
+    buffCodes:
+    - B193
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_091
+  - id: EV_248
+    name: "\uC0AC\uAC74_248_B"
+    scope: 0
+    minDays: 4
+    maxDays: 7
+    buffCodes:
+    - B027
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_177
+  - id: EV_249
+    name: "\uC0AC\uAC74_249_A"
+    scope: 0
+    minDays: 4
+    maxDays: 8
+    buffCodes:
+    - B246
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_038
+  - id: EV_249
+    name: "\uC0AC\uAC74_249_B"
+    scope: 0
+    minDays: 5
+    maxDays: 9
+    buffCodes:
+    - B023
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_126
+  - id: EV_250
+    name: "\uC0AC\uAC74_250_A"
+    scope: 0
+    minDays: 2
+    maxDays: 11
+    buffCodes:
+    - B095
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C_044
+  - id: EV_250
+    name: "\uC0AC\uAC74_250_B"
+    scope: 0
+    minDays: 1
+    maxDays: 9
+    buffCodes:
+    - B052
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C_066

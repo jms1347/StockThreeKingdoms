@@ -1,0 +1,3015 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e27ee815dd9f22a45885703705150b1e, type: 3}
+  m_Name: EventStatModifierSo
+  m_EditorClassIdentifier: Assembly-CSharp::EventStatModifierSo
+  list:
+  - id: EV_001
+    flatProbBonus: 8.5
+    perMight: 0.25
+    perIntel: -0.35
+    perCharm: 0.54
+    perInfamy: 0.86
+  - id: EV_002
+    flatProbBonus: 6.8
+    perMight: -0.71
+    perIntel: -0.04
+    perCharm: -0.7
+    perInfamy: 0.39
+  - id: EV_003
+    flatProbBonus: 4.2
+    perMight: 0.44
+    perIntel: 0.73
+    perCharm: -0.55
+    perInfamy: 0.37
+  - id: EV_004
+    flatProbBonus: 3.8
+    perMight: 0.26
+    perIntel: 0.13
+    perCharm: 0.52
+    perInfamy: 0.67
+  - id: EV_005
+    flatProbBonus: 7.4
+    perMight: -0.67
+    perIntel: 0.52
+    perCharm: 0.12
+    perInfamy: 0.71
+  - id: EV_006
+    flatProbBonus: 3.6
+    perMight: -0.27
+    perIntel: 0.85
+    perCharm: -0.67
+    perInfamy: 1.15
+  - id: EV_007
+    flatProbBonus: 6.2
+    perMight: -0.05
+    perIntel: 0.04
+    perCharm: -0.58
+    perInfamy: 0.64
+  - id: EV_008
+    flatProbBonus: 2
+    perMight: -0.34
+    perIntel: -0.66
+    perCharm: 0.8
+    perInfamy: 1.42
+  - id: EV_009
+    flatProbBonus: 7.1
+    perMight: -0.4
+    perIntel: -0.47
+    perCharm: -0.26
+    perInfamy: 1.03
+  - id: EV_010
+    flatProbBonus: 1.1
+    perMight: -0.72
+    perIntel: -0.12
+    perCharm: -0.87
+    perInfamy: 1.31
+  - id: EV_011
+    flatProbBonus: 1.7
+    perMight: -0.43
+    perIntel: -0.17
+    perCharm: 0.1
+    perInfamy: 1.13
+  - id: EV_012
+    flatProbBonus: 3.2
+    perMight: -0.21
+    perIntel: -0.71
+    perCharm: -0.4
+    perInfamy: 1.45
+  - id: EV_013
+    flatProbBonus: 9.8
+    perMight: -0.89
+    perIntel: 0.02
+    perCharm: 0.38
+    perInfamy: 1.2
+  - id: EV_014
+    flatProbBonus: 6.6
+    perMight: -0.13
+    perIntel: -0.03
+    perCharm: -0.84
+    perInfamy: 0.5
+  - id: EV_015
+    flatProbBonus: 6.4
+    perMight: -0.88
+    perIntel: 0.61
+    perCharm: 0.88
+    perInfamy: 0.43
+  - id: EV_016
+    flatProbBonus: 6.3
+    perMight: 0.46
+    perIntel: -0.06
+    perCharm: 0.27
+    perInfamy: 0.91
+  - id: EV_017
+    flatProbBonus: 5.8
+    perMight: 0.42
+    perIntel: -0.05
+    perCharm: 0.16
+    perInfamy: 0.6
+  - id: EV_018
+    flatProbBonus: 8.9
+    perMight: -0.4
+    perIntel: -0.4
+    perCharm: 0.05
+    perInfamy: 1.01
+  - id: EV_019
+    flatProbBonus: 6.1
+    perMight: 0.15
+    perIntel: -0.77
+    perCharm: -0.79
+    perInfamy: 1.28
+  - id: EV_020
+    flatProbBonus: 7
+    perMight: -0.4
+    perIntel: 0.22
+    perCharm: 0.18
+    perInfamy: 0.98
+  - id: EV_021
+    flatProbBonus: 4.6
+    perMight: -0.35
+    perIntel: -0.77
+    perCharm: 0.6
+    perInfamy: 1.08
+  - id: EV_022
+    flatProbBonus: 9.7
+    perMight: -0.72
+    perIntel: 0.38
+    perCharm: -0.69
+    perInfamy: 0.25
+  - id: EV_023
+    flatProbBonus: 3.5
+    perMight: -0.11
+    perIntel: -0.74
+    perCharm: 0.69
+    perInfamy: 1.23
+  - id: EV_024
+    flatProbBonus: 2.3
+    perMight: -0.29
+    perIntel: 0.5
+    perCharm: 0.73
+    perInfamy: 1.29
+  - id: EV_025
+    flatProbBonus: 6.6
+    perMight: -0.23
+    perIntel: 0.6
+    perCharm: -0.49
+    perInfamy: 0.11
+  - id: EV_026
+    flatProbBonus: 2
+    perMight: 0
+    perIntel: -0.03
+    perCharm: 0.71
+    perInfamy: 0.52
+  - id: EV_027
+    flatProbBonus: 0.1
+    perMight: -0.79
+    perIntel: 0.81
+    perCharm: 0.14
+    perInfamy: 0.53
+  - id: EV_028
+    flatProbBonus: 4.6
+    perMight: -0.1
+    perIntel: 0.35
+    perCharm: 0.43
+    perInfamy: 0.61
+  - id: EV_029
+    flatProbBonus: 1.5
+    perMight: -0.83
+    perIntel: 0.36
+    perCharm: 0.34
+    perInfamy: 0.9
+  - id: EV_030
+    flatProbBonus: 7.9
+    perMight: -0.82
+    perIntel: 0.07
+    perCharm: -0.29
+    perInfamy: 0.7
+  - id: EV_031
+    flatProbBonus: 7.4
+    perMight: -0.29
+    perIntel: -0.57
+    perCharm: -0.79
+    perInfamy: 0.43
+  - id: EV_032
+    flatProbBonus: 1.2
+    perMight: 0.4
+    perIntel: -0.5
+    perCharm: 0.39
+    perInfamy: 1.3
+  - id: EV_033
+    flatProbBonus: 3
+    perMight: 0.47
+    perIntel: 0.49
+    perCharm: 0.88
+    perInfamy: 1.33
+  - id: EV_034
+    flatProbBonus: 3.7
+    perMight: -0.46
+    perIntel: 0.41
+    perCharm: 0.2
+    perInfamy: 0.62
+  - id: EV_035
+    flatProbBonus: 2.6
+    perMight: -0.59
+    perIntel: -0.13
+    perCharm: 0.26
+    perInfamy: 0.52
+  - id: EV_036
+    flatProbBonus: 1.2
+    perMight: -0.25
+    perIntel: 0.51
+    perCharm: 0.81
+    perInfamy: 0.56
+  - id: EV_037
+    flatProbBonus: 0.1
+    perMight: -0.71
+    perIntel: -0.41
+    perCharm: -0.06
+    perInfamy: 0.88
+  - id: EV_038
+    flatProbBonus: 6
+    perMight: 0.18
+    perIntel: 0.15
+    perCharm: -0.59
+    perInfamy: 0.55
+  - id: EV_039
+    flatProbBonus: 4.9
+    perMight: -0.09
+    perIntel: 0.02
+    perCharm: -0.38
+    perInfamy: 0.67
+  - id: EV_040
+    flatProbBonus: 8.9
+    perMight: 0.22
+    perIntel: 0.84
+    perCharm: 0.15
+    perInfamy: 1.36
+  - id: EV_041
+    flatProbBonus: 1.5
+    perMight: -0.56
+    perIntel: -0.75
+    perCharm: -0.51
+    perInfamy: 0.45
+  - id: EV_042
+    flatProbBonus: 7.6
+    perMight: 0.05
+    perIntel: -0.77
+    perCharm: 0.19
+    perInfamy: 1.5
+  - id: EV_043
+    flatProbBonus: 4.6
+    perMight: -0.66
+    perIntel: -0.64
+    perCharm: -0.69
+    perInfamy: 1.45
+  - id: EV_044
+    flatProbBonus: 9.2
+    perMight: 0.18
+    perIntel: 0.08
+    perCharm: -0.76
+    perInfamy: 1.08
+  - id: EV_045
+    flatProbBonus: 8.9
+    perMight: 0.02
+    perIntel: 0.25
+    perCharm: -0.77
+    perInfamy: 1.37
+  - id: EV_046
+    flatProbBonus: 3.2
+    perMight: 0.41
+    perIntel: 0.14
+    perCharm: 0.08
+    perInfamy: 1.49
+  - id: EV_047
+    flatProbBonus: 9
+    perMight: -0.74
+    perIntel: 0.54
+    perCharm: 0.33
+    perInfamy: 0.88
+  - id: EV_048
+    flatProbBonus: 6.7
+    perMight: 0.41
+    perIntel: 0.05
+    perCharm: 0.85
+    perInfamy: 0.67
+  - id: EV_049
+    flatProbBonus: 9.7
+    perMight: -0.7
+    perIntel: 0.03
+    perCharm: 0.47
+    perInfamy: 0.59
+  - id: EV_050
+    flatProbBonus: 9.4
+    perMight: -0.66
+    perIntel: -0.86
+    perCharm: -0.4
+    perInfamy: 0.45
+  - id: EV_051
+    flatProbBonus: 3.7
+    perMight: -0.34
+    perIntel: -0.49
+    perCharm: -0.65
+    perInfamy: 1
+  - id: EV_052
+    flatProbBonus: 4.2
+    perMight: 0.41
+    perIntel: 0.04
+    perCharm: 0.38
+    perInfamy: 1.04
+  - id: EV_053
+    flatProbBonus: 7.4
+    perMight: -0.42
+    perIntel: -0.46
+    perCharm: -0.76
+    perInfamy: 0.27
+  - id: EV_054
+    flatProbBonus: 5.2
+    perMight: 0.12
+    perIntel: 0.21
+    perCharm: -0.6
+    perInfamy: 0.27
+  - id: EV_055
+    flatProbBonus: 5.9
+    perMight: 0.11
+    perIntel: 0.24
+    perCharm: 0.21
+    perInfamy: 0.88
+  - id: EV_056
+    flatProbBonus: 9.3
+    perMight: 0.36
+    perIntel: -0.09
+    perCharm: 0.73
+    perInfamy: 0.92
+  - id: EV_057
+    flatProbBonus: 5
+    perMight: 0.38
+    perIntel: -0.08
+    perCharm: -0.17
+    perInfamy: 0.34
+  - id: EV_058
+    flatProbBonus: 0.4
+    perMight: 0.32
+    perIntel: -0.86
+    perCharm: 0.53
+    perInfamy: 0.25
+  - id: EV_059
+    flatProbBonus: 3.3
+    perMight: -0.71
+    perIntel: 0.45
+    perCharm: 0.1
+    perInfamy: 1.11
+  - id: EV_060
+    flatProbBonus: 5.3
+    perMight: -0.83
+    perIntel: -0.51
+    perCharm: -0.34
+    perInfamy: 0.72
+  - id: EV_061
+    flatProbBonus: 9.5
+    perMight: -0.54
+    perIntel: 0.53
+    perCharm: 0.81
+    perInfamy: 0.93
+  - id: EV_062
+    flatProbBonus: 4.5
+    perMight: -0.37
+    perIntel: -0.2
+    perCharm: -0.02
+    perInfamy: 1.07
+  - id: EV_063
+    flatProbBonus: 6.1
+    perMight: -0.26
+    perIntel: -0.46
+    perCharm: 0.86
+    perInfamy: 0.83
+  - id: EV_064
+    flatProbBonus: 0.9
+    perMight: -0.43
+    perIntel: -0.43
+    perCharm: -0.71
+    perInfamy: 0.8
+  - id: EV_065
+    flatProbBonus: 1.1
+    perMight: -0.61
+    perIntel: 0.64
+    perCharm: 0.81
+    perInfamy: 0.68
+  - id: EV_066
+    flatProbBonus: 5.8
+    perMight: 0.19
+    perIntel: 0.29
+    perCharm: -0.31
+    perInfamy: 0.56
+  - id: EV_067
+    flatProbBonus: 5.2
+    perMight: -0.54
+    perIntel: -0.85
+    perCharm: -0.06
+    perInfamy: 0.13
+  - id: EV_068
+    flatProbBonus: 0.1
+    perMight: -0.32
+    perIntel: -0.9
+    perCharm: 0.32
+    perInfamy: 0.12
+  - id: EV_069
+    flatProbBonus: 5.4
+    perMight: -0.13
+    perIntel: 0.07
+    perCharm: -0.2
+    perInfamy: 0.51
+  - id: EV_070
+    flatProbBonus: 1.8
+    perMight: -0.38
+    perIntel: 0.6
+    perCharm: -0.33
+    perInfamy: 0.23
+  - id: EV_071
+    flatProbBonus: 7.7
+    perMight: 0.43
+    perIntel: 0.77
+    perCharm: 0.14
+    perInfamy: 0.78
+  - id: EV_072
+    flatProbBonus: 1.3
+    perMight: 0.26
+    perIntel: 0.78
+    perCharm: -0.6
+    perInfamy: 1.44
+  - id: EV_073
+    flatProbBonus: 0.2
+    perMight: -0.62
+    perIntel: 0.15
+    perCharm: -0.67
+    perInfamy: 1.05
+  - id: EV_074
+    flatProbBonus: 3.4
+    perMight: 0.15
+    perIntel: 0.56
+    perCharm: -0.17
+    perInfamy: 0.85
+  - id: EV_075
+    flatProbBonus: 8.8
+    perMight: -0.79
+    perIntel: -0.71
+    perCharm: -0.63
+    perInfamy: 0.99
+  - id: EV_076
+    flatProbBonus: 2.9
+    perMight: 0.33
+    perIntel: 0.01
+    perCharm: -0.89
+    perInfamy: 0.89
+  - id: EV_077
+    flatProbBonus: 3.6
+    perMight: -0.11
+    perIntel: 0.15
+    perCharm: 0.07
+    perInfamy: 0.74
+  - id: EV_078
+    flatProbBonus: 9.3
+    perMight: -0.44
+    perIntel: -0.82
+    perCharm: -0.79
+    perInfamy: 1.03
+  - id: EV_079
+    flatProbBonus: 2.6
+    perMight: 0.28
+    perIntel: -0.64
+    perCharm: -0.8
+    perInfamy: 0.32
+  - id: EV_080
+    flatProbBonus: 3
+    perMight: -0.5
+    perIntel: 0.74
+    perCharm: -0.8
+    perInfamy: 0.91
+  - id: EV_081
+    flatProbBonus: 6.9
+    perMight: -0.43
+    perIntel: 0.57
+    perCharm: 0.37
+    perInfamy: 1.3
+  - id: EV_082
+    flatProbBonus: 2.9
+    perMight: -0.59
+    perIntel: -0.03
+    perCharm: -0.49
+    perInfamy: 0.78
+  - id: EV_083
+    flatProbBonus: 0.4
+    perMight: -0.69
+    perIntel: 0.8
+    perCharm: -0.2
+    perInfamy: 0.61
+  - id: EV_084
+    flatProbBonus: 8.3
+    perMight: -0.87
+    perIntel: 0.48
+    perCharm: 0.7
+    perInfamy: 0.19
+  - id: EV_085
+    flatProbBonus: 7.4
+    perMight: 0.21
+    perIntel: -0.84
+    perCharm: 0.88
+    perInfamy: 0.93
+  - id: EV_086
+    flatProbBonus: 8.2
+    perMight: 0.08
+    perIntel: 0.65
+    perCharm: -0.76
+    perInfamy: 1.34
+  - id: EV_087
+    flatProbBonus: 4.8
+    perMight: -0.21
+    perIntel: -0.7
+    perCharm: 0.44
+    perInfamy: 0.6
+  - id: EV_088
+    flatProbBonus: 8.4
+    perMight: -0.31
+    perIntel: 0.28
+    perCharm: 0.09
+    perInfamy: 1.3
+  - id: EV_089
+    flatProbBonus: 5.9
+    perMight: -0.27
+    perIntel: -0.83
+    perCharm: 0.11
+    perInfamy: 0.3
+  - id: EV_090
+    flatProbBonus: 2.4
+    perMight: -0.81
+    perIntel: -0.23
+    perCharm: -0.31
+    perInfamy: 1.29
+  - id: EV_091
+    flatProbBonus: 2
+    perMight: -0.43
+    perIntel: -0.63
+    perCharm: 0.65
+    perInfamy: 1.09
+  - id: EV_092
+    flatProbBonus: 4.5
+    perMight: -0.13
+    perIntel: -0.12
+    perCharm: -0.41
+    perInfamy: 1.32
+  - id: EV_093
+    flatProbBonus: 6.8
+    perMight: -0.88
+    perIntel: 0.16
+    perCharm: 0.57
+    perInfamy: 0.96
+  - id: EV_094
+    flatProbBonus: 4.3
+    perMight: 0.1
+    perIntel: -0.67
+    perCharm: -0.01
+    perInfamy: 0.44
+  - id: EV_095
+    flatProbBonus: 9.4
+    perMight: -0.18
+    perIntel: 0.16
+    perCharm: 0.1
+    perInfamy: 1.05
+  - id: EV_096
+    flatProbBonus: 7.9
+    perMight: 0.43
+    perIntel: 0.13
+    perCharm: 0.74
+    perInfamy: 0.88
+  - id: EV_097
+    flatProbBonus: 10
+    perMight: 0.06
+    perIntel: -0.12
+    perCharm: -0.86
+    perInfamy: 0.34
+  - id: EV_098
+    flatProbBonus: 5.6
+    perMight: 0.35
+    perIntel: 0.4
+    perCharm: -0.24
+    perInfamy: 0.19
+  - id: EV_099
+    flatProbBonus: 6.5
+    perMight: -0.54
+    perIntel: -0.52
+    perCharm: -0.28
+    perInfamy: 1.35
+  - id: EV_100
+    flatProbBonus: 7.3
+    perMight: 0.47
+    perIntel: -0.36
+    perCharm: 0.27
+    perInfamy: 0.97
+  - id: EV_101
+    flatProbBonus: 7.9
+    perMight: -0.56
+    perIntel: 0.46
+    perCharm: -0.39
+    perInfamy: 0.68
+  - id: EV_102
+    flatProbBonus: 6.4
+    perMight: -0.58
+    perIntel: 0.66
+    perCharm: 0.57
+    perInfamy: 0.26
+  - id: EV_103
+    flatProbBonus: 0.4
+    perMight: 0.36
+    perIntel: 0.44
+    perCharm: -0.42
+    perInfamy: 0.37
+  - id: EV_104
+    flatProbBonus: 8.5
+    perMight: 0.36
+    perIntel: 0.63
+    perCharm: 0.39
+    perInfamy: 0.18
+  - id: EV_105
+    flatProbBonus: 6.5
+    perMight: -0.76
+    perIntel: -0.82
+    perCharm: 0.35
+    perInfamy: 1.4
+  - id: EV_106
+    flatProbBonus: 6.4
+    perMight: -0.08
+    perIntel: 0.52
+    perCharm: 0.37
+    perInfamy: 0.34
+  - id: EV_107
+    flatProbBonus: 0.7
+    perMight: 0.45
+    perIntel: 0.19
+    perCharm: 0.36
+    perInfamy: 0.3
+  - id: EV_108
+    flatProbBonus: 6.1
+    perMight: 0.01
+    perIntel: -0.15
+    perCharm: -0.17
+    perInfamy: 0.53
+  - id: EV_109
+    flatProbBonus: 5.3
+    perMight: 0.41
+    perIntel: -0.6
+    perCharm: 0.84
+    perInfamy: 1.09
+  - id: EV_110
+    flatProbBonus: 2.6
+    perMight: 0.45
+    perIntel: -0.4
+    perCharm: -0.5
+    perInfamy: 1.48
+  - id: EV_111
+    flatProbBonus: 8.3
+    perMight: -0.65
+    perIntel: -0.42
+    perCharm: -0.01
+    perInfamy: 0.87
+  - id: EV_112
+    flatProbBonus: 3.7
+    perMight: -0.58
+    perIntel: -0.89
+    perCharm: 0.83
+    perInfamy: 0.54
+  - id: EV_113
+    flatProbBonus: 7.1
+    perMight: -0.75
+    perIntel: 0.87
+    perCharm: -0.3
+    perInfamy: 0.88
+  - id: EV_114
+    flatProbBonus: 7.9
+    perMight: -0.23
+    perIntel: -0.89
+    perCharm: -0.43
+    perInfamy: 0.21
+  - id: EV_115
+    flatProbBonus: 2.8
+    perMight: -0.11
+    perIntel: 0.57
+    perCharm: -0.39
+    perInfamy: 1.24
+  - id: EV_116
+    flatProbBonus: 8.4
+    perMight: -0.7
+    perIntel: -0.75
+    perCharm: 0.77
+    perInfamy: 1.16
+  - id: EV_117
+    flatProbBonus: 0.7
+    perMight: -0.29
+    perIntel: -0.26
+    perCharm: 0.78
+    perInfamy: 0.51
+  - id: EV_118
+    flatProbBonus: 3.3
+    perMight: -0.8
+    perIntel: 0.17
+    perCharm: 0.05
+    perInfamy: 0.77
+  - id: EV_119
+    flatProbBonus: 3.6
+    perMight: 0.37
+    perIntel: 0.47
+    perCharm: 0.09
+    perInfamy: 0.6
+  - id: EV_120
+    flatProbBonus: 4.5
+    perMight: -0.77
+    perIntel: -0.3
+    perCharm: 0.74
+    perInfamy: 0.49
+  - id: EV_121
+    flatProbBonus: 7.2
+    perMight: 0.26
+    perIntel: 0.55
+    perCharm: -0.16
+    perInfamy: 0.12
+  - id: EV_122
+    flatProbBonus: 7.6
+    perMight: -0.54
+    perIntel: -0.68
+    perCharm: -0.04
+    perInfamy: 0.76
+  - id: EV_123
+    flatProbBonus: 6.3
+    perMight: 0.28
+    perIntel: 0.3
+    perCharm: -0.89
+    perInfamy: 0.92
+  - id: EV_124
+    flatProbBonus: 2.5
+    perMight: 0.35
+    perIntel: 0.29
+    perCharm: -0.46
+    perInfamy: 1.42
+  - id: EV_125
+    flatProbBonus: 3.9
+    perMight: -0.35
+    perIntel: -0.51
+    perCharm: -0.55
+    perInfamy: 0.25
+  - id: EV_126
+    flatProbBonus: 7
+    perMight: -0.49
+    perIntel: 0.07
+    perCharm: 0.17
+    perInfamy: 0.83
+  - id: EV_127
+    flatProbBonus: 6
+    perMight: -0.48
+    perIntel: 0.29
+    perCharm: 0.08
+    perInfamy: 0.35
+  - id: EV_128
+    flatProbBonus: 3.5
+    perMight: 0.17
+    perIntel: -0.4
+    perCharm: -0.66
+    perInfamy: 0.61
+  - id: EV_129
+    flatProbBonus: 3.6
+    perMight: -0.15
+    perIntel: -0.16
+    perCharm: 0.07
+    perInfamy: 0.15
+  - id: EV_130
+    flatProbBonus: 6.4
+    perMight: 0.13
+    perIntel: 0.76
+    perCharm: 0.37
+    perInfamy: 0.37
+  - id: EV_131
+    flatProbBonus: 3.3
+    perMight: -0.72
+    perIntel: -0.51
+    perCharm: 0
+    perInfamy: 1.21
+  - id: EV_132
+    flatProbBonus: 0.2
+    perMight: -0.01
+    perIntel: -0.22
+    perCharm: 0.06
+    perInfamy: 0.62
+  - id: EV_133
+    flatProbBonus: 7
+    perMight: -0.04
+    perIntel: -0.43
+    perCharm: -0.73
+    perInfamy: 1.24
+  - id: EV_134
+    flatProbBonus: 4.2
+    perMight: 0.24
+    perIntel: 0.56
+    perCharm: 0.79
+    perInfamy: 0.29
+  - id: EV_135
+    flatProbBonus: 3.7
+    perMight: -0.81
+    perIntel: 0.46
+    perCharm: 0.36
+    perInfamy: 0.28
+  - id: EV_136
+    flatProbBonus: 4.1
+    perMight: -0.59
+    perIntel: -0.8
+    perCharm: -0.27
+    perInfamy: 0.45
+  - id: EV_137
+    flatProbBonus: 7.2
+    perMight: 0.02
+    perIntel: 0.33
+    perCharm: 0.57
+    perInfamy: 1.28
+  - id: EV_138
+    flatProbBonus: 8
+    perMight: -0.39
+    perIntel: -0.83
+    perCharm: -0.5
+    perInfamy: 0.58
+  - id: EV_139
+    flatProbBonus: 6.5
+    perMight: 0.43
+    perIntel: 0.08
+    perCharm: 0.14
+    perInfamy: 0.79
+  - id: EV_140
+    flatProbBonus: 2.6
+    perMight: -0.43
+    perIntel: 0.74
+    perCharm: 0.24
+    perInfamy: 1.24
+  - id: EV_141
+    flatProbBonus: 5.2
+    perMight: -0.66
+    perIntel: 0.61
+    perCharm: 0.76
+    perInfamy: 0.73
+  - id: EV_142
+    flatProbBonus: 9
+    perMight: 0.43
+    perIntel: -0.55
+    perCharm: -0.82
+    perInfamy: 0.42
+  - id: EV_143
+    flatProbBonus: 9.8
+    perMight: -0.36
+    perIntel: 0.36
+    perCharm: -0.25
+    perInfamy: 1.21
+  - id: EV_144
+    flatProbBonus: 4.5
+    perMight: -0.78
+    perIntel: -0.47
+    perCharm: -0.9
+    perInfamy: 0.57
+  - id: EV_145
+    flatProbBonus: 1.1
+    perMight: 0.11
+    perIntel: -0.28
+    perCharm: -0.88
+    perInfamy: 0.27
+  - id: EV_146
+    flatProbBonus: 1.8
+    perMight: 0.24
+    perIntel: 0.56
+    perCharm: 0.85
+    perInfamy: 0.99
+  - id: EV_147
+    flatProbBonus: 7.2
+    perMight: -0.85
+    perIntel: -0.54
+    perCharm: 0.6
+    perInfamy: 1.24
+  - id: EV_148
+    flatProbBonus: 5.9
+    perMight: -0.65
+    perIntel: 0.58
+    perCharm: -0.3
+    perInfamy: 0.8
+  - id: EV_149
+    flatProbBonus: 8.1
+    perMight: -0.6
+    perIntel: -0.58
+    perCharm: 0.22
+    perInfamy: 0.11
+  - id: EV_150
+    flatProbBonus: 8
+    perMight: 0.49
+    perIntel: 0.58
+    perCharm: -0.17
+    perInfamy: 0.31
+  - id: EV_151
+    flatProbBonus: 3.7
+    perMight: 0.31
+    perIntel: -0.25
+    perCharm: -0.65
+    perInfamy: 0.87
+  - id: EV_152
+    flatProbBonus: 8.4
+    perMight: -0.53
+    perIntel: -0.78
+    perCharm: 0.64
+    perInfamy: 1.02
+  - id: EV_153
+    flatProbBonus: 1.3
+    perMight: 0.08
+    perIntel: 0.21
+    perCharm: -0.39
+    perInfamy: 1.41
+  - id: EV_154
+    flatProbBonus: 9.9
+    perMight: -0.71
+    perIntel: 0.31
+    perCharm: 0.76
+    perInfamy: 0.59
+  - id: EV_155
+    flatProbBonus: 3.9
+    perMight: -0.89
+    perIntel: -0.42
+    perCharm: -0.19
+    perInfamy: 0.48
+  - id: EV_156
+    flatProbBonus: 6.2
+    perMight: 0.03
+    perIntel: 0.02
+    perCharm: -0.59
+    perInfamy: 0.97
+  - id: EV_157
+    flatProbBonus: 3.2
+    perMight: -0.04
+    perIntel: 0.88
+    perCharm: 0.77
+    perInfamy: 1.21
+  - id: EV_158
+    flatProbBonus: 7.6
+    perMight: -0.86
+    perIntel: -0.23
+    perCharm: -0.62
+    perInfamy: 0.34
+  - id: EV_159
+    flatProbBonus: 6.7
+    perMight: 0.4
+    perIntel: -0.62
+    perCharm: 0.73
+    perInfamy: 0.49
+  - id: EV_160
+    flatProbBonus: 5.6
+    perMight: -0.17
+    perIntel: -0.82
+    perCharm: -0.14
+    perInfamy: 0.3
+  - id: EV_161
+    flatProbBonus: 8
+    perMight: -0.28
+    perIntel: 0.04
+    perCharm: 0.32
+    perInfamy: 1.23
+  - id: EV_162
+    flatProbBonus: 8.8
+    perMight: -0.69
+    perIntel: 0.47
+    perCharm: 0.76
+    perInfamy: 0.3
+  - id: EV_163
+    flatProbBonus: 6
+    perMight: 0.02
+    perIntel: 0.71
+    perCharm: -0.06
+    perInfamy: 1.41
+  - id: EV_164
+    flatProbBonus: 3.3
+    perMight: -0.1
+    perIntel: 0.45
+    perCharm: -0.48
+    perInfamy: 1.18
+  - id: EV_165
+    flatProbBonus: 6.5
+    perMight: 0.44
+    perIntel: -0.49
+    perCharm: -0.02
+    perInfamy: 1.01
+  - id: EV_166
+    flatProbBonus: 6.1
+    perMight: -0.89
+    perIntel: -0.45
+    perCharm: -0.71
+    perInfamy: 0.38
+  - id: EV_167
+    flatProbBonus: 6.8
+    perMight: -0.8
+    perIntel: 0.78
+    perCharm: 0.66
+    perInfamy: 0.73
+  - id: EV_168
+    flatProbBonus: 7.5
+    perMight: -0.43
+    perIntel: 0.43
+    perCharm: 0.69
+    perInfamy: 1.49
+  - id: EV_169
+    flatProbBonus: 8
+    perMight: -0.48
+    perIntel: -0.43
+    perCharm: -0.19
+    perInfamy: 1.14
+  - id: EV_170
+    flatProbBonus: 0.7
+    perMight: 0.06
+    perIntel: -0.69
+    perCharm: -0.07
+    perInfamy: 0.99
+  - id: EV_171
+    flatProbBonus: 1.9
+    perMight: -0.28
+    perIntel: -0.21
+    perCharm: -0.52
+    perInfamy: 0.15
+  - id: EV_172
+    flatProbBonus: 9.7
+    perMight: 0.36
+    perIntel: 0.14
+    perCharm: 0.51
+    perInfamy: 0.61
+  - id: EV_173
+    flatProbBonus: 0.1
+    perMight: -0.4
+    perIntel: -0.84
+    perCharm: 0.66
+    perInfamy: 1.21
+  - id: EV_174
+    flatProbBonus: 9.5
+    perMight: -0.76
+    perIntel: 0.4
+    perCharm: 0.11
+    perInfamy: 0.2
+  - id: EV_175
+    flatProbBonus: 8.1
+    perMight: -0.5
+    perIntel: 0.21
+    perCharm: 0.37
+    perInfamy: 0.69
+  - id: EV_176
+    flatProbBonus: 4
+    perMight: 0.26
+    perIntel: -0.58
+    perCharm: -0.52
+    perInfamy: 0.68
+  - id: EV_177
+    flatProbBonus: 3.5
+    perMight: -0.11
+    perIntel: -0.21
+    perCharm: -0.42
+    perInfamy: 0.3
+  - id: EV_178
+    flatProbBonus: 2.9
+    perMight: 0.27
+    perIntel: -0.77
+    perCharm: 0.85
+    perInfamy: 0.86
+  - id: EV_179
+    flatProbBonus: 0.9
+    perMight: -0.12
+    perIntel: 0.09
+    perCharm: 0.68
+    perInfamy: 0.7
+  - id: EV_180
+    flatProbBonus: 6
+    perMight: -0.51
+    perIntel: 0.74
+    perCharm: -0.23
+    perInfamy: 1.34
+  - id: EV_181
+    flatProbBonus: 7.9
+    perMight: -0.5
+    perIntel: -0.26
+    perCharm: 0.37
+    perInfamy: 1.26
+  - id: EV_182
+    flatProbBonus: 3.4
+    perMight: -0.39
+    perIntel: -0.25
+    perCharm: -0.34
+    perInfamy: 0.69
+  - id: EV_183
+    flatProbBonus: 5.9
+    perMight: 0.44
+    perIntel: 0.81
+    perCharm: 0.59
+    perInfamy: 0.53
+  - id: EV_184
+    flatProbBonus: 8.3
+    perMight: 0.36
+    perIntel: -0.24
+    perCharm: -0.77
+    perInfamy: 0.42
+  - id: EV_185
+    flatProbBonus: 8
+    perMight: -0.74
+    perIntel: 0.84
+    perCharm: 0.8
+    perInfamy: 0.95
+  - id: EV_186
+    flatProbBonus: 2.1
+    perMight: -0.37
+    perIntel: 0.26
+    perCharm: -0.87
+    perInfamy: 1.29
+  - id: EV_187
+    flatProbBonus: 2.8
+    perMight: -0.32
+    perIntel: -0.09
+    perCharm: -0.74
+    perInfamy: 1.34
+  - id: EV_188
+    flatProbBonus: 0.5
+    perMight: -0.74
+    perIntel: -0.76
+    perCharm: -0.41
+    perInfamy: 0.88
+  - id: EV_189
+    flatProbBonus: 4.9
+    perMight: -0.43
+    perIntel: -0.66
+    perCharm: -0.37
+    perInfamy: 0.81
+  - id: EV_190
+    flatProbBonus: 3.2
+    perMight: -0.06
+    perIntel: 0.2
+    perCharm: 0.15
+    perInfamy: 0.72
+  - id: EV_191
+    flatProbBonus: 9.5
+    perMight: 0.06
+    perIntel: 0.82
+    perCharm: 0.29
+    perInfamy: 0.54
+  - id: EV_192
+    flatProbBonus: 1.1
+    perMight: 0.26
+    perIntel: 0.52
+    perCharm: -0.14
+    perInfamy: 0.57
+  - id: EV_193
+    flatProbBonus: 8.1
+    perMight: -0.32
+    perIntel: -0.78
+    perCharm: 0.05
+    perInfamy: 1.16
+  - id: EV_194
+    flatProbBonus: 7.6
+    perMight: -0.21
+    perIntel: -0.61
+    perCharm: 0.07
+    perInfamy: 1.3
+  - id: EV_195
+    flatProbBonus: 9.4
+    perMight: 0.43
+    perIntel: 0.85
+    perCharm: -0.49
+    perInfamy: 0.69
+  - id: EV_196
+    flatProbBonus: 6.6
+    perMight: -0.48
+    perIntel: 0.43
+    perCharm: -0.6
+    perInfamy: 0.91
+  - id: EV_197
+    flatProbBonus: 7.3
+    perMight: 0.13
+    perIntel: 0.55
+    perCharm: 0.78
+    perInfamy: 0.86
+  - id: EV_198
+    flatProbBonus: 4.5
+    perMight: 0.12
+    perIntel: -0.61
+    perCharm: -0.15
+    perInfamy: 0.71
+  - id: EV_199
+    flatProbBonus: 5.4
+    perMight: 0.36
+    perIntel: 0.78
+    perCharm: -0.13
+    perInfamy: 0.73
+  - id: EV_200
+    flatProbBonus: 9.3
+    perMight: -0.05
+    perIntel: 0.27
+    perCharm: -0.12
+    perInfamy: 1.42
+  - id: EV_201
+    flatProbBonus: 1.7
+    perMight: 0.23
+    perIntel: -0.88
+    perCharm: -0.69
+    perInfamy: 0.15
+  - id: EV_202
+    flatProbBonus: 0.4
+    perMight: -0.75
+    perIntel: -0.64
+    perCharm: 0.6
+    perInfamy: 0.78
+  - id: EV_203
+    flatProbBonus: 1.3
+    perMight: -0.6
+    perIntel: -0.34
+    perCharm: -0.65
+    perInfamy: 0.36
+  - id: EV_204
+    flatProbBonus: 6.1
+    perMight: 0.36
+    perIntel: 0.34
+    perCharm: -0.21
+    perInfamy: 0.3
+  - id: EV_205
+    flatProbBonus: 5.5
+    perMight: -0.03
+    perIntel: 0.72
+    perCharm: 0.84
+    perInfamy: 0.76
+  - id: EV_206
+    flatProbBonus: 5.2
+    perMight: -0.89
+    perIntel: -0.43
+    perCharm: 0.73
+    perInfamy: 1.36
+  - id: EV_207
+    flatProbBonus: 5.7
+    perMight: -0.01
+    perIntel: -0.21
+    perCharm: -0.43
+    perInfamy: 0.15
+  - id: EV_208
+    flatProbBonus: 5.4
+    perMight: -0.67
+    perIntel: -0.79
+    perCharm: 0.73
+    perInfamy: 0.38
+  - id: EV_209
+    flatProbBonus: 0.2
+    perMight: -0.08
+    perIntel: -0.65
+    perCharm: 0.16
+    perInfamy: 1.25
+  - id: EV_210
+    flatProbBonus: 4.6
+    perMight: -0.51
+    perIntel: 0.27
+    perCharm: -0.02
+    perInfamy: 0.72
+  - id: EV_211
+    flatProbBonus: 4.2
+    perMight: -0.21
+    perIntel: -0.55
+    perCharm: -0.08
+    perInfamy: 0.68
+  - id: EV_212
+    flatProbBonus: 6.2
+    perMight: -0.55
+    perIntel: -0.85
+    perCharm: 0.05
+    perInfamy: 1.18
+  - id: EV_213
+    flatProbBonus: 7.8
+    perMight: -0.86
+    perIntel: 0.54
+    perCharm: -0.84
+    perInfamy: 0.39
+  - id: EV_214
+    flatProbBonus: 3.6
+    perMight: 0.26
+    perIntel: -0.64
+    perCharm: -0.8
+    perInfamy: 1.35
+  - id: EV_215
+    flatProbBonus: 0
+    perMight: 0.04
+    perIntel: 0.58
+    perCharm: -0.73
+    perInfamy: 1.11
+  - id: EV_216
+    flatProbBonus: 4.3
+    perMight: -0.25
+    perIntel: 0.06
+    perCharm: 0.86
+    perInfamy: 1.23
+  - id: EV_217
+    flatProbBonus: 9.6
+    perMight: -0.87
+    perIntel: 0.57
+    perCharm: -0.66
+    perInfamy: 1.41
+  - id: EV_218
+    flatProbBonus: 4.8
+    perMight: 0.04
+    perIntel: -0.68
+    perCharm: 0.89
+    perInfamy: 0.59
+  - id: EV_219
+    flatProbBonus: 8.6
+    perMight: 0.21
+    perIntel: 0.49
+    perCharm: 0.06
+    perInfamy: 0.24
+  - id: EV_220
+    flatProbBonus: 8.2
+    perMight: -0.64
+    perIntel: 0.06
+    perCharm: 0.28
+    perInfamy: 0.48
+  - id: EV_221
+    flatProbBonus: 0.2
+    perMight: -0.67
+    perIntel: -0.63
+    perCharm: -0.73
+    perInfamy: 0.64
+  - id: EV_222
+    flatProbBonus: 9.9
+    perMight: -0.33
+    perIntel: 0.82
+    perCharm: -0.51
+    perInfamy: 0.66
+  - id: EV_223
+    flatProbBonus: 6.1
+    perMight: -0.77
+    perIntel: -0.34
+    perCharm: -0.52
+    perInfamy: 0.85
+  - id: EV_224
+    flatProbBonus: 5.3
+    perMight: -0.55
+    perIntel: -0.11
+    perCharm: 0.62
+    perInfamy: 1.45
+  - id: EV_225
+    flatProbBonus: 9.6
+    perMight: -0.35
+    perIntel: 0.63
+    perCharm: 0.18
+    perInfamy: 0.33
+  - id: EV_226
+    flatProbBonus: 7.9
+    perMight: 0.13
+    perIntel: 0.55
+    perCharm: 0.37
+    perInfamy: 0.12
+  - id: EV_227
+    flatProbBonus: 3.4
+    perMight: -0.38
+    perIntel: 0.25
+    perCharm: 0.74
+    perInfamy: 0.11
+  - id: EV_228
+    flatProbBonus: 5.4
+    perMight: -0.33
+    perIntel: -0.03
+    perCharm: 0.38
+    perInfamy: 0.86
+  - id: EV_229
+    flatProbBonus: 0.5
+    perMight: 0.25
+    perIntel: 0.61
+    perCharm: 0.57
+    perInfamy: 0.82
+  - id: EV_230
+    flatProbBonus: 9.6
+    perMight: -0.34
+    perIntel: 0.68
+    perCharm: 0.57
+    perInfamy: 0.66
+  - id: EV_231
+    flatProbBonus: 7.3
+    perMight: -0.25
+    perIntel: -0.26
+    perCharm: 0.4
+    perInfamy: 0.61
+  - id: EV_232
+    flatProbBonus: 8.2
+    perMight: -0.64
+    perIntel: 0.17
+    perCharm: 0.82
+    perInfamy: 1.39
+  - id: EV_233
+    flatProbBonus: 7
+    perMight: -0.68
+    perIntel: 0.45
+    perCharm: 0.33
+    perInfamy: 0.79
+  - id: EV_234
+    flatProbBonus: 0.8
+    perMight: 0.49
+    perIntel: -0.79
+    perCharm: 0.62
+    perInfamy: 0.95
+  - id: EV_235
+    flatProbBonus: 8.5
+    perMight: -0.11
+    perIntel: -0.69
+    perCharm: 0.58
+    perInfamy: 1.27
+  - id: EV_236
+    flatProbBonus: 2
+    perMight: -0.02
+    perIntel: -0.35
+    perCharm: 0.89
+    perInfamy: 1.34
+  - id: EV_237
+    flatProbBonus: 6.7
+    perMight: -0.03
+    perIntel: -0.28
+    perCharm: -0.76
+    perInfamy: 0.33
+  - id: EV_238
+    flatProbBonus: 1.2
+    perMight: -0.69
+    perIntel: 0.86
+    perCharm: 0.75
+    perInfamy: 0.85
+  - id: EV_239
+    flatProbBonus: 4.9
+    perMight: 0.43
+    perIntel: 0.1
+    perCharm: -0.47
+    perInfamy: 1.09
+  - id: EV_240
+    flatProbBonus: 8.7
+    perMight: -0.27
+    perIntel: -0.38
+    perCharm: 0.83
+    perInfamy: 0.82
+  - id: EV_241
+    flatProbBonus: 6
+    perMight: 0.17
+    perIntel: -0.59
+    perCharm: 0.84
+    perInfamy: 0.23
+  - id: EV_242
+    flatProbBonus: 5.8
+    perMight: -0.7
+    perIntel: -0.77
+    perCharm: -0.07
+    perInfamy: 0.66
+  - id: EV_243
+    flatProbBonus: 2.2
+    perMight: -0.11
+    perIntel: -0.83
+    perCharm: 0.71
+    perInfamy: 0.12
+  - id: EV_244
+    flatProbBonus: 5.4
+    perMight: -0.62
+    perIntel: -0.15
+    perCharm: -0.22
+    perInfamy: 0.18
+  - id: EV_245
+    flatProbBonus: 7.9
+    perMight: -0.37
+    perIntel: -0.55
+    perCharm: -0.74
+    perInfamy: 0.68
+  - id: EV_246
+    flatProbBonus: 3.7
+    perMight: -0.33
+    perIntel: 0.6
+    perCharm: 0.5
+    perInfamy: 1.4
+  - id: EV_247
+    flatProbBonus: 5.2
+    perMight: -0.89
+    perIntel: 0.51
+    perCharm: -0.66
+    perInfamy: 0.28
+  - id: EV_248
+    flatProbBonus: 3.2
+    perMight: -0.53
+    perIntel: 0.64
+    perCharm: 0.77
+    perInfamy: 1.16
+  - id: EV_249
+    flatProbBonus: 1.4
+    perMight: 0.1
+    perIntel: -0.45
+    perCharm: 0.55
+    perInfamy: 0.49
+  - id: EV_250
+    flatProbBonus: 9.1
+    perMight: -0.39
+    perIntel: 0.02
+    perCharm: -0.14
+    perInfamy: 0.68
+  - id: EV_251
+    flatProbBonus: 2.1
+    perMight: -0.56
+    perIntel: 0.87
+    perCharm: 0.86
+    perInfamy: 0.91
+  - id: EV_252
+    flatProbBonus: 5.9
+    perMight: -0.07
+    perIntel: -0.17
+    perCharm: -0.8
+    perInfamy: 1.22
+  - id: EV_253
+    flatProbBonus: 6.7
+    perMight: -0.78
+    perIntel: -0.67
+    perCharm: -0.08
+    perInfamy: 1.37
+  - id: EV_254
+    flatProbBonus: 6.4
+    perMight: -0.52
+    perIntel: 0.02
+    perCharm: -0.67
+    perInfamy: 1.47
+  - id: EV_255
+    flatProbBonus: 2.9
+    perMight: 0.49
+    perIntel: 0.09
+    perCharm: -0.8
+    perInfamy: 0.19
+  - id: EV_256
+    flatProbBonus: 2.6
+    perMight: -0.42
+    perIntel: -0.3
+    perCharm: -0.07
+    perInfamy: 1.2
+  - id: EV_257
+    flatProbBonus: 4.9
+    perMight: -0.21
+    perIntel: 0.77
+    perCharm: 0.19
+    perInfamy: 0.21
+  - id: EV_258
+    flatProbBonus: 5
+    perMight: 0.15
+    perIntel: -0.5
+    perCharm: -0.57
+    perInfamy: 0.9
+  - id: EV_259
+    flatProbBonus: 5.2
+    perMight: 0.24
+    perIntel: 0.63
+    perCharm: 0.66
+    perInfamy: 0.45
+  - id: EV_260
+    flatProbBonus: 7.9
+    perMight: -0.15
+    perIntel: -0.12
+    perCharm: 0.49
+    perInfamy: 1.46
+  - id: EV_261
+    flatProbBonus: 5.9
+    perMight: -0.54
+    perIntel: -0.06
+    perCharm: 0.1
+    perInfamy: 1.17
+  - id: EV_262
+    flatProbBonus: 1
+    perMight: 0.41
+    perIntel: 0.5
+    perCharm: 0.57
+    perInfamy: 1.21
+  - id: EV_263
+    flatProbBonus: 6.8
+    perMight: 0.41
+    perIntel: 0.05
+    perCharm: -0.09
+    perInfamy: 0.91
+  - id: EV_264
+    flatProbBonus: 7.4
+    perMight: -0.29
+    perIntel: -0.06
+    perCharm: -0.07
+    perInfamy: 1.11
+  - id: EV_265
+    flatProbBonus: 7.9
+    perMight: -0.62
+    perIntel: -0.05
+    perCharm: 0.85
+    perInfamy: 0.12
+  - id: EV_266
+    flatProbBonus: 8.4
+    perMight: -0.23
+    perIntel: -0.56
+    perCharm: -0.86
+    perInfamy: 0.81
+  - id: EV_267
+    flatProbBonus: 4.1
+    perMight: -0.13
+    perIntel: -0.47
+    perCharm: -0.74
+    perInfamy: 0.45
+  - id: EV_268
+    flatProbBonus: 6.6
+    perMight: -0.69
+    perIntel: 0.62
+    perCharm: 0.53
+    perInfamy: 1.43
+  - id: EV_269
+    flatProbBonus: 4.5
+    perMight: 0.42
+    perIntel: 0.27
+    perCharm: -0.77
+    perInfamy: 1.13
+  - id: EV_270
+    flatProbBonus: 5.9
+    perMight: -0.84
+    perIntel: 0.37
+    perCharm: -0.58
+    perInfamy: 1.25
+  - id: EV_271
+    flatProbBonus: 8.6
+    perMight: -0.56
+    perIntel: 0.58
+    perCharm: 0.29
+    perInfamy: 0.6
+  - id: EV_272
+    flatProbBonus: 5.1
+    perMight: -0.88
+    perIntel: 0.51
+    perCharm: 0.77
+    perInfamy: 0.33
+  - id: EV_273
+    flatProbBonus: 1.4
+    perMight: -0.25
+    perIntel: -0.03
+    perCharm: 0.5
+    perInfamy: 0.59
+  - id: EV_274
+    flatProbBonus: 4.9
+    perMight: 0.19
+    perIntel: -0.56
+    perCharm: 0.3
+    perInfamy: 0.84
+  - id: EV_275
+    flatProbBonus: 7
+    perMight: -0.65
+    perIntel: 0.8
+    perCharm: -0.13
+    perInfamy: 0.56
+  - id: EV_276
+    flatProbBonus: 6.3
+    perMight: 0.06
+    perIntel: -0.7
+    perCharm: 0.83
+    perInfamy: 0.48
+  - id: EV_277
+    flatProbBonus: 4
+    perMight: -0.57
+    perIntel: 0.86
+    perCharm: 0.88
+    perInfamy: 0.27
+  - id: EV_278
+    flatProbBonus: 1.6
+    perMight: 0.05
+    perIntel: -0.84
+    perCharm: 0.79
+    perInfamy: 1.14
+  - id: EV_279
+    flatProbBonus: 5.2
+    perMight: -0.07
+    perIntel: -0.25
+    perCharm: 0.72
+    perInfamy: 0.2
+  - id: EV_280
+    flatProbBonus: 8
+    perMight: -0.38
+    perIntel: 0.56
+    perCharm: -0.33
+    perInfamy: 0.32
+  - id: EV_281
+    flatProbBonus: 4.3
+    perMight: 0.27
+    perIntel: -0.39
+    perCharm: -0.04
+    perInfamy: 0.38
+  - id: EV_282
+    flatProbBonus: 7.3
+    perMight: -0.41
+    perIntel: -0.14
+    perCharm: -0.82
+    perInfamy: 0.16
+  - id: EV_283
+    flatProbBonus: 1.3
+    perMight: -0.84
+    perIntel: -0.6
+    perCharm: 0.21
+    perInfamy: 1.33
+  - id: EV_284
+    flatProbBonus: 1.4
+    perMight: -0.07
+    perIntel: -0.61
+    perCharm: -0.24
+    perInfamy: 0.4
+  - id: EV_285
+    flatProbBonus: 8.7
+    perMight: 0.02
+    perIntel: 0.37
+    perCharm: 0.38
+    perInfamy: 0.69
+  - id: EV_286
+    flatProbBonus: 2.8
+    perMight: 0.41
+    perIntel: -0.06
+    perCharm: 0.53
+    perInfamy: 1.12
+  - id: EV_287
+    flatProbBonus: 4.8
+    perMight: 0.04
+    perIntel: 0.13
+    perCharm: 0.44
+    perInfamy: 0.77
+  - id: EV_288
+    flatProbBonus: 1.9
+    perMight: 0.49
+    perIntel: 0.13
+    perCharm: 0.74
+    perInfamy: 0.57
+  - id: EV_289
+    flatProbBonus: 9.2
+    perMight: 0.37
+    perIntel: -0.86
+    perCharm: -0.47
+    perInfamy: 0.69
+  - id: EV_290
+    flatProbBonus: 4.8
+    perMight: -0.65
+    perIntel: -0.53
+    perCharm: -0.3
+    perInfamy: 0.83
+  - id: EV_291
+    flatProbBonus: 7.3
+    perMight: 0.33
+    perIntel: 0.29
+    perCharm: 0.68
+    perInfamy: 0.46
+  - id: EV_292
+    flatProbBonus: 3.6
+    perMight: -0.86
+    perIntel: -0.44
+    perCharm: -0.5
+    perInfamy: 1.13
+  - id: EV_293
+    flatProbBonus: 1.5
+    perMight: -0.32
+    perIntel: 0.64
+    perCharm: -0.51
+    perInfamy: 0.28
+  - id: EV_294
+    flatProbBonus: 4.7
+    perMight: -0.4
+    perIntel: 0.61
+    perCharm: 0.28
+    perInfamy: 0.8
+  - id: EV_295
+    flatProbBonus: 6.3
+    perMight: -0.82
+    perIntel: -0.5
+    perCharm: 0.79
+    perInfamy: 0.11
+  - id: EV_296
+    flatProbBonus: 6
+    perMight: 0.18
+    perIntel: 0.88
+    perCharm: 0.31
+    perInfamy: 1.13
+  - id: EV_297
+    flatProbBonus: 0.8
+    perMight: 0.2
+    perIntel: 0.11
+    perCharm: -0.63
+    perInfamy: 0.48
+  - id: EV_298
+    flatProbBonus: 1.3
+    perMight: -0.5
+    perIntel: -0.05
+    perCharm: 0.78
+    perInfamy: 1.01
+  - id: EV_299
+    flatProbBonus: 6
+    perMight: 0.21
+    perIntel: 0.74
+    perCharm: -0.62
+    perInfamy: 0.93
+  - id: EV_300
+    flatProbBonus: 4.2
+    perMight: -0.37
+    perIntel: 0.87
+    perCharm: -0.29
+    perInfamy: 1.11
+  - id: EV_301
+    flatProbBonus: 6.7
+    perMight: -0.15
+    perIntel: -0.07
+    perCharm: 0
+    perInfamy: 0.87
+  - id: EV_302
+    flatProbBonus: 3.4
+    perMight: 0.24
+    perIntel: -0.34
+    perCharm: -0.03
+    perInfamy: 0.67
+  - id: EV_303
+    flatProbBonus: 9.1
+    perMight: -0.4
+    perIntel: -0.48
+    perCharm: 0.08
+    perInfamy: 0.88
+  - id: EV_304
+    flatProbBonus: 0.9
+    perMight: -0.1
+    perIntel: -0.34
+    perCharm: -0.06
+    perInfamy: 0.86
+  - id: EV_305
+    flatProbBonus: 0.9
+    perMight: 0.06
+    perIntel: -0.48
+    perCharm: 0.14
+    perInfamy: 0.69
+  - id: EV_306
+    flatProbBonus: 5.8
+    perMight: -0.47
+    perIntel: 0.38
+    perCharm: 0.42
+    perInfamy: 1.17
+  - id: EV_307
+    flatProbBonus: 1.5
+    perMight: -0.89
+    perIntel: -0.11
+    perCharm: 0.61
+    perInfamy: 0.5
+  - id: EV_308
+    flatProbBonus: 1.5
+    perMight: -0.66
+    perIntel: 0.54
+    perCharm: -0.22
+    perInfamy: 0.89
+  - id: EV_309
+    flatProbBonus: 5.5
+    perMight: -0.26
+    perIntel: -0.84
+    perCharm: 0.15
+    perInfamy: 0.27
+  - id: EV_310
+    flatProbBonus: 2.4
+    perMight: 0.42
+    perIntel: 0.76
+    perCharm: -0.39
+    perInfamy: 0.49
+  - id: EV_311
+    flatProbBonus: 8.5
+    perMight: 0.22
+    perIntel: -0.7
+    perCharm: 0.45
+    perInfamy: 0.81
+  - id: EV_312
+    flatProbBonus: 0.7
+    perMight: -0.3
+    perIntel: 0.58
+    perCharm: 0.82
+    perInfamy: 0.26
+  - id: EV_313
+    flatProbBonus: 4.1
+    perMight: -0.43
+    perIntel: -0.68
+    perCharm: 0.26
+    perInfamy: 0.53
+  - id: EV_314
+    flatProbBonus: 5.5
+    perMight: -0.18
+    perIntel: 0.13
+    perCharm: -0.38
+    perInfamy: 0.8
+  - id: EV_315
+    flatProbBonus: 4.1
+    perMight: 0.31
+    perIntel: -0.05
+    perCharm: 0.39
+    perInfamy: 1.22
+  - id: EV_316
+    flatProbBonus: 1.7
+    perMight: 0.25
+    perIntel: -0.89
+    perCharm: 0.66
+    perInfamy: 0.13
+  - id: EV_317
+    flatProbBonus: 5.3
+    perMight: -0.11
+    perIntel: 0.08
+    perCharm: -0.38
+    perInfamy: 0.26
+  - id: EV_318
+    flatProbBonus: 4.9
+    perMight: 0.08
+    perIntel: 0.51
+    perCharm: 0.13
+    perInfamy: 1.35
+  - id: EV_319
+    flatProbBonus: 8
+    perMight: 0.01
+    perIntel: -0.59
+    perCharm: 0.53
+    perInfamy: 0.34
+  - id: EV_320
+    flatProbBonus: 0.8
+    perMight: 0.19
+    perIntel: 0.74
+    perCharm: -0.78
+    perInfamy: 0.18
+  - id: EV_321
+    flatProbBonus: 0.1
+    perMight: 0.1
+    perIntel: 0.06
+    perCharm: -0.02
+    perInfamy: 1.18
+  - id: EV_322
+    flatProbBonus: 0.6
+    perMight: 0.22
+    perIntel: -0.49
+    perCharm: 0.41
+    perInfamy: 1.46
+  - id: EV_323
+    flatProbBonus: 8.6
+    perMight: -0.48
+    perIntel: -0.25
+    perCharm: 0.41
+    perInfamy: 0.43
+  - id: EV_324
+    flatProbBonus: 7.1
+    perMight: -0.57
+    perIntel: -0.77
+    perCharm: 0.61
+    perInfamy: 1.33
+  - id: EV_325
+    flatProbBonus: 3.5
+    perMight: 0.39
+    perIntel: 0.51
+    perCharm: -0.37
+    perInfamy: 0.61
+  - id: EV_326
+    flatProbBonus: 3.5
+    perMight: 0.12
+    perIntel: -0.5
+    perCharm: 0.06
+    perInfamy: 1.32
+  - id: EV_327
+    flatProbBonus: 9.8
+    perMight: -0.59
+    perIntel: 0.25
+    perCharm: 0.47
+    perInfamy: 1.41
+  - id: EV_328
+    flatProbBonus: 6.7
+    perMight: -0.14
+    perIntel: 0.34
+    perCharm: -0.87
+    perInfamy: 0.85
+  - id: EV_329
+    flatProbBonus: 7.9
+    perMight: -0.53
+    perIntel: -0.74
+    perCharm: 0.68
+    perInfamy: 0.65
+  - id: EV_330
+    flatProbBonus: 5.1
+    perMight: 0.13
+    perIntel: 0.7
+    perCharm: 0.02
+    perInfamy: 0.88
+  - id: EV_331
+    flatProbBonus: 4.8
+    perMight: -0.25
+    perIntel: 0.66
+    perCharm: -0.56
+    perInfamy: 0.35
+  - id: EV_332
+    flatProbBonus: 3.9
+    perMight: -0.41
+    perIntel: -0.37
+    perCharm: 0.35
+    perInfamy: 0.28
+  - id: EV_333
+    flatProbBonus: 6.5
+    perMight: -0.46
+    perIntel: 0.24
+    perCharm: -0.37
+    perInfamy: 1.14
+  - id: EV_334
+    flatProbBonus: 3.8
+    perMight: 0.22
+    perIntel: 0.09
+    perCharm: -0.39
+    perInfamy: 0.48
+  - id: EV_335
+    flatProbBonus: 1
+    perMight: -0.89
+    perIntel: -0.2
+    perCharm: 0.62
+    perInfamy: 0.42
+  - id: EV_336
+    flatProbBonus: 3.1
+    perMight: -0.58
+    perIntel: 0.2
+    perCharm: 0.13
+    perInfamy: 0.28
+  - id: EV_337
+    flatProbBonus: 2.3
+    perMight: -0.48
+    perIntel: 0.58
+    perCharm: -0.15
+    perInfamy: 0.62
+  - id: EV_338
+    flatProbBonus: 1.2
+    perMight: -0.05
+    perIntel: -0.69
+    perCharm: 0.32
+    perInfamy: 0.22
+  - id: EV_339
+    flatProbBonus: 6.8
+    perMight: 0.12
+    perIntel: -0.37
+    perCharm: -0.34
+    perInfamy: 1.25
+  - id: EV_340
+    flatProbBonus: 6.4
+    perMight: -0.78
+    perIntel: -0.83
+    perCharm: 0.72
+    perInfamy: 0.58
+  - id: EV_341
+    flatProbBonus: 4.2
+    perMight: 0.13
+    perIntel: 0.16
+    perCharm: -0.44
+    perInfamy: 1.42
+  - id: EV_342
+    flatProbBonus: 5
+    perMight: 0.25
+    perIntel: -0.58
+    perCharm: -0.19
+    perInfamy: 1.24
+  - id: EV_343
+    flatProbBonus: 2.1
+    perMight: -0.39
+    perIntel: -0.41
+    perCharm: 0
+    perInfamy: 0.66
+  - id: EV_344
+    flatProbBonus: 3.2
+    perMight: -0.22
+    perIntel: -0.89
+    perCharm: -0.27
+    perInfamy: 0.7
+  - id: EV_345
+    flatProbBonus: 2.8
+    perMight: -0.14
+    perIntel: -0.6
+    perCharm: 0.67
+    perInfamy: 0.71
+  - id: EV_346
+    flatProbBonus: 8.6
+    perMight: -0.01
+    perIntel: 0.31
+    perCharm: 0.5
+    perInfamy: 1.35
+  - id: EV_347
+    flatProbBonus: 5.6
+    perMight: -0.38
+    perIntel: 0.78
+    perCharm: 0.25
+    perInfamy: 0.98
+  - id: EV_348
+    flatProbBonus: 1
+    perMight: 0.41
+    perIntel: -0.06
+    perCharm: -0.07
+    perInfamy: 1.17
+  - id: EV_349
+    flatProbBonus: 9.3
+    perMight: -0.86
+    perIntel: 0.21
+    perCharm: -0.45
+    perInfamy: 1.31
+  - id: EV_350
+    flatProbBonus: 4.1
+    perMight: -0.53
+    perIntel: -0.39
+    perCharm: 0.74
+    perInfamy: 0.53
+  - id: EV_351
+    flatProbBonus: 7.1
+    perMight: 0.04
+    perIntel: 0.56
+    perCharm: 0.01
+    perInfamy: 0.5
+  - id: EV_352
+    flatProbBonus: 1.6
+    perMight: -0.46
+    perIntel: -0.42
+    perCharm: -0.74
+    perInfamy: 0.64
+  - id: EV_353
+    flatProbBonus: 3.7
+    perMight: -0.75
+    perIntel: -0.01
+    perCharm: -0.33
+    perInfamy: 0.22
+  - id: EV_354
+    flatProbBonus: 1.2
+    perMight: -0.44
+    perIntel: 0.13
+    perCharm: -0.87
+    perInfamy: 0.86
+  - id: EV_355
+    flatProbBonus: 2.8
+    perMight: 0.22
+    perIntel: -0.17
+    perCharm: -0.72
+    perInfamy: 1.37
+  - id: EV_356
+    flatProbBonus: 2.6
+    perMight: -0.73
+    perIntel: 0.27
+    perCharm: -0.18
+    perInfamy: 1.18
+  - id: EV_357
+    flatProbBonus: 1.8
+    perMight: 0.39
+    perIntel: 0.12
+    perCharm: 0.72
+    perInfamy: 1.14
+  - id: EV_358
+    flatProbBonus: 4.1
+    perMight: 0.25
+    perIntel: 0.46
+    perCharm: -0.17
+    perInfamy: 1.18
+  - id: EV_359
+    flatProbBonus: 8.5
+    perMight: -0.46
+    perIntel: -0.31
+    perCharm: -0.13
+    perInfamy: 0.2
+  - id: EV_360
+    flatProbBonus: 4
+    perMight: 0.2
+    perIntel: 0.62
+    perCharm: 0.58
+    perInfamy: 1.17
+  - id: EV_361
+    flatProbBonus: 2.8
+    perMight: -0.67
+    perIntel: 0.79
+    perCharm: -0.2
+    perInfamy: 0.67
+  - id: EV_362
+    flatProbBonus: 1.4
+    perMight: 0.34
+    perIntel: 0.09
+    perCharm: 0.58
+    perInfamy: 1.11
+  - id: EV_363
+    flatProbBonus: 8.1
+    perMight: -0.44
+    perIntel: -0.87
+    perCharm: 0.4
+    perInfamy: 0.66
+  - id: EV_364
+    flatProbBonus: 3.1
+    perMight: -0.22
+    perIntel: 0.05
+    perCharm: 0.51
+    perInfamy: 1.11
+  - id: EV_365
+    flatProbBonus: 7.3
+    perMight: -0.54
+    perIntel: -0.56
+    perCharm: 0.88
+    perInfamy: 0.52
+  - id: EV_366
+    flatProbBonus: 0.7
+    perMight: -0.24
+    perIntel: -0.85
+    perCharm: -0.31
+    perInfamy: 0.83
+  - id: EV_367
+    flatProbBonus: 6.4
+    perMight: 0.02
+    perIntel: 0.37
+    perCharm: 0.54
+    perInfamy: 0.97
+  - id: EV_368
+    flatProbBonus: 6.1
+    perMight: -0.38
+    perIntel: 0.04
+    perCharm: -0.36
+    perInfamy: 0.35
+  - id: EV_369
+    flatProbBonus: 4.4
+    perMight: -0.77
+    perIntel: 0.76
+    perCharm: -0.16
+    perInfamy: 1.27
+  - id: EV_370
+    flatProbBonus: 4.9
+    perMight: -0.5
+    perIntel: 0.25
+    perCharm: -0.8
+    perInfamy: 0.55
+  - id: EV_371
+    flatProbBonus: 0.9
+    perMight: 0.36
+    perIntel: 0.71
+    perCharm: -0.77
+    perInfamy: 0.83
+  - id: EV_372
+    flatProbBonus: 7.1
+    perMight: -0.45
+    perIntel: -0.39
+    perCharm: 0.31
+    perInfamy: 0.86
+  - id: EV_373
+    flatProbBonus: 9.1
+    perMight: -0.22
+    perIntel: -0.52
+    perCharm: -0.11
+    perInfamy: 0.23
+  - id: EV_374
+    flatProbBonus: 2.4
+    perMight: 0.1
+    perIntel: 0.32
+    perCharm: 0.79
+    perInfamy: 0.12
+  - id: EV_375
+    flatProbBonus: 2
+    perMight: -0.68
+    perIntel: -0.5
+    perCharm: 0.52
+    perInfamy: 1.34
+  - id: EV_376
+    flatProbBonus: 7.4
+    perMight: -0.27
+    perIntel: 0.5
+    perCharm: -0.08
+    perInfamy: 0.24
+  - id: EV_377
+    flatProbBonus: 6.5
+    perMight: -0.02
+    perIntel: -0.62
+    perCharm: 0.07
+    perInfamy: 1.06
+  - id: EV_378
+    flatProbBonus: 7.9
+    perMight: 0.4
+    perIntel: -0.06
+    perCharm: -0.57
+    perInfamy: 1.19
+  - id: EV_379
+    flatProbBonus: 1.8
+    perMight: 0.41
+    perIntel: 0.17
+    perCharm: 0.36
+    perInfamy: 0.49
+  - id: EV_380
+    flatProbBonus: 4.7
+    perMight: 0.02
+    perIntel: -0.74
+    perCharm: 0.72
+    perInfamy: 1.07
+  - id: EV_381
+    flatProbBonus: 9.1
+    perMight: -0.26
+    perIntel: 0.02
+    perCharm: -0.38
+    perInfamy: 0.76
+  - id: EV_382
+    flatProbBonus: 1.5
+    perMight: -0.63
+    perIntel: -0.24
+    perCharm: -0.02
+    perInfamy: 0.99
+  - id: EV_383
+    flatProbBonus: 3.6
+    perMight: 0.06
+    perIntel: -0.63
+    perCharm: -0.41
+    perInfamy: 0.27
+  - id: EV_384
+    flatProbBonus: 4.3
+    perMight: -0.13
+    perIntel: -0.41
+    perCharm: 0.49
+    perInfamy: 0.25
+  - id: EV_385
+    flatProbBonus: 9.4
+    perMight: -0.87
+    perIntel: 0.86
+    perCharm: -0.13
+    perInfamy: 0.64
+  - id: EV_386
+    flatProbBonus: 6.3
+    perMight: -0.06
+    perIntel: -0.2
+    perCharm: 0.27
+    perInfamy: 1.02
+  - id: EV_387
+    flatProbBonus: 3.8
+    perMight: -0.76
+    perIntel: 0.58
+    perCharm: 0.64
+    perInfamy: 0.16
+  - id: EV_388
+    flatProbBonus: 5.5
+    perMight: -0.24
+    perIntel: 0.44
+    perCharm: -0.18
+    perInfamy: 0.86
+  - id: EV_389
+    flatProbBonus: 7.5
+    perMight: -0.76
+    perIntel: 0.04
+    perCharm: 0.89
+    perInfamy: 1.5
+  - id: EV_390
+    flatProbBonus: 2.9
+    perMight: -0.42
+    perIntel: 0.58
+    perCharm: -0.37
+    perInfamy: 0.78
+  - id: EV_391
+    flatProbBonus: 2.9
+    perMight: -0.42
+    perIntel: -0.71
+    perCharm: -0.48
+    perInfamy: 0.6
+  - id: EV_392
+    flatProbBonus: 4.5
+    perMight: 0.05
+    perIntel: 0.44
+    perCharm: 0.78
+    perInfamy: 0.12
+  - id: EV_393
+    flatProbBonus: 6.9
+    perMight: -0.07
+    perIntel: -0.51
+    perCharm: 0.77
+    perInfamy: 0.35
+  - id: EV_394
+    flatProbBonus: 7.1
+    perMight: -0.03
+    perIntel: -0.13
+    perCharm: 0.38
+    perInfamy: 0.53
+  - id: EV_395
+    flatProbBonus: 5.3
+    perMight: -0.74
+    perIntel: 0.34
+    perCharm: 0.25
+    perInfamy: 0.31
+  - id: EV_396
+    flatProbBonus: 4.7
+    perMight: -0.83
+    perIntel: 0.7
+    perCharm: -0.15
+    perInfamy: 0.59
+  - id: EV_397
+    flatProbBonus: 2.2
+    perMight: -0.29
+    perIntel: -0.22
+    perCharm: -0.55
+    perInfamy: 1.19
+  - id: EV_398
+    flatProbBonus: 3.7
+    perMight: -0.22
+    perIntel: 0.78
+    perCharm: -0.88
+    perInfamy: 0.31
+  - id: EV_399
+    flatProbBonus: 3.1
+    perMight: 0.4
+    perIntel: -0.54
+    perCharm: -0.33
+    perInfamy: 0.62
+  - id: EV_400
+    flatProbBonus: 6.2
+    perMight: -0.62
+    perIntel: 0.74
+    perCharm: 0.19
+    perInfamy: 0.63
+  - id: EV_401
+    flatProbBonus: 6.6
+    perMight: 0.19
+    perIntel: 0.35
+    perCharm: -0.22
+    perInfamy: 0.16
+  - id: EV_402
+    flatProbBonus: 5.5
+    perMight: 0.17
+    perIntel: 0.54
+    perCharm: 0.85
+    perInfamy: 1.18
+  - id: EV_403
+    flatProbBonus: 4.9
+    perMight: 0.39
+    perIntel: 0.66
+    perCharm: 0.76
+    perInfamy: 1
+  - id: EV_404
+    flatProbBonus: 4.9
+    perMight: -0.86
+    perIntel: -0.53
+    perCharm: 0.33
+    perInfamy: 0.79
+  - id: EV_405
+    flatProbBonus: 0.6
+    perMight: 0.46
+    perIntel: -0.64
+    perCharm: -0.69
+    perInfamy: 0.65
+  - id: EV_406
+    flatProbBonus: 0.4
+    perMight: -0.78
+    perIntel: -0.82
+    perCharm: 0.32
+    perInfamy: 0.39
+  - id: EV_407
+    flatProbBonus: 0.7
+    perMight: 0.48
+    perIntel: -0.58
+    perCharm: -0.45
+    perInfamy: 0.96
+  - id: EV_408
+    flatProbBonus: 2.6
+    perMight: -0.72
+    perIntel: 0.47
+    perCharm: 0.03
+    perInfamy: 0.55
+  - id: EV_409
+    flatProbBonus: 8.7
+    perMight: -0.01
+    perIntel: 0.53
+    perCharm: 0.15
+    perInfamy: 1.39
+  - id: EV_410
+    flatProbBonus: 2.2
+    perMight: -0.04
+    perIntel: 0.48
+    perCharm: -0.66
+    perInfamy: 1.15
+  - id: EV_411
+    flatProbBonus: 6.9
+    perMight: -0.26
+    perIntel: 0.37
+    perCharm: -0.19
+    perInfamy: 0.23
+  - id: EV_412
+    flatProbBonus: 7.2
+    perMight: -0.41
+    perIntel: -0.83
+    perCharm: 0.47
+    perInfamy: 0.91
+  - id: EV_413
+    flatProbBonus: 5.6
+    perMight: -0.46
+    perIntel: -0.24
+    perCharm: -0.68
+    perInfamy: 0.17
+  - id: EV_414
+    flatProbBonus: 9.1
+    perMight: 0.04
+    perIntel: 0.88
+    perCharm: 0.61
+    perInfamy: 1.09
+  - id: EV_415
+    flatProbBonus: 5.6
+    perMight: -0.08
+    perIntel: 0.2
+    perCharm: 0
+    perInfamy: 1.19
+  - id: EV_416
+    flatProbBonus: 5.6
+    perMight: -0.75
+    perIntel: 0.3
+    perCharm: 0.63
+    perInfamy: 1.42
+  - id: EV_417
+    flatProbBonus: 4.5
+    perMight: -0.35
+    perIntel: -0.27
+    perCharm: 0.08
+    perInfamy: 0.23
+  - id: EV_418
+    flatProbBonus: 3
+    perMight: -0.56
+    perIntel: 0.49
+    perCharm: 0.07
+    perInfamy: 1.07
+  - id: EV_419
+    flatProbBonus: 2.1
+    perMight: 0.38
+    perIntel: 0.64
+    perCharm: 0.69
+    perInfamy: 0.54
+  - id: EV_420
+    flatProbBonus: 3.7
+    perMight: -0.66
+    perIntel: -0.35
+    perCharm: -0.45
+    perInfamy: 1.2
+  - id: EV_421
+    flatProbBonus: 5.1
+    perMight: 0.01
+    perIntel: 0.68
+    perCharm: -0.46
+    perInfamy: 0.86
+  - id: EV_422
+    flatProbBonus: 1.2
+    perMight: 0.23
+    perIntel: 0.21
+    perCharm: 0.56
+    perInfamy: 0.58
+  - id: EV_423
+    flatProbBonus: 9.7
+    perMight: -0.61
+    perIntel: 0.5
+    perCharm: 0.66
+    perInfamy: 1.39
+  - id: EV_424
+    flatProbBonus: 8
+    perMight: -0.21
+    perIntel: 0.85
+    perCharm: 0.86
+    perInfamy: 0.42
+  - id: EV_425
+    flatProbBonus: 0.3
+    perMight: -0.31
+    perIntel: -0.03
+    perCharm: 0.71
+    perInfamy: 1.38
+  - id: EV_426
+    flatProbBonus: 8.5
+    perMight: 0
+    perIntel: 0.27
+    perCharm: 0.04
+    perInfamy: 1.33
+  - id: EV_427
+    flatProbBonus: 5
+    perMight: 0.5
+    perIntel: 0.39
+    perCharm: 0.28
+    perInfamy: 0.57
+  - id: EV_428
+    flatProbBonus: 3.7
+    perMight: 0.23
+    perIntel: -0.1
+    perCharm: 0.41
+    perInfamy: 1.01
+  - id: EV_429
+    flatProbBonus: 6.2
+    perMight: 0
+    perIntel: -0.59
+    perCharm: -0.77
+    perInfamy: 0.55
+  - id: EV_430
+    flatProbBonus: 4.1
+    perMight: -0.17
+    perIntel: -0.66
+    perCharm: -0.03
+    perInfamy: 0.32
+  - id: EV_431
+    flatProbBonus: 7.7
+    perMight: 0.26
+    perIntel: 0.02
+    perCharm: 0.8
+    perInfamy: 0.11
+  - id: EV_432
+    flatProbBonus: 4.7
+    perMight: -0.49
+    perIntel: -0.77
+    perCharm: -0.28
+    perInfamy: 0.93
+  - id: EV_433
+    flatProbBonus: 4.8
+    perMight: 0.47
+    perIntel: -0.54
+    perCharm: 0.3
+    perInfamy: 0.31
+  - id: EV_434
+    flatProbBonus: 1.1
+    perMight: 0.29
+    perIntel: 0.46
+    perCharm: -0.46
+    perInfamy: 0.46
+  - id: EV_435
+    flatProbBonus: 3
+    perMight: -0.64
+    perIntel: -0.05
+    perCharm: 0.72
+    perInfamy: 1.46
+  - id: EV_436
+    flatProbBonus: 3.8
+    perMight: -0.38
+    perIntel: 0.59
+    perCharm: 0.13
+    perInfamy: 0.27
+  - id: EV_437
+    flatProbBonus: 2.5
+    perMight: -0.11
+    perIntel: 0.86
+    perCharm: 0.55
+    perInfamy: 1.46
+  - id: EV_438
+    flatProbBonus: 3.8
+    perMight: -0.06
+    perIntel: -0.63
+    perCharm: -0.08
+    perInfamy: 0.16
+  - id: EV_439
+    flatProbBonus: 6.6
+    perMight: -0.32
+    perIntel: -0.34
+    perCharm: -0.55
+    perInfamy: 0.24
+  - id: EV_440
+    flatProbBonus: 5.8
+    perMight: 0.19
+    perIntel: -0.48
+    perCharm: 0.53
+    perInfamy: 0.59
+  - id: EV_441
+    flatProbBonus: 6
+    perMight: 0.12
+    perIntel: -0.58
+    perCharm: -0.01
+    perInfamy: 0.84
+  - id: EV_442
+    flatProbBonus: 4
+    perMight: 0.34
+    perIntel: 0.13
+    perCharm: 0.59
+    perInfamy: 0.63
+  - id: EV_443
+    flatProbBonus: 1.4
+    perMight: 0.31
+    perIntel: 0.72
+    perCharm: 0.83
+    perInfamy: 1
+  - id: EV_444
+    flatProbBonus: 2.5
+    perMight: -0.26
+    perIntel: -0.02
+    perCharm: 0.14
+    perInfamy: 1.29
+  - id: EV_445
+    flatProbBonus: 6.8
+    perMight: -0.37
+    perIntel: 0.88
+    perCharm: -0.68
+    perInfamy: 1.25
+  - id: EV_446
+    flatProbBonus: 6.2
+    perMight: -0.18
+    perIntel: -0.13
+    perCharm: 0.23
+    perInfamy: 1
+  - id: EV_447
+    flatProbBonus: 8.4
+    perMight: 0.18
+    perIntel: 0.04
+    perCharm: 0.38
+    perInfamy: 0.16
+  - id: EV_448
+    flatProbBonus: 0.4
+    perMight: -0.9
+    perIntel: -0.41
+    perCharm: -0.06
+    perInfamy: 1.15
+  - id: EV_449
+    flatProbBonus: 5.2
+    perMight: -0.27
+    perIntel: -0.74
+    perCharm: 0.82
+    perInfamy: 0.91
+  - id: EV_450
+    flatProbBonus: 8.3
+    perMight: -0.3
+    perIntel: 0.5
+    perCharm: -0.01
+    perInfamy: 1.2
+  - id: EV_451
+    flatProbBonus: 3.5
+    perMight: 0.03
+    perIntel: 0.1
+    perCharm: 0.4
+    perInfamy: 1.39
+  - id: EV_452
+    flatProbBonus: 0.2
+    perMight: 0.35
+    perIntel: 0.47
+    perCharm: 0.28
+    perInfamy: 0.53
+  - id: EV_453
+    flatProbBonus: 1
+    perMight: 0.23
+    perIntel: 0.31
+    perCharm: -0.25
+    perInfamy: 0.99
+  - id: EV_454
+    flatProbBonus: 8.1
+    perMight: -0.65
+    perIntel: -0.86
+    perCharm: 0.43
+    perInfamy: 1.2
+  - id: EV_455
+    flatProbBonus: 7.9
+    perMight: -0.76
+    perIntel: -0.83
+    perCharm: 0.81
+    perInfamy: 0.4
+  - id: EV_456
+    flatProbBonus: 8.8
+    perMight: -0.88
+    perIntel: 0.62
+    perCharm: -0.08
+    perInfamy: 1
+  - id: EV_457
+    flatProbBonus: 1.7
+    perMight: 0.12
+    perIntel: 0.49
+    perCharm: 0.35
+    perInfamy: 0.42
+  - id: EV_458
+    flatProbBonus: 9.2
+    perMight: 0.4
+    perIntel: -0.28
+    perCharm: -0.52
+    perInfamy: 0.94
+  - id: EV_459
+    flatProbBonus: 8.8
+    perMight: 0.11
+    perIntel: 0.36
+    perCharm: -0.46
+    perInfamy: 1.05
+  - id: EV_460
+    flatProbBonus: 6.3
+    perMight: 0.29
+    perIntel: -0.54
+    perCharm: -0.81
+    perInfamy: 0.45
+  - id: EV_461
+    flatProbBonus: 3.7
+    perMight: -0.75
+    perIntel: -0.4
+    perCharm: 0.16
+    perInfamy: 0.2
+  - id: EV_462
+    flatProbBonus: 0.3
+    perMight: -0.03
+    perIntel: -0.56
+    perCharm: 0.76
+    perInfamy: 0.4
+  - id: EV_463
+    flatProbBonus: 2.6
+    perMight: -0.07
+    perIntel: 0.08
+    perCharm: -0.81
+    perInfamy: 1.35
+  - id: EV_464
+    flatProbBonus: 5.4
+    perMight: -0.15
+    perIntel: 0.69
+    perCharm: 0.74
+    perInfamy: 1.45
+  - id: EV_465
+    flatProbBonus: 3
+    perMight: -0.53
+    perIntel: 0.78
+    perCharm: 0.39
+    perInfamy: 0.81
+  - id: EV_466
+    flatProbBonus: 2.3
+    perMight: -0.21
+    perIntel: -0.59
+    perCharm: 0.15
+    perInfamy: 1.08
+  - id: EV_467
+    flatProbBonus: 9.5
+    perMight: -0.2
+    perIntel: -0.84
+    perCharm: 0.33
+    perInfamy: 0.66
+  - id: EV_468
+    flatProbBonus: 4
+    perMight: 0.21
+    perIntel: 0.56
+    perCharm: -0.37
+    perInfamy: 0.72
+  - id: EV_469
+    flatProbBonus: 0.9
+    perMight: -0.17
+    perIntel: -0.27
+    perCharm: -0.46
+    perInfamy: 1.2
+  - id: EV_470
+    flatProbBonus: 1.9
+    perMight: -0.16
+    perIntel: 0.04
+    perCharm: 0.67
+    perInfamy: 0.28
+  - id: EV_471
+    flatProbBonus: 4
+    perMight: -0.3
+    perIntel: -0.2
+    perCharm: 0.31
+    perInfamy: 0.33
+  - id: EV_472
+    flatProbBonus: 0.9
+    perMight: -0.41
+    perIntel: 0.3
+    perCharm: 0.27
+    perInfamy: 0.88
+  - id: EV_473
+    flatProbBonus: 6.7
+    perMight: -0.65
+    perIntel: 0.52
+    perCharm: -0.06
+    perInfamy: 0.65
+  - id: EV_474
+    flatProbBonus: 5
+    perMight: 0.26
+    perIntel: 0.86
+    perCharm: 0.03
+    perInfamy: 0.11
+  - id: EV_475
+    flatProbBonus: 2.7
+    perMight: -0.53
+    perIntel: 0.83
+    perCharm: 0.04
+    perInfamy: 0.9
+  - id: EV_476
+    flatProbBonus: 2.5
+    perMight: 0.28
+    perIntel: 0.02
+    perCharm: -0.09
+    perInfamy: 1.06
+  - id: EV_477
+    flatProbBonus: 8.6
+    perMight: -0.8
+    perIntel: -0.85
+    perCharm: 0.78
+    perInfamy: 0.52
+  - id: EV_478
+    flatProbBonus: 9.5
+    perMight: -0.86
+    perIntel: -0.15
+    perCharm: -0.21
+    perInfamy: 0.15
+  - id: EV_479
+    flatProbBonus: 8.3
+    perMight: -0.47
+    perIntel: -0.31
+    perCharm: -0.45
+    perInfamy: 0.99
+  - id: EV_480
+    flatProbBonus: 8.9
+    perMight: -0.6
+    perIntel: -0.85
+    perCharm: 0.03
+    perInfamy: 0.31
+  - id: EV_481
+    flatProbBonus: 9.7
+    perMight: -0.54
+    perIntel: -0.14
+    perCharm: -0.41
+    perInfamy: 0.15
+  - id: EV_482
+    flatProbBonus: 0.5
+    perMight: 0.2
+    perIntel: -0.59
+    perCharm: 0.77
+    perInfamy: 0.94
+  - id: EV_483
+    flatProbBonus: 7.3
+    perMight: 0.06
+    perIntel: -0.37
+    perCharm: 0.37
+    perInfamy: 0.53
+  - id: EV_484
+    flatProbBonus: 3.6
+    perMight: 0.31
+    perIntel: -0.66
+    perCharm: 0.21
+    perInfamy: 1.15
+  - id: EV_485
+    flatProbBonus: 8
+    perMight: 0.25
+    perIntel: -0.42
+    perCharm: 0.57
+    perInfamy: 0.36
+  - id: EV_486
+    flatProbBonus: 9.4
+    perMight: -0.88
+    perIntel: -0.36
+    perCharm: -0.14
+    perInfamy: 1.16
+  - id: EV_487
+    flatProbBonus: 5.3
+    perMight: 0.36
+    perIntel: -0.26
+    perCharm: 0.67
+    perInfamy: 0.77
+  - id: EV_488
+    flatProbBonus: 3.9
+    perMight: -0.55
+    perIntel: -0.76
+    perCharm: 0.32
+    perInfamy: 0.92
+  - id: EV_489
+    flatProbBonus: 0.1
+    perMight: -0.83
+    perIntel: 0.41
+    perCharm: 0.78
+    perInfamy: 1.06
+  - id: EV_490
+    flatProbBonus: 0
+    perMight: 0.4
+    perIntel: -0.8
+    perCharm: -0.48
+    perInfamy: 1.09
+  - id: EV_491
+    flatProbBonus: 7.6
+    perMight: -0.47
+    perIntel: -0.06
+    perCharm: 0.01
+    perInfamy: 0.16
+  - id: EV_492
+    flatProbBonus: 2.8
+    perMight: -0.34
+    perIntel: 0.33
+    perCharm: 0.12
+    perInfamy: 0.58
+  - id: EV_493
+    flatProbBonus: 9.8
+    perMight: -0.6
+    perIntel: 0.04
+    perCharm: -0.8
+    perInfamy: 0.24
+  - id: EV_494
+    flatProbBonus: 7.8
+    perMight: -0.43
+    perIntel: 0.66
+    perCharm: 0.36
+    perInfamy: 0.63
+  - id: EV_495
+    flatProbBonus: 3.1
+    perMight: -0.85
+    perIntel: -0.38
+    perCharm: -0.26
+    perInfamy: 1.26
+  - id: EV_496
+    flatProbBonus: 4.1
+    perMight: -0.1
+    perIntel: -0.01
+    perCharm: 0.33
+    perInfamy: 1.16
+  - id: EV_497
+    flatProbBonus: 8.8
+    perMight: -0.58
+    perIntel: 0.8
+    perCharm: -0.36
+    perInfamy: 1.18
+  - id: EV_498
+    flatProbBonus: 0.2
+    perMight: 0.36
+    perIntel: 0.8
+    perCharm: -0.66
+    perInfamy: 1.21
+  - id: EV_499
+    flatProbBonus: 8.1
+    perMight: -0.81
+    perIntel: -0.44
+    perCharm: -0.79
+    perInfamy: 0.96
+  - id: EV_500
+    flatProbBonus: 3.8
+    perMight: -0.45
+    perIntel: 0.74
+    perCharm: 0.06
+    perInfamy: 0.98

@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// <see cref="ConditionData"/>·<see cref="EventMasterData.conditionIds"/> 평가.
-/// targetAttr(시트 B열, 대소문자 무시): gold 금화, food 식량, soldiers 병사, public_order 민심, population 백성수, might 무력, intel 지력, charm 매력.
+/// 시트 B열은 <see cref="ConditionTypeSheetParser"/>로 <see cref="ConditionType"/>에 매핑됩니다.
 /// </summary>
 public static class EventConditionEvaluator
 {
@@ -39,14 +39,15 @@ public static class EventConditionEvaluator
 
     public static bool EvaluateSingle(DataManager dm, CastleStateData castle, ConditionData c)
     {
-        if (c == null || string.IsNullOrWhiteSpace(c.targetAttr))
+        if (c == null)
+            return false;
+        if (c.conditionType == ConditionType.None)
             return true;
-        if (!GoogleSheetManager.TryParseEventConditionOp(c.targetOp, out var op))
-            return false;
+
         var gov = ResolveGovernor(dm, castle);
-        if (!TryGetAttributeValue(dm, castle, gov, c.targetAttr, out float actual))
+        if (!TryGetAttributeValue(dm, castle, gov, c.conditionType, out float actual))
             return false;
-        return Compare(op, actual, c.targetValue);
+        return Compare(c.conditionOperator, actual, c.targetValue);
     }
 
     static GeneralMasterData ResolveGovernor(DataManager dm, CastleStateData castle)
@@ -56,74 +57,46 @@ public static class EventConditionEvaluator
         return dm.GetGeneralMasterData(castle.currentGovernorId);
     }
 
-    static bool TryGetAttributeValue(DataManager dm, CastleStateData castle, GeneralMasterData gov, string rawKey,
+    static bool TryGetAttributeValue(DataManager dm, CastleStateData castle, GeneralMasterData gov, ConditionType attr,
         out float value)
     {
         value = 0f;
-        string key = NormalizeAttrKey(rawKey);
-        if (string.IsNullOrEmpty(key))
-            return false;
-
-        switch (key)
+        switch (attr)
         {
-            case "might":
-            case "power":
-            case "무력":
+            case ConditionType.Might:
                 if (gov == null) return false;
                 value = gov.power;
                 return true;
-            case "intel":
-            case "지력":
+            case ConditionType.Intel:
                 if (gov == null) return false;
                 value = gov.intel;
                 return true;
-            case "charm":
-            case "매력":
+            case ConditionType.Charm:
                 if (gov == null) return false;
                 value = gov.charm;
                 return true;
-            case "infamy":
-            case "악명":
+            case ConditionType.Notoriety:
                 if (gov == null) return false;
                 value = gov.infamy;
                 return true;
-            case "public_sentiment":
-            case "public_order":
-            case "sentiment":
-            case "민심":
+            case ConditionType.PublicOrder:
                 if (castle == null) return false;
                 value = castle.currentSentiment;
                 return true;
-            case "soldiers":
-            case "soldier":
-            case "병사":
+            case ConditionType.Soldiers:
+            case ConditionType.Population:
                 if (castle == null) return false;
                 value = castle.currentPopulation;
                 return true;
-            case "population":
-            case "백성":
-            case "백성수":
-                if (castle == null) return false;
-                value = castle.currentPopulation;
-                return true;
-            case "gold":
-            case "금화":
+            case ConditionType.Gold:
                 value = GetPlayerGoldF();
                 return true;
-            case "food":
-            case "grain":
-            case "식량":
+            case ConditionType.Food:
                 value = GetPlayerGrainF();
                 return true;
             default:
                 return false;
         }
-    }
-
-    static string NormalizeAttrKey(string raw)
-    {
-        if (string.IsNullOrWhiteSpace(raw)) return "";
-        return raw.Trim().ToLowerInvariant().Replace('-', '_').Replace(" ", "_");
     }
 
     static float GetPlayerGoldF()
@@ -140,6 +113,28 @@ public static class EventConditionEvaluator
         return gm.currentGrain > (long)int.MaxValue ? int.MaxValue : (float)gm.currentGrain;
     }
 
+    public static bool Compare(ConditionOperator op, float actual, float threshold)
+    {
+        switch (op)
+        {
+            case ConditionOperator.Equal:
+                return Mathf.Abs(actual - threshold) < FloatEpsilon;
+            case ConditionOperator.NotEqual:
+                return Mathf.Abs(actual - threshold) >= FloatEpsilon;
+            case ConditionOperator.GreaterThan:
+                return actual > threshold;
+            case ConditionOperator.LessThan:
+                return actual < threshold;
+            case ConditionOperator.GreaterOrEqual:
+                return actual >= threshold - FloatEpsilon;
+            case ConditionOperator.LessOrEqual:
+                return actual <= threshold + FloatEpsilon;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>레거시·시트 문자열 경로용. 신규 코드는 <see cref="Compare(ConditionOperator, float, float)"/> 권장.</summary>
     public static bool Compare(EventConditionOp op, float actual, float threshold)
     {
         switch (op)

@@ -88,6 +88,10 @@ public class ActiveBuffEntry
     public string buffCode;
     public string sourceEventId;
     public int appliedUtcDay;
+    /// <summary>버프 마스터의 <see cref="BuffMasterData.durationDays"/> 스냅샷. 멀티데이 분할용.</summary>
+    public int totalDurationDays;
+    /// <summary>이미 일차 샘플을 몇 번 적용했는지(확정 직후 1일차 포함).</summary>
+    public int completedDayCount;
 }
 
 /// <summary>소문 → N일 뒤 속보 확정 파이프라인. <see cref="CastleStateSavePayload"/>에 저장.</summary>
@@ -153,9 +157,9 @@ public class WorldNewsItem
     /// <summary>소문 성격의 기사(소문 탭 분류용).</summary>
     public bool isRumorContent;
 
-    /// <summary>추첨된 <see cref="NewsMasterData.newsCode"/> — UI에서 아이콘·추적용.</summary>
+    /// <summary>추첨된 <see cref="NewsMasterData.newsCode"/> — UI 추적용.</summary>
     public string newsMasterCode;
-    /// <summary><see cref="NewsMasterData.iconResourcePath"/> 복사(Resources 로드 힌트).</summary>
+    /// <summary>레거시 필드(아이콘 마스터 제거 후 미사용). 세이브 호환용.</summary>
     public string newsIconResourcePath;
 
     public string GetEffectiveDetailTitle()

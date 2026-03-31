@@ -313,22 +313,19 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
                     if (!dm.castleStateDataMap.TryGetValue(cid, out var st) || st == null) continue;
                     ApplyCastleDelta(st, p.largeSentimentDelta, p.largePopulationDelta);
                     if (buffList != null && buffList.Count > 0)
-                    {
-                        WorldEventBuffApplier.ApplyBuffCodesToCastle(dm, st, buffList);
-                        WorldEventBuffApplier.RegisterActiveBuffCodes(st, buffList, p.eventId ?? "", today);
-                    }
+                        WorldEventBuffApplier.ApplyBuffCodesToCastle(dm, st, buffList, p.eventId ?? "", today);
                 }
 
-                string breakCode = "", breakIcon = "";
+                string breakCode = "";
                 if (!TryResolveNewsFromCodes(dm, p.pendingBreakingNewsCodes, primary, out var head, out var body,
-                        out breakCode, out breakIcon, ctxBuff))
+                        out breakCode, ctxBuff))
                     ResolveNewsLegacyTemplates(dm, p.eventId, primary, true, out head, out body, ctxBuff);
                 var rumorItem = FindPendingRumorNews(dm, p.linkedNewsUnixTime, p.eventId, primary);
                 if (rumorItem != null)
                 {
                     UpgradeRumorItemToBreaking(rumorItem, head, body);
                     rumorItem.newsMasterCode = breakCode ?? "";
-                    rumorItem.newsIconResourcePath = breakIcon ?? "";
+                    rumorItem.newsIconResourcePath = "";
                 }
                 else
                 {
@@ -336,7 +333,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
                     if (w != null)
                     {
                         w.newsMasterCode = breakCode ?? "";
-                        w.newsIconResourcePath = breakIcon ?? "";
+                        w.newsIconResourcePath = "";
                     }
                 }
             }
@@ -476,16 +473,16 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         string relatedRaw = string.Join(",", affected);
 
         BuffMasterData rumorCtxBuff = NewsFormatter.TryGetFirstBuffForEvent(dm, ev);
-        string rumorCode = "", rumorIcon = "";
+        string rumorCode = "";
         if (!TryResolveNewsFromCodes(dm, ev.rumorNewsCodes, triggerCid, out var rh, out var rb, out rumorCode,
-                out rumorIcon, rumorCtxBuff))
+                rumorCtxBuff))
             ResolveNewsLegacyTemplates(dm, ev.id, triggerCid, false, out rh, out rb, rumorCtxBuff);
         var item = nm.AddNewsAndReturn(WorldNewsFeedKind.Rumor, ev.id, triggerCid, rh, rb, false);
         if (item != null)
         {
             item.relatedCastleIdsRaw = relatedRaw;
             item.newsMasterCode = rumorCode ?? "";
-            item.newsIconResourcePath = rumorIcon ?? "";
+            item.newsIconResourcePath = "";
         }
 
         if (dm.pendingRumorWorldEvents == null)
@@ -545,10 +542,10 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
     /// 맵에 존재하는 코드만 모아 무작위 1개로 <see cref="NewsMasterData"/>를 적용합니다. 없으면 false(레거시 템플릿).
     /// </summary>
     public static bool TryResolveNewsFromCodes(DataManager dm, IList<string> codes, string castleId,
-        out string headline, out string body, out string pickedCode, out string iconResourceHint,
+        out string headline, out string body, out string pickedCode,
         BuffMasterData buffForPlaceholders = null)
     {
-        headline = body = pickedCode = iconResourceHint = "";
+        headline = body = pickedCode = "";
         if (dm == null || codes == null || codes.Count == 0) return false;
 
         var valid = new List<string>();
@@ -569,7 +566,6 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         body = NewsFormatter.FormatNews(newsRow.script ?? "", castleId, dm, buffForPlaceholders);
         if (string.IsNullOrWhiteSpace(body))
             body = headline;
-        iconResourceHint = newsRow.iconResourcePath ?? "";
         return true;
     }
 
@@ -647,9 +643,9 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         }
 
         BuffMasterData directCtxBuff = NewsFormatter.TryGetFirstBuffForEvent(dm, ev);
-        string code = "", iconHint = "";
+        string code = "";
         if (!TryResolveNewsFromCodes(dm, ev.breakingNewsCodes, triggerCid, out var head, out var body, out code,
-                out iconHint, directCtxBuff))
+                directCtxBuff))
             ResolveNewsLegacyTemplates(dm, ev.id, triggerCid, true, out head, out body, directCtxBuff);
 
         var item = nm.AddNewsAndReturn(WorldNewsFeedKind.Breaking, ev.id, triggerCid, head, body, true);
@@ -657,7 +653,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         {
             item.relatedCastleIdsRaw = string.Join(",", affected);
             item.newsMasterCode = code ?? "";
-            item.newsIconResourcePath = iconHint ?? "";
+            item.newsIconResourcePath = "";
         }
 
         var buff = ev.buffCodes;
@@ -665,8 +661,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         {
             if (!dm.castleStateDataMap.TryGetValue(aid, out var st) || st == null) continue;
             if (buff == null || buff.Count == 0) continue;
-            WorldEventBuffApplier.ApplyBuffCodesToCastle(dm, st, buff);
-            WorldEventBuffApplier.RegisterActiveBuffCodes(st, buff, ev.id, todayUtcDay);
+            WorldEventBuffApplier.ApplyBuffCodesToCastle(dm, st, buff, ev.id, todayUtcDay);
         }
 
         OnEventSample?.Invoke(castle, ev);
