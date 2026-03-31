@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 일간 월드 이벤트·뉴스 파이프라인. 동일 <b>eventId</b> 다중 행은 <b>OR</b>(한 행이라도 조건 AND 만족 시 발생 가능),
-/// 행 내 <see cref="EventMasterData.conditionIds"/>는 <b>AND</b>.
-/// <see cref="CalculateFinalProb"/> = 7 + Modifier + 스탯항 → 일일 당첨·(Rumor) 확정일 재주사위에 사용.
-/// affinityTagsRaw: <c>Direct</c> 즉시 속보+버프, <c>Rumor</c> 소문 예약 후 확정일 재확률.
+/// 일간 월드 이벤트·뉴스 파이프라인(기획 연결 요약).
+/// <list type="number">
+/// <item><description>조건: <see cref="ConditionDataSo"/> condId 목록이 <see cref="EventMasterData.conditionIds"/>에 들어가며,
+/// 한 행 안에서는 <b>AND</b>, 같은 eventId의 여러 행은 <b>OR</b>(<see cref="SelectRandomSatisfiedRow"/>).</description></item>
+/// <item><description>당첨 가중치: 태수 <see cref="GeneralMasterDataSo"/> 스탯 + <see cref="EventStatModifierSo"/> 행(eventId)의 flat/perStat 보정 →
+/// <see cref="CalculateFinalWeight"/> 후 /100으로 일일 확률·소문 확정 재주사위(임시, 추후 조정 가능).</description></item>
+/// <item><description>발생 시 버프: <see cref="BuffMasterDataSo"/> 코드를 <see cref="WorldEventBuffApplier"/>로 적용(일차·duration 규칙은 버프 마스터).</description></item>
+/// <item><description>기사: <see cref="NewsMasterDataSo"/> 코드가 소문(<see cref="EventMasterData.rumorNewsCodes"/>)·속보(<see cref="EventMasterData.breakingNewsCodes"/>)에 매핑.
+/// <c>Direct</c> 태그는 즉시 속보, 그 외는 소문 → N일 뒤 확률로 팩트화 또는 허위.</description></item>
+/// <item><description>거리: 본영~이벤트 성 거리에 따라 속보의 <see cref="WorldNewsItem.isVerifiedFact"/>가 꺼질 수 있음(<see cref="WorldNewsReach"/>, 임시).</description></item>
+/// </list>
 /// </summary>
 public class WorldEventCenter : Singleton<WorldEventCenter>
 {
@@ -20,6 +27,14 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
     [Tooltip("사실무근(가짜)로 끝날 확률 — 확정 시각마다 이 구간에서 임계값을 한 번 뽑습니다.")]
     [SerializeField] float fakeRumorChanceMin = 0.10f;
     [SerializeField] float fakeRumorChanceMax = 0.20f;
+
+    [Header("임시: 본영 거리별 속보 ‘확인됨’ 확률")]
+    [Tooltip("지도 거리 180 미만")]
+    [SerializeField] float newsVerifiedChanceNear = 0.92f;
+    [Tooltip("180 이상 420 미만")]
+    [SerializeField] float newsVerifiedChanceMid = 0.62f;
+    [Tooltip("420 이상")]
+    [SerializeField] float newsVerifiedChanceFar = 0.32f;
 
     /// <summary>동일 성에서 같은 eventId가 다시 뜨기까지 최소 일수(UTC 일 버킷).</summary>
     public const int SameCastleEventCooldownDays = 30;
@@ -326,6 +341,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
                     UpgradeRumorItemToBreaking(rumorItem, head, body);
                     rumorItem.newsMasterCode = breakCode ?? "";
                     rumorItem.newsIconResourcePath = "";
+                    ApplyPlayerNewsReach(dm, rumorItem, primary, WorldNewsFeedKind.Breaking);
                 }
                 else
                 {
@@ -335,6 +351,8 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
                         w.newsMasterCode = breakCode ?? "";
                         w.newsIconResourcePath = "";
                     }
+
+                    ApplyPlayerNewsReach(dm, w, primary, WorldNewsFeedKind.Breaking);
                 }
             }
             else
@@ -483,6 +501,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
             item.relatedCastleIdsRaw = relatedRaw;
             item.newsMasterCode = rumorCode ?? "";
             item.newsIconResourcePath = "";
+            ApplyPlayerNewsReach(dm, item, triggerCid, WorldNewsFeedKind.Rumor);
         }
 
         if (dm.pendingRumorWorldEvents == null)
@@ -654,6 +673,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
             item.relatedCastleIdsRaw = string.Join(",", affected);
             item.newsMasterCode = code ?? "";
             item.newsIconResourcePath = "";
+            ApplyPlayerNewsReach(dm, item, triggerCid, WorldNewsFeedKind.Breaking);
         }
 
         var buff = ev.buffCodes;
@@ -739,6 +759,24 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         if (dm == null || state == null || string.IsNullOrWhiteSpace(state.currentGovernorId))
             return null;
         return dm.GetGeneralMasterData(state.currentGovernorId);
+    }
+
+    /// <summary>본영 거리 기반 임시 도달·확실도. 소문은 부가 문구, 속보는 <see cref="WorldNewsItem.isVerifiedFact"/> 보정.</summary>
+    void ApplyPlayerNewsReach(DataManager dm, WorldNewsItem item, string primaryCastleId, WorldNewsFeedKind kind)
+    {
+        if (item == null || dm == null) return;
+        string pc = (primaryCastleId ?? "").Trim();
+        if (kind == WorldNewsFeedKind.Rumor)
+        {
+            WorldNewsReach.ApplyDistanceTagToRumor(dm, item, pc);
+            return;
+        }
+
+        if (kind == WorldNewsFeedKind.Breaking)
+        {
+            WorldNewsReach.ApplyDistanceIntelToBreakingNews(dm, item, pc, newsVerifiedChanceNear, newsVerifiedChanceMid,
+                newsVerifiedChanceFar);
+        }
     }
 
     public static void EnsureCreated()

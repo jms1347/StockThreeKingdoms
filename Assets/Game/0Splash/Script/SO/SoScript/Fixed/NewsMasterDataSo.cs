@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>기사 마스터 분류 — UI 연출·필터(스펙 NewsType). 월드 뉴스 탭 enum은 <see cref="WorldNewsFeedKind"/>.</summary>
+/// <summary>
+/// 기사 마스터(도서관). <see cref="NewsMasterData.newsCode"/>는 <see cref="EventMasterData.rumorNewsCodes"/>·<see cref="EventMasterData.breakingNewsCodes"/>에서 참조되어
+/// 소문·속보 문구로 쓰입니다. 월드 탭 분류는 <see cref="WorldNewsFeedKind"/>, 스펙 분류는 <see cref="NewsType"/>입니다.
+/// </summary>
 public enum NewsType
 {
     None = 0,

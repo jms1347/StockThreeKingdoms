@@ -4,7 +4,10 @@ using System.Globalization;
 using UnityEngine;
 
 /// <summary>
-/// 주식 삼국지: 이벤트 발동 조건 속성 타입
+/// 이벤트용 조건 라이브러리(시트 Condition 탭). 각 행의 <see cref="ConditionData.conditionId"/>가
+/// <see cref="EventMasterData.conditionIds"/>에 들어가며, <b>한 이벤트 행 안에서는 모두 만족(AND)</b>해야 해당 행이 후보가 됩니다.
+/// 구글 시트에서 내려받을 때 B·C열 문자열은 <see cref="ConditionTypeSheetParser"/>·<see cref="ConditionOperatorSheetParser"/>로 enum에 매핑됩니다.
+/// 런타임 평가는 <see cref="EventConditionEvaluator"/>·<see cref="WorldEventCenter.SelectRandomSatisfiedRow"/>를 참고하세요.
 /// </summary>
 public enum ConditionType
 {

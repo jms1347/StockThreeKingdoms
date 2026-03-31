@@ -4,8 +4,8 @@ using System.Globalization;
 using UnityEngine;
 
 /// <summary>
-/// Buff row keyed by BuffCode on events. Drives castle stat moves with <see cref="CurveType"/> pacing
-/// and <see cref="BuffMasterData.durationDays"/> so effects spread across UTC days (market volatility).
+/// 이벤트 <see cref="EventMasterData.buffCodes"/>에서 참조되는 BuffCode 한 행. <see cref="CurveType"/>·<see cref="BuffMasterData.durationDays"/>로
+/// 일차 분할 적용(<see cref="WorldEventBuffApplier"/>). 영문: Buff row keyed by BuffCode; spreads across UTC days for volatility.
 /// </summary>
 public enum CastleStatType
 {

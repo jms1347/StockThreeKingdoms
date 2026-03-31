@@ -59,7 +59,9 @@ public enum EventCategory
 
 /// 동일 id의 여러 행은 <b>행 간 OR</b>(하나라도 조건 만족 시 이벤트 후보), 한 행의 <see cref="conditionIds"/>는 <b>AND</b>입니다.
 
-/// 확률 보정은 <see cref="EventStatModifierData"/> / <c>eventStatModifierMap</c>(eventId)에서 조회합니다.
+/// <see cref="conditionIds"/>는 <see cref="ConditionDataSo"/> condId와 동일 키입니다. 버프·기사는 <see cref="buffCodes"/>, <see cref="rumorNewsCodes"/>, <see cref="breakingNewsCodes"/>로 <see cref="BuffMasterDataSo"/>·<see cref="NewsMasterDataSo"/>와 연결됩니다.
+
+/// 확률 보정은 태수 스탯 + <see cref="EventStatModifierData"/> / eventStatModifierMap(eventId)입니다. 파이프라인 요약은 <see cref="WorldEventCenter"/>를 참고하세요.
 
 /// </summary>
 
