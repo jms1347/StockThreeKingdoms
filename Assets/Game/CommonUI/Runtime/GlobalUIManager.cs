@@ -33,6 +33,9 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
     [Header("Top Bar Rolling")]
     [SerializeField] float rollDuration = 0.42f;
+    [Header("자원 텍스트 색")]
+    [SerializeField] Color foodTextColor = new Color(0.42f, 0.92f, 0.48f, 1f);
+    [SerializeField] Color soldiersTextColor = Color.white;
     Tweener _assetsTween;
     Tweener _foodTween;
     Tweener _soldiersTween;
@@ -43,6 +46,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     protected override void Awake()
     {
         base.Awake();
+        ApplyResourceTextColors();
         WireTabs();
     }
 
@@ -50,38 +54,60 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     {
         if (homeButton != null) homeButton.onClick.AddListener(() => TabSelected?.Invoke("Home"));
         if (marketButton != null) marketButton.onClick.AddListener(() => TabSelected?.Invoke("Market"));
-        if (portfolioButton != null) portfolioButton.onClick.AddListener(() => TabSelected?.Invoke("Portfolio"));
+        // 포트폴리오·상점(맨 오른쪽)은 TabSelected 탭 전환에만 연결하지 않음
         if (newsButton != null) newsButton.onClick.AddListener(() => TabSelected?.Invoke("News"));
-        if (ordersButton != null) ordersButton.onClick.AddListener(() => TabSelected?.Invoke("Orders"));
+    }
+
+    void ApplyResourceTextColors()
+    {
+        if (foodText != null) foodText.color = foodTextColor;
+        if (soldiersText != null) soldiersText.color = soldiersTextColor;
     }
 
     public void SetTopBar(string userName, string totalAssets, string food)
     {
         if (userNameText != null) userNameText.text = userName;
         if (totalAssetsText != null) totalAssetsText.text = totalAssets;
-        if (foodText != null) foodText.text = food;
+        if (foodText != null)
+        {
+            foodText.text = food;
+            foodText.color = foodTextColor;
+        }
     }
 
     public void SetTopBar(string userName, string totalAssets, string food, string soldiers)
     {
         SetTopBar(userName, totalAssets, food);
-        if (soldiersText != null) soldiersText.text = soldiers;
+        if (soldiersText != null)
+        {
+            soldiersText.text = soldiers;
+            soldiersText.color = soldiersTextColor;
+        }
     }
 
     public void SetTopBarNumbers(string userName, double totalAssets, double food, long soldiers)
     {
         if (userNameText != null) userNameText.text = userName ?? "";
+        ApplyResourceTextColors();
         RollNumber(ref _assetsTween, _displayAssets, totalAssets, v => _displayAssets = v, v =>
         {
             if (totalAssetsText != null) totalAssetsText.text = FormatCompact(v);
         });
         RollNumber(ref _foodTween, _displayFood, food, v => _displayFood = v, v =>
         {
-            if (foodText != null) foodText.text = FormatCompact(v);
+            if (foodText != null)
+            {
+                foodText.text = FormatCompact(v);
+                foodText.color = foodTextColor;
+            }
         });
         RollNumber(ref _soldiersTween, _displaySoldiers, soldiers, v => _displaySoldiers = v, v =>
         {
-            if (soldiersText != null) soldiersText.text = $"{FormatCompact(v)}명";
+            if (soldiersText != null)
+            {
+                soldiersText.text = $"{FormatCompact(v)}명";
+                soldiersText.color = soldiersTextColor;
+            }
         });
     }
 

@@ -75,7 +75,6 @@ public class WorldMarketCastleCardView : MonoBehaviour
     bool _cachedColors;
     Sequence _warPulseSeq;
     Sequence _favorablePulseSeq;
-    Tweener _warShakeTweener;
     GameObject _hqBadgeGo;
 
     void Awake()
@@ -254,8 +253,6 @@ public class WorldMarketCastleCardView : MonoBehaviour
         _warPulseSeq = null;
         _favorablePulseSeq?.Kill();
         _favorablePulseSeq = null;
-        _warShakeTweener?.Kill();
-        _warShakeTweener = null;
         // 카드 루트 anchoredPosition은 WorldMarketCastleVirtualList가 행 인덱스마다 설정함.
         // 여기서 복원하면 매 Bind마다 (0,0)으로 덮여 전부 한곳에 겹침.
         if (warTintImage != null)
@@ -721,15 +718,6 @@ public class WorldMarketCastleCardView : MonoBehaviour
             }, 0f, 0.55f).SetEase(Ease.InOutSine));
             _warPulseSeq.SetLoops(-1);
             _warPulseSeq.SetTarget(gameObject);
-
-            var rt = transform as RectTransform;
-            if (rt != null)
-            {
-                _warShakeTweener = rt.DOShakeAnchorPos(1.05f, new Vector2(2.2f, 1.6f), 10, 90f, false, true)
-                    .SetLoops(-1)
-                    .SetUpdate(true)
-                    .SetTarget(gameObject);
-            }
 
             if (warBurstParticles != null)
             {

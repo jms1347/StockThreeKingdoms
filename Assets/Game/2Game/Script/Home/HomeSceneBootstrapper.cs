@@ -4,6 +4,7 @@ using UnityEngine;
 /// SplashScene을 거치지 않고 HomeScene만 단독 실행해도
 /// 필요한 싱글톤(특히 GlobalUIManager)이 로드되도록 하는 부트스트랩.
 /// </summary>
+[DefaultExecutionOrder(-100)]
 public class HomeSceneBootstrapper : MonoBehaviour
 {
     [Header("Manager Prefabs (optional)")]
@@ -22,7 +23,7 @@ public class HomeSceneBootstrapper : MonoBehaviour
         if (dataManagerPrefab != null) DataManager.Load(dataManagerPrefab);
         if (googleSheetManagerPrefab != null) GoogleSheetManager.Load(googleSheetManagerPrefab);
         if (newsManagerPrefab != null) NewsManager.Load(newsManagerPrefab);
-        if (eventManagerPrefab != null) EventManager.Load(eventManagerPrefab);
+        if (eventManagerPrefab != null) WorldEventCenter.Load(eventManagerPrefab);
     }
 }
 

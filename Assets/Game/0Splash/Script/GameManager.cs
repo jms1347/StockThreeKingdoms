@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using System.IO;
 
 [Serializable]
@@ -25,17 +26,17 @@ public class BalanceConfig
     public double soldierGradeMultPerLevel = 0.1;
 }
 
-/// <summary>TimeManager(-200)보다 먼저 Awake되어 <see cref="RealMinutesPerGameDay"/>를 씁니다.</summary>
+/// <summary>TimeManager(-200)보다 먼저 Awake되어 <see cref="RealSecondsPerGameDay"/>를 씁니다.</summary>
 [DefaultExecutionOrder(-250)]
 public class GameManager : Singleton<GameManager>
 {
     [Header("시간")]
-    [Tooltip("실시간으로 1게임일이 지나는 데 걸리는 분. 1440 = 24시간. 짧게 두면 테스트에 유리.")]
-    [Range(1, 1440)]
-    [SerializeField] int minutesPerGameDay = 1440;
+    [Tooltip("현실 시간 기준으로 ‘게임 하루’(게임 내 86400초)가 지나가는 데 걸리는 초.\n• 86400 = 현실 24시간에 게임 1일\n• 1 = 현실 1초에 게임 1일 (빠른 테스트용)")]
+    [SerializeField, FormerlySerializedAs("minutesPerGameDay")]
+    float realSecondsPerGameDay = 86400f;
 
-    /// <summary>1~1440분. <see cref="TimeManager"/> 가상 Unix·일 경계에 사용.</summary>
-    public int RealMinutesPerGameDay => Mathf.Clamp(minutesPerGameDay, 1, 1440);
+    /// <summary>게임 하루당 현실 초(최소 0.001). <see cref="TimeManager"/> 가상 Unix·일 경계에 사용.</summary>
+    public float RealSecondsPerGameDay => Mathf.Max(0.001f, realSecondsPerGameDay);
 
     [Header("밸런스 (유저 레벨 기반 계산)")]
     public BalanceConfig balance = new BalanceConfig();

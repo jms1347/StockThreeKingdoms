@@ -1,0 +1,1135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a829fd14d4608c49ae855e16e3f097f, type: 3}
+  m_Name: ConditionDataSo
+  m_EditorClassIdentifier: Assembly-CSharp::ConditionDataSo
+  list:
+  - conditionId: C_CHA_H01
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 50
+    description: "\uBBFC\uC2EC \uC218\uC2B5 \uC2DC\uC791"
+  - conditionId: C_CHA_H02
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 55
+    description: "\uD638\uC758\uC801\uC778 \uC5EC\uB860"
+  - conditionId: C_CHA_H03
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 60
+    description: "\uC548\uC815\uC801\uC778 \uC9C0\uC9C0"
+  - conditionId: C_CHA_H04
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 65
+    description: "\uC778\uC7AC \uC720\uC785 \uAC00\uB2A5"
+  - conditionId: C_CHA_H05
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 70
+    description: "\uB6F0\uC5B4\uB09C \uCE74\uB9AC\uC2A4\uB9C8"
+  - conditionId: C_CHA_H06
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 75
+    description: "\uC0C1\uC778\uB4E4\uC758 \uC2E0\uB8B0"
+  - conditionId: C_CHA_H07
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 80
+    description: "\uB9CC\uC778\uC774 \uB530\uB974\uB294 \uB355"
+  - conditionId: C_CHA_H08
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 85
+    description: "\uC601\uC6C5\uC758 \uAE30\uC9C8"
+  - conditionId: C_CHA_H09
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 90
+    description: "\uD669\uC81C\uC758 \uD48D\uBAA8"
+  - conditionId: C_CHA_H10
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 95
+    description: "\uCC9C\uD558\uC758 \uC778\uD488"
+  - conditionId: C_CHA_H11
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 100
+    description: "\uC131\uC778(\u8056\u4EBA)\uC758 \uB9E4\uB825"
+  - conditionId: C_CHA_L01
+    targetAttr: charm
+    targetOp: <
+    targetValue: 5
+    description: "\uBBFC\uC2EC \uC774\uBC18 \uCD5C\uC545"
+  - conditionId: C_CHA_L02
+    targetAttr: charm
+    targetOp: <
+    targetValue: 10
+    description: "\uC7A5\uC218 \uCDA9\uC131\uB3C4 \uC704\uD5D8"
+  - conditionId: C_CHA_L03
+    targetAttr: charm
+    targetOp: <
+    targetValue: 15
+    description: "\uC778\uC7AC \uC601\uC785 \uBD88\uAC00"
+  - conditionId: C_CHA_L04
+    targetAttr: charm
+    targetOp: <
+    targetValue: 20
+    description: "\uC720\uBBFC \uBC1C\uC0DD \uC704\uD5D8"
+  - conditionId: C_CHA_L05
+    targetAttr: charm
+    targetOp: <
+    targetValue: 25
+    description: "\uC778\uB355 \uBD80\uC871 \uC0C1\uD0DC"
+  - conditionId: C_CHA_L06
+    targetAttr: charm
+    targetOp: <
+    targetValue: 30
+    description: "\uBD88\uB9CC \uAC00\uB4DD\uD55C \uBBFC\uC2EC"
+  - conditionId: C_CHA_L07
+    targetAttr: charm
+    targetOp: <
+    targetValue: 35
+    description: "\uD3C9\uADE0 \uC774\uD558 \uB9E4\uB825"
+  - conditionId: C_CHA_L08
+    targetAttr: charm
+    targetOp: <
+    targetValue: 40
+    description: "\uC9C0\uC9C0 \uAE30\uBC18 \uC57D\uD654"
+  - conditionId: C_CHA_L09
+    targetAttr: charm
+    targetOp: <
+    targetValue: 45
+    description: "\uC124\uB4DD\uB825 \uBD80\uC871"
+  - conditionId: C_CHA_L10
+    targetAttr: charm
+    targetOp: <
+    targetValue: 50
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uB9E4\uB825"
+  - conditionId: C_CHA_S01
+    targetAttr: charm
+    targetOp: ==
+    targetValue: 0
+    description: "\uBC18\uB780 \uD655\uC815 \uC0C1\uD0DC"
+  - conditionId: C_CHA_S02
+    targetAttr: charm
+    targetOp: '!='
+    targetValue: 100
+    description: "\uBD88\uC644\uC804\uD55C \uC778\uC2EC"
+  - conditionId: C_CHA_S03
+    targetAttr: charm
+    targetOp: <=
+    targetValue: 20
+    description: "\uC7A5\uC218 \uC774\uD0C8 \uC8FC\uC758\uBCF4"
+  - conditionId: C_CHA_S04
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 80
+    description: "\uB300\uADDC\uBAA8 \uCD95\uC81C \uAC00\uB2A5"
+  - conditionId: C_CHA_S05
+    targetAttr: charm
+    targetOp: '>'
+    targetValue: 50
+    description: "\uC911\uAC04 \uC9C0\uC9C0\uCE35 \uD655\uBCF4"
+  - conditionId: C_CHA_S06
+    targetAttr: charm
+    targetOp: <
+    targetValue: 70
+    description: "\uC778\uB9DD \uBD80\uC871"
+  - conditionId: C_CHA_S07
+    targetAttr: charm
+    targetOp: '>='
+    targetValue: 30
+    description: "\uCD5C\uC18C \uD1B5\uCE58\uAD8C"
+  - conditionId: C_FOD_H01
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 40000
+    description: "\uAE30\uCD08 \uC2DD\uB7C9 \uD655\uBCF4"
+  - conditionId: C_FOD_H02
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 50000
+    description: "\uC548\uC815\uC801 \uAD70\uB7C9"
+  - conditionId: C_FOD_H03
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 60000
+    description: "\uD48D\uC871\uD55C \uC218\uD655\uB7C9"
+  - conditionId: C_FOD_H04
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 80000
+    description: "\uCC3D\uACE0\uAC00 \uAC00\uB4DD \uCC38"
+  - conditionId: C_FOD_H05
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 100000
+    description: "\uC2DD\uB7C9 \uC218\uCD9C \uAC00\uB2A5"
+  - conditionId: C_FOD_H06
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 150000
+    description: "\uC7A5\uAE30\uC804 \uB300\uBE44 \uAC00\uB2A5"
+  - conditionId: C_FOD_H07
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 200000
+    description: "\uCC9C\uD558\uC758 \uACE1\uCC3D"
+  - conditionId: C_FOD_H08
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 300000
+    description: "\uC2DD\uB7C9\uC774 \uC0B0\uB354\uBBF8"
+  - conditionId: C_FOD_H09
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 500000
+    description: "\uC808\uB300 \uC2DD\uB7C9 \uC548\uBCF4"
+  - conditionId: C_FOD_H10
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 700000
+    description: "\uC601\uC6D0\uD55C \uD48D\uC694"
+  - conditionId: C_FOD_H11
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 1000000
+    description: "\uB9CC\uC778\uC744 \uBA39\uC5EC\uC0B4\uB9BC"
+  - conditionId: C_FOD_L01
+    targetAttr: food
+    targetOp: <
+    targetValue: 1000
+    description: "\uC2DD\uB7C9 \uACE0\uAC08 (\uAE30\uADFC)"
+  - conditionId: C_FOD_L02
+    targetAttr: food
+    targetOp: <
+    targetValue: 2000
+    description: "\uAD70\uB7C9 \uBD80\uC871 \uC704\uAE30"
+  - conditionId: C_FOD_L03
+    targetAttr: food
+    targetOp: <
+    targetValue: 3000
+    description: "\uBC30\uAE09 \uC81C\uD55C \uB2E8\uACC4"
+  - conditionId: C_FOD_L04
+    targetAttr: food
+    targetOp: <
+    targetValue: 4000
+    description: "\uC544\uC0AC\uC790 \uBC1C\uC0DD \uC804\uC870"
+  - conditionId: C_FOD_L05
+    targetAttr: food
+    targetOp: <
+    targetValue: 5000
+    description: "\uC2DD\uB7C9 \uC218\uAE09 \uBD88\uC548"
+  - conditionId: C_FOD_L06
+    targetAttr: food
+    targetOp: <
+    targetValue: 7000
+    description: "\uBE44\uCD95\uBD84 \uAC10\uC18C \uC911"
+  - conditionId: C_FOD_L07
+    targetAttr: food
+    targetOp: <
+    targetValue: 10000
+    description: "\uC2DD\uB7C9 \uAC00\uACA9 \uD3ED\uB4F1"
+  - conditionId: C_FOD_L08
+    targetAttr: food
+    targetOp: <
+    targetValue: 15000
+    description: "\uD574\uC678 \uC758\uC874 \uC2EC\uD654"
+  - conditionId: C_FOD_L09
+    targetAttr: food
+    targetOp: <
+    targetValue: 20000
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uC2DD\uB7C9"
+  - conditionId: C_FOD_L10
+    targetAttr: food
+    targetOp: <
+    targetValue: 30000
+    description: "\uC5EC\uC720\uBD84 \uBD80\uC871"
+  - conditionId: C_FOD_S01
+    targetAttr: food
+    targetOp: ==
+    targetValue: 0
+    description: "\uCD08\uD1A0\uD654 \uC0C1\uD0DC (\uC2DD\uB7C9)"
+  - conditionId: C_FOD_S02
+    targetAttr: food
+    targetOp: '!='
+    targetValue: 0
+    description: "\uCD5C\uC18C \uC0DD\uC874\uB7C9"
+  - conditionId: C_FOD_S03
+    targetAttr: food
+    targetOp: <=
+    targetValue: 5000
+    description: "\uD3ED\uB3D9 \uC784\uACC4\uC810"
+  - conditionId: C_FOD_S04
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 20000
+    description: "\uC804\uC2DC \uB300\uBE44 \uC548\uC815"
+  - conditionId: C_FOD_S05
+    targetAttr: food
+    targetOp: '>'
+    targetValue: 100000
+    description: "\uD0C0 \uC9C0\uC5ED \uAD6C\uD73C \uAC00\uB2A5"
+  - conditionId: C_FOD_S06
+    targetAttr: food
+    targetOp: <
+    targetValue: 50000
+    description: "\uC7A5\uAE30\uC804 \uBD88\uB9AC"
+  - conditionId: C_FOD_S07
+    targetAttr: food
+    targetOp: '>='
+    targetValue: 15000
+    description: "\uC2DC\uC7A5\uAC00 \uC548\uC815\uC120"
+  - conditionId: C_GLD_H01
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 40000
+    description: "\uAE30\uCD08 \uC790\uC0B0 \uD655\uBCF4"
+  - conditionId: C_GLD_H02
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 50000
+    description: "\uC548\uC815\uC801 \uC7AC\uC815"
+  - conditionId: C_GLD_H03
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 60000
+    description: "\uC801\uADF9 \uD22C\uC790 \uAC00\uB2A5"
+  - conditionId: C_GLD_H04
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 80000
+    description: "\uBD80\uC720\uD55C \uC601\uC9C0"
+  - conditionId: C_GLD_H05
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 100000
+    description: "\uC9C0\uC5ED \uAC70\uBD80 \uC0C1\uD0DC"
+  - conditionId: C_GLD_H06
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 150000
+    description: "\uB300\uADDC\uBAA8 \uC0AC\uC5C5 \uAC00\uB2A5"
+  - conditionId: C_GLD_H07
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 200000
+    description: "\uAE08\uC735 \uD5C8\uBE0C \uB3C4\uC57D"
+  - conditionId: C_GLD_H08
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 300000
+    description: "\uB9C9\uAC15\uD55C \uC790\uAE08\uB825"
+  - conditionId: C_GLD_H09
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 500000
+    description: "\uCC9C\uD558 \uC81C\uC77C \uBD80"
+  - conditionId: C_GLD_H10
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 700000
+    description: "\uAE08\uACE0\uAC00 \uB118\uCCD0\uB0A8"
+  - conditionId: C_GLD_H11
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 1000000
+    description: "\uBB34\uD55C\uD55C \uC7AC\uB825"
+  - conditionId: C_GLD_L01
+    targetAttr: gold
+    targetOp: <
+    targetValue: 1000
+    description: "\uAE08\uD654 \uD30C\uC0B0 \uC704\uAE30"
+  - conditionId: C_GLD_L02
+    targetAttr: gold
+    targetOp: <
+    targetValue: 3000
+    description: "\uAD6D\uACE0 \uACE0\uAC08 \uC704\uAE30"
+  - conditionId: C_GLD_L03
+    targetAttr: gold
+    targetOp: <
+    targetValue: 5000
+    description: "\uC790\uAE08 \uB9E4\uC6B0 \uBD80\uC871"
+  - conditionId: C_GLD_L04
+    targetAttr: gold
+    targetOp: <
+    targetValue: 8000
+    description: "\uBD09\uAE09 \uC9C0\uBD88 \uACE4\uB780"
+  - conditionId: C_GLD_L05
+    targetAttr: gold
+    targetOp: <
+    targetValue: 10000
+    description: "\uC7AC\uC815\uB09C \uC2DC\uC791"
+  - conditionId: C_GLD_L06
+    targetAttr: gold
+    targetOp: <
+    targetValue: 15000
+    description: "\uC720\uB3D9\uC131 \uACBD\uC0C9"
+  - conditionId: C_GLD_L07
+    targetAttr: gold
+    targetOp: <
+    targetValue: 20000
+    description: "\uD22C\uC790 \uC704\uCD95 \uC0C1\uD0DC"
+  - conditionId: C_GLD_L08
+    targetAttr: gold
+    targetOp: <
+    targetValue: 25000
+    description: "\uAE34\uAE09 \uC790\uAE08 \uBD80\uC871"
+  - conditionId: C_GLD_L09
+    targetAttr: gold
+    targetOp: <
+    targetValue: 30000
+    description: "\uC7AC\uC815 \uC555\uBC15 \uB2E8\uACC4"
+  - conditionId: C_GLD_L10
+    targetAttr: gold
+    targetOp: <
+    targetValue: 40000
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uC790\uBCF8"
+  - conditionId: C_GLD_S01
+    targetAttr: gold
+    targetOp: ==
+    targetValue: 0
+    description: "\uC644\uC804 \uBE48\uD138\uD130\uB9AC"
+  - conditionId: C_GLD_S02
+    targetAttr: gold
+    targetOp: '!='
+    targetValue: 0
+    description: "\uCD5C\uC18C \uC790\uBCF8 \uBCF4\uC720"
+  - conditionId: C_GLD_S03
+    targetAttr: gold
+    targetOp: <=
+    targetValue: 5000
+    description: "\uBD80\uB3C4 \uACBD\uBCF4 \uBC1C\uB839"
+  - conditionId: C_GLD_S04
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 20000
+    description: "\uC0C1\uC5C5 \uBC1C\uC804 \uAC00\uB2A5"
+  - conditionId: C_GLD_S05
+    targetAttr: gold
+    targetOp: '>'
+    targetValue: 100000
+    description: "\uD638\uD654 \uD1B5\uCE58 \uAC00\uB2A5"
+  - conditionId: C_GLD_S06
+    targetAttr: gold
+    targetOp: <
+    targetValue: 50000
+    description: "\uD655\uC7A5 \uD55C\uACC4\uC810"
+  - conditionId: C_GLD_S07
+    targetAttr: gold
+    targetOp: '>='
+    targetValue: 15000
+    description: "\uC911\uC0C1\uCE35 \uC601\uC9C0"
+  - conditionId: C_INT_H01
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 50
+    description: "\uAE30\uCD08 \uD589\uC815\uB825 \uD655\uBCF4"
+  - conditionId: C_INT_H02
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 55
+    description: "\uC548\uC815\uC801 \uC2DC\uC7A5 \uAD00\uB9AC"
+  - conditionId: C_INT_H03
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 60
+    description: "\uC0C1\uB85C \uAC1C\uCC99 \uAC00\uB2A5"
+  - conditionId: C_INT_H04
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 65
+    description: "\uB6F0\uC5B4\uB09C \uB0B4\uC815 \uCC98\uB9AC"
+  - conditionId: C_INT_H05
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 70
+    description: "\uAE30\uC220 \uAC1C\uBC1C \uAC00\uC18D"
+  - conditionId: C_INT_H06
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 75
+    description: "\uCC45\uB7B5 \uBC29\uC5B4 \uAC00\uB2A5"
+  - conditionId: C_INT_H07
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 80
+    description: "\uCC9C\uC7AC\uC801 \uCC45\uB7B5\uAC00"
+  - conditionId: C_INT_H08
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 85
+    description: "\uC644\uBCBD\uD55C \uC815\uBCF4 \uBCF4\uC548"
+  - conditionId: C_INT_H09
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 90
+    description: "\uC81C\uAC08\uB7C9\uAE09 \uC9C0\uB7B5"
+  - conditionId: C_INT_H10
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 95
+    description: "\uAD6D\uAC00 \uACBD\uC601\uC758 \uADC0\uC7AC"
+  - conditionId: C_INT_H11
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 100
+    description: "\uC2E0\uC758 \uD55C \uC218 (\uC9C0\uB825)"
+  - conditionId: C_INT_L01
+    targetAttr: intel
+    targetOp: <
+    targetValue: 5
+    description: "\uC9C0\uB2A5\uC801 \uB300\uCC98 \uBD88\uAC00\uB2A5"
+  - conditionId: C_INT_L02
+    targetAttr: intel
+    targetOp: <
+    targetValue: 10
+    description: "\uC2EC\uAC01\uD55C \uD589\uC815 \uBB34\uB2A5"
+  - conditionId: C_INT_L03
+    targetAttr: intel
+    targetOp: <
+    targetValue: 15
+    description: "\uC0AC\uAE30 \uBC94\uC8C4 \uCDE8\uC57D"
+  - conditionId: C_INT_L04
+    targetAttr: intel
+    targetOp: <
+    targetValue: 20
+    description: "\uAE30\uBC00 \uC720\uC9C0 \uBD88\uC548"
+  - conditionId: C_INT_L05
+    targetAttr: intel
+    targetOp: <
+    targetValue: 25
+    description: "\uB0B4\uBD80 \uAC04\uC790 \uD65C\uB3D9 \uC6A9\uC774"
+  - conditionId: C_INT_L06
+    targetAttr: intel
+    targetOp: <
+    targetValue: 30
+    description: "\uD589\uC815 \uCC98\uB9AC \uBBF8\uC219"
+  - conditionId: C_INT_L07
+    targetAttr: intel
+    targetOp: <
+    targetValue: 35
+    description: "\uC815\uBCF4\uB825 \uBD80\uC871"
+  - conditionId: C_INT_L08
+    targetAttr: intel
+    targetOp: <
+    targetValue: 40
+    description: "\uC0AC\uAE30\uAFBC\uC758 \uD0C0\uAC9F"
+  - conditionId: C_INT_L09
+    targetAttr: intel
+    targetOp: <
+    targetValue: 45
+    description: "\uC911\uACC4 \uBB34\uC5ED \uBBF8\uC219"
+  - conditionId: C_INT_L10
+    targetAttr: intel
+    targetOp: <
+    targetValue: 50
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uC9C0\uB825"
+  - conditionId: C_INT_S01
+    targetAttr: intel
+    targetOp: ==
+    targetValue: 0
+    description: "\uD589\uC815 \uB9C8\uBE44 \uC0C1\uD0DC"
+  - conditionId: C_INT_S02
+    targetAttr: intel
+    targetOp: '!='
+    targetValue: 100
+    description: "\uBE44\uCD5C\uC801\uD654 \uD589\uC815"
+  - conditionId: C_INT_S03
+    targetAttr: intel
+    targetOp: <=
+    targetValue: 20
+    description: "\uCC0C\uB77C\uC2DC \uCDE8\uC57D \uC9C0\uB300"
+  - conditionId: C_INT_S04
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 80
+    description: "\uACE0\uB3C4\uC758 \uACBD\uC81C \uC815\uCC45"
+  - conditionId: C_INT_S05
+    targetAttr: intel
+    targetOp: '>'
+    targetValue: 50
+    description: "\uC911\uAC04 \uAD00\uB9AC\uB825 \uD655\uBCF4"
+  - conditionId: C_INT_S06
+    targetAttr: intel
+    targetOp: <
+    targetValue: 70
+    description: "\uACE0\uAE09 \uCC45\uB7B5\uC5D0 \uB178\uCD9C"
+  - conditionId: C_INT_S07
+    targetAttr: intel
+    targetOp: '>='
+    targetValue: 30
+    description: "\uCD5C\uC18C \uD589\uC815 \uC720\uC9C0"
+  - conditionId: C_POP_H01
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 50000
+    description: "\uC548\uC815\uC801 \uC778\uAD6C \uAE30\uBC18"
+  - conditionId: C_POP_H02
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 70000
+    description: "\uD65C\uBC1C\uD55C \uACBD\uC81C \uD65C\uB3D9"
+  - conditionId: C_POP_H03
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 100000
+    description: "\uB300\uB3C4\uC2DC \uC9C4\uC785"
+  - conditionId: C_POP_H04
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 150000
+    description: "\uC9C0\uC5ED \uC911\uC2EC \uAC70\uC810"
+  - conditionId: C_POP_H05
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 200000
+    description: "\uB9C9\uAC15\uD55C \uC0DD\uC0B0\uB825"
+  - conditionId: C_POP_H06
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 300000
+    description: "\uCC9C\uD558 5\uB300 \uB3C4\uC2DC"
+  - conditionId: C_POP_H07
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 500000
+    description: "\uC81C\uAD6D\uC758 \uC218\uB3C4\uAE09"
+  - conditionId: C_POP_H08
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 700000
+    description: "\uC778\uAD6C \uB300\uD3ED\uBC1C"
+  - conditionId: C_POP_H09
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 900000
+    description: "\uC808\uB300\uC801 \uC778\uAD6C \uC6B0\uC704"
+  - conditionId: C_POP_H10
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 1000000
+    description: "\uCC9C\uD558 \uB9CC\uBBFC\uC758 \uACE0\uD5A5"
+  - conditionId: C_POP_H11
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 2000000
+    description: "\uBA54\uD2B8\uB85C\uD3F4\uB9AC\uC2A4"
+  - conditionId: C_POP_L01
+    targetAttr: population
+    targetOp: <
+    targetValue: 1000
+    description: "\uC720\uB839 \uB3C4\uC2DC (\uC778\uAD6C)"
+  - conditionId: C_POP_L02
+    targetAttr: population
+    targetOp: <
+    targetValue: 3000
+    description: "\uD669\uD3D0\uD55C \uC601\uC9C0"
+  - conditionId: C_POP_L03
+    targetAttr: population
+    targetOp: <
+    targetValue: 5000
+    description: "\uB9C8\uC744 \uC218\uC900 \uC778\uAD6C"
+  - conditionId: C_POP_L04
+    targetAttr: population
+    targetOp: <
+    targetValue: 7000
+    description: "\uBC1C\uC804 \uC815\uCCB4 \uC0C1\uD0DC"
+  - conditionId: C_POP_L05
+    targetAttr: population
+    targetOp: <
+    targetValue: 10000
+    description: "\uB178\uB3D9\uB825 \uBD80\uC871"
+  - conditionId: C_POP_L06
+    targetAttr: population
+    targetOp: <
+    targetValue: 15000
+    description: "\uC18C\uB3C4\uC2DC \uC218\uC900"
+  - conditionId: C_POP_L07
+    targetAttr: population
+    targetOp: <
+    targetValue: 20000
+    description: "\uC2DC\uC7A5 \uD615\uC131 \uC9C0\uC5F0"
+  - conditionId: C_POP_L08
+    targetAttr: population
+    targetOp: <
+    targetValue: 30000
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uC778\uAD6C"
+  - conditionId: C_POP_L09
+    targetAttr: population
+    targetOp: <
+    targetValue: 40000
+    description: "\uC131\uC7A5 \uB3D9\uB825 \uBD80\uC871"
+  - conditionId: C_POP_L10
+    targetAttr: population
+    targetOp: <
+    targetValue: 50000
+    description: "\uC911\uC18C \uB3C4\uC2DC \uC218\uC900"
+  - conditionId: C_POP_S01
+    targetAttr: population
+    targetOp: ==
+    targetValue: 0
+    description: "\uBB38\uBA85 \uBA78\uB9DD \uC0C1\uD0DC"
+  - conditionId: C_POP_S02
+    targetAttr: population
+    targetOp: '!='
+    targetValue: 0
+    description: "\uC0DD\uC874\uC790 \uC9D1\uB2E8"
+  - conditionId: C_POP_S03
+    targetAttr: population
+    targetOp: <=
+    targetValue: 5000
+    description: "\uC774\uC8FC \uC7A5\uB824 \uD544\uC694"
+  - conditionId: C_POP_S04
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 50000
+    description: "\uB178\uB3D9\uB825 \uC790\uAE09\uC790\uC871"
+  - conditionId: C_POP_S05
+    targetAttr: population
+    targetOp: '>'
+    targetValue: 200000
+    description: "\uAC70\uB300 \uACBD\uC81C \uC0DD\uD0DC\uACC4"
+  - conditionId: C_POP_S06
+    targetAttr: population
+    targetOp: <
+    targetValue: 100000
+    description: "\uB300\uB3C4\uC2DC \uBBF8\uB2EC"
+  - conditionId: C_POP_S07
+    targetAttr: population
+    targetOp: '>='
+    targetValue: 30000
+    description: "\uAE30\uCD08 \uC138\uC218 \uD655\uBCF4"
+  - conditionId: C_POW_H01
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 50
+    description: "\uBCF4\uD1B5 \uC218\uC900 \uBB34\uB825"
+  - conditionId: C_POW_H02
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 55
+    description: "\uAE30\uCD08 \uC218\uBE44 \uD655\uBCF4"
+  - conditionId: C_POW_H03
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 60
+    description: "\uC548\uC815\uC801\uC778 \uC218\uBE44\uB825"
+  - conditionId: C_POW_H04
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 65
+    description: "\uC815\uC608\uBCD1 \uAE30\uC6A9 \uAC00\uB2A5"
+  - conditionId: C_POW_H05
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 70
+    description: "\uAC15\uB825\uD55C \uBB34\uB825"
+  - conditionId: C_POW_H06
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 75
+    description: "\uC9C0\uC5ED \uB0B4 \uC6B0\uC138 \uBB34\uB825"
+  - conditionId: C_POW_H07
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 80
+    description: "\uCD5C\uC0C1\uC704\uAD8C \uBB34\uB825"
+  - conditionId: C_POW_H08
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 85
+    description: "\uB09C\uACF5\uBD88\uB77D\uC758 \uAE30\uC138"
+  - conditionId: C_POW_H09
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 90
+    description: "\uCC9C\uD558 \uBA85\uC7A5\uAE09 \uBB34\uB825"
+  - conditionId: C_POW_H10
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 95
+    description: "\uB9CC\uC778\uC9C0\uC801\uC758 \uBB34\uB825"
+  - conditionId: C_POW_H11
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 100
+    description: "\uC808\uB300 \uBB34\uB825 (\uC2E0)"
+  - conditionId: C_POW_L01
+    targetAttr: might
+    targetOp: <
+    targetValue: 5
+    description: "\uBB34\uB825 \uADF9\uB3C4\uB85C \uB0AE\uC74C (\uBC29\uC5B4 \uBD88\uAC00)"
+  - conditionId: C_POW_L02
+    targetAttr: might
+    targetOp: <
+    targetValue: 10
+    description: "\uBB34\uB825 \uB9E4\uC6B0 \uB0AE\uC74C"
+  - conditionId: C_POW_L03
+    targetAttr: might
+    targetOp: <
+    targetValue: 15
+    description: "\uBB34\uB825 \uB0AE\uC74C"
+  - conditionId: C_POW_L04
+    targetAttr: might
+    targetOp: <
+    targetValue: 20
+    description: "\uBB34\uB825 \uBD80\uC871"
+  - conditionId: C_POW_L05
+    targetAttr: might
+    targetOp: <
+    targetValue: 25
+    description: "\uCE58\uC548 \uC720\uC9C0 \uD55C\uACC4"
+  - conditionId: C_POW_L06
+    targetAttr: might
+    targetOp: <
+    targetValue: 30
+    description: "\uD558\uC704\uAD8C \uBB34\uB825"
+  - conditionId: C_POW_L07
+    targetAttr: might
+    targetOp: <
+    targetValue: 35
+    description: "\uC218\uBE44 \uBD88\uC548\uC815"
+  - conditionId: C_POW_L08
+    targetAttr: might
+    targetOp: <
+    targetValue: 40
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uBB34\uB825"
+  - conditionId: C_POW_L09
+    targetAttr: might
+    targetOp: <
+    targetValue: 45
+    description: "\uACBD\uACC4 \uC18C\uD640"
+  - conditionId: C_POW_L10
+    targetAttr: might
+    targetOp: <
+    targetValue: 50
+    description: "\uD3C9\uADE0 \uBBF8\uB2EC \uBB34\uB825"
+  - conditionId: C_POW_S01
+    targetAttr: might
+    targetOp: ==
+    targetValue: 0
+    description: "\uBE44\uBB34\uC7A5 \uC0C1\uD0DC"
+  - conditionId: C_POW_S02
+    targetAttr: might
+    targetOp: '!='
+    targetValue: 100
+    description: "\uC644\uBCBD\uD558\uC9C0 \uC54A\uC740 \uBB34\uB825"
+  - conditionId: C_POW_S03
+    targetAttr: might
+    targetOp: <=
+    targetValue: 15
+    description: "\uCD08\uAE30 \uC57D\uD0C8 \uC704\uD5D8\uAD70"
+  - conditionId: C_POW_S04
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 80
+    description: "\uACF5\uACA9\uC801 \uBC29\uC5B4 \uAC00\uB2A5"
+  - conditionId: C_POW_S05
+    targetAttr: might
+    targetOp: '>'
+    targetValue: 50
+    description: "\uC911\uAC04 \uBC29\uC5B4\uC120 \uD655\uBCF4"
+  - conditionId: C_POW_S06
+    targetAttr: might
+    targetOp: <
+    targetValue: 70
+    description: "\uAC15\uB825\uD55C \uC801\uC5D0 \uCDE8\uC57D"
+  - conditionId: C_POW_S07
+    targetAttr: might
+    targetOp: '>='
+    targetValue: 30
+    description: "\uCD5C\uC18C\uD55C\uC758 \uCE58\uC548"
+  - conditionId: C_PUB_H01
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 50
+    description: "\uC9C8\uC11C \uD68C\uBCF5\uAE30"
+  - conditionId: C_PUB_H02
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 55
+    description: "\uC548\uC815\uC801\uC778 \uCE58\uC548"
+  - conditionId: C_PUB_H03
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 60
+    description: "\uACF5\uACF5 \uC9C8\uC11C \uD655\uB9BD"
+  - conditionId: C_PUB_H04
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 65
+    description: "\uD3C9\uD654\uB85C\uC6B4 \uB3C4\uC2DC"
+  - conditionId: C_PUB_H05
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 70
+    description: "\uC2DC\uBBFC \uC758\uC2DD \uB192\uC74C"
+  - conditionId: C_PUB_H06
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 75
+    description: "\uBC94\uC8C4 \uC5C6\uB294 \uB9C8\uC744"
+  - conditionId: C_PUB_H07
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 80
+    description: "\uD0DC\uD3C9\uC131\uB300 \uC9D5\uC870"
+  - conditionId: C_PUB_H08
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 85
+    description: "\uC644\uBCBD\uD55C \uC0AC\uD68C \uC9C8\uC11C"
+  - conditionId: C_PUB_H09
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 90
+    description: "\uC694\uC21C\uC2DC\uB300 \uC7AC\uB9BC"
+  - conditionId: C_PUB_H10
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 95
+    description: "\uCC9C\uAD6D \uAC19\uC740 \uCE58\uC548"
+  - conditionId: C_PUB_H11
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 100
+    description: "\uC808\uB300\uC801 \uD3C9\uD654"
+  - conditionId: C_PUB_L01
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 5
+    description: "\uD3ED\uB3D9 \uC9C1\uC804 (\uBBFC\uC2EC)"
+  - conditionId: C_PUB_L02
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 10
+    description: "\uACC4\uC5C4\uB839 \uD544\uC694"
+  - conditionId: C_PUB_L03
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 15
+    description: "\uCE58\uC548 \uBD95\uAD34 \uC704\uAE30"
+  - conditionId: C_PUB_L04
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 20
+    description: "\uB3C4\uC801 \uC18C\uAD74\uD654"
+  - conditionId: C_PUB_L05
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 25
+    description: "\uBBFC\uC2EC \uD749\uD749\uD568"
+  - conditionId: C_PUB_L06
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 30
+    description: "\uC0C1\uC2B5 \uBC94\uC8C4 \uC9C0\uC5ED"
+  - conditionId: C_PUB_L07
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 35
+    description: "\uC2DC\uC704 \uBC1C\uC0DD \uC804\uC870"
+  - conditionId: C_PUB_L08
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 40
+    description: "\uACF5\uAD8C\uB825 \uC57D\uD654"
+  - conditionId: C_PUB_L09
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 45
+    description: "\uC815\uBD80 \uBD88\uC2E0 \uD33D\uBC30"
+  - conditionId: C_PUB_L10
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 50
+    description: "\uD63C\uB780\uC2A4\uB7EC\uC6B4 \uCE58\uC548"
+  - conditionId: C_PUB_S01
+    targetAttr: public_order
+    targetOp: ==
+    targetValue: 0
+    description: "\uBB34\uBC95 \uCC9C\uC9C0"
+  - conditionId: C_PUB_S02
+    targetAttr: public_order
+    targetOp: '!='
+    targetValue: 100
+    description: "\uBBF8\uC138\uD55C \uBD88\uB9CC"
+  - conditionId: C_PUB_S03
+    targetAttr: public_order
+    targetOp: <=
+    targetValue: 15
+    description: "\uC989\uAC01 \uBC18\uB780 \uAC00\uB2A5"
+  - conditionId: C_PUB_S04
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 80
+    description: "\uD22C\uC790 \uCD5C\uC801 \uD658\uACBD"
+  - conditionId: C_PUB_S05
+    targetAttr: public_order
+    targetOp: '>'
+    targetValue: 50
+    description: "\uAE30\uCD08 \uC9C8\uC11C \uC720\uC9C0"
+  - conditionId: C_PUB_S06
+    targetAttr: public_order
+    targetOp: <
+    targetValue: 70
+    description: "\uC7A0\uC7AC\uC801 \uBD88\uC548"
+  - conditionId: C_PUB_S07
+    targetAttr: public_order
+    targetOp: '>='
+    targetValue: 30
+    description: "\uCD5C\uC18C \uC9C8\uC11C"
+  - conditionId: C_SOL_H01
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 20000
+    description: "\uAE30\uCD08 \uAD70\uC0AC\uB825 \uD655\uBCF4"
+  - conditionId: C_SOL_H02
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 30000
+    description: "\uC548\uC815\uC801 \uC8FC\uB454\uAD70"
+  - conditionId: C_SOL_H03
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 40000
+    description: "\uACF5\uACA9\uC801 \uC6B4\uC601 \uAC00\uB2A5"
+  - conditionId: C_SOL_H04
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 50000
+    description: "\uC9C0\uC5ED \uD328\uAD8C \uD655\uBCF4"
+  - conditionId: C_SOL_H05
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 70000
+    description: "\uB9C9\uAC15\uD55C \uC815\uC608\uAD70"
+  - conditionId: C_SOL_H06
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 100000
+    description: "\uBC31\uB9CC \uB300\uAD70 \uC11C\uB9C9"
+  - conditionId: C_SOL_H07
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 150000
+    description: "\uC808\uB300 \uBB34\uB825 \uC9D1\uB2E8"
+  - conditionId: C_SOL_H08
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 200000
+    description: "\uCC9C\uD558 \uD1B5\uC77C \uAD70\uC138"
+  - conditionId: C_SOL_H09
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 300000
+    description: "\uC2E0\uC758 \uAD70\uB300 (\uBCD1\uC0AC)"
+  - conditionId: C_SOL_H10
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 500000
+    description: "\uC0C1\uC0C1 \uCD08\uC6D4 \uBCD1\uB825"
+  - conditionId: C_SOL_H11
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 1000000
+    description: "\uC804 \uC778\uB958\uC758 \uAD70\uB300"
+  - conditionId: C_SOL_L01
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 100
+    description: "\uBCD1\uC0AC \uC804\uBA78 \uC218\uC900"
+  - conditionId: C_SOL_L02
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 500
+    description: "\uC218\uBE44\uB300 \uBD95\uAD34 \uC704\uAE30"
+  - conditionId: C_SOL_L03
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 1000
+    description: "\uCD5C\uC18C \uBC29\uC5B4\uC120 \uC5C6\uC74C"
+  - conditionId: C_SOL_L04
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 2000
+    description: "\uC2EC\uAC01\uD55C \uC804\uB825 \uBD80\uC871"
+  - conditionId: C_SOL_L05
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 3000
+    description: "\uC131\uBB38 \uBC29\uC5B4 \uBD88\uC548"
+  - conditionId: C_SOL_L06
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 5000
+    description: "\uCE58\uC548 \uC720\uC9C0 \uD55C\uACC4"
+  - conditionId: C_SOL_L07
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 7000
+    description: "\uC57D\uD0C8\uC758 \uBA39\uC787\uAC10"
+  - conditionId: C_SOL_L08
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 10000
+    description: "\uC218\uC138\uC801 \uBC29\uC5B4"
+  - conditionId: C_SOL_L09
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 15000
+    description: "\uBCF4\uD1B5 \uC774\uD558 \uBCD1\uB825"
+  - conditionId: C_SOL_L10
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 20000
+    description: "\uB300\uADDC\uBAA8 \uC2B5\uACA9 \uCDE8\uC57D"
+  - conditionId: C_SOL_S01
+    targetAttr: soldiers
+    targetOp: ==
+    targetValue: 0
+    description: "\uBB34\uC8FC\uACF5\uC0B0 \uC0C1\uD0DC"
+  - conditionId: C_SOL_S02
+    targetAttr: soldiers
+    targetOp: '!='
+    targetValue: 0
+    description: "\uC18C\uC218 \uC815\uC608 \uC0C1\uC8FC"
+  - conditionId: C_SOL_S03
+    targetAttr: soldiers
+    targetOp: <=
+    targetValue: 1000
+    description: "\uB3C4\uC801\uC758 \uB180\uC774\uD130"
+  - conditionId: C_SOL_S04
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 10000
+    description: "\uC131\uB0B4 \uC9C8\uC11C \uD655\uB9BD"
+  - conditionId: C_SOL_S05
+    targetAttr: soldiers
+    targetOp: '>'
+    targetValue: 50000
+    description: "\uD0C0 \uC131 \uC6D0\uC815 \uAC00\uB2A5"
+  - conditionId: C_SOL_S06
+    targetAttr: soldiers
+    targetOp: <
+    targetValue: 30000
+    description: "\uC601\uD1A0 \uD655\uC7A5 \uD55C\uACC4"
+  - conditionId: C_SOL_S07
+    targetAttr: soldiers
+    targetOp: '>='
+    targetValue: 15000
+    description: "\uC548\uC815\uC801 \uC218\uBE44\uC120"

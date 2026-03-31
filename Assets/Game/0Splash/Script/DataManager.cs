@@ -18,18 +18,15 @@ public partial class DataManager : Singleton<DataManager>
     /// <summary>런타임 맵·SO를 갱신한 뒤 천하 UI만 즉시 다시 그릴 때 호출(가짜 틱 제거 후).</summary>
     public void RequestWorldUiRefresh() => OnStateTicked?.Invoke();
 
-    [Header("Master Data SO References")]
-    [SerializeField] LevelRuleDataSo levelRuleDataSo;
-    [SerializeField] CastleMasterDataSo castleMasterDataSo;
-    [SerializeField] GeneralMasterDataSo generalMasterDataSo;
-    [SerializeField] BuffMasterDataSo buffMasterDataSo;
-    [SerializeField] NationMasterDataSo nationMasterDataSo;
-    [SerializeField] RegionMasterDataSo regionMasterDataSo;
-    [SerializeField] EventMasterDataSo eventMasterDataSo;
+    [Header("고정 마스터 (FixedSoDataManager)")]
+    [Tooltip("같은 GameObject에 두면 자동 연결됩니다. 마스터 SO·맵은 여기서만 할당하세요.")]
+    [SerializeField] FixedSoDataManager fixedSoDataManager;
 
-    [Header("경제 기본값 SO (선택)")]
-    [Tooltip("GlobalEconomy 정적 필드 초기화.")]
-    [SerializeField] GlobalEconomyDefaultsSo globalEconomyDefaultsSo;
+    /// <summary>고정 SO·마스터 맵. 컴포넌트 참조 또는 싱글톤.</summary>
+    public FixedSoDataManager FixedSo =>
+        fixedSoDataManager != null ? fixedSoDataManager : FixedSoDataManager.InstanceOrNull;
+
+    [Header("월드 초기 시나리오 SO (선택, 변동 상태 덮어쓰기)")]
     [Tooltip("castle_state.json 이 없을 때만 BuildStateDataFromMaster 뒤에 적용되는 성별 초기 AI/상태 덮어쓰기.")]
     [SerializeField] CastleWorldInitialScenarioSo castleWorldInitialScenarioSo;
 
@@ -39,40 +36,59 @@ public partial class DataManager : Singleton<DataManager>
     [Tooltip("유저 투자(성별 병력·평단) + 총 금화.")]
     [SerializeField] UserPortfolioSo userPortfolioLiveSo;
 
-    [Header("Runtime Dictionaries")]
+    static Dictionary<int, LevelRuleData> _fbLevelRule;
+    static Dictionary<string, CastleMasterData> _fbCastle;
+    static Dictionary<string, GeneralMasterData> _fbGeneral;
+    static Dictionary<string, BuffMasterData> _fbBuff;
+    static Dictionary<string, NationMasterData> _fbNation;
+    static Dictionary<string, RegionMasterData> _fbRegion;
+    static Dictionary<string, List<EventMasterData>> _fbEvent;
+    static Dictionary<string, ConditionData> _fbCond;
+    static Dictionary<string, EventStatModifierData> _fbStatMod;
+    static Dictionary<string, NewsMasterData> _fbNews;
+    static Dictionary<string, string> _fbCastleRegion;
 
-    // ★ Odin Inspector의 마법! 이 속성 하나로 딕셔너리가 인스펙터에 예쁘게 그려집니다.
-    // [DictionaryDrawerSettings]를 추가하면 UI를 더 깔끔하게 다듬을 수 있습니다.
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "레벨", ValueLabel = "밸런스 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<int, LevelRuleData> levelRuleMap = new Dictionary<int, LevelRuleData>();
+    /// <summary><see cref="FixedSoDataManager.levelRuleMap"/> 위임(FixedSo 없으면 빈 맵).</summary>
+    public Dictionary<int, LevelRuleData> levelRuleMap =>
+        FixedSo != null ? FixedSo.levelRuleMap : (_fbLevelRule ??= new Dictionary<int, LevelRuleData>());
 
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "성 ID", ValueLabel = "성 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<string, CastleMasterData> castleMasterDataMap = new Dictionary<string, CastleMasterData>();
+    public Dictionary<string, CastleMasterData> castleMasterDataMap =>
+        FixedSo != null ? FixedSo.castleMasterDataMap : (_fbCastle ??= new Dictionary<string, CastleMasterData>());
 
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "장수 ID", ValueLabel = "장수 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<string, GeneralMasterData> generalMasterDataMap = new Dictionary<string, GeneralMasterData>();
+    public Dictionary<string, GeneralMasterData> generalMasterDataMap =>
+        FixedSo != null ? FixedSo.generalMasterDataMap : (_fbGeneral ??= new Dictionary<string, GeneralMasterData>());
 
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "버프 ID", ValueLabel = "버프 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<string, BuffMasterData> buffMasterDataMap = new Dictionary<string, BuffMasterData>();
+    public Dictionary<string, BuffMasterData> buffMasterDataMap =>
+        FixedSo != null ? FixedSo.buffMasterDataMap : (_fbBuff ??= new Dictionary<string, BuffMasterData>());
 
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "세력 ID", ValueLabel = "세력 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<string, NationMasterData> nationMasterDataMap = new Dictionary<string, NationMasterData>();
+    public Dictionary<string, NationMasterData> nationMasterDataMap =>
+        FixedSo != null ? FixedSo.nationMasterDataMap : (_fbNation ??= new Dictionary<string, NationMasterData>());
 
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "지역 코드", ValueLabel = "지역 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<string, RegionMasterData> regionMasterDataMap = new Dictionary<string, RegionMasterData>();
+    public Dictionary<string, RegionMasterData> regionMasterDataMap =>
+        FixedSo != null ? FixedSo.regionMasterDataMap : (_fbRegion ??= new Dictionary<string, RegionMasterData>());
 
-    [ShowInInspector]
-    [DictionaryDrawerSettings(KeyLabel = "이벤트 ID", ValueLabel = "이벤트 마스터 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
-    public Dictionary<string, EventMasterData> eventMasterDataMap = new Dictionary<string, EventMasterData>();
+    public Dictionary<string, List<EventMasterData>> eventMasterDataMap =>
+        FixedSo != null
+            ? FixedSo.eventMasterDataMap
+            : (_fbEvent ??= new Dictionary<string, List<EventMasterData>>(StringComparer.Ordinal));
 
-    /// <summary>성 ID → 지역 코드(R01 등). <see cref="RebuildRegionCastleLookup"/>로 갱신.</summary>
-    public Dictionary<string, string> castleIdToRegionIdMap = new Dictionary<string, string>();
+    public Dictionary<string, ConditionData> conditionDataMap =>
+        FixedSo != null
+            ? FixedSo.conditionDataMap
+            : (_fbCond ??= new Dictionary<string, ConditionData>(StringComparer.Ordinal));
+
+    public Dictionary<string, EventStatModifierData> eventStatModifierMap =>
+        FixedSo != null
+            ? FixedSo.eventStatModifierMap
+            : (_fbStatMod ??= new Dictionary<string, EventStatModifierData>(StringComparer.Ordinal));
+
+    public Dictionary<string, NewsMasterData> newsMasterDataMap =>
+        FixedSo != null
+            ? FixedSo.newsMasterDataMap
+            : (_fbNews ??= new Dictionary<string, NewsMasterData>(StringComparer.Ordinal));
+
+    public Dictionary<string, string> castleIdToRegionIdMap =>
+        FixedSo != null ? FixedSo.castleIdToRegionIdMap : (_fbCastleRegion ??= new Dictionary<string, string>());
 
     [Header("State Data (Runtime)")]
     [ShowInInspector]
@@ -81,6 +97,9 @@ public partial class DataManager : Singleton<DataManager>
 
     [ShowInInspector]
     public List<WorldNewsItem> worldNews = new List<WorldNewsItem>();
+
+    [ShowInInspector]
+    public List<PendingRumorWorldEvent> pendingRumorWorldEvents = new List<PendingRumorWorldEvent>();
 
     public bool IsReady { get; private set; } = false;
     public bool IsStateReady { get; private set; } = false;
@@ -110,21 +129,39 @@ public partial class DataManager : Singleton<DataManager>
 #endif
 
     const string StateSaveFileName = "castle_state.json";
+    const int WorldNewsMaxCount = 100;
 
     protected override void Awake()
     {
         base.Awake();
+        if (fixedSoDataManager == null)
+            fixedSoDataManager = GetComponent<FixedSoDataManager>();
     }
 
     public void InitializeAllData()
     {
-        ApplyGlobalEconomyDefaultsFromSoIfPresent();
+        if (FixedSo != null)
+        {
+            FixedSo.ApplyGlobalEconomyDefaultsFromSoIfPresent();
+            FixedSo.SyncRuntimeMapsFromSo();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[DataManager] FixedSoDataManager가 없습니다. DataManager와 같은 오브젝트에 FixedSoDataManager를 추가하고 마스터 SO를 연결하세요.");
+        }
 
-        // 시트 파싱 결과가 비어있을 때를 대비해 SO에서 딕셔너리를 보강합니다.
-        SyncRuntimeMapsFromSo();
         IsReady = true;
-        OnDataReady?.Invoke(); // 구독 중인 UI(UpgradeButton 등)가 초기화되도록 호출
-        Debug.Log($"[DataManager] 데이터 세팅 완료! 레벨룰 {levelRuleMap.Count}개, 성 {castleMasterDataMap.Count}개, 장수 {generalMasterDataMap.Count}개, 버프 {buffMasterDataMap.Count}개, 세력 {nationMasterDataMap.Count}개, 지역 {regionMasterDataMap.Count}개, 이벤트 {eventMasterDataMap.Count}개를 로드했습니다.");
+        OnDataReady?.Invoke();
+        int eventRowTotal = 0;
+        if (FixedSo != null)
+        {
+            foreach (var kv in FixedSo.eventMasterDataMap)
+                if (kv.Value != null) eventRowTotal += kv.Value.Count;
+        }
+
+        Debug.Log(
+            $"[DataManager] 변동 데이터 매니저 준비. 마스터(FixedSo): {(FixedSo != null ? "OK" : "없음")} — 레벨룰 {levelRuleMap.Count}, 성 {castleMasterDataMap.Count}, 장수 {generalMasterDataMap.Count}, 버프 {buffMasterDataMap.Count}, 세력 {nationMasterDataMap.Count}, 지역 {regionMasterDataMap.Count}, 이벤트 {eventMasterDataMap.Count}종(행 {eventRowTotal}), 조건 {conditionDataMap.Count}, 확률보정 {eventStatModifierMap.Count}, 뉴스마스터 {newsMasterDataMap.Count}.");
 
         InitializeStateData();
     }
@@ -144,132 +181,60 @@ public partial class DataManager : Singleton<DataManager>
         }
     }
 
-    public LevelRuleData GetLevelData(int level)
-    {
-        if (levelRuleMap.TryGetValue(level, out LevelRuleData data)) return data;
-        return null;
-    }
+    public LevelRuleData GetLevelData(int level) => FixedSo != null ? FixedSo.GetLevelData(level) : null;
 
-    public CastleMasterData GetCastleMasterData(string id)
-    {
-        if (string.IsNullOrWhiteSpace(id)) return null;
-        if (castleMasterDataMap.TryGetValue(id.Trim(), out CastleMasterData data)) return data;
-        return null;
-    }
+    public CastleMasterData GetCastleMasterData(string id) => FixedSo != null ? FixedSo.GetCastleMasterData(id) : null;
 
-    public GeneralMasterData GetGeneralMasterData(string id)
-    {
-        if (string.IsNullOrWhiteSpace(id)) return null;
-        if (generalMasterDataMap.TryGetValue(id.Trim(), out GeneralMasterData data)) return data;
-        return null;
-    }
+    public GeneralMasterData GetGeneralMasterData(string id) => FixedSo != null ? FixedSo.GetGeneralMasterData(id) : null;
 
-    public BuffMasterData GetBuffMasterData(string id)
-    {
-        if (string.IsNullOrWhiteSpace(id)) return null;
-        if (buffMasterDataMap.TryGetValue(id.Trim(), out BuffMasterData data)) return data;
-        return null;
-    }
+    public BuffMasterData GetBuffMasterData(string id) => FixedSo != null ? FixedSo.GetBuffMasterData(id) : null;
 
     /// <summary>
     /// 구글 시트로 버프 맵을 채운 뒤, SO에만 있는 ID(예: 이벤트용 E01~E11)를 맵에 합칩니다.
     /// <see cref="GoogleSheetManager"/>에서 SetBuff 직후 호출.
     /// </summary>
-    public void MergeBuffMasterFromSoMissingKeys()
+    public void MergeBuffMasterFromSoMissingKeys() => FixedSo?.MergeBuffMasterFromSoMissingKeys();
+
+    public NationMasterData GetNationMasterData(string id) => FixedSo != null ? FixedSo.GetNationMasterData(id) : null;
+
+    public RegionMasterData GetRegionMasterData(string regionId) =>
+        FixedSo != null ? FixedSo.GetRegionMasterData(regionId) : null;
+
+    /// <summary>eventId의 <b>첫 행</b>(대표 메타·버프). 다중 행 중 조건 만족 행은 <see cref="TryGetEventMasterRows"/>로 조회.</summary>
+    public EventMasterData GetEventMasterData(string eventId) =>
+        FixedSo != null ? FixedSo.GetEventMasterData(eventId) : null;
+
+    public bool TryGetEventMasterRows(string eventId, out List<EventMasterData> rows)
     {
-        if (buffMasterDataSo == null || buffMasterDataSo.list == null) return;
-        for (int i = 0; i < buffMasterDataSo.list.Count; i++)
-        {
-            var b = buffMasterDataSo.list[i];
-            if (b == null || string.IsNullOrWhiteSpace(b.id)) continue;
-            string id = b.id.Trim();
-            if (!buffMasterDataMap.ContainsKey(id))
-                buffMasterDataMap[id] = b;
-        }
+        rows = null;
+        return FixedSo != null && FixedSo.TryGetEventMasterRows(eventId, out rows);
     }
 
-    public NationMasterData GetNationMasterData(string id)
-    {
-        if (string.IsNullOrWhiteSpace(id)) return null;
-        if (nationMasterDataMap.TryGetValue(id.Trim(), out NationMasterData data)) return data;
-        return null;
-    }
-
-    public RegionMasterData GetRegionMasterData(string regionId)
-    {
-        if (string.IsNullOrWhiteSpace(regionId)) return null;
-        if (regionMasterDataMap.TryGetValue(regionId.Trim(), out RegionMasterData data)) return data;
-        return null;
-    }
-
-    public EventMasterData GetEventMasterData(string eventId)
-    {
-        if (string.IsNullOrWhiteSpace(eventId)) return null;
-        if (eventMasterDataMap.TryGetValue(eventId.Trim(), out EventMasterData data)) return data;
-        return null;
-    }
+    public void AddEventMasterDataRow(EventMasterData row) => FixedSo?.AddEventMasterDataRow(row);
 
     /// <summary>성 마스터 ID로 소속 지역(R01 등)을 조회합니다.</summary>
     public bool TryGetRegionIdForCastle(string castleId, out string regionId)
     {
         regionId = null;
-        if (string.IsNullOrWhiteSpace(castleId)) return false;
-        return castleIdToRegionIdMap.TryGetValue(castleId.Trim(), out regionId) && !string.IsNullOrEmpty(regionId);
+        return FixedSo != null && FixedSo.TryGetRegionIdForCastle(castleId, out regionId);
     }
 
     /// <summary>성 ID로 <see cref="RegionMasterData"/>를 조회합니다.</summary>
     public bool TryGetRegionByCastleId(string castleId, out RegionMasterData region)
     {
         region = null;
-        if (!TryGetRegionIdForCastle(castleId, out string rid)) return false;
-        return regionMasterDataMap.TryGetValue(rid, out region) && region != null;
+        return FixedSo != null && FixedSo.TryGetRegionByCastleId(castleId, out region);
     }
 
     /// <summary>UI·뉴스용 성 표시명 — R01/C01 같은 코드 대신 실제 성명·지역 문자열·섹터명을 우선합니다.</summary>
-    public string GetCastleDisplayName(string castleId)
-    {
-        if (string.IsNullOrWhiteSpace(castleId)) return "";
-        castleId = castleId.Trim();
-        if (!castleMasterDataMap.TryGetValue(castleId, out var m) || m == null) return "";
-        TryGetRegionByCastleId(castleId, out var byCastle);
-        RegionMasterData byRidField = null;
-        string rf = (m.regionId ?? "").Trim();
-        if (!string.IsNullOrEmpty(rf))
-            byRidField = GetRegionMasterData(rf);
-        return CastleDisplayLabels.GetCastleTitle(m, byCastle, byRidField);
-    }
+    public string GetCastleDisplayName(string castleId) =>
+        FixedSo != null ? FixedSo.GetCastleDisplayName(castleId) : "";
 
     /// <summary>천하 카드 부제 등 — 지역(섹터) 표시명. 제목과 같으면 빈 문자열.</summary>
-    public string GetCastleRegionSubtitle(string castleId)
-    {
-        if (string.IsNullOrWhiteSpace(castleId)) return "";
-        castleId = castleId.Trim();
-        if (!castleMasterDataMap.TryGetValue(castleId, out var m) || m == null) return "";
-        TryGetRegionByCastleId(castleId, out var byCastle);
-        RegionMasterData byRidField = null;
-        string rf = (m.regionId ?? "").Trim();
-        if (!string.IsNullOrEmpty(rf))
-            byRidField = GetRegionMasterData(rf);
-        string title = CastleDisplayLabels.GetCastleTitle(m, byCastle, byRidField);
-        return CastleDisplayLabels.GetRegionSubtitle(m, byCastle, byRidField, title);
-    }
+    public string GetCastleRegionSubtitle(string castleId) =>
+        FixedSo != null ? FixedSo.GetCastleRegionSubtitle(castleId) : "";
 
-    public void RebuildRegionCastleLookup()
-    {
-        castleIdToRegionIdMap.Clear();
-        foreach (var kv in regionMasterDataMap)
-        {
-            string rid = kv.Key;
-            var r = kv.Value;
-            if (r == null || r.castleIds == null) continue;
-            for (int i = 0; i < r.castleIds.Count; i++)
-            {
-                string cid = r.castleIds[i];
-                if (string.IsNullOrWhiteSpace(cid)) continue;
-                castleIdToRegionIdMap[cid.Trim()] = rid;
-            }
-        }
-    }
+    public void RebuildRegionCastleLookup() => FixedSo?.RebuildRegionCastleLookup();
 
     // ========================================================================
     // State Data Initialization / Save / Load
@@ -336,6 +301,7 @@ public partial class DataManager : Singleton<DataManager>
             s.historySentiment7Day = new List<float>();
             s.buyPricePrevDayClose = 0f;
             s.castleTaxRatePercent = master.initialTaxRatePercent;
+            s.worldEventCooldowns = new List<WorldEventCooldownEntry>();
             castleStateDataMap[s.id] = s;
         }
 
@@ -343,6 +309,8 @@ public partial class DataManager : Singleton<DataManager>
         ApplyCastleWorldInitialScenarioIfPresent();
 
         worldNews.Clear();
+        if (pendingRumorWorldEvents != null)
+            pendingRumorWorldEvents.Clear();
         AddNews($"[INIT] StateData 생성 완료 ({castleStateDataMap.Count}개 성).");
         _stateDirty = true;
     }
@@ -540,13 +508,6 @@ public partial class DataManager : Singleton<DataManager>
 #endif
     }
 
-    void ApplyGlobalEconomyDefaultsFromSoIfPresent()
-    {
-        if (globalEconomyDefaultsSo == null) return;
-        GlobalEconomy.totalServerSoldiers = globalEconomyDefaultsSo.initialTotalServerSoldiers;
-        GlobalEconomy.grainPriceIndex = globalEconomyDefaultsSo.initialGrainPriceIndex;
-    }
-
     void ApplyCastleWorldInitialScenarioIfPresent()
     {
         if (castleWorldInitialScenarioSo == null || !castleWorldInitialScenarioSo.enabled) return;
@@ -633,10 +594,13 @@ public partial class DataManager : Singleton<DataManager>
                     s.populationHistory = new List<int> { s.currentPopulation };
                 if (s.historyPopulation7Day == null) s.historyPopulation7Day = new List<float>();
                 if (s.historySentiment7Day == null) s.historySentiment7Day = new List<float>();
+                if (s.worldEventCooldowns == null) s.worldEventCooldowns = new List<WorldEventCooldownEntry>();
                 castleStateDataMap[s.id] = s;
             }
 
             worldNews = payload.news ?? new List<WorldNewsItem>();
+            TrimWorldNewsToCap();
+            pendingRumorWorldEvents = payload.pendingRumorWorldEvents ?? new List<PendingRumorWorldEvent>();
 
             // 마스터가 바뀌었을 때를 대비해 누락분 보강
             foreach (var kv in castleMasterDataMap)
@@ -663,7 +627,8 @@ public partial class DataManager : Singleton<DataManager>
                         historyPopulation7Day = new List<float>(),
                         historySentiment7Day = new List<float>(),
                         buyPricePrevDayClose = 0f,
-                        castleTaxRatePercent = master.initialTaxRatePercent
+                        castleTaxRatePercent = master.initialTaxRatePercent,
+                        worldEventCooldowns = new List<WorldEventCooldownEntry>()
                     };
                     castleStateDataMap[id] = s;
                 }
@@ -680,6 +645,29 @@ public partial class DataManager : Singleton<DataManager>
         }
     }
 
+    public void MarkCastleStateDirty() => _stateDirty = true;
+
+    public void ClearConditionLibrary() => FixedSo?.ClearConditionLibrary();
+
+    /// <summary>시트 파싱 결과를 FixedSo 조건 SO·맵에 반영합니다.</summary>
+    public void ApplyParsedConditionLibrary(List<ConditionData> rows) => FixedSo?.ApplyParsedConditionLibrary(rows);
+
+    /// <summary>EventStatModifier 시트 파싱 결과를 FixedSo에 반영합니다.</summary>
+    public void ApplyParsedEventStatModifier(List<EventStatModifierData> rows) =>
+        FixedSo?.ApplyParsedEventStatModifier(rows);
+
+    public void MergeEventStatModifierFromSoMissingKeys() => FixedSo?.MergeEventStatModifierFromSoMissingKeys();
+
+    public bool TryGetNewsMasterData(string newsCode, out NewsMasterData data)
+    {
+        data = null;
+        return FixedSo != null && FixedSo.TryGetNewsMasterData(newsCode, out data);
+    }
+
+    public void ApplyParsedNewsMaster(List<NewsMasterData> rows) => FixedSo?.ApplyParsedNewsMaster(rows);
+
+    public void MergeNewsMasterFromSoMissingKeys() => FixedSo?.MergeNewsMasterFromSoMissingKeys();
+
     public void SaveStateDataToDisk()
     {
         try
@@ -687,7 +675,8 @@ public partial class DataManager : Singleton<DataManager>
             var payload = new CastleStateSavePayload
             {
                 castles = castleStateDataMap.Values.ToList(),
-                news = worldNews ?? new List<WorldNewsItem>()
+                news = worldNews ?? new List<WorldNewsItem>(),
+                pendingRumorWorldEvents = pendingRumorWorldEvents ?? new List<PendingRumorWorldEvent>()
             };
             string json = JsonUtility.ToJson(payload, prettyPrint: true);
 
@@ -1112,10 +1101,10 @@ public partial class DataManager : Singleton<DataManager>
         var buff = GetGovernorBuff(governorId);
         if (buff == null) return 0f;
 
-        if (buff.type == BuffType.CastleValue)
+        if (buff.statType == CastleStatType.CastleValue)
             return buff.value;
 
-        if (buff.type == BuffType.PriceValue)
+        if (buff.statType == CastleStatType.PriceValue)
             return -Mathf.Abs(buff.value);
 
         return 0f;
@@ -1128,15 +1117,53 @@ public partial class DataManager : Singleton<DataManager>
         return null;
     }
 
+    public void ClearNewsTemplateSheetRows() => FixedSo?.ClearNewsTemplateSheetRows();
+
+    public void SetNewsTemplateSheetRow(string eventId, NewsTemplateSheetRow row) =>
+        FixedSo?.SetNewsTemplateSheetRow(eventId, row);
+
+    public bool TryGetNewsTemplateSheetRow(string eventId, out NewsTemplateSheetRow row)
+    {
+        row = null;
+        return FixedSo != null && FixedSo.TryGetNewsTemplateSheetRow(eventId, out row);
+    }
+
     // ========================================================================
     // News
     // ========================================================================
+
+    void TrimWorldNewsToCap()
+    {
+        if (worldNews == null) return;
+        while (worldNews.Count > WorldNewsMaxCount)
+        {
+            int removeIdx = -1;
+            for (int i = 0; i < worldNews.Count; i++)
+            {
+                var w = worldNews[i];
+                if (w == null || w.newsKind != (byte)WorldNewsFeedKind.System)
+                {
+                    removeIdx = i;
+                    break;
+                }
+            }
+
+            if (removeIdx < 0)
+                break;
+            worldNews.RemoveAt(removeIdx);
+        }
+    }
+
     void AddNews(string text)
     {
         AddNewsItem(new WorldNewsItem
         {
             unixTime = TimeManager.GetUnixNow(),
-            text = text
+            text = text,
+            newsKind = (byte)WorldNewsFeedKind.System,
+            headline = text.Trim(),
+            bodyContent = text.Trim(),
+            isConfirmed = true
         });
     }
 
@@ -1148,8 +1175,8 @@ public partial class DataManager : Singleton<DataManager>
             item.unixTime = TimeManager.GetUnixNow();
         if (worldNews == null) worldNews = new List<WorldNewsItem>();
         worldNews.Add(item);
-        while (worldNews.Count > 80)
-            worldNews.RemoveAt(0);
+        TrimWorldNewsToCap();
+        _stateDirty = true;
         OnNewsAdded?.Invoke(item);
     }
 
@@ -1161,152 +1188,7 @@ public partial class DataManager : Singleton<DataManager>
         return id.Trim();
     }
 
-    public void SyncRuntimeMapsFromSo()
-    {
-        SyncLevelRuleFromSoIfNeeded();
-        SyncCastleFromSoIfNeeded();
-        SyncGeneralFromSoIfNeeded();
-        SyncBuffFromSoIfNeeded();
-        SyncNationFromSoIfNeeded();
-        SyncRegionFromSoIfNeeded();
-        SyncEventFromSoIfNeeded();
-    }
+    public void SyncRuntimeMapsFromSo() => FixedSo?.SyncRuntimeMapsFromSo();
 
-    public void SyncSoFromRuntimeMaps()
-    {
-        if (levelRuleDataSo != null)
-            levelRuleDataSo.list = levelRuleMap.Values.OrderBy(x => x.level).ToList();
-
-        if (castleMasterDataSo != null)
-            castleMasterDataSo.list = castleMasterDataMap.Values.OrderBy(x => x.id).ToList();
-
-        if (generalMasterDataSo != null)
-            generalMasterDataSo.list = generalMasterDataMap.Values.OrderBy(x => x.id).ToList();
-
-        if (buffMasterDataSo != null)
-            buffMasterDataSo.list = buffMasterDataMap.Values.OrderBy(x => x.id).ToList();
-
-        if (nationMasterDataSo != null)
-            nationMasterDataSo.list = nationMasterDataMap.Values.OrderBy(x => x.id).ToList();
-
-        if (regionMasterDataSo != null)
-            regionMasterDataSo.list = regionMasterDataMap.Values.OrderBy(x => x.id).ToList();
-
-        if (eventMasterDataSo != null)
-            eventMasterDataSo.list = eventMasterDataMap.Values.OrderBy(x => x.id).ToList();
-
-#if UNITY_EDITOR
-        if (levelRuleDataSo != null) EditorUtility.SetDirty(levelRuleDataSo);
-        if (castleMasterDataSo != null) EditorUtility.SetDirty(castleMasterDataSo);
-        if (generalMasterDataSo != null) EditorUtility.SetDirty(generalMasterDataSo);
-        if (buffMasterDataSo != null) EditorUtility.SetDirty(buffMasterDataSo);
-        if (nationMasterDataSo != null) EditorUtility.SetDirty(nationMasterDataSo);
-        if (regionMasterDataSo != null) EditorUtility.SetDirty(regionMasterDataSo);
-        if (eventMasterDataSo != null) EditorUtility.SetDirty(eventMasterDataSo);
-        AssetDatabase.SaveAssets();
-#endif
-    }
-
-    void SyncLevelRuleFromSoIfNeeded()
-    {
-        if (levelRuleMap.Count > 0 || levelRuleDataSo == null || levelRuleDataSo.list == null)
-            return;
-
-        for (int i = 0; i < levelRuleDataSo.list.Count; i++)
-        {
-            var item = levelRuleDataSo.list[i];
-            if (item == null)
-                continue;
-            levelRuleMap[item.level] = item;
-        }
-    }
-
-    void SyncCastleFromSoIfNeeded()
-    {
-        if (castleMasterDataMap.Count > 0 || castleMasterDataSo == null || castleMasterDataSo.list == null)
-            return;
-
-        for (int i = 0; i < castleMasterDataSo.list.Count; i++)
-        {
-            var item = castleMasterDataSo.list[i];
-            if (item == null || string.IsNullOrWhiteSpace(item.id))
-                continue;
-            castleMasterDataMap[item.id.Trim()] = item;
-        }
-    }
-
-    void SyncGeneralFromSoIfNeeded()
-    {
-        if (generalMasterDataMap.Count > 0 || generalMasterDataSo == null || generalMasterDataSo.list == null)
-            return;
-
-        for (int i = 0; i < generalMasterDataSo.list.Count; i++)
-        {
-            var item = generalMasterDataSo.list[i];
-            if (item == null || string.IsNullOrWhiteSpace(item.id))
-                continue;
-            generalMasterDataMap[item.id.Trim()] = item;
-        }
-    }
-
-    void SyncBuffFromSoIfNeeded()
-    {
-        if (buffMasterDataMap.Count > 0 || buffMasterDataSo == null || buffMasterDataSo.list == null)
-            return;
-
-        for (int i = 0; i < buffMasterDataSo.list.Count; i++)
-        {
-            var item = buffMasterDataSo.list[i];
-            if (item == null || string.IsNullOrWhiteSpace(item.id))
-                continue;
-            buffMasterDataMap[item.id.Trim()] = item;
-        }
-    }
-
-    void SyncNationFromSoIfNeeded()
-    {
-        if (nationMasterDataMap.Count > 0 || nationMasterDataSo == null || nationMasterDataSo.list == null)
-            return;
-
-        for (int i = 0; i < nationMasterDataSo.list.Count; i++)
-        {
-            var item = nationMasterDataSo.list[i];
-            if (item == null || string.IsNullOrWhiteSpace(item.id))
-                continue;
-            nationMasterDataMap[item.id.Trim()] = item;
-        }
-    }
-
-    void SyncRegionFromSoIfNeeded()
-    {
-        if (regionMasterDataMap.Count > 0 || regionMasterDataSo == null || regionMasterDataSo.list == null)
-        {
-            RebuildRegionCastleLookup();
-            return;
-        }
-
-        for (int i = 0; i < regionMasterDataSo.list.Count; i++)
-        {
-            var item = regionMasterDataSo.list[i];
-            if (item == null || string.IsNullOrWhiteSpace(item.id))
-                continue;
-            regionMasterDataMap[item.id.Trim()] = item;
-        }
-
-        RebuildRegionCastleLookup();
-    }
-
-    void SyncEventFromSoIfNeeded()
-    {
-        if (eventMasterDataMap.Count > 0 || eventMasterDataSo == null || eventMasterDataSo.list == null)
-            return;
-
-        for (int i = 0; i < eventMasterDataSo.list.Count; i++)
-        {
-            var item = eventMasterDataSo.list[i];
-            if (item == null || string.IsNullOrWhiteSpace(item.id))
-                continue;
-            eventMasterDataMap[item.id.Trim()] = item;
-        }
-    }
+    public void SyncSoFromRuntimeMaps() => FixedSo?.SyncSoFromRuntimeMaps();
 }

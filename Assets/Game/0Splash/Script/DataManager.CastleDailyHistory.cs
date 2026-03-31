@@ -38,7 +38,7 @@ public partial class DataManager
         _lastUtcDayBucket = day;
         _stateDirty = true;
 
-        EventManager.InstanceOrNull?.CheckDailyEventsFromDataManager();
+        WorldEventCenter.InstanceOrNull?.CheckDailyEventsFromDataManager();
     }
 
     /// <summary>전일 종가(또는 마지막 일괄 스냅샷) 대비 성채 호가 등락률(%).</summary>

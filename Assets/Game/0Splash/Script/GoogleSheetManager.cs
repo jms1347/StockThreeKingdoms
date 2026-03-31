@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks; // UniTask
 using UnityEngine;
@@ -19,13 +20,20 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     const string castleMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=661929505&range=A2:L";
     /// <summary>A:id, B:name, C:grade, D:power, E:intel, F:charm, G:infamy(0~100), H:initialNationId, I:initialCastleId</summary>
     const string generalMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1008843975&range=A2:I";
-    const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:E";
+    /// <summary>A:id, B:name, C:CastleStatType, D:CurveType, E:value, F:description</summary>
+    const string buffMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1241447495&range=A2:F";
     /// <summary>세력(Nation) 마스터 TSV URL. A:id, B:name, C:colorCode, D:capitalId, E:description (예: range=A2:E)</summary>
     const string nationMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1621681501&range=A2:E";
     /// <summary>지역(섹터) 마스터 TSV URL. A:지역코드, B:섹터명, C:특징, D:배정 성 예시 (낙양(C01) 형식, range=A2:D 등)</summary>
     const string regionMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1716545491&range=A2:D";
-    /// <summary>이벤트 마스터 TSV. A:id, B:name, C:scope(Region|Castle), D:minDays, E:maxDays, F:buffCodes(콤마). 비우면 시트에서 가져오지 않고 SO만 사용.</summary>
-    const string eventMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=902917272&range=A2:F";
+    /// <summary>조건 라이브러리 TSV. A:condId, B:targetAttr, C:op, D:thresholdValue, E:Description (헤더 행은 자동 스킵)</summary>
+    const string conditionLibraryDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=537776857&range=A2:E";
+    /// <summary>이벤트 통합 TSV. A~F: EventMaster, G:rumorNewsCodes, H:breakingNewsCodes(콤마), M: affinity, N: ConditionIDs, O~S: 레거시/미사용 열.</summary>
+    const string eventMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=902917272&range=A2:S";
+    /// <summary>NewsMaster TSV. A:newsCode, B:headline, C:script, D:iconResourcePath(선택). 비우면 다운로드 생략.</summary>
+    const string newsMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=301270709&range=A2:D";
+    /// <summary>EventStatModifier TSV. A:eventId, B:flatProbBonus, C:perMight, D:perIntel, E:perCharm, F:perInfamy. 비우면 다운로드 생략(SO·기존 맵 유지).</summary>
+    const string eventStatModifierDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1830339338&range=A2:F";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -48,15 +56,24 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         string buffMasterResult = await GetGSDataToURL(buffMasterDataURL);
         string nationMasterResult = await GetGSDataToURL(nationMasterDataURL);
         string regionMasterResult = await GetGSDataToURL(regionMasterDataURL);
+        string conditionLibraryResult = string.IsNullOrWhiteSpace(conditionLibraryDataURL)
+            ? ""
+            : await GetGSDataToURL(conditionLibraryDataURL);
         string eventMasterResult = string.IsNullOrWhiteSpace(eventMasterDataURL)
             ? ""
             : await GetGSDataToURL(eventMasterDataURL);
+        string eventStatModifierResult = string.IsNullOrWhiteSpace(eventStatModifierDataURL)
+            ? ""
+            : await GetGSDataToURL(eventStatModifierDataURL);
+        string newsMasterResult = string.IsNullOrWhiteSpace(newsMasterDataURL)
+            ? ""
+            : await GetGSDataToURL(newsMasterDataURL);
 
 #if UNITY_EDITOR
         // 에디터에서 수동 실행(비플레이) 시 DataManager가 없더라도 SO에 직접 반영
         if (!Application.isPlaying && DataManager.InstanceOrNull == null)
         {
-            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult, eventMasterResult);
+            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult, eventMasterResult, conditionLibraryResult, eventStatModifierResult, newsMasterResult);
             IsSetData.Value = saved;
             if (saved)
                 Debug.Log("[GoogleSheetManager] DataManager 없이 SO 저장 완료.");
@@ -73,6 +90,13 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             return;
         }
 
+        if (dm.FixedSo == null)
+        {
+            Debug.LogError(
+                "[GoogleSheetManager] FixedSoDataManager가 없습니다. DataManager와 같은 오브젝트에 FixedSoDataManager를 붙이고 마스터 SO를 할당하세요.");
+            return;
+        }
+
         // 2. 메인 스레드에서 파싱/반영 (DataManager/Unity 오브젝트 안전)
         SetLevelRuleData(dm, levelRuleResult);
         SetCastleMasterData(dm, castleMasterResult);
@@ -81,7 +105,12 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         dm.MergeBuffMasterFromSoMissingKeys();
         SetNationMasterData(dm, nationMasterResult);
         SetRegionMasterData(dm, regionMasterResult);
+        SetConditionLibraryData(dm, conditionLibraryResult);
         SetEventMasterData(dm, eventMasterResult);
+        SetEventStatModifierData(dm, eventStatModifierResult);
+        dm.MergeEventStatModifierFromSoMissingKeys();
+        SetNewsMasterData(dm, newsMasterResult);
+        dm.MergeNewsMasterFromSoMissingKeys();
 
         // 3. 런타임 맵 내용을 SO 리스트에도 반영 (인스펙터에서 즉시 확인 가능)
         dm.SyncSoFromRuntimeMaps();
@@ -293,7 +322,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 4) continue;
+            if (cells.Length < 5) continue;
 
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
@@ -302,21 +331,55 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                description = cells.Length > 4 ? cells[4].Trim() : ""
+                description = cells.Length > 5 ? cells[5].Trim() : ""
             };
 
-            string typeRaw = cells.Length > 2 ? cells[2].Trim() : "";
-            if (Enum.TryParse<BuffType>(typeRaw, true, out BuffType parsedType))
-                buff.type = parsedType;
-            else if (int.TryParse(typeRaw, out int typeInt) && Enum.IsDefined(typeof(BuffType), typeInt))
-                buff.type = (BuffType)typeInt;
-            else
-                buff.type = BuffType.None;
+            if (!TryParseCastleStatTypeCell(cells.Length > 2 ? cells[2] : "", out buff.statType))
+                buff.statType = CastleStatType.None;
+            if (!TryParseCurveTypeCell(cells.Length > 3 ? cells[3] : "", out buff.curveType))
+                buff.curveType = CurveType.None;
 
-            float.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out buff.value);
+            float.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out buff.value);
 
             dm.buffMasterDataMap[buff.id] = buff;
         }
+    }
+
+    /// <summary>시트 C열 <see cref="CastleStatType"/> (이름 또는 정수).</summary>
+    public static bool TryParseCastleStatTypeCell(string raw, out CastleStatType statType)
+    {
+        statType = CastleStatType.None;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+        string t = raw.Trim();
+        if (Enum.TryParse(t, true, out statType))
+            return true;
+        if (int.TryParse(t, NumberStyles.Integer, CultureInfo.InvariantCulture, out int n) &&
+            Enum.IsDefined(typeof(CastleStatType), n))
+        {
+            statType = (CastleStatType)n;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>시트 D열 <see cref="CurveType"/> (이름 또는 정수).</summary>
+    public static bool TryParseCurveTypeCell(string raw, out CurveType curveType)
+    {
+        curveType = CurveType.None;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+        string t = raw.Trim();
+        if (Enum.TryParse(t, true, out curveType))
+            return true;
+        if (int.TryParse(t, NumberStyles.Integer, CultureInfo.InvariantCulture, out int n) &&
+            Enum.IsDefined(typeof(CurveType), n))
+        {
+            curveType = (CurveType)n;
+            return true;
+        }
+
+        return false;
     }
 
     void SetNationMasterData(DataManager dm, string data)
@@ -394,7 +457,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     {
         var list = new List<string>();
         if (string.IsNullOrWhiteSpace(cell)) return list;
-        string[] parts = cell.Split(',');
+        string[] parts = cell.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 0; i < parts.Length; i++)
         {
             string t = parts[i].Trim();
@@ -403,6 +466,92 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         }
 
         return list;
+    }
+
+    /// <summary>Condition 탭 TSV → <see cref="ConditionData"/> 목록. <see cref="ConditionDataSo"/>.list에 넣기 위함.</summary>
+    public static List<ConditionData> ParseConditionLibraryDataFromTsv(string data)
+    {
+        var list = new List<ConditionData>();
+        if (string.IsNullOrWhiteSpace(data)) return list;
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase)) return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 4) continue;
+            string cid = cells[0].Trim();
+            if (string.IsNullOrEmpty(cid)) continue;
+            if (IsConditionLibraryHeaderRow(cid, cells))
+                continue;
+
+            string attr, op;
+            float tv;
+            string desc = "";
+            // 레거시: A condId, B eventId(EV_*), C targetAttr, D op, E threshold [, F Description…]
+            if (cells.Length >= 5 && cells[1].Trim().StartsWith("EV_", StringComparison.OrdinalIgnoreCase))
+            {
+                attr = cells[2].Trim();
+                op = cells[3].Trim();
+                if (!float.TryParse(cells[4].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out tv))
+                    tv = 0f;
+                if (cells.Length > 5)
+                    desc = cells[5].Trim();
+            }
+            else
+            {
+                // 표준: A condId, B targetAttr, C op, D thresholdValue, E Description
+                attr = cells[1].Trim();
+                op = cells[2].Trim();
+                if (!float.TryParse(cells[3].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out tv))
+                    tv = 0f;
+                if (cells.Length > 4)
+                    desc = cells[4].Trim();
+            }
+
+            list.Add(new ConditionData
+            {
+                conditionId = cid,
+                targetAttr = attr,
+                targetOp = op,
+                targetValue = tv,
+                description = desc
+            });
+        }
+
+        return list;
+    }
+
+    void SetConditionLibraryData(DataManager dm, string data)
+    {
+        if (dm == null) return;
+        dm.ClearConditionLibrary();
+        if (string.IsNullOrWhiteSpace(data)) return;
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] Condition 라이브러리 TSV가 아닌 HTML이 반환되었습니다.");
+            return;
+        }
+
+        var list = ParseConditionLibraryDataFromTsv(data);
+        dm.ApplyParsedConditionLibrary(list);
+    }
+
+    static bool IsConditionLibraryHeaderRow(string colA, string[] cells)
+    {
+        if (string.Equals(colA, "condId", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(colA, "conditionId", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(colA, "conditionid", StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (cells.Length > 1)
+        {
+            string b = cells[1].Trim();
+            if (string.Equals(b, "targetAttr", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(b, "targetattr", StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
     }
 
     void SetEventMasterData(DataManager dm, string data)
@@ -417,31 +566,280 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         }
 
         dm.eventMasterDataMap.Clear();
+        dm.ClearNewsTemplateSheetRows();
 
         string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 5) continue;
+            if (!TryParseUnifiedEventNewsRow(cells, out var ev, out _, out _))
+                continue;
 
-            string id = cells[0].Trim();
-            if (string.IsNullOrEmpty(id)) continue;
-
-            var ev = new EventMasterData
-            {
-                id = id,
-                name = cells.Length > 1 ? cells[1].Trim() : "",
-                scope = ParseEventScopeCell(cells.Length > 2 ? cells[2] : ""),
-                buffCodes = ParseEventBuffCodesCell(cells.Length > 5 ? cells[5] : "")
-            };
-
-            int.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out ev.minDays);
-            int.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", out ev.maxDays);
-            if (ev.maxDays < ev.minDays)
-                ev.maxDays = ev.minDays;
-
-            dm.eventMasterDataMap[ev.id] = ev;
+            dm.AddEventMasterDataRow(ev);
         }
+    }
+
+    void SetEventStatModifierData(DataManager dm, string data)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrWhiteSpace(data)) return;
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] EventStatModifier TSV가 아닌 HTML이 반환되었습니다. URL·gid·웹 게시를 확인해 주세요.");
+            return;
+        }
+
+        var list = ParseEventStatModifierTsv(data);
+        dm.ApplyParsedEventStatModifier(list);
+    }
+
+    void SetNewsMasterData(DataManager dm, string data)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrWhiteSpace(data)) return;
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] NewsMaster TSV가 아닌 HTML이 반환되었습니다. URL·gid·웹 게시를 확인해 주세요.");
+            return;
+        }
+
+        var list = ParseNewsMasterTsv(data);
+        dm.ApplyParsedNewsMaster(list);
+    }
+
+    /// <summary>
+    /// NewsMaster TSV. 표준: A:newsCode, B:newsType(None/Rumor/Breaking/FactCheck/System 또는 0~4), C:headline, D:script, E:iconResourcePath.
+    /// B가 타입으로 파싱되지 않으면 레거시: B=headline, C=script, D=icon.
+    /// </summary>
+    public static List<NewsMasterData> ParseNewsMasterTsv(string data)
+    {
+        var list = new List<NewsMasterData>();
+        if (string.IsNullOrWhiteSpace(data)) return list;
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase)) return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 2) continue;
+            string code = cells[0].Trim();
+            if (string.IsNullOrEmpty(code)) continue;
+            if (string.Equals(code, "newsCode", StringComparison.OrdinalIgnoreCase)
+                || (string.Equals(code, "code", StringComparison.OrdinalIgnoreCase) && cells.Length > 1
+                    && (string.Equals(cells[1].Trim(), "headline", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(cells[1].Trim(), "newsType", StringComparison.OrdinalIgnoreCase))))
+                continue;
+
+            string colB = cells.Length > 1 ? cells[1].Trim() : "";
+            var row = new NewsMasterData { newsCode = code };
+            if (TryParseNewsTypeCell(colB, out var ntype))
+            {
+                row.newsType = ntype;
+                row.headline = cells.Length > 2 ? cells[2].Trim() : "";
+                row.script = cells.Length > 3 ? cells[3].Trim() : "";
+            }
+            else
+            {
+                row.newsType = NewsType.None;
+                row.headline = colB;
+                row.script = cells.Length > 2 ? cells[2].Trim() : "";
+            }
+
+            list.Add(row);
+        }
+
+        return list;
+    }
+
+    static bool TryParseNewsTypeCell(string raw, out NewsType newsType)
+    {
+        newsType = NewsType.None;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+        raw = raw.Trim();
+        if (int.TryParse(raw, out int n) && Enum.IsDefined(typeof(NewsType), n))
+        {
+            newsType = (NewsType)n;
+            return true;
+        }
+
+        if (!Enum.TryParse(raw, true, out newsType))
+            return false;
+        return Enum.IsDefined(typeof(NewsType), newsType);
+    }
+
+    /// <summary>EventStatModifier 탭 TSV → 리스트. A:eventId, B:flatProbBonus, C:perMight, D:perIntel, E:perCharm, F:perInfamy.</summary>
+    public static List<EventStatModifierData> ParseEventStatModifierTsv(string data)
+    {
+        var list = new List<EventStatModifierData>();
+        if (string.IsNullOrWhiteSpace(data)) return list;
+        if (data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase)) return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 2) continue;
+            string eid = cells[0].Trim();
+            if (string.IsNullOrEmpty(eid)) continue;
+            if (IsEventStatModifierHeaderRow(eid, cells)) continue;
+
+            var row = new EventStatModifierData { id = eid };
+            float.TryParse(cells.Length > 1 ? cells[1].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out row.flatProbBonus);
+            float.TryParse(cells.Length > 2 ? cells[2].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out row.perMight);
+            float.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out row.perIntel);
+            float.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out row.perCharm);
+            float.TryParse(cells.Length > 5 ? cells[5].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out row.perInfamy);
+            list.Add(row);
+        }
+
+        return list;
+    }
+
+    static bool IsEventStatModifierHeaderRow(string colA, string[] cells)
+    {
+        if (string.Equals(colA, "eventId", StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (string.Equals(colA, "id", StringComparison.OrdinalIgnoreCase) && cells.Length > 1
+            && string.Equals(cells[1].Trim(), "flatProbBonus", StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    /// <summary>A~F 이벤트, G:rumorNewsCodes, H:breakingNewsCodes(콤마), M affinity, N ConditionIDs. 확률 보정은 EventStatModifier 탭.</summary>
+    internal static bool TryParseUnifiedEventNewsRow(string[] cells, out EventMasterData ev,
+        out NewsTemplateSheetRow sheetRow, out NewsTemplateEntry soEntry)
+    {
+        ev = null;
+        sheetRow = null;
+        soEntry = null;
+        if (cells == null || cells.Length < 5) return false;
+
+        string id = cells[0].Trim();
+        if (string.IsNullOrEmpty(id)) return false;
+
+        ev = new EventMasterData
+        {
+            id = id,
+            name = cells.Length > 1 ? cells[1].Trim() : "",
+            scope = ParseEventScopeCell(cells.Length > 2 ? cells[2] : ""),
+            buffCodes = ParseEventBuffCodesCell(cells.Length > 5 ? cells[5] : ""),
+            affinityTagsRaw = cells.Length > 12 ? cells[12].Trim() : "",
+            conditionIds = ParseConditionIdsCell(cells.Length > 13 ? cells[13] : "")
+        };
+
+        int.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out ev.minDays);
+        int.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", out ev.maxDays);
+        if (ev.maxDays < ev.minDays)
+            ev.maxDays = ev.minDays;
+
+        if (cells.Length > 6)
+            ev.rumorNewsCodes = ParseCommaSeparatedCodes(cells[6]);
+        if (cells.Length > 7)
+            ev.breakingNewsCodes = ParseCommaSeparatedCodes(cells[7]);
+
+        return true;
+    }
+
+    static List<string> ParseCommaSeparatedCodes(string raw)
+    {
+        var list = new List<string>();
+        if (string.IsNullOrWhiteSpace(raw)) return list;
+        var parts = raw.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < parts.Length; i++)
+        {
+            string t = parts[i].Trim();
+            if (!string.IsNullOrEmpty(t))
+                list.Add(t);
+        }
+
+        return list;
+    }
+
+    public static List<string> ParseConditionIdsCell(string raw)
+    {
+        var list = new List<string>();
+        if (string.IsNullOrWhiteSpace(raw)) return list;
+        var parts = raw.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < parts.Length; i++)
+        {
+            string t = parts[i].Trim();
+            if (!string.IsNullOrEmpty(t))
+                list.Add(t);
+        }
+
+        return list;
+    }
+
+    public static bool TryParseEventConditionOp(string token, out EventConditionOp op)
+    {
+        op = EventConditionOp.Eq;
+        if (string.IsNullOrWhiteSpace(token)) return false;
+        switch (token.Trim())
+        {
+            case "==":
+                op = EventConditionOp.Eq;
+                return true;
+            case "!=":
+                op = EventConditionOp.Ne;
+                return true;
+            case ">":
+                op = EventConditionOp.Gt;
+                return true;
+            case "<":
+                op = EventConditionOp.Lt;
+                return true;
+            case ">=":
+                op = EventConditionOp.Ge;
+                return true;
+            case "<=":
+                op = EventConditionOp.Le;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static List<NewsTemplateEntry> MergeNewsTemplateSoPreserveSprites(NewsTemplateSo prev, List<NewsTemplateEntry> fromSheet)
+    {
+        var oldById = new Dictionary<string, NewsTemplateEntry>();
+        if (prev != null && prev.entries != null)
+        {
+            for (int i = 0; i < prev.entries.Count; i++)
+            {
+                var e = prev.entries[i];
+                if (e != null && !string.IsNullOrWhiteSpace(e.id))
+                    oldById[e.id.Trim()] = e;
+            }
+        }
+
+        var merged = new List<NewsTemplateEntry>();
+        var seen = new HashSet<string>();
+        if (fromSheet != null)
+        {
+            for (int i = 0; i < fromSheet.Count; i++)
+            {
+                var n = fromSheet[i];
+                if (n == null || string.IsNullOrWhiteSpace(n.id)) continue;
+                string nid = n.id.Trim();
+                seen.Add(nid);
+                if (oldById.TryGetValue(nid, out var o) && n.reporterIcon == null)
+                    n.reporterIcon = o.reporterIcon;
+                merged.Add(n);
+            }
+        }
+
+        foreach (var kv in oldById)
+        {
+            if (!seen.Contains(kv.Key))
+                merged.Add(kv.Value);
+        }
+
+        return merged;
     }
 
     /// <summary>"낙양(C01), 호로관(C21)" 등 괄호 안의 성 ID를 순서대로 추출.</summary>
@@ -472,7 +870,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     }
 
 #if UNITY_EDITOR
-    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData, string eventData)
+    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData, string eventData, string conditionLibraryData = "", string eventStatModifierData = "", string newsMasterData = "")
     {
         var levelSo = FindAsset<LevelRuleDataSo>();
         var castleSo = FindAsset<CastleMasterDataSo>();
@@ -481,6 +879,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         var nationSo = FindAsset<NationMasterDataSo>();
         var regionSo = FindAsset<RegionMasterDataSo>();
         var eventSo = FindAsset<EventMasterDataSo>();
+        var newsTemplateSo = FindAsset<NewsTemplateSo>();
 
         if (levelSo == null || castleSo == null || generalSo == null || buffSo == null || nationSo == null || regionSo == null)
         {
@@ -497,7 +896,42 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         if (!string.IsNullOrWhiteSpace(regionData) && !regionData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
             regionSo.list = ParseRegionList(regionData);
         if (eventSo != null && !string.IsNullOrWhiteSpace(eventData) && !eventData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
-            eventSo.list = ParseEventList(eventData);
+        {
+            ParseUnifiedEventSheetForEditor(eventData, out var evList, out var newsList);
+            eventSo.list = evList;
+            if (newsTemplateSo != null && newsList != null && newsList.Count > 0)
+            {
+                newsTemplateSo.entries = MergeNewsTemplateSoPreserveSprites(newsTemplateSo, newsList);
+                EditorUtility.SetDirty(newsTemplateSo);
+            }
+        }
+
+        var conditionSo = FindAsset<ConditionDataSo>();
+        if (conditionSo != null && !string.IsNullOrWhiteSpace(conditionLibraryData)
+                                && !conditionLibraryData.TrimStart()
+                                    .StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            conditionSo.list = ParseConditionLibraryDataFromTsv(conditionLibraryData);
+            EditorUtility.SetDirty(conditionSo);
+        }
+
+        var eventStatModifierSo = FindAsset<EventStatModifierSo>();
+        if (eventStatModifierSo != null && !string.IsNullOrWhiteSpace(eventStatModifierData)
+                                         && !eventStatModifierData.TrimStart()
+                                             .StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            eventStatModifierSo.list = ParseEventStatModifierTsv(eventStatModifierData);
+            EditorUtility.SetDirty(eventStatModifierSo);
+        }
+
+        var newsMasterSo = FindAsset<NewsMasterDataSo>();
+        if (newsMasterSo != null && !string.IsNullOrWhiteSpace(newsMasterData)
+                                  && !newsMasterData.TrimStart()
+                                      .StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            newsMasterSo.list = ParseNewsMasterTsv(newsMasterData);
+            EditorUtility.SetDirty(newsMasterSo);
+        }
 
         EditorUtility.SetDirty(levelSo);
         EditorUtility.SetDirty(castleSo);
@@ -509,6 +943,9 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             EditorUtility.SetDirty(regionSo);
         if (eventSo != null && !string.IsNullOrWhiteSpace(eventData) && !eventData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
             EditorUtility.SetDirty(eventSo);
+        if (newsMasterSo != null && !string.IsNullOrWhiteSpace(newsMasterData)
+                                && !newsMasterData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            EditorUtility.SetDirty(newsMasterSo);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         return true;
@@ -629,11 +1066,10 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 
         string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-        // i = 1부터 시작 (첫 줄이 컬럼 제목인 경우 스킵)
-        for (int i = 1; i < rows.Length; i++)
+        for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 4) continue;
+            if (cells.Length < 5) continue;
 
             string id = cells[0].Trim();
             if (string.IsNullOrEmpty(id)) continue;
@@ -642,31 +1078,20 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             {
                 id = id,
                 name = cells.Length > 1 ? cells[1].Trim() : "",
-                description = cells.Length > 4 ? cells[4].Trim() : ""
+                description = cells.Length > 5 ? cells[5].Trim() : ""
             };
 
-            // --- 버프 타입(Enum) 파싱 로직 ---
-            string typeRaw = cells.Length > 2 ? cells[2].Trim() : "";
-
-            // 1. 문자열 이름으로 시도 (예: "ValueMultiplier", "ParValueModifier")
-            if (Enum.TryParse<BuffType>(typeRaw, true, out BuffType parsedEnum))
+            if (!TryParseCastleStatTypeCell(cells.Length > 2 ? cells[2] : "", out item.statType))
             {
-                item.type = parsedEnum;
-            }
-            // 2. 만약 숫자로 입력되었을 경우 대비 (예: "1", "2")
-            else if (int.TryParse(typeRaw, out int ti) && Enum.IsDefined(typeof(BuffType), ti))
-            {
-                item.type = (BuffType)ti;
-            }
-            // 3. 둘 다 실패하면 기본값 None
-            else
-            {
-                item.type = BuffType.None;
-                Debug.LogWarning($"[DataManager] 알 수 없는 버프 타입 발견 (ID: {id}, Type: {typeRaw})");
+                item.statType = CastleStatType.None;
+                Debug.LogWarning($"[GoogleSheetManager] 알 수 없는 CastleStatType (ID: {id}, C열: {cells[2]})");
             }
 
-            // 수치 파싱
-            float.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out item.value);
+            if (!TryParseCurveTypeCell(cells.Length > 3 ? cells[3] : "", out item.curveType))
+                item.curveType = CurveType.None;
+
+            float.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", NumberStyles.Float, CultureInfo.InvariantCulture,
+                out item.value);
 
             list.Add(item);
         }
@@ -714,35 +1139,29 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         return list;
     }
 
-    List<EventMasterData> ParseEventList(string data)
+    static void ParseUnifiedEventSheetForEditor(string data, out List<EventMasterData> events, out List<NewsTemplateEntry> newsEntries)
     {
-        var list = new List<EventMasterData>();
+        events = new List<EventMasterData>();
+        newsEntries = new List<NewsTemplateEntry>();
         if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
-            return list;
+            return;
 
         string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 5) continue;
-            string id = cells[0].Trim();
-            if (string.IsNullOrEmpty(id)) continue;
-
-            var ev = new EventMasterData
-            {
-                id = id,
-                name = cells.Length > 1 ? cells[1].Trim() : "",
-                scope = ParseEventScopeCell(cells.Length > 2 ? cells[2] : ""),
-                buffCodes = ParseEventBuffCodesCell(cells.Length > 5 ? cells[5] : "")
-            };
-            int.TryParse(cells.Length > 3 ? cells[3].Trim() : "0", out ev.minDays);
-            int.TryParse(cells.Length > 4 ? cells[4].Trim() : "0", out ev.maxDays);
-            if (ev.maxDays < ev.minDays)
-                ev.maxDays = ev.minDays;
-            list.Add(ev);
+            if (!TryParseUnifiedEventNewsRow(cells, out var ev, out _, out var soEntry))
+                continue;
+            events.Add(ev);
+            if (soEntry != null)
+                newsEntries.Add(soEntry);
         }
+    }
 
-        return list;
+    List<EventMasterData> ParseEventList(string data)
+    {
+        ParseUnifiedEventSheetForEditor(data, out var events, out _);
+        return events;
     }
 #endif
 }
