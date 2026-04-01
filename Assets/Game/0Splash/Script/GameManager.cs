@@ -113,6 +113,8 @@ public class GameManager : Singleton<GameManager>
             if (currentUser == null) return;
             currentUser.gold = Math.Max(0L, value);
             OnGoldChanged?.Invoke(currentUser.gold);
+            // OnGoldChanged 구독 순서/누락과 무관하게 글로벌 탑바 숫자를 맞춤 (대문·업그레이드 등)
+            GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
         }
     }
 
@@ -124,6 +126,7 @@ public class GameManager : Singleton<GameManager>
             if (currentUser == null) return;
             currentUser.grain = Math.Max(0L, value);
             OnGrainChanged?.Invoke(currentUser.grain);
+            GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
         }
     }
 

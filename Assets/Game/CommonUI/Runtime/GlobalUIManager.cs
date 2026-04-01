@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
@@ -35,6 +36,14 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     [Header("자원 텍스트 색")]
     [SerializeField] Color foodTextColor = new Color(0.42f, 0.92f, 0.48f, 1f);
     [SerializeField] Color soldiersTextColor = Color.white;
+    [Header("탑바 자원 숫자 롤링")]
+    [Tooltip("금화·식량·병사가 늘거나 줄 때 탑바 숫자가 보간되는 시간(초). 구매 시 금화↓·식량↑ 등 모두 적용. 0이면 즉시 반영.")]
+    [FormerlySerializedAs("topBarDecreaseDuration")]
+    [SerializeField] float topBarResourceRollDuration = 0.28f;
+
+    Tweener _assetsTween;
+    Tweener _foodTween;
+    Tweener _soldiersTween;
     double _displayAssets;
     double _displayFood;
     double _displaySoldiers;
@@ -53,6 +62,9 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
     void OnDestroy()
     {
+        _assetsTween?.Kill();
+        _foodTween?.Kill();
+        _soldiersTween?.Kill();
         var gm = GameManager.InstanceOrNull;
         if (gm != null)
         {
@@ -127,22 +139,67 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
         ApplyResourceTextColors();
 
-        _displayAssets = totalAssets;
-        _displayFood = food;
-        _displaySoldiers = soldiers;
-
-        if (totalAssetsText != null) totalAssetsText.text = FormatCompact(totalAssets);
-        if (foodText != null)
+        ApplyTopBarField(ref _assetsTween, () => _displayAssets, v => _displayAssets = v, totalAssets, v =>
         {
-            foodText.text = FormatCompact(food);
-            foodText.color = foodTextColor;
+            if (totalAssetsText != null) totalAssetsText.text = FormatCompact(v);
+        });
+
+        ApplyTopBarField(ref _foodTween, () => _displayFood, v => _displayFood = v, food, v =>
+        {
+            if (foodText != null)
+            {
+                foodText.text = FormatCompact(v);
+                foodText.color = foodTextColor;
+            }
+        });
+
+        ApplyTopBarField(ref _soldiersTween, () => _displaySoldiers, v => _displaySoldiers = v, soldiers, v =>
+        {
+            if (soldiersText != null)
+            {
+                soldiersText.text = $"{FormatCompact(v)}명";
+                soldiersText.color = soldiersTextColor;
+            }
+        });
+    }
+
+    /// <summary>표시값이 목표와 다르면 증가·감소 모두 짧게 롤링합니다(구매 시 금화↓·식량/병사↑ 포함).</summary>
+    void ApplyTopBarField(ref Tweener tweenRef, Func<double> getDisplay, Action<double> setDisplay, double target,
+        Action<double> applyFormatted)
+    {
+        if (applyFormatted == null || getDisplay == null || setDisplay == null) return;
+
+        const double eps = 0.5;
+        tweenRef?.Kill();
+        tweenRef = null;
+
+        double current = getDisplay();
+        if (Math.Abs(current - target) < eps)
+        {
+            setDisplay(target);
+            applyFormatted(target);
+            return;
         }
 
-        if (soldiersText != null)
+        if (topBarResourceRollDuration > 0f)
         {
-            soldiersText.text = $"{FormatCompact(soldiers)}명";
-            soldiersText.color = soldiersTextColor;
+            double start = current;
+            tweenRef = DOVirtual.Float(0f, 1f, topBarResourceRollDuration, u =>
+            {
+                float uu = Mathf.Clamp01(u);
+                double v = start + (target - start) * uu;
+                setDisplay(v);
+                applyFormatted(v);
+            }).SetEase(Ease.OutCubic).SetUpdate(true).OnComplete(() =>
+            {
+                setDisplay(target);
+                applyFormatted(target);
+            });
+            return;
         }
+
+        setDisplay(target);
+        applyFormatted(target);
     }
 
     static string FormatUserNameWithHomeCastle(string userName)

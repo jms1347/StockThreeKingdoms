@@ -28,7 +28,6 @@ public class ButtonHoldRepeat : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     public void OnPointerDown(PointerEventData eventData)
     {
         if (_tick == null) return;
-        if (eventData.button != PointerEventData.InputButton.Left) return;
 
         _tick.Invoke();
         if (_co != null) StopCoroutine(_co);
