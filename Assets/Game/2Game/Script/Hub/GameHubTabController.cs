@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 한 씬에서 GlobalUIManager 하단 탭과 본영·천하·뉴스 UI 루트를 연결합니다.
@@ -21,6 +22,7 @@ public class GameHubTabController : MonoBehaviour
 
     void Start()
     {
+        FixHubRootCanvasScales();
         BindScreenSpaceCameras();
         _gui = GlobalUIManager.InstanceOrNull;
         if (_gui != null)
@@ -34,6 +36,25 @@ public class GameHubTabController : MonoBehaviour
     {
         if (_gui != null)
             _gui.TabSelected -= OnGlobalTabSelected;
+    }
+
+    /// <summary>허브 프리팹에 Canvas 루트 scale 0이 들어가면 UI 히트가 전부 죽을 수 있어 보정합니다.</summary>
+    static void FixHubRootCanvasScale(GameObject root)
+    {
+        if (root == null) return;
+        var canvas = root.GetComponent<Canvas>();
+        if (canvas == null) return;
+        var rt = canvas.transform as RectTransform;
+        if (rt != null && rt.localScale.sqrMagnitude < 1e-8f)
+            rt.localScale = Vector3.one;
+    }
+
+    void FixHubRootCanvasScales()
+    {
+        FixHubRootCanvasScale(homeTerritoryPanel);
+        FixHubRootCanvasScale(worldMarketPanel);
+        FixHubRootCanvasScale(newsPanel);
+        FixHubRootCanvasScale(ordersPanel);
     }
 
     void BindScreenSpaceCameras()

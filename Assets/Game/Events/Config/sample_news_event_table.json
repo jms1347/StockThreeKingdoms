@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "maxDailyNewsCastleSample": 3,
+  "priorityWeights": {
+    "war": 1000000,
+    "disaster": 500000,
+    "favorableEvent": 100000,
+    "tieRandomMax": 999
+  },
+  "criticalThresholds": [
+    {
+      "stat": "PublicSentiment",
+      "below": 20,
+      "criticalKind": "PopularRiot",
+      "headlineTemplate": "[속보] {castleName}, 민심 임계 이하 — 민란 위기"
+    },
+    {
+      "stat": "Stability",
+      "below": 20,
+      "criticalKind": "StabilityCollapse",
+      "headlineTemplate": "[속보] {castleName}, 치안·안정도 임계 이하"
+    }
+  ],
+  "sampleTriggers": [
+    {
+      "triggerId": "periodic_regional_news",
+      "isConditional": false,
+      "linkedEventMasterId": "",
+      "evaluateEveryNDays": 1
+    },
+    {
+      "triggerId": "low_sentiment_chain",
+      "isConditional": true,
+      "primaryConditionId": "",
+      "linkedEventMasterId": ""
+    }
+  ]
+}

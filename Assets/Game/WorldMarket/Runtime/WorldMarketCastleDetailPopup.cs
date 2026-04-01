@@ -49,6 +49,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] Button recallButton;
     [SerializeField] Button relocateButton;
     [SerializeField] TextMeshProUGUI relocateHintText;
+    [SerializeField] TextMeshProUGUI deployDisabledHintText;
     [SerializeField] TextMeshProUGUI footprintIcon1;
     [SerializeField] TextMeshProUGUI footprintIcon2;
     [SerializeField] TextMeshProUGUI footprintIcon3;
@@ -56,14 +57,21 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] RectTransform deployDialogRoot;
     [SerializeField] Slider deploySlider;
     [SerializeField] TextMeshProUGUI deploySliderValueText;
+    [SerializeField] TextMeshProUGUI deployCapHintText;
     [SerializeField] Button deployConfirmButton;
     [SerializeField] Button deployCancelButton;
+    [SerializeField] RectTransform recallDialogRoot;
+    [SerializeField] Slider recallSlider;
+    [SerializeField] TextMeshProUGUI recallSliderValueText;
+    [SerializeField] Button recallConfirmButton;
+    [SerializeField] Button recallCancelButton;
 
     const string GaugeTweenId = "CastleDetailGauges";
 
     string _castleId;
     DataManager _dm;
     int _deployMaxThisOpen;
+    int _recallMaxThisOpen;
     bool _playOpenGaugeAnim;
 
     void Awake()
@@ -105,8 +113,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         if (recallButton != null)
         {
-            recallButton.onClick.RemoveListener(OnRecallClicked);
-            recallButton.onClick.AddListener(OnRecallClicked);
+            recallButton.onClick.RemoveListener(OnRecallOpen);
+            recallButton.onClick.AddListener(OnRecallOpen);
         }
 
         if (relocateButton != null)
@@ -127,8 +135,23 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             deployCancelButton.onClick.AddListener(OnDeployCancel);
         }
 
+        if (recallConfirmButton != null)
+        {
+            recallConfirmButton.onClick.RemoveListener(OnRecallConfirm);
+            recallConfirmButton.onClick.AddListener(OnRecallConfirm);
+        }
+
+        if (recallCancelButton != null)
+        {
+            recallCancelButton.onClick.RemoveListener(OnRecallCancel);
+            recallCancelButton.onClick.AddListener(OnRecallCancel);
+        }
+
         if (deploySlider != null)
             deploySlider.onValueChanged.RemoveListener(OnDeploySlider);
+
+        if (recallSlider != null)
+            recallSlider.onValueChanged.RemoveListener(OnRecallSlider);
 
         if (confirmCloseButton != null)
         {
@@ -148,6 +171,14 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     {
         if (InstanceOrNull == null) return;
         InstanceOrNull.Open(castleId);
+    }
+
+    /// <summary>천하 카드 등에서 회군 슬라이더를 바로 띄울 때.</summary>
+    public static void OpenCastleForRecall(string castleId)
+    {
+        if (InstanceOrNull == null) return;
+        InstanceOrNull.Open(castleId);
+        InstanceOrNull.OnRecallOpen();
     }
 
     public void Open(string castleId)
@@ -177,6 +208,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         DOTween.Kill(GaugeTweenId);
         if (deployDialogRoot != null)
             deployDialogRoot.gameObject.SetActive(false);
+        if (recallDialogRoot != null)
+            recallDialogRoot.gameObject.SetActive(false);
         UnhookDm();
         gameObject.SetActive(false);
         _castleId = null;
@@ -535,6 +568,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     {
         if (deployDialogRoot == null || deploySlider == null) return;
         if (_deployMaxThisOpen <= 0) return;
+        if (recallDialogRoot != null)
+            recallDialogRoot.gameObject.SetActive(false);
         deployDialogRoot.SetAsLastSibling();
         deployDialogRoot.gameObject.SetActive(true);
         deploySlider.wholeNumbers = true;
@@ -543,6 +578,13 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         deploySlider.SetValueWithoutNotify(Mathf.Max(1, _deployMaxThisOpen / 2));
         deploySlider.onValueChanged.RemoveListener(OnDeploySlider);
         deploySlider.onValueChanged.AddListener(OnDeploySlider);
+        if (deployCapHintText != null)
+        {
+            var dm = DataManager.InstanceOrNull;
+            deployCapHintText.text = dm != null && !string.IsNullOrWhiteSpace(_castleId)
+                ? DeployTroopCapBreakdown.FormatHint(dm.ComputeDeployTroopCapBreakdown(_castleId))
+                : string.Empty;
+        }
         OnDeploySlider(deploySlider.value);
     }
 
@@ -553,10 +595,16 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         if (dm != null && !string.IsNullOrWhiteSpace(_castleId) &&
             dm.TryComputeDeployGoldBreakdown(_castleId, n, out var principal, out var tax, out var total))
+        {
             deploySliderValueText.text =
-                $"투입 {n:N0}명 · 입성료×병력 {principal:N0} G + 세액 {tax:N0} G = 총 지불 {total:N0} G";
+                $"<b>{n:N0}명</b> 투입\n\n" +
+                $"입성료(병력 합)   {principal:N0}  G\n" +
+                $"세액             {tax:N0}  G\n" +
+                $"<color=#8899aa>─────────────────</color>\n" +
+                $"<color=#ffd080>총 지불</color>         <b>{total:N0}</b>  G";
+        }
         else
-            deploySliderValueText.text = $"투입 병력: {n:N0}명";
+            deploySliderValueText.text = $"<b>{n:N0}명</b> 투입\n\n금액을 계산할 수 없습니다.";
     }
 
     void OnDeployConfirm()
@@ -577,12 +625,67 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             deployDialogRoot.gameObject.SetActive(false);
     }
 
-    void OnRecallClicked()
+    void OnRecallOpen()
     {
+        if (recallDialogRoot == null || recallSlider == null) return;
         var dm = DataManager.InstanceOrNull;
         if (dm == null || string.IsNullOrWhiteSpace(_castleId)) return;
-        dm.RecallUserCastleDeployment(_castleId);
+        if (!dm.castleStateDataMap.TryGetValue(_castleId, out var st) || st == null) return;
+        _recallMaxThisOpen = st.userDeployedTroops;
+        if (_recallMaxThisOpen <= 0) return;
+        if (deployDialogRoot != null)
+            deployDialogRoot.gameObject.SetActive(false);
+        recallDialogRoot.SetAsLastSibling();
+        recallDialogRoot.gameObject.SetActive(true);
+        recallSlider.wholeNumbers = true;
+        recallSlider.minValue = 1;
+        recallSlider.maxValue = Mathf.Max(1, _recallMaxThisOpen);
+        recallSlider.SetValueWithoutNotify(_recallMaxThisOpen);
+        recallSlider.onValueChanged.RemoveListener(OnRecallSlider);
+        recallSlider.onValueChanged.AddListener(OnRecallSlider);
+        OnRecallSlider(recallSlider.value);
+    }
+
+    void OnRecallSlider(float v)
+    {
+        if (recallSliderValueText == null) return;
+        int n = Mathf.RoundToInt(v);
+        int remain = Mathf.Max(0, _recallMaxThisOpen - n);
+        var dm = DataManager.InstanceOrNull;
+        if (dm != null && !string.IsNullOrWhiteSpace(_castleId) &&
+            dm.TryComputeRecallGoldPayout(_castleId, n, out var unitFace, out var totalGold))
+        {
+            recallSliderValueText.text =
+                $"<b>{n:N0}명</b> 회군\n\n" +
+                $"이 성 주둔 잔여      <b>{remain:N0}</b>  명\n" +
+                $"병사 풀 복귀         <b>+{n:N0}</b>  명\n\n" +
+                $"<color=#a8c8ff>액면가(병당)</color>  <b>{unitFace:N0}</b>  G\n" +
+                $"<color=#8899aa>× {n:N0} (수수료·관부 없음)</color>\n" +
+                $"<color=#ffd080>회수 금화</color>       <b>{totalGold:N0}</b>  G";
+        }
+        else
+        {
+            recallSliderValueText.text =
+                $"<b>{n:N0}명</b> 회군\n\n이 성 주둔 잔여 <b>{remain:N0}</b> 명\n병사 풀 복귀 <b>+{n:N0}</b> 명";
+        }
+    }
+
+    void OnRecallConfirm()
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || string.IsNullOrWhiteSpace(_castleId) || recallSlider == null) return;
+        int n = Mathf.RoundToInt(recallSlider.value);
+        if (n <= 0) return;
+        dm.RecallUserCastleDeployment(_castleId, n);
+        if (recallDialogRoot != null)
+            recallDialogRoot.gameObject.SetActive(false);
         Refresh();
+    }
+
+    void OnRecallCancel()
+    {
+        if (recallDialogRoot != null)
+            recallDialogRoot.gameObject.SetActive(false);
     }
 
     void OnRelocateClicked()
@@ -951,6 +1054,24 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var hintRt = hintGo.GetComponent<RectTransform>();
         hintRt.sizeDelta = new Vector2(0f, 96f);
 
+        var deployHintGo = new GameObject("DeployDisabledHint", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        deployHintGo.transform.SetParent(footer.transform, false);
+        deployDisabledHintText = deployHintGo.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            deployDisabledHintText.font = TMP_Settings.defaultFontAsset;
+        deployDisabledHintText.fontSize = 20;
+        deployDisabledHintText.fontStyle = FontStyles.Normal;
+        deployDisabledHintText.alignment = TextAlignmentOptions.Center;
+        deployDisabledHintText.color = new Color(0.72f, 0.76f, 0.82f, 1f);
+        deployDisabledHintText.enableWordWrapping = true;
+        deployDisabledHintText.overflowMode = TextOverflowModes.Overflow;
+        deployDisabledHintText.text = "";
+        deployDisabledHintText.gameObject.SetActive(false);
+        var deployHintLe = deployHintGo.GetComponent<LayoutElement>();
+        deployHintLe.minHeight = 0f;
+        deployHintLe.preferredHeight = 0f;
+        deployHintLe.flexibleWidth = 1f;
+
         var btnRow = new GameObject("BtnRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         btnRow.transform.SetParent(footer.transform, false);
         btnRow.GetComponent<LayoutElement>().minHeight = 52f;
@@ -986,7 +1107,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         deployDialogRoot = new GameObject("DeployDialog", typeof(RectTransform), typeof(Image)).GetComponent<RectTransform>();
         deployDialogRoot.SetParent(root, false);
         StretchFull(deployDialogRoot);
-        deployDialogRoot.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.45f);
+        deployDialogRoot.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.52f);
         deployDialogRoot.gameObject.SetActive(false);
 
         var box = new GameObject("Box", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
@@ -994,18 +1115,48 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var boxRt = box.GetComponent<RectTransform>();
         boxRt.anchorMin = new Vector2(0.5f, 0.5f);
         boxRt.anchorMax = new Vector2(0.5f, 0.5f);
-        boxRt.sizeDelta = new Vector2(300f, 200f);
+        boxRt.sizeDelta = new Vector2(600f, 468f);
         boxRt.anchoredPosition = Vector2.zero;
-        box.GetComponent<Image>().color = new Color(0.12f, 0.13f, 0.17f, 0.99f);
+        box.GetComponent<Image>().color = new Color(0.10f, 0.11f, 0.15f, 0.995f);
         var bv = box.GetComponent<VerticalLayoutGroup>();
-        bv.padding = new RectOffset(16, 16, 16, 16);
-        bv.spacing = 12;
+        bv.padding = new RectOffset(28, 28, 26, 24);
+        bv.spacing = 18;
+        bv.childAlignment = TextAnchor.UpperCenter;
         bv.childControlWidth = true;
-        deploySliderValueText = CreateTmp(box.transform, "SliderLabel", "투입 병력: 0", 24, FontStyles.Bold, TextAlignmentOptions.Center);
+        bv.childControlHeight = true;
+        bv.childForceExpandWidth = true;
 
-        var sgo = new GameObject("Slider", typeof(RectTransform), typeof(Slider));
+        var titleTmp = CreateTmp(box.transform, "DeployTitle", "병력 투입 확인", 32f, FontStyles.Bold, TextAlignmentOptions.Center);
+        titleTmp.color = new Color(1f, 0.96f, 0.88f, 1f);
+        titleTmp.enableWordWrapping = false;
+        var titleLe = titleTmp.gameObject.GetComponent<LayoutElement>();
+        titleLe.minHeight = 44f;
+        titleLe.preferredHeight = 44f;
+
+        deployCapHintText = CreateTmp(box.transform, "DeployCapHint", "", 21f, FontStyles.Normal, TextAlignmentOptions.Center);
+        deployCapHintText.color = new Color(0.78f, 0.80f, 0.84f, 1f);
+        deployCapHintText.enableWordWrapping = true;
+        deployCapHintText.richText = true;
+        deployCapHintText.lineSpacing = 2f;
+        var hintLe = deployCapHintText.gameObject.GetComponent<LayoutElement>();
+        hintLe.minHeight = 40f;
+        hintLe.preferredHeight = 46f;
+
+        deploySliderValueText = CreateTmp(box.transform, "SliderLabel", "0명 투입", 26f, FontStyles.Normal, TextAlignmentOptions.Center);
+        deploySliderValueText.color = new Color(0.93f, 0.95f, 0.98f, 1f);
+        deploySliderValueText.enableWordWrapping = true;
+        deploySliderValueText.richText = true;
+        deploySliderValueText.lineSpacing = 8f;
+        deploySliderValueText.overflowMode = TextOverflowModes.Overflow;
+        var valLe = deploySliderValueText.gameObject.GetComponent<LayoutElement>();
+        valLe.minHeight = 168f;
+        valLe.preferredHeight = 176f;
+        valLe.flexibleWidth = 1f;
+
+        var sgo = new GameObject("Slider", typeof(RectTransform), typeof(Slider), typeof(LayoutElement));
         sgo.transform.SetParent(box.transform, false);
-        sgo.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 34f);
+        sgo.GetComponent<LayoutElement>().minHeight = 48f;
+        sgo.GetComponent<LayoutElement>().preferredHeight = 48f;
         deploySlider = sgo.GetComponent<Slider>();
         deploySlider.minValue = 1;
         deploySlider.maxValue = 100;
@@ -1034,7 +1185,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
         handle.transform.SetParent(handleSlide.transform, false);
         var hRt = handle.GetComponent<RectTransform>();
-        hRt.sizeDelta = new Vector2(18f, 22f);
+        hRt.sizeDelta = new Vector2(26f, 34f);
         hRt.anchorMin = new Vector2(0f, 0.5f);
         hRt.anchorMax = new Vector2(0f, 0.5f);
         hRt.pivot = new Vector2(0.5f, 0.5f);
@@ -1043,15 +1194,117 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         deploySlider.handleRect = hRt;
         deploySlider.targetGraphic = hImg;
 
-        var hBtn = new GameObject("BtnRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        var hBtn = new GameObject("BtnRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         hBtn.transform.SetParent(box.transform, false);
-        hBtn.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 40f);
+        hBtn.GetComponent<LayoutElement>().minHeight = 60f;
+        hBtn.GetComponent<LayoutElement>().preferredHeight = 64f;
         var hhg = hBtn.GetComponent<HorizontalLayoutGroup>();
-        hhg.spacing = 12;
+        hhg.spacing = 16;
         hhg.childControlWidth = true;
         hhg.childForceExpandWidth = true;
-        deployCancelButton = CreateFooterBtn(hBtn.transform, "취소", new Color(0.35f, 0.36f, 0.4f));
-        deployConfirmButton = CreateFooterBtn(hBtn.transform, "확인", new Color(0.22f, 0.45f, 0.62f));
+        hhg.childControlHeight = true;
+        hhg.childForceExpandHeight = true;
+        deployCancelButton = CreateFooterBtn(hBtn.transform, "취소", new Color(0.38f, 0.39f, 0.44f), 58f, 24f);
+        deployConfirmButton = CreateFooterBtn(hBtn.transform, "확인", new Color(0.20f, 0.48f, 0.68f), 58f, 24f);
+
+        BuildRecallDialog(transform);
+    }
+
+    void BuildRecallDialog(Transform root)
+    {
+        recallDialogRoot = new GameObject("RecallDialog", typeof(RectTransform), typeof(Image)).GetComponent<RectTransform>();
+        recallDialogRoot.SetParent(root, false);
+        StretchFull(recallDialogRoot);
+        recallDialogRoot.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.52f);
+        recallDialogRoot.gameObject.SetActive(false);
+
+        var box = new GameObject("Box", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        box.transform.SetParent(recallDialogRoot, false);
+        var boxRt = box.GetComponent<RectTransform>();
+        boxRt.anchorMin = new Vector2(0.5f, 0.5f);
+        boxRt.anchorMax = new Vector2(0.5f, 0.5f);
+        boxRt.sizeDelta = new Vector2(600f, 420f);
+        boxRt.anchoredPosition = Vector2.zero;
+        box.GetComponent<Image>().color = new Color(0.14f, 0.10f, 0.09f, 0.995f);
+        var bv = box.GetComponent<VerticalLayoutGroup>();
+        bv.padding = new RectOffset(28, 28, 26, 24);
+        bv.spacing = 18;
+        bv.childAlignment = TextAnchor.UpperCenter;
+        bv.childControlWidth = true;
+        bv.childControlHeight = true;
+        bv.childForceExpandWidth = true;
+
+        var titleTmp = CreateTmp(box.transform, "RecallTitle", "병력 회군 확인", 32f, FontStyles.Bold, TextAlignmentOptions.Center);
+        titleTmp.color = new Color(1f, 0.92f, 0.82f, 1f);
+        titleTmp.enableWordWrapping = false;
+        var titleLe = titleTmp.gameObject.GetComponent<LayoutElement>();
+        titleLe.minHeight = 44f;
+        titleLe.preferredHeight = 44f;
+
+        recallSliderValueText = CreateTmp(box.transform, "RecallSliderLabel", "0명 회군", 26f, FontStyles.Normal, TextAlignmentOptions.Center);
+        recallSliderValueText.color = new Color(0.96f, 0.94f, 0.90f, 1f);
+        recallSliderValueText.enableWordWrapping = true;
+        recallSliderValueText.richText = true;
+        recallSliderValueText.lineSpacing = 8f;
+        recallSliderValueText.overflowMode = TextOverflowModes.Overflow;
+        var valLe = recallSliderValueText.gameObject.GetComponent<LayoutElement>();
+        valLe.minHeight = 168f;
+        valLe.preferredHeight = 176f;
+        valLe.flexibleWidth = 1f;
+
+        var sgo = new GameObject("Slider", typeof(RectTransform), typeof(Slider), typeof(LayoutElement));
+        sgo.transform.SetParent(box.transform, false);
+        sgo.GetComponent<LayoutElement>().minHeight = 48f;
+        sgo.GetComponent<LayoutElement>().preferredHeight = 48f;
+        recallSlider = sgo.GetComponent<Slider>();
+        recallSlider.minValue = 1;
+        recallSlider.maxValue = 100;
+        recallSlider.wholeNumbers = true;
+        var bg = new GameObject("Background", typeof(RectTransform), typeof(Image));
+        bg.transform.SetParent(sgo.transform, false);
+        StretchFull(bg.GetComponent<RectTransform>());
+        bg.GetComponent<Image>().color = new Color(0.26f, 0.18f, 0.14f, 1f);
+        var fillA = new GameObject("Fill Area", typeof(RectTransform));
+        fillA.transform.SetParent(sgo.transform, false);
+        StretchFull(fillA.GetComponent<RectTransform>());
+        var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
+        fill.transform.SetParent(fillA.transform, false);
+        var fillRt = fill.GetComponent<RectTransform>();
+        fillRt.anchorMin = Vector2.zero;
+        fillRt.anchorMax = Vector2.one;
+        fillRt.offsetMin = Vector2.zero;
+        fillRt.offsetMax = Vector2.zero;
+        var fillImg = fill.GetComponent<Image>();
+        fillImg.color = new Color(0.78f, 0.42f, 0.22f, 1f);
+        recallSlider.fillRect = fillRt;
+
+        var handleSlide = new GameObject("Handle Slide Area", typeof(RectTransform));
+        handleSlide.transform.SetParent(sgo.transform, false);
+        StretchFull(handleSlide.GetComponent<RectTransform>());
+        var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
+        handle.transform.SetParent(handleSlide.transform, false);
+        var hRt = handle.GetComponent<RectTransform>();
+        hRt.sizeDelta = new Vector2(26f, 34f);
+        hRt.anchorMin = new Vector2(0f, 0.5f);
+        hRt.anchorMax = new Vector2(0f, 0.5f);
+        hRt.pivot = new Vector2(0.5f, 0.5f);
+        var hImg = handle.GetComponent<Image>();
+        hImg.color = new Color(0.96f, 0.93f, 0.88f, 1f);
+        recallSlider.handleRect = hRt;
+        recallSlider.targetGraphic = hImg;
+
+        var hBtn = new GameObject("BtnRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        hBtn.transform.SetParent(box.transform, false);
+        hBtn.GetComponent<LayoutElement>().minHeight = 60f;
+        hBtn.GetComponent<LayoutElement>().preferredHeight = 64f;
+        var hhg = hBtn.GetComponent<HorizontalLayoutGroup>();
+        hhg.spacing = 16;
+        hhg.childControlWidth = true;
+        hhg.childForceExpandWidth = true;
+        hhg.childControlHeight = true;
+        hhg.childForceExpandHeight = true;
+        recallCancelButton = CreateFooterBtn(hBtn.transform, "취소", new Color(0.40f, 0.38f, 0.36f), 58f, 24f);
+        recallConfirmButton = CreateFooterBtn(hBtn.transform, "회군", new Color(0.72f, 0.38f, 0.18f), 58f, 24f);
     }
 
     static TextMeshProUGUI CreateTmp(Transform parent, string name, string text, float size, FontStyles fs,
@@ -1060,11 +1313,14 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
         go.transform.SetParent(parent, false);
         var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
         tmp.text = text;
         tmp.fontSize = size;
         tmp.fontStyle = fs;
         tmp.alignment = align;
         tmp.color = Color.white;
+        tmp.raycastTarget = false;
         return tmp;
     }
 
@@ -1110,17 +1366,17 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         return slider;
     }
 
-    static Button CreateFooterBtn(Transform parent, string label, Color bg)
+    static Button CreateFooterBtn(Transform parent, string label, Color bg, float minHeight = 48f, float fontSize = 20f)
     {
         var go = new GameObject(label, typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
         go.transform.SetParent(parent, false);
         go.GetComponent<Image>().color = bg;
         var le = go.GetComponent<LayoutElement>();
-        le.minHeight = 48f;
-        le.preferredHeight = 48f;
+        le.minHeight = minHeight;
+        le.preferredHeight = minHeight;
         le.flexibleWidth = 1f;
         var btn = go.GetComponent<Button>();
-        var tmp = CreateTmp(go.transform, "Lbl", label, 20, FontStyles.Bold, TextAlignmentOptions.Center);
+        var tmp = CreateTmp(go.transform, "Lbl", label, fontSize, FontStyles.Bold, TextAlignmentOptions.Center);
         tmp.color = Color.white;
         StretchFull(tmp.rectTransform);
         return btn;

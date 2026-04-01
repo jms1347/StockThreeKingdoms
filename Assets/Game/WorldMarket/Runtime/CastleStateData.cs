@@ -21,7 +21,7 @@ public struct FactionCastleShare
 }
 
 [Serializable]
-public class CastleStateData
+public partial class CastleStateData
 {
     public string id; // CastleMasterData.id
 

@@ -31,12 +31,28 @@ public class BalanceConfig
 public class GameManager : Singleton<GameManager>
 {
     [Header("시간")]
-    [Tooltip("현실 시간 기준으로 ‘게임 하루’(게임 내 86400초)가 지나가는 데 걸리는 초.\n• 86400 = 현실 24시간에 게임 1일\n• 1 = 현실 1초에 게임 1일 (빠른 테스트용)")]
+    [Tooltip("비어 있지 않으면 TimeManager에 등록되어 시뮬레이션 속도·모드의 단일 소스가 됩니다(아래 인스펙터 테스트 토글은 무시).")]
+    [SerializeField] TimeConfig timeConfig;
+    [Tooltip("체크하면 아래 ‘테스트용 현실 초/게임일’만 사용합니다. 끄면 ‘현실 초/게임일’ 값을 씁니다.")]
+    [SerializeField] bool testModeGameDay;
+    [Tooltip("테스트 모드일 때만 적용. 기본 60 = 현실 1분에 게임 하루(일 경계·이벤트 일 틱).")]
+    [SerializeField] float testRealSecondsPerGameDay = 60f;
+
+    [Tooltip("일반 플레이: 현실 몇 초가 지나면 게임 내 하루(86400초)가 지난 것으로 취급되는지.\n• 86400 = 현실 24시간에 게임 1일\n• 테스트 모드가 켜져 있으면 이 값은 무시됩니다.")]
     [SerializeField, FormerlySerializedAs("minutesPerGameDay")]
     float realSecondsPerGameDay = 86400f;
 
-    /// <summary>게임 하루당 현실 초(최소 0.001). <see cref="TimeManager"/> 가상 Unix·일 경계에 사용.</summary>
-    public float RealSecondsPerGameDay => Mathf.Max(0.001f, realSecondsPerGameDay);
+    /// <summary>게임 하루당 현실 초(최소 0.001). <see cref="TimeConfig"/>가 있으면 그 값과 동기화.</summary>
+    public float RealSecondsPerGameDay
+    {
+        get
+        {
+            if (timeConfig != null)
+                return Mathf.Max(0.001f, timeConfig.ResolveSecondsPerDay());
+            float raw = testModeGameDay ? testRealSecondsPerGameDay : realSecondsPerGameDay;
+            return Mathf.Max(0.001f, raw);
+        }
+    }
 
     [Header("밸런스 (유저 레벨 기반 계산)")]
     public BalanceConfig balance = new BalanceConfig();
@@ -59,6 +75,8 @@ public class GameManager : Singleton<GameManager>
 
     protected override void Awake()
     {
+        if (timeConfig != null)
+            TimeManager.RegisterTimeConfig(timeConfig);
         TimeManager.EnsureCreated();
         base.Awake();  // Singleton: _instance 설정 + DontDestroyOnLoad (씬 전환 시 유지)
         savePath = Path.Combine(Application.persistentDataPath, "userData.json");
@@ -174,6 +192,8 @@ public class GameManager : Singleton<GameManager>
             currentUser.lastMarketCollectTime = now;
         if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime <= 0)
             currentUser.lastFarmCollectTime = now;
+        if (FixWarehouseTimestampsIfBehindClock(now))
+            SaveUserData();
     }
 
     /// <summary>시장/농장이 가동 중인데 lastCollect가 0이면 지금 시각으로 보정 (구세이브 호환).</summary>
@@ -192,6 +212,31 @@ public class GameManager : Singleton<GameManager>
             currentUser.lastFarmCollectTime = now;
             dirty = true;
         }
+
+        if (FixWarehouseTimestampsIfBehindClock(now))
+            dirty = true;
+
         if (dirty) SaveUserData();
+    }
+
+    /// <summary>
+    /// 가상 시각이 뒤로 돌아가거나 세이브의 last가 미래인 경우 경과가 0으로 고정되는 문제를 방지합니다.
+    /// </summary>
+    bool FixWarehouseTimestampsIfBehindClock(long nowUnix)
+    {
+        bool changed = false;
+        if (currentUser.marketLevel > 0 && currentUser.lastMarketCollectTime > nowUnix)
+        {
+            currentUser.lastMarketCollectTime = nowUnix;
+            changed = true;
+        }
+
+        if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime > nowUnix)
+        {
+            currentUser.lastFarmCollectTime = nowUnix;
+            changed = true;
+        }
+
+        return changed;
     }
 }

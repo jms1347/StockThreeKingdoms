@@ -108,7 +108,7 @@ public static class WorldEventBuffApplier
         switch (b.statType)
         {
             case CastleStatType.SentimentRecovery:
-                s.currentSentiment = Mathf.Clamp(s.currentSentiment + delta, 0f, 200f);
+                s.ApplySentimentDelta(delta);
                 break;
             case CastleStatType.PriceValue:
                 s.currentBuyPrice = Mathf.Max(0.01f, s.currentBuyPrice + delta);
@@ -117,7 +117,8 @@ public static class WorldEventBuffApplier
             {
                 float slice = b.value * w;
                 float mulDelta = Random.Range(0f, 2f * Mathf.Abs(slice)) * Mathf.Sign(slice);
-                s.currentPopulation = Mathf.Max(1, Mathf.RoundToInt(s.currentPopulation * (1f + mulDelta)));
+                int next = Mathf.Max(1, Mathf.RoundToInt(s.currentPopulation * (1f + mulDelta)));
+                s.ApplyPopulationDelta(next - s.currentPopulation);
                 break;
             }
             case CastleStatType.CastleValue:

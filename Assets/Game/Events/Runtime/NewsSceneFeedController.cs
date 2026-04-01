@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,11 +12,20 @@ public class NewsSceneFeedController : MonoBehaviour
     [SerializeField] NewsDetailPopup detailPopup;
     [SerializeField] RectTransform listContent;
     [SerializeField] GameObject rowTemplate;
-    [Tooltip("비우면 자식에서 CategoryTabBar를 찾습니다. 자식 순서: 전체→전쟁→속보→소문→본영 (= WorldNewsFeedKind 0~4)")]
+    [Tooltip("비우면 자식에서 CategoryTabBar를 찾습니다. 자식 순서: 전체→전쟁→속보(팩트)→소문→본영 (= WorldNewsFeedKind 0~4)")]
     [SerializeField] RectTransform categoryTabBarRoot;
     [SerializeField] int maxRows = 40;
     [Tooltip("0=전체, 1~4 = WorldNewsFeedKind (탭과 동기화)")]
     [SerializeField] int listFilter;
+
+    static readonly string[] CategoryTabLabels =
+    {
+        "전체",
+        "전쟁",
+        "속보(팩트)",
+        "소문",
+        "본영"
+    };
 
     readonly List<GameObject> _rows = new List<GameObject>();
     readonly List<Button> _categoryButtons = new List<Button>();
@@ -23,6 +33,10 @@ public class NewsSceneFeedController : MonoBehaviour
     readonly List<Color> _categoryTabBaseColors = new List<Color>();
     ScrollRect _listScroll;
     bool _categoryTabsWired;
+    Coroutine _debouncedRebuildCo;
+
+    [Tooltip("같은 프레임에 뉴스가 여러 건 쌓일 때 리스트 전체 재구성을 한 번으로 묶습니다.")]
+    [SerializeField] float rebuildDebounceSeconds = 0.12f;
 
     void Awake() => ResolveRefs();
 
@@ -44,9 +58,30 @@ public class NewsSceneFeedController : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         if (dm != null)
             dm.OnNewsAdded -= OnNewsAddedHandler;
+        if (_debouncedRebuildCo != null)
+        {
+            StopCoroutine(_debouncedRebuildCo);
+            _debouncedRebuildCo = null;
+        }
     }
 
-    void OnNewsAddedHandler(WorldNewsItem _) => RebuildList();
+    void OnNewsAddedHandler(WorldNewsItem _) => RequestDebouncedRebuild();
+
+    void RequestDebouncedRebuild()
+    {
+        if (!isActiveAndEnabled) return;
+        if (_debouncedRebuildCo != null)
+            StopCoroutine(_debouncedRebuildCo);
+        _debouncedRebuildCo = StartCoroutine(CoDebouncedRebuild());
+    }
+
+    IEnumerator CoDebouncedRebuild()
+    {
+        float wait = Mathf.Max(0.02f, rebuildDebounceSeconds);
+        yield return new WaitForSecondsRealtime(wait);
+        _debouncedRebuildCo = null;
+        RebuildList();
+    }
 
     IEnumerator CoRetryWhenDataReady()
     {
@@ -64,8 +99,20 @@ public class NewsSceneFeedController : MonoBehaviour
 
     void ResolveRefs()
     {
-        if (detailPopup == null && transform.parent != null)
-            detailPopup = transform.parent.GetComponentInChildren<NewsDetailPopup>(true);
+        if (detailPopup == null)
+        {
+            // NewsDetailOverlay는 NewsTabRoot 형제(ContentRoot 직하)에 있어 parent 한 단계로는 안 잡힘.
+            for (Transform t = transform; t != null; t = t.parent)
+            {
+                var p = t.GetComponentInChildren<NewsDetailPopup>(true);
+                if (p != null)
+                {
+                    detailPopup = p;
+                    break;
+                }
+            }
+        }
+
         if (detailPopup == null)
             detailPopup = UnityEngine.Object.FindFirstObjectByType<NewsDetailPopup>(FindObjectsInactive.Include);
 
@@ -97,11 +144,14 @@ public class NewsSceneFeedController : MonoBehaviour
         if (categoryTabBarRoot == null) return;
         var h = categoryTabBarRoot.GetComponent<HorizontalLayoutGroup>();
         if (h == null) return;
+        h.childAlignment = TextAnchor.MiddleCenter;
         h.childControlWidth = true;
         h.childForceExpandWidth = true;
         h.childControlHeight = true;
         h.childForceExpandHeight = true;
-        h.spacing = Mathf.Max(6f, h.spacing);
+        h.spacing = Mathf.Clamp(h.spacing, 4f, 10f);
+        h.padding.left = Mathf.Max(h.padding.left, 4);
+        h.padding.right = Mathf.Max(h.padding.right, 4);
         for (int i = 0; i < categoryTabBarRoot.childCount; i++)
         {
             var rt = categoryTabBarRoot.GetChild(i) as RectTransform;
@@ -112,12 +162,28 @@ public class NewsSceneFeedController : MonoBehaviour
             rt.offsetMin = Vector2.zero;
             rt.offsetMax = Vector2.zero;
             var le = rt.GetComponent<LayoutElement>();
-            if (le != null)
+            if (le == null)
+                le = rt.gameObject.AddComponent<LayoutElement>();
+            le.flexibleWidth = 1f;
+            le.minWidth = Mathf.Max(le.minWidth, 76f);
+            le.minHeight = Mathf.Max(le.minHeight, 44f);
+
+            var btn = rt.GetComponent<Button>();
+            if (btn != null)
             {
-                le.flexibleWidth = 1f;
-                le.minWidth = Mathf.Min(le.minWidth > 0 ? le.minWidth : 88f, 88f);
+                var label = rt.GetComponentInChildren<TextMeshProUGUI>(true);
+                if (label != null && i < CategoryTabLabels.Length)
+                {
+                    label.text = CategoryTabLabels[i];
+                    label.alignment = TextAlignmentOptions.Midline;
+                    label.enableAutoSizing = true;
+                    label.fontSizeMin = 16;
+                    label.fontSizeMax = 22;
+                    label.margin = new Vector4(4f, 2f, 4f, 2f);
+                }
             }
         }
+
         LayoutRebuilder.ForceRebuildLayoutImmediate(categoryTabBarRoot);
     }
 
@@ -246,7 +312,12 @@ public class NewsSceneFeedController : MonoBehaviour
             return;
 
         var sorted = new List<WorldNewsItem>(dm.worldNews);
-        sorted.Sort((a, b) => b.unixTime.CompareTo(a.unixTime));
+        sorted.Sort((a, b) =>
+        {
+            int c = b.unixTime.CompareTo(a.unixTime);
+            if (c != 0) return c;
+            return string.Compare(a.eventId ?? "", b.eventId ?? "", StringComparison.Ordinal);
+        });
 
         int shown = 0;
         for (int i = 0; i < sorted.Count && shown < maxRows; i++)
@@ -258,26 +329,36 @@ public class NewsSceneFeedController : MonoBehaviour
             var row = Instantiate(rowTemplate, listContent);
             row.name = "NewsRow_" + shown;
             row.SetActive(true);
-            BindRow(row, item);
+            BindRow(row, item, dm);
             _rows.Add(row);
             shown++;
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(listContent);
         UpdateCategoryTabVisuals();
+        ScrollListToTop();
     }
 
-    void BindRow(GameObject row, WorldNewsItem item)
+    void BindRow(GameObject row, WorldNewsItem item, DataManager dm)
     {
-        var headline = FindTmpUnder(row.transform, "Headline");
+        // 템플릿은 "Headline" 또는 TitleRow 안의 "Title"을 씁니다(이름 불일치 시 플레이스홀더가 남음).
+        var headline = FindTmpUnder(row.transform, "Headline") ?? FindTmpUnder(row.transform, "Title");
         if (headline != null)
-            headline.text = item.GetEffectiveDetailTitle();
+        {
+            string t = item.GetEffectiveDetailTitle();
+            headline.text = NewsFormatter.ApplyNewsDisplayTextExpansions(dm, t);
+        }
+
+        var timeAgo = FindTmpUnder(row.transform, "TimeAgo");
+        if (timeAgo != null)
+            timeAgo.text = FormatListTimeAgo(item, dm);
 
         var summary = FindTmpUnder(row.transform, "Summary");
         if (summary != null)
         {
             string s = item.GetEffectiveSummaryForList();
-            summary.text = string.IsNullOrEmpty(s) ? item.text : s;
+            if (string.IsNullOrEmpty(s)) s = item.text ?? "";
+            summary.text = NewsFormatter.ApplyNewsDisplayTextExpansions(dm, s);
         }
 
         var debuff = FindTmpUnder(row.transform, "DebuffHint");
@@ -290,29 +371,41 @@ public class NewsSceneFeedController : MonoBehaviour
                 detailPopup.Show(item);
         }
 
-        var detailBtnGo = FindDeep(row.transform, "DetailButton");
-        if (detailBtnGo != null)
+        foreach (var detailBtn in row.GetComponentsInChildren<Button>(true))
         {
-            var detailBtn = detailBtnGo.GetComponent<Button>();
-            if (detailBtn != null)
-            {
-                detailBtn.onClick.RemoveAllListeners();
-                detailBtn.onClick.AddListener(OpenDetail);
-            }
+            if (detailBtn == null || detailBtn.gameObject.name != "DetailButton") continue;
+            detailBtn.onClick.RemoveAllListeners();
+            detailBtn.onClick.AddListener(OpenDetail);
+            detailBtn.navigation = new Navigation { mode = Navigation.Mode.None };
+            detailBtn.transform.SetAsLastSibling();
         }
 
-        var btn = row.GetComponent<Button>();
-        if (btn == null)
+        // 행 전체 Button은 ScrollRect·자식 DetailButton과 레이캐스트가 겹치면 상세가 안 뜰 수 있어 쓰지 않음.
+        var rowBtn = row.GetComponent<Button>();
+        if (rowBtn != null)
         {
-            btn = row.AddComponent<Button>();
-            btn.targetGraphic = row.GetComponent<Image>() ?? row.GetComponentInChildren<Graphic>(true);
+            rowBtn.onClick.RemoveAllListeners();
+            Destroy(rowBtn);
         }
-
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(OpenDetail);
     }
 
-    /// <summary>0=전체, 1=전쟁, 2=속보(팩트), 3=소문(비시스템 전체), 4=본영(본성 연관 + 속보)</summary>
+    static string FormatListTimeAgo(WorldNewsItem item, DataManager dm)
+    {
+        if (item == null) return "";
+        long now = TimeManager.GetUnixNow();
+        long dt = Math.Max(0L, now - item.unixTime);
+        string rel = dt < 60 ? "방금 전"
+            : dt < 3600 ? $"{dt / 60}분 전"
+            : dt < 86400 ? $"{dt / 3600}시간 전"
+            : $"{dt / 86400}일 전";
+        if (string.IsNullOrWhiteSpace(item.relatedCastleIdsRaw))
+            return rel;
+        string raw = item.relatedCastleIdsRaw.Trim();
+        string expanded = dm != null ? NewsFormatter.ApplyNewsDisplayTextExpansions(dm, raw) : raw;
+        return $"{rel} · 관련: {expanded}";
+    }
+
+    /// <summary>0=전체, 1=전쟁, 2=속보(팩트), 3=소문, 4=본영</summary>
     bool PassesFilter(WorldNewsItem item, DataManager dm)
     {
         if (item == null)
@@ -329,11 +422,11 @@ public class NewsSceneFeedController : MonoBehaviour
             case (int)WorldNewsFeedKind.All:
                 return !IsSystemNewsItem(item);
             case (int)WorldNewsFeedKind.War:
-                return ItemHasWarTag(item);
+                return ItemHasWarTag(item, dm);
             case (int)WorldNewsFeedKind.Breaking:
                 return ItemIsFactBreaking(item);
             case (int)WorldNewsFeedKind.Rumor:
-                return !IsSystemNewsItem(item);
+                return ItemIsRumorFeedItem(item);
             case (int)WorldNewsFeedKind.Headquarters:
                 return PassesHeadquartersTab(item, dm);
             default:
@@ -350,9 +443,28 @@ public class NewsSceneFeedController : MonoBehaviour
                || t.StartsWith("[LOAD]", StringComparison.Ordinal);
     }
 
-    static bool ItemHasWarTag(WorldNewsItem item)
+    static bool ItemHasWarTag(WorldNewsItem item, DataManager dm)
     {
-        return !string.IsNullOrEmpty(item.text) && item.text.Contains("[전쟁]");
+        if (item == null) return false;
+        if (item.newsKind == (byte)WorldNewsFeedKind.War) return true;
+        const string tag = "[전쟁]";
+        if (!string.IsNullOrEmpty(item.text) && item.text.Contains(tag)) return true;
+        if (!string.IsNullOrEmpty(item.headline) && item.headline.Contains(tag)) return true;
+        if (!string.IsNullOrEmpty(item.bodyContent) && item.bodyContent.Contains(tag)) return true;
+        if (string.Equals(item.debuffIconsHint?.Trim(), tag, StringComparison.Ordinal)) return true;
+
+        return false;
+    }
+
+    /// <summary>소문 탭: 시스템 제외, 팩트 속보 제외, 소문 성격 기사만.</summary>
+    static bool ItemIsRumorFeedItem(WorldNewsItem item)
+    {
+        if (item == null || IsSystemNewsItem(item)) return false;
+        if (ItemIsFactBreaking(item)) return false;
+        if (item.isRumorContent) return true;
+        if (item.newsKind == (byte)WorldNewsFeedKind.Rumor) return true;
+        string tx = (item.text ?? "").TrimStart();
+        return tx.StartsWith("[소문]", StringComparison.Ordinal) || (item.text ?? "").Contains("[소문]");
     }
 
     static bool ItemIsFactBreaking(WorldNewsItem item)
@@ -366,12 +478,8 @@ public class NewsSceneFeedController : MonoBehaviour
         return string.Equals(item.debuffIconsHint, "[속보]", StringComparison.Ordinal);
     }
 
-    static bool ItemIsBreakingForHqFeed(WorldNewsItem item) => ItemIsFactBreaking(item);
-
     bool PassesHeadquartersTab(WorldNewsItem item, DataManager dm)
     {
-        if (ItemIsBreakingForHqFeed(item))
-            return true;
         if (dm == null || string.IsNullOrWhiteSpace(dm.HomeCastleId))
             return false;
         return ItemReferencesHomeCastle(item, dm.HomeCastleId.Trim(), dm);
@@ -382,6 +490,10 @@ public class NewsSceneFeedController : MonoBehaviour
         if (string.IsNullOrWhiteSpace(homeCastleId))
             return false;
         string id = homeCastleId.Trim();
+
+        if (!string.IsNullOrWhiteSpace(item.targetCastleId)
+            && string.Equals(item.targetCastleId.Trim(), id, StringComparison.OrdinalIgnoreCase))
+            return true;
 
         if (!string.IsNullOrWhiteSpace(item.relatedCastleIdsRaw))
         {
@@ -395,21 +507,20 @@ public class NewsSceneFeedController : MonoBehaviour
 
         string hay = string.Concat(
             item.text ?? "",
+            item.headline ?? "",
+            item.bodyContent ?? "",
             item.detailTitle ?? "",
             item.detailBody ?? "",
             item.detailSubline ?? "");
-        if (hay.IndexOf(id, StringComparison.OrdinalIgnoreCase) >= 0)
-            return true;
-
-        if (dm != null)
+        try
         {
-            string disp = dm.GetCastleDisplayName(id);
-            if (!string.IsNullOrWhiteSpace(disp))
-            {
-                string d = disp.Trim();
-                if (d.Length > 0 && hay.IndexOf(d, StringComparison.Ordinal) >= 0)
-                    return true;
-            }
+            if (Regex.IsMatch(hay, @"\b" + Regex.Escape(id) + @"\b",
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                return true;
+        }
+        catch (ArgumentException)
+        {
+            // 잘못된 ID — 건너뜀
         }
 
         return false;

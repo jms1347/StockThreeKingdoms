@@ -41,7 +41,7 @@ public class HomeController : MonoBehaviour
     public static double UpgradeCost(double baseCost, int level) =>
         baseCost * Math.Pow(UpgradeCostMult, level);
 
-    /// <summary> 시장 창고 현재 누적량 (1분 단위 Floor × 분당 생산, MaxCap 한도) </summary>
+    /// <summary> 시장 창고 현재 누적량 (수거 시각 이후 경과 초 × 초당 생산, MaxCap 한도) </summary>
     public double CurrentMarketAccumulated
     {
         get
@@ -55,15 +55,13 @@ public class HomeController : MonoBehaviour
             long last = gm.currentUser.lastMarketCollectTime;
             if (last <= 0) return 0;
             long elapsedSec = Math.Max(0, now - last);
-            long wholeMinutes = elapsedSec / 60;
-            double perMinute = ratePerSec * 60.0;
-            double raw = wholeMinutes * perMinute;
+            double raw = elapsedSec * ratePerSec;
             double maxCap = GetMarketMaxCapacity();
             return Math.Min(raw, maxCap > 0 ? maxCap : double.MaxValue);
         }
     }
 
-    /// <summary> 농장 창고 현재 누적량 (1분 단위 Floor × 분당 생산, MaxCap 한도) </summary>
+    /// <summary> 농장 창고 현재 누적량 (수거 시각 이후 경과 초 × 초당 생산, MaxCap 한도) </summary>
     public double CurrentFarmAccumulated
     {
         get
@@ -77,9 +75,7 @@ public class HomeController : MonoBehaviour
             long last = gm.currentUser.lastFarmCollectTime;
             if (last <= 0) return 0;
             long elapsedSec = Math.Max(0, now - last);
-            long wholeMinutes = elapsedSec / 60;
-            double perMinute = ratePerSec * 60.0;
-            double raw = wholeMinutes * perMinute;
+            double raw = elapsedSec * ratePerSec;
             double maxCap = GetFarmMaxCapacity();
             return Math.Min(raw, maxCap > 0 ? maxCap : double.MaxValue);
         }

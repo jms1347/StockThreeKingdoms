@@ -58,10 +58,59 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
 
     public event Action<CastleStateData, EventMasterData> OnEventSample;
 
+    bool _subscribedGlobalCritical;
+
     protected override void Awake()
     {
         base.Awake();
         RebuildFromSources();
+        if (WorldEventCenter.InstanceOrNull != this)
+            return;
+        CastleWorldEventManager.GlobalOnCriticalBreach -= HandleGlobalCriticalBreach;
+        CastleWorldEventManager.GlobalOnCriticalBreach += HandleGlobalCriticalBreach;
+        _subscribedGlobalCritical = true;
+    }
+
+    void OnDestroy()
+    {
+        if (_subscribedGlobalCritical)
+            CastleWorldEventManager.GlobalOnCriticalBreach -= HandleGlobalCriticalBreach;
+    }
+
+    static void HandleGlobalCriticalBreach(CastleStateData castle, CriticalWorldEventArgs args)
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || castle == null || string.IsNullOrWhiteSpace(castle.id))
+            return;
+
+        string cid = castle.id.Trim();
+        string cname = dm.GetCastleDisplayName(cid);
+        if (string.IsNullOrWhiteSpace(cname) || cname == "성")
+            cname = cid;
+
+        string head = args.Kind switch
+        {
+            CriticalWorldEventKind.PopularRiot => $"[속보] {cname}, 민심 임계 이하 — 민란 위기",
+            CriticalWorldEventKind.StabilityCollapse => $"[속보] {cname}, 치안·안정도 임계 이하",
+            _ => $"[속보] {cname}, 위급 상황"
+        };
+
+        string body = args.SourceField == CastleStatField.PublicSentiment
+            ? $"민심이 {args.NewValue:0.#}로 떨어졌습니다. (임계 {args.Threshold:0.#})"
+            : $"안정도가 {args.NewValue:0.#}로 떨어졌습니다. (임계 {args.Threshold:0.#})";
+
+        dm.AddNewsItem(new WorldNewsItem
+        {
+            text = $"{head}\n{body}",
+            headline = head,
+            bodyContent = body,
+            newsKind = (byte)WorldNewsFeedKind.Breaking,
+            targetCastleId = cid,
+            relatedCastleIdsRaw = cid,
+            isVerifiedFact = true,
+            isConfirmed = true,
+            debuffIconsHint = "[속보]"
+        });
     }
 
     public void RebuildFromSources()
@@ -114,11 +163,14 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         if (nm == null)
             return;
 
-        int today = (int)(TimeManager.GetUnixNow() / 86400L);
+        int today = (int)TimeManager.GetGameDayBucket();
 
-        foreach (var kv in dm.castleStateDataMap)
+        var dailyCandidates = CastleDailyEventSampler.SelectCastlesForDailyEventRoll(dm,
+            CastleDailyEventSampler.MaxDailyNewsCastleSample);
+
+        for (int ci = 0; ci < dailyCandidates.Count; ci++)
         {
-            var state = kv.Value;
+            var state = dailyCandidates[ci];
             if (state == null || string.IsNullOrWhiteSpace(state.id))
                 continue;
 
@@ -155,7 +207,6 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
                     break;
                 }
             }
-
         }
     }
 
@@ -295,7 +346,7 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
         var nm = NewsManager.InstanceOrNull;
         if (nm == null) return;
 
-        int today = (int)(TimeManager.GetUnixNow() / 86400L);
+        int today = (int)TimeManager.GetGameDayBucket();
 
         for (int i = dm.pendingRumorWorldEvents.Count - 1; i >= 0; i--)
         {
@@ -700,8 +751,10 @@ public class WorldEventCenter : Singleton<WorldEventCenter>
     static void ApplyCastleDelta(CastleStateData s, float dSentiment, int dPopulation)
     {
         if (s == null) return;
-        s.currentSentiment = Mathf.Clamp(s.currentSentiment + dSentiment, 0f, 200f);
-        s.currentPopulation = Mathf.Max(1, s.currentPopulation + dPopulation);
+        if (Mathf.Abs(dSentiment) > 1e-5f)
+            s.ApplySentimentDelta(dSentiment);
+        if (dPopulation != 0)
+            s.ApplyPopulationDelta(dPopulation);
     }
 
     static bool CastleHasPendingRumor(DataManager dm, string castleId)

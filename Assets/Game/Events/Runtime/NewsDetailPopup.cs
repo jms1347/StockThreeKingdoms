@@ -100,6 +100,7 @@ public class NewsDetailPopup : MonoBehaviour
     {
         if (item == null) return;
         ResolveRefs();
+        transform.SetAsLastSibling();
         gameObject.SetActive(true);
 
         var dm = DataManager.InstanceOrNull;
@@ -109,12 +110,18 @@ public class NewsDetailPopup : MonoBehaviour
 
         string title = NewsTemplateSo.GetFormattedContent(item.GetEffectiveDetailTitle(), cid, dm);
         string body = NewsTemplateSo.GetFormattedContent(item.GetEffectiveDetailBody(), cid, dm);
+        title = NewsFormatter.ApplyNewsDisplayTextExpansions(dm, title);
+        body = NewsFormatter.ApplyNewsDisplayTextExpansions(dm, body);
         if (headerTitleText != null) headerTitleText.text = title;
         if (headlineText != null) headlineText.text = title;
         if (sublineText != null)
-            sublineText.text = string.IsNullOrWhiteSpace(item.detailSubline)
-                ? FormatSubline(item)
+        {
+            string sub = string.IsNullOrWhiteSpace(item.detailSubline)
+                ? FormatSubline(item, dm)
                 : NewsTemplateSo.GetFormattedContent(item.detailSubline.Trim(), cid, dm);
+            sublineText.text = NewsFormatter.ApplyNewsDisplayTextExpansions(dm, sub);
+        }
+
         if (bodyText != null) bodyText.text = body;
 
         var templates = newsTemplateOverride != null ? newsTemplateOverride : WorldEventCenter.InstanceOrNull?.NewsTemplates;
@@ -126,9 +133,12 @@ public class NewsDetailPopup : MonoBehaviour
         if (reporterSection != null)
             reporterSection.SetActive(hasTpl && !debunked);
         if (reporterScriptText != null)
-            reporterScriptText.text = !debunked && hasTpl && !string.IsNullOrWhiteSpace(te.reporterScript)
+        {
+            string rep = !debunked && hasTpl && !string.IsNullOrWhiteSpace(te.reporterScript)
                 ? NewsTemplateSo.GetFormattedContent(te.reporterScript.Trim(), cid, dm)
                 : "";
+            reporterScriptText.text = NewsFormatter.ApplyNewsDisplayTextExpansions(dm, rep);
+        }
 
         if (heroImage != null)
         {
@@ -175,9 +185,55 @@ public class NewsDetailPopup : MonoBehaviour
 
         if (castleButtonStrip != null)
             castleButtonStrip.gameObject.SetActive(false);
+
+        ApplyDetailTextReadability();
     }
 
     public void Hide() => gameObject.SetActive(false);
+
+    void ApplyDetailTextReadability()
+    {
+        Color titleCol = new Color(0.97f, 0.98f, 1f, 1f);
+        Color bodyCol = new Color(0.90f, 0.92f, 0.96f, 1f);
+        Color metaCol = new Color(0.80f, 0.84f, 0.90f, 1f);
+        if (headerTitleText != null)
+        {
+            headerTitleText.fontSize = Mathf.Max(headerTitleText.fontSize, 26f);
+            headerTitleText.color = titleCol;
+            headerTitleText.fontStyle |= FontStyles.Bold;
+        }
+
+        if (headlineText != null)
+        {
+            headlineText.fontSize = Mathf.Max(headlineText.fontSize, 24f);
+            headlineText.color = titleCol;
+        }
+
+        if (sublineText != null)
+        {
+            sublineText.fontSize = Mathf.Max(sublineText.fontSize, 20f);
+            sublineText.color = metaCol;
+        }
+
+        if (bodyText != null)
+        {
+            bodyText.fontSize = Mathf.Max(bodyText.fontSize, 22f);
+            bodyText.color = bodyCol;
+            bodyText.lineSpacing = Mathf.Max(bodyText.lineSpacing, 4f);
+        }
+
+        if (trustLineText != null)
+        {
+            trustLineText.fontSize = Mathf.Max(trustLineText.fontSize, 20f);
+            trustLineText.color = metaCol;
+        }
+
+        if (reporterScriptText != null)
+        {
+            reporterScriptText.fontSize = Mathf.Max(reporterScriptText.fontSize, 21f);
+            reporterScriptText.color = bodyCol;
+        }
+    }
 
     static bool TryGetHomeGovernorIntel(DataManager dm, out int intel)
     {
@@ -192,7 +248,7 @@ public class NewsDetailPopup : MonoBehaviour
         return true;
     }
 
-    static string FormatSubline(WorldNewsItem item)
+    static string FormatSubline(WorldNewsItem item, DataManager dm)
     {
         long now = TimeManager.GetUnixNow();
         long dt = now - item.unixTime;
@@ -201,7 +257,12 @@ public class NewsDetailPopup : MonoBehaviour
             : dt < 86400 ? $"{dt / 3600}시간 전"
             : $"{dt / 86400}일 전";
         if (!string.IsNullOrWhiteSpace(item.relatedCastleIdsRaw))
-            return $"{rel} · 관련: {item.relatedCastleIdsRaw.Trim()}";
+        {
+            string raw = item.relatedCastleIdsRaw.Trim();
+            string expanded = dm != null ? NewsFormatter.ApplyNewsDisplayTextExpansions(dm, raw) : raw;
+            return $"{rel} · 관련: {expanded}";
+        }
+
         return rel;
     }
 

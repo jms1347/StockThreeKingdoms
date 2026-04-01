@@ -9,7 +9,7 @@ public partial class DataManager
     void TickCastleDailyHistoryRollover()
     {
         if (!IsStateReady || castleStateDataMap == null) return;
-        long day = TimeManager.GetUnixNow() / 86400L;
+        long day = TimeManager.GetGameDayBucket();
         if (_lastUtcDayBucket < 0)
         {
             _lastUtcDayBucket = day;

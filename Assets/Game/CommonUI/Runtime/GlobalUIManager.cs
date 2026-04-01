@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -31,14 +32,9 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     public RectTransform FoodTarget => foodText != null ? foodText.rectTransform : null;
     public RectTransform SoldiersTarget => soldiersText != null ? soldiersText.rectTransform : null;
 
-    [Header("Top Bar Rolling")]
-    [SerializeField] float rollDuration = 0.42f;
     [Header("자원 텍스트 색")]
     [SerializeField] Color foodTextColor = new Color(0.42f, 0.92f, 0.48f, 1f);
     [SerializeField] Color soldiersTextColor = Color.white;
-    Tweener _assetsTween;
-    Tweener _foodTween;
-    Tweener _soldiersTween;
     double _displayAssets;
     double _displayFood;
     double _displaySoldiers;
@@ -48,6 +44,47 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         base.Awake();
         ApplyResourceTextColors();
         WireTabs();
+    }
+
+    void Start()
+    {
+        StartCoroutine(BindGameManagerTopBarSync());
+    }
+
+    void OnDestroy()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm != null)
+        {
+            gm.OnGoldChanged -= OnGameManagerGoldOrGrainChanged;
+            gm.OnGrainChanged -= OnGameManagerGoldOrGrainChanged;
+        }
+    }
+
+    IEnumerator BindGameManagerTopBarSync()
+    {
+        while (GameManager.InstanceOrNull == null)
+            yield return null;
+
+        var gm = GameManager.InstanceOrNull;
+        gm.OnGoldChanged -= OnGameManagerGoldOrGrainChanged;
+        gm.OnGoldChanged += OnGameManagerGoldOrGrainChanged;
+        gm.OnGrainChanged -= OnGameManagerGoldOrGrainChanged;
+        gm.OnGrainChanged += OnGameManagerGoldOrGrainChanged;
+        RefreshTopBarFromGameManager();
+    }
+
+    void OnGameManagerGoldOrGrainChanged(long _)
+    {
+        RefreshTopBarFromGameManager();
+    }
+
+    /// <summary>GameManager 현재 값으로 상단 자원 숫자를 맞춥니다. (홈 UI 비활성 시에도 호출 가능)</summary>
+    public void RefreshTopBarFromGameManager()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return;
+        SetTopBarNumbers(gm.currentUser.userName, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
     }
 
     void WireTabs()
@@ -66,7 +103,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
     public void SetTopBar(string userName, string totalAssets, string food)
     {
-        if (userNameText != null) userNameText.text = userName;
+        if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
         if (totalAssetsText != null) totalAssetsText.text = totalAssets;
         if (foodText != null)
         {
@@ -87,49 +124,37 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
     public void SetTopBarNumbers(string userName, double totalAssets, double food, long soldiers)
     {
-        if (userNameText != null) userNameText.text = userName ?? "";
+        if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
         ApplyResourceTextColors();
-        RollNumber(ref _assetsTween, _displayAssets, totalAssets, v => _displayAssets = v, v =>
-        {
-            if (totalAssetsText != null) totalAssetsText.text = FormatCompact(v);
-        });
-        RollNumber(ref _foodTween, _displayFood, food, v => _displayFood = v, v =>
-        {
-            if (foodText != null)
-            {
-                foodText.text = FormatCompact(v);
-                foodText.color = foodTextColor;
-            }
-        });
-        RollNumber(ref _soldiersTween, _displaySoldiers, soldiers, v => _displaySoldiers = v, v =>
-        {
-            if (soldiersText != null)
-            {
-                soldiersText.text = $"{FormatCompact(v)}명";
-                soldiersText.color = soldiersTextColor;
-            }
-        });
-    }
 
-    void RollNumber(ref Tweener t, double display, double target, Action<double> setDisplay, Action<double> apply)
-    {
-        if (apply == null || setDisplay == null) return;
-        if (rollDuration <= 0f)
+        _displayAssets = totalAssets;
+        _displayFood = food;
+        _displaySoldiers = soldiers;
+
+        if (totalAssetsText != null) totalAssetsText.text = FormatCompact(totalAssets);
+        if (foodText != null)
         {
-            setDisplay(target);
-            apply(target);
-            return;
+            foodText.text = FormatCompact(food);
+            foodText.color = foodTextColor;
         }
 
-        t?.Kill();
-        double start = display;
-        t = DOVirtual.Float(0f, 1f, rollDuration, u =>
+        if (soldiersText != null)
         {
-            float uu = Mathf.Clamp01(u);
-            double v = start + (target - start) * uu;
-            setDisplay(v);
-            apply(v);
-        }).SetEase(Ease.OutCubic).SetUpdate(true);
+            soldiersText.text = $"{FormatCompact(soldiers)}명";
+            soldiersText.color = soldiersTextColor;
+        }
+    }
+
+    static string FormatUserNameWithHomeCastle(string userName)
+    {
+        string n = userName ?? "";
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null) return n;
+        string hid = dm.HomeCastleId?.Trim();
+        if (string.IsNullOrEmpty(hid)) return n;
+        string cn = dm.GetCastleDisplayName(hid);
+        if (string.IsNullOrWhiteSpace(cn)) cn = hid;
+        return $"{n} · 본영 {cn}";
     }
 
     static string FormatCompact(double value)

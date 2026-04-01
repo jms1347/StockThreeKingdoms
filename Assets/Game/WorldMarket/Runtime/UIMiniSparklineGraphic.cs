@@ -7,15 +7,15 @@ using UnityEngine.UI;
 /// </summary>
 public class UIMiniSparklineGraphic : MaskableGraphic
 {
-    [SerializeField] float lineThickness = 1.25f;
+    [SerializeField] float lineThickness = 2.25f;
 
     protected override void Awake()
     {
         base.Awake();
         raycastTarget = false;
     }
-    [SerializeField] Color populationLineColor = new Color(0.38f, 0.92f, 0.58f, 0.45f);
-    [SerializeField] Color sentimentLineColor = new Color(1f, 0.88f, 0.38f, 0.45f);
+    [SerializeField] Color populationLineColor = new Color(0.38f, 0.92f, 0.58f, 0.82f);
+    [SerializeField] Color sentimentLineColor = new Color(1f, 0.88f, 0.38f, 0.82f);
 
     float[] _popNorm;
     float[] _sentNorm;

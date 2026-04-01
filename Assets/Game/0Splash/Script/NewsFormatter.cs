@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 /// <summary>
@@ -135,5 +137,89 @@ public static class NewsFormatter
         }
 
         return null;
+    }
+
+    static DataManager _expandCacheDm;
+    static int _expandCacheCastleCount;
+    static List<(Regex rx, string rep)> _expandRegexes;
+
+    static void EnsureCastleExpandRegexCache(DataManager dm)
+    {
+        int n = dm?.castleStateDataMap?.Count ?? 0;
+        if (_expandRegexes != null && ReferenceEquals(_expandCacheDm, dm) && _expandCacheCastleCount == n)
+            return;
+
+        _expandCacheDm = dm;
+        _expandCacheCastleCount = n;
+        _expandRegexes = new List<(Regex, string)>();
+        if (dm?.castleStateDataMap == null) return;
+
+        var ids = new List<string>();
+        foreach (var k in dm.castleStateDataMap.Keys)
+        {
+            string t = k?.Trim();
+            if (!string.IsNullOrEmpty(t)) ids.Add(t);
+        }
+
+        ids.Sort((a, b) => b.Length.CompareTo(a.Length));
+        const RegexOptions RxOpt = RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+        foreach (var id in ids)
+        {
+            string disp = dm.GetCastleDisplayName(id);
+            if (string.IsNullOrWhiteSpace(disp) || string.Equals(disp.Trim(), id, StringComparison.OrdinalIgnoreCase))
+                continue;
+            try
+            {
+                var rx = new Regex(@"\b" + Regex.Escape(id) + @"\b", RxOpt);
+                _expandRegexes.Add((rx, disp.Trim()));
+            }
+            catch (ArgumentException)
+            {
+                // 잘못된 패턴 — 건너뜀
+            }
+        }
+    }
+
+    /// <summary>기사 UI에 표시할 때 성 ID(C04 등)를 마스터 표기 이름으로 치환합니다(단어 경계).</summary>
+    public static string ExpandKnownCastleIdsInText(DataManager dm, string text)
+    {
+        if (dm == null || string.IsNullOrEmpty(text)) return text;
+
+        EnsureCastleExpandRegexCache(dm);
+        if (_expandRegexes == null || _expandRegexes.Count == 0) return text;
+
+        string s = text;
+        for (int i = 0; i < _expandRegexes.Count; i++)
+        {
+            var pair = _expandRegexes[i];
+            s = pair.rx.Replace(s, pair.rep);
+        }
+
+        return s;
+    }
+
+    static Regex _evCodeRx;
+
+    /// <summary>제목·본문에 남은 <c>EV14</c> 형태 이벤트 코드를 마스터 표시 이름으로 치환합니다.</summary>
+    public static string ExpandEventCodesInText(DataManager dm, string text)
+    {
+        if (dm == null || string.IsNullOrEmpty(text)) return text;
+        if (_evCodeRx == null)
+            _evCodeRx = new Regex(@"\b(EV[0-9A-Z]+)\b", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        return _evCodeRx.Replace(text, m =>
+        {
+            string eid = m.Groups[1].Value;
+            var ev = dm.GetEventMasterData(eid);
+            if (ev != null && !string.IsNullOrWhiteSpace(ev.name))
+                return ev.name.Trim();
+            return m.Value;
+        });
+    }
+
+    /// <summary>뉴스 한 줄 표시용: 성 ID 치환 후 이벤트 코드 치환.</summary>
+    public static string ApplyNewsDisplayTextExpansions(DataManager dm, string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+        return ExpandEventCodesInText(dm, ExpandKnownCastleIdsInText(dm, text));
     }
 }

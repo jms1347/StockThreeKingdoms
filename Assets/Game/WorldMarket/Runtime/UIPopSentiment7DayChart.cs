@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
@@ -12,21 +13,22 @@ using UnityEngine.UI;
 [RequireComponent(typeof(RectTransform))]
 public class UIPopSentiment7DayChart : MonoBehaviour
 {
-    [SerializeField] float lineWidthPixels = 14f;
+    [Tooltip("인구·민심 추세선 두께(픽셀). 캔버스 UI 메시로 그립니다.")]
+    [FormerlySerializedAs("lineWidthPixels")]
+    [SerializeField] float seriesLineThicknessPx = 3.25f;
     [SerializeField] Color populationLineColor = new Color(0.38f, 0.65f, 0.98f, 1f);
     [SerializeField] Color sentimentLineColor = new Color(1f, 0.82f, 0.35f, 1f);
-    [SerializeField] float labelOffsetAbovePoint = 24f;
-    [SerializeField] float labelOffsetBelowPoint = 14f;
-    [SerializeField] int valueLabelFontSize = 14;
-    [SerializeField] int axisLabelFontSize = 15;
+    [SerializeField] float labelOffsetAbovePoint = 28f;
+    [SerializeField] float labelOffsetBelowPoint = 18f;
+    [SerializeField] int valueLabelFontSize = 15;
+    [SerializeField] int axisLabelFontSize = 14;
 
     const float AxisLeft = 48f;
     const float AxisRight = 44f;
     const float AxisBottom = 34f;
     const float AxisTop = 58f;
 
-    LineRenderer _popLine;
-    LineRenderer _sentLine;
+    UIPopSentiment7DaySeriesLines _seriesLines;
     Transform _linesRoot;
     RectTransform _plotAreaRt;
     UIPopSentiment7DayChartGrid _grid;
@@ -70,13 +72,11 @@ public class UIPopSentiment7DayChart : MonoBehaviour
 
         _grid = plotGo.AddComponent<UIPopSentiment7DayChartGrid>();
 
-        var lrGo = new GameObject("LineRenderers", typeof(RectTransform));
+        var lrGo = new GameObject("SeriesLines", typeof(RectTransform), typeof(UIPopSentiment7DaySeriesLines));
         lrGo.transform.SetParent(transform, false);
         StretchFull(lrGo.GetComponent<RectTransform>());
         _linesRoot = lrGo.transform;
-
-        _popLine = CreateLineRenderer("PopulationLine", populationLineColor);
-        _sentLine = CreateLineRenderer("SentimentLine", sentimentLineColor);
+        _seriesLines = lrGo.GetComponent<UIPopSentiment7DaySeriesLines>();
 
         var ax = new GameObject("AxesAndLegend", typeof(RectTransform));
         ax.transform.SetParent(transform, false);
@@ -86,12 +86,12 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         _legendPop = CreateAxisTmp(_axisRoot, "LegendPop", TextAlignmentOptions.TopLeft);
         _legendPop.fontSize = axisLabelFontSize + 3;
         _legendPop.fontStyle = FontStyles.Bold;
-        _legendPop.text = "인구 7일";
+        _legendPop.text = LegendPopRichText;
 
         _legendSent = CreateAxisTmp(_axisRoot, "LegendSent", TextAlignmentOptions.TopLeft);
         _legendSent.fontSize = axisLabelFontSize + 3;
         _legendSent.fontStyle = FontStyles.Bold;
-        _legendSent.text = "민심 0-200";
+        _legendSent.text = LegendSentRichText;
 
         for (int i = 0; i < 3; i++)
             _leftAxisLabels.Add(CreateAxisTmp(_axisRoot, $"LAxis{i}", TextAlignmentOptions.MidlineRight));
@@ -138,34 +138,8 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         return tmp;
     }
 
-    LineRenderer CreateLineRenderer(string name, Color color)
-    {
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(_linesRoot, false);
-        StretchFull(go.GetComponent<RectTransform>());
-
-        var lr = go.AddComponent<LineRenderer>();
-        lr.useWorldSpace = true;
-        lr.loop = false;
-        lr.numCornerVertices = 3;
-        lr.numCapVertices = 3;
-        lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        lr.receiveShadows = false;
-        lr.allowOcclusionWhenDynamic = false;
-        lr.alignment = LineAlignment.TransformZ;
-
-        var sh = Shader.Find("Sprites/Default");
-        if (sh == null)
-            sh = Shader.Find("Unlit/Color");
-        if (sh != null)
-            lr.sharedMaterial = new Material(sh);
-
-        lr.startColor = lr.endColor = color;
-        lr.startWidth = lr.endWidth = 0.05f;
-        lr.positionCount = 0;
-
-        return lr;
-    }
+    const string LegendPopRichText = "<color=#8B939E>인구</color>  <color=#5B98F0>7일</color>";
+    const string LegendSentRichText = "<color=#8B939E>민심</color>  <color=#E8C44A>0–200</color>";
 
     static void StretchFull(RectTransform rt)
     {
@@ -223,8 +197,7 @@ public class UIPopSentiment7DayChart : MonoBehaviour
 
     void ClearVisuals()
     {
-        if (_popLine != null) _popLine.positionCount = 0;
-        if (_sentLine != null) _sentLine.positionCount = 0;
+        if (_seriesLines != null) _seriesLines.ClearSeries();
         SetAllValueLabelsActive(false);
         SetAllDotsActive(false);
         if (_grid != null)
@@ -312,23 +285,8 @@ public class UIPopSentiment7DayChart : MonoBehaviour
 
         LayoutLegendAndAxes(r, center, popMin, popMean, popMax, sentMin, sentMax);
 
-        float lineWidthWorld = PixelsToWorldLineWidth(chartRt);
-        if (_popLine != null)
-        {
-            _popLine.startWidth = _popLine.endWidth = lineWidthWorld;
-            _popLine.startColor = _popLine.endColor = populationLineColor;
-        }
-
-        if (_sentLine != null)
-        {
-            _sentLine.startWidth = _sentLine.endWidth = lineWidthWorld;
-            _sentLine.startColor = _sentLine.endColor = sentimentLineColor;
-        }
-
-        SyncLineSorting();
-
-        _popLine.positionCount = _count;
-        _sentLine.positionCount = _count;
+        var popPts = new Vector2[_count];
+        var sentPts = new Vector2[_count];
 
         EnsureValueLabelCount(_popLabels, _count, populationLineColor);
         EnsureValueLabelCount(_sentLabels, _count, sentimentLineColor);
@@ -344,10 +302,8 @@ public class UIPopSentiment7DayChart : MonoBehaviour
             float sentNorm = Mathf.Clamp((_sent[i] - SentimentNeutral) / SentimentHalfRange, -1f, 1f);
             float sy = plotBottom + innerH * (0.5f + MidBand * sentNorm);
 
-            Vector3 wpPop = chartRt.TransformPoint(new Vector3(lx, py, 0f));
-            Vector3 wpSent = chartRt.TransformPoint(new Vector3(lx, sy, 0f));
-            _popLine.SetPosition(i, wpPop);
-            _sentLine.SetPosition(i, wpSent);
+            popPts[i] = new Vector2(lx, py);
+            sentPts[i] = new Vector2(lx, sy);
 
             var pl = _popLabels[i];
             var sl = _sentLabels[i];
@@ -355,15 +311,33 @@ public class UIPopSentiment7DayChart : MonoBehaviour
             sl.gameObject.SetActive(true);
             pl.text = $"{Mathf.RoundToInt(_pop[i]):N0}";
             sl.text = $"{Mathf.RoundToInt(_sent[i])}";
-            float stagger = (i % 2) * 20f;
-            PlaceValueLabel(chartRt, pl.rectTransform, lx, py, populationLineColor, stagger, true);
-            PlaceValueLabel(chartRt, sl.rectTransform, lx, sy, sentimentLineColor, stagger, false);
+            float stagger = (i % 2) * 6f;
+            float yGap = Mathf.Abs(py - sy);
+            bool crowding = yGap < innerH * 0.07f;
+            float popNudgeX = crowding ? -12f : 0f;
+            float sentNudgeX = crowding ? 12f : 0f;
+            if (i == 0)
+            {
+                popNudgeX += 10f;
+                sentNudgeX += 10f;
+            }
+            else if (i == _count - 1)
+            {
+                popNudgeX -= 10f;
+                sentNudgeX -= 10f;
+            }
+
+            PlaceValueLabel(chartRt, pl.rectTransform, lx, py, populationLineColor, stagger, true, popNudgeX);
+            PlaceValueLabel(chartRt, sl.rectTransform, lx, sy, sentimentLineColor, stagger, false, sentNudgeX);
 
             PlaceDot(chartRt, _popDots[i].rectTransform, lx, py, populationLineColor);
             PlaceDot(chartRt, _sentDots[i].rectTransform, lx, sy, sentimentLineColor);
             _popDots[i].gameObject.SetActive(true);
             _sentDots[i].gameObject.SetActive(true);
         }
+
+        if (_seriesLines != null)
+            _seriesLines.SetTwoSeries(popPts, populationLineColor, sentPts, sentimentLineColor, seriesLineThicknessPx);
 
         for (int i = _count; i < _popLabels.Count; i++)
             _popLabels[i].gameObject.SetActive(false);
@@ -391,10 +365,10 @@ public class UIPopSentiment7DayChart : MonoBehaviour
             if (t != null) t.fontSize = axisLabelFontSize;
 
         float topY = r.yMax - 12f;
-        _legendPop.color = populationLineColor;
-        _legendSent.color = sentimentLineColor;
-        _legendPop.text = "인구 7일";
-        _legendSent.text = "민심 0-200";
+        _legendPop.color = Color.white;
+        _legendSent.color = Color.white;
+        _legendPop.text = LegendPopRichText;
+        _legendSent.text = LegendSentRichText;
 
         LayoutTmp(_legendPop.rectTransform,
             new Vector2(r.xMin + 8f - center.x, topY - center.y));
@@ -404,9 +378,10 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         _leftAxisLabels[0].text = FormatPopAxis(popMin);
         _leftAxisLabels[1].text = FormatPopAxis(popMean);
         _leftAxisLabels[2].text = FormatPopAxis(popMax);
-        _leftAxisLabels[0].color = new Color(0.55f, 0.72f, 0.95f, 0.95f);
-        _leftAxisLabels[1].color = _leftAxisLabels[0].color;
-        _leftAxisLabels[2].color = _leftAxisLabels[0].color;
+        var leftMuted = new Color(0.48f, 0.58f, 0.74f, 0.78f);
+        _leftAxisLabels[0].color = leftMuted;
+        _leftAxisLabels[1].color = leftMuted;
+        _leftAxisLabels[2].color = leftMuted;
 
         float plotBottom = r.yMin + AxisBottom;
         float plotTop = r.yMax - AxisTop;
@@ -421,9 +396,10 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         _rightAxisLabels[0].text = $"{Mathf.RoundToInt(sentMin)}";
         _rightAxisLabels[1].text = "100";
         _rightAxisLabels[2].text = $"{Mathf.RoundToInt(sentMax)}";
-        _rightAxisLabels[0].color = new Color(0.95f, 0.82f, 0.45f, 0.95f);
-        _rightAxisLabels[1].color = _rightAxisLabels[0].color;
-        _rightAxisLabels[2].color = _rightAxisLabels[0].color;
+        var rightMuted = new Color(0.82f, 0.72f, 0.42f, 0.78f);
+        _rightAxisLabels[0].color = rightMuted;
+        _rightAxisLabels[1].color = rightMuted;
+        _rightAxisLabels[2].color = rightMuted;
         for (int k = 0; k < 3; k++)
         {
             float ty = plotBottom + (k / 2f) * innerH;
@@ -431,7 +407,8 @@ public class UIPopSentiment7DayChart : MonoBehaviour
                 new Vector2(r.xMax - 4f - center.x, ty - center.y));
         }
 
-        DateTime end = DateTime.Today;
+        // 실제 PC 날짜(DateTime.Today)가 아니라 가상 시계(TimeManager) 기준 — 1분=1일 테스트에서도 맨 오른쪽이 '게임 오늘'로 진행됨
+        DateTime end = GetGameCalendarUtcDate();
         float plotLeft = r.xMin + AxisLeft;
         float plotRight = r.xMax - AxisRight;
         float innerW = Mathf.Max(2f, plotRight - plotLeft);
@@ -441,7 +418,7 @@ public class UIPopSentiment7DayChart : MonoBehaviour
             float lx = plotLeft + t * innerW;
             DateTime day = end.AddDays(-(_count - 1 - i));
             _bottomDateLabels[i].text = $"{day.Month}/{day.Day}";
-            _bottomDateLabels[i].color = new Color(0.65f, 0.68f, 0.72f, 1f);
+            _bottomDateLabels[i].color = new Color(0.50f, 0.53f, 0.58f, 0.88f);
             LayoutTmp(_bottomDateLabels[i].rectTransform,
                 new Vector2(lx - center.x, r.yMin + 4f - center.y));
             _bottomDateLabels[i].gameObject.SetActive(true);
@@ -458,6 +435,13 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         _rightAxisLabels[2].gameObject.SetActive(true);
         _legendPop.gameObject.SetActive(true);
         _legendSent.gameObject.SetActive(true);
+    }
+
+    /// <summary><see cref="TimeManager.GetUnixNow"/>와 동일한 UTC 일 경계를 쓰는 달력 날짜(차트 X축).</summary>
+    static DateTime GetGameCalendarUtcDate()
+    {
+        long unix = TimeManager.GetUnixNow();
+        return DateTimeOffset.FromUnixTimeSeconds(unix).UtcDateTime.Date;
     }
 
     static string FormatPopAxis(float v)
@@ -477,7 +461,7 @@ public class UIPopSentiment7DayChart : MonoBehaviour
     }
 
     void PlaceValueLabel(RectTransform chartRt, RectTransform labelRt, float localX, float localY, Color col,
-        float staggerPx, bool abovePoint)
+        float staggerPx, bool abovePoint, float extraOffsetX = 0f)
     {
         labelRt.SetParent(_labelsRoot, false);
         labelRt.anchorMin = labelRt.anchorMax = new Vector2(0.5f, 0.5f);
@@ -486,9 +470,9 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         if (abovePoint)
         {
             labelRt.pivot = new Vector2(0.5f, 0f);
-            labelRt.anchoredPosition = new Vector2(localX - center.x,
+            labelRt.anchoredPosition = new Vector2(localX - center.x + extraOffsetX,
                 localY - center.y + labelOffsetAbovePoint + staggerPx);
-            labelRt.sizeDelta = new Vector2(78f, 22f);
+            labelRt.sizeDelta = new Vector2(88f, 24f);
             if (tmp != null)
             {
                 tmp.alignment = TextAlignmentOptions.Bottom;
@@ -497,9 +481,9 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         else
         {
             labelRt.pivot = new Vector2(0.5f, 1f);
-            labelRt.anchoredPosition = new Vector2(localX - center.x,
+            labelRt.anchoredPosition = new Vector2(localX - center.x + extraOffsetX,
                 localY - center.y - labelOffsetBelowPoint - staggerPx);
-            labelRt.sizeDelta = new Vector2(56f, 20f);
+            labelRt.sizeDelta = new Vector2(64f, 22f);
             if (tmp != null)
             {
                 tmp.alignment = TextAlignmentOptions.Top;
@@ -509,10 +493,13 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         if (tmp != null)
         {
             tmp.color = col;
+            tmp.fontStyle = FontStyles.Bold;
             tmp.fontSize = valueLabelFontSize;
             tmp.enableWordWrapping = false;
             tmp.overflowMode = TextOverflowModes.Overflow;
             tmp.raycastTarget = false;
+            tmp.outlineWidth = 0.22f;
+            tmp.outlineColor = new Color32(12, 14, 20, 210);
         }
     }
 
@@ -556,36 +543,6 @@ public class UIPopSentiment7DayChart : MonoBehaviour
         return _dotSprite;
     }
 
-    float PixelsToWorldLineWidth(RectTransform chartRt)
-    {
-        Canvas c = chartRt.GetComponentInParent<Canvas>();
-        float scale = c != null ? c.scaleFactor : 1f;
-        Vector3 a = chartRt.TransformPoint(Vector3.zero);
-        Vector3 b = chartRt.TransformPoint(new Vector3(lineWidthPixels / scale, 0f, 0f));
-        return Mathf.Max(0.0008f, Vector3.Distance(a, b));
-    }
-
-    void SyncLineSorting()
-    {
-        Canvas canvas = GetComponentInParent<Canvas>();
-        if (canvas == null)
-            return;
-
-        int order = canvas.overrideSorting ? canvas.sortingOrder : canvas.rootCanvas.sortingOrder;
-        int lineOrder = order + 25;
-        if (_popLine != null)
-        {
-            _popLine.sortingLayerID = canvas.sortingLayerID;
-            _popLine.sortingOrder = lineOrder;
-        }
-
-        if (_sentLine != null)
-        {
-            _sentLine.sortingLayerID = canvas.sortingLayerID;
-            _sentLine.sortingOrder = lineOrder + 1;
-        }
-    }
-
     void EnsureValueLabelCount(List<TextMeshProUGUI> list, int need, Color tint)
     {
         while (list.Count < need)
@@ -596,11 +553,14 @@ public class UIPopSentiment7DayChart : MonoBehaviour
             if (TMP_Settings.defaultFontAsset != null)
                 tmp.font = TMP_Settings.defaultFontAsset;
             tmp.fontSize = valueLabelFontSize;
+            tmp.fontStyle = FontStyles.Bold;
             tmp.color = tint;
             tmp.alignment = TextAlignmentOptions.Bottom;
             tmp.raycastTarget = false;
             tmp.enableWordWrapping = false;
             tmp.richText = true;
+            tmp.outlineWidth = 0.22f;
+            tmp.outlineColor = new Color32(12, 14, 20, 210);
             list.Add(tmp);
         }
     }

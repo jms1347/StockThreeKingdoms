@@ -48,9 +48,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [Header("가격 롤링")]
     [SerializeField, Min(18f)] float largeBuyPriceFontSize = 34f;
 
-    [Header("투입 비율")]
+    [Header("퀵 투입")]
+    [Tooltip("0이면 가능한 최대(정원·병력·금화)만큼 투입. 1 이상이면 그 수와 상한 중 작은 값.")]
     [SerializeField] int quickDeployTroopFixed = 0;
-    [SerializeField, Range(0.02f, 0.5f)] float quickDeployGarrisonRatio = 0.10f;
 
     [Header("연출")]
     [SerializeField] Image cardBackgroundImage;
@@ -76,6 +76,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     Sequence _warPulseSeq;
     Sequence _favorablePulseSeq;
     GameObject _hqBadgeGo;
+    TextMeshProUGUI _deployDisabledHintTmp;
 
     void Awake()
     {
@@ -83,6 +84,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         TryAutoWire();
         EnsureHqMoveButtonUi();
         EnsureHqBadgeUi();
+        EnsureDeployDisabledHintUi();
         CacheDefaultColors();
         WireActionButtons();
         WireCardOpenDetailButton();
@@ -221,6 +223,77 @@ public class WorldMarketCastleCardView : MonoBehaviour
         _hqBadgeGo = go;
     }
 
+    void EnsureDeployDisabledHintUi()
+    {
+        if (_deployDisabledHintTmp != null) return;
+        var z4 = transform.Find("MainRow/Zone4Actions");
+        if (z4 == null) return;
+        var go = new GameObject("DeployDisabledHint", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(z4, false);
+        go.transform.SetAsLastSibling();
+        var le = go.GetComponent<LayoutElement>();
+        le.minHeight = 0f;
+        le.preferredHeight = 0f;
+        le.flexibleWidth = 1f;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.fontSize = 11;
+        tmp.fontStyle = FontStyles.Normal;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.color = new Color(0.68f, 0.72f, 0.78f, 1f);
+        tmp.enableWordWrapping = true;
+        tmp.overflowMode = TextOverflowModes.Overflow;
+        tmp.text = "";
+        tmp.richText = false;
+        go.SetActive(false);
+        _deployDisabledHintTmp = tmp;
+    }
+
+    void ClearDeployDisabledHint()
+    {
+        if (_deployDisabledHintTmp == null) return;
+        _deployDisabledHintTmp.text = "";
+        _deployDisabledHintTmp.gameObject.SetActive(false);
+        var le = _deployDisabledHintTmp.GetComponent<LayoutElement>();
+        if (le != null)
+        {
+            le.minHeight = 0f;
+            le.preferredHeight = 0f;
+        }
+    }
+
+    void ApplyDeployDisabledHint(DataManager dm, string castleId, int deployMax)
+    {
+        EnsureDeployDisabledHintUi();
+        if (_deployDisabledHintTmp == null || dm == null || string.IsNullOrWhiteSpace(castleId)) return;
+        if (deployMax > 0)
+        {
+            ClearDeployDisabledHint();
+            return;
+        }
+
+        var bd = dm.ComputeDeployTroopCapBreakdown(castleId.Trim());
+        string msg = DeployTroopCapBreakdown.FormatDeployButtonDisabledReason(in bd);
+        bool show = !string.IsNullOrEmpty(msg);
+        _deployDisabledHintTmp.text = msg;
+        _deployDisabledHintTmp.gameObject.SetActive(show);
+        var le = _deployDisabledHintTmp.GetComponent<LayoutElement>();
+        if (le != null)
+        {
+            if (!show)
+            {
+                le.minHeight = 0f;
+                le.preferredHeight = 0f;
+            }
+            else
+            {
+                le.minHeight = 28f;
+                le.preferredHeight = 34f;
+            }
+        }
+    }
+
     void OnDeployClicked()
     {
         var dm = DataManager.InstanceOrNull;
@@ -236,9 +309,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
     void OnRecallClicked()
     {
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null || string.IsNullOrWhiteSpace(_boundCastleId)) return;
-        dm.RecallUserCastleDeployment(_boundCastleId.Trim());
+        if (string.IsNullOrWhiteSpace(_boundCastleId)) return;
+        WorldMarketCastleDetailPopup.OpenCastleForRecall(_boundCastleId.Trim());
     }
 
     void OnDisable()
@@ -388,6 +460,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         {
             if (hqMoveButton != null)
                 hqMoveButton.gameObject.SetActive(false);
+            ClearDeployDisabledHint();
             return;
         }
 
@@ -515,8 +588,12 @@ public class WorldMarketCastleCardView : MonoBehaviour
                 hqLbl.text = "본영 이주";
         }
 
-        int maxG = master?.maxTroops ?? 0;
-        float stake = maxG > 0 ? Mathf.Clamp01(troopCount / (float)maxG) * 100f : 0f;
+        // 지분율: 주둔 상한(maxTroops)이 아니라 성 인구(유통/규모 지표) 대비 내 투입 병력 비율.
+        int stakeDenominator = Mathf.Max(1, population);
+        float stakePct = hasStock && troopCount > 0
+            ? Mathf.Clamp(troopCount / (float)stakeDenominator * 100f, 0f, 100f)
+            : 0f;
+        string stakePctStr = stakePct >= 1f ? stakePct.ToString("F1") : stakePct.ToString("F2");
 
         if (troopsText != null)
         {
@@ -526,19 +603,21 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (stakeText != null)
         {
-            stakeText.text = hasStock && maxG > 0 ? $"지분 {stake:F1}%" : "";
+            stakeText.text = hasStock ? $"지분 {stakePctStr}%" : "";
             stakeText.color = PersonalGoldDim;
         }
 
         Transform stakeBarRoot = stakeGaugeFillImage != null ? stakeGaugeFillImage.transform.parent : null;
         if (stakeBarRoot != null)
-            stakeBarRoot.gameObject.SetActive(hasStock && maxG > 0);
+            stakeBarRoot.gameObject.SetActive(hasStock);
 
-        if (stakeGaugeFillImage != null && hasStock && maxG > 0)
-            stakeGaugeFillImage.fillAmount = Mathf.Clamp01(troopCount / (float)maxG);
+        if (stakeGaugeFillImage != null && hasStock)
+            stakeGaugeFillImage.fillAmount = Mathf.Clamp01(troopCount / (float)stakeDenominator);
 
+        int deployMax = dm.ComputeMaxDeployTroopsForCastle(castleId);
         if (deployButton != null)
-            deployButton.interactable = dm.ComputeMaxDeployTroopsForCastle(castleId) > 0;
+            deployButton.interactable = deployMax > 0;
+        ApplyDeployDisabledHint(dm, castleId, deployMax);
 
         if (roiText != null)
         {
