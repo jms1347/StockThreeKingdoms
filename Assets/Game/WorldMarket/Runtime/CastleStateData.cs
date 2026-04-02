@@ -73,6 +73,9 @@ public partial class CastleStateData
     /// <summary>AMM 상수 K (= R·G). 초기화 후 불변(double).</summary>
     public double constantK;
 
+    /// <summary>거래세 등 성에 쌓인 주간 배당 재원. 월요일 정산 시 유저 지분만큼 지급 후 0으로 초기화.</summary>
+    public long accumulatedDividendPool;
+
     public bool IsUserInvested => userDeployedTroops > 0;
 
     /// <summary>성별 월드 이벤트(eventId) 마지막 발생 UTC 일 버킷(30일 쿨다운).</summary>
@@ -212,5 +215,7 @@ public class CastleStateSavePayload
     public List<CastleStateData> castles = new List<CastleStateData>();
     public List<WorldNewsItem> news = new List<WorldNewsItem>();
     public List<PendingRumorWorldEvent> pendingRumorWorldEvents = new List<PendingRumorWorldEvent>();
+    /// <summary>마지막으로 주간 배당을 지급한 로컬 월요일 06:00 앵커(Unix 초).</summary>
+    public long lastWeeklyDividendPaidAnchorUnix;
 }
 

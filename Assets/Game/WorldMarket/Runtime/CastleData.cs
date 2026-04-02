@@ -58,6 +58,46 @@ public partial class CastleStateData
         SetPublicSentiment(currentSentiment + delta, notify);
     }
 
+    /// <summary>
+    /// <see cref="accumulatedDividendPool"/>에서 유저 병력 지분만큼 배당액을 계산하고 풀을 0으로 만듭니다.
+    /// 지분 = userDeployedTroops / (currentAiGarrison + userDeployedTroops).
+    /// </summary>
+    public long DistributeUserDividendShare()
+    {
+        long pool = accumulatedDividendPool;
+        if (pool <= 0L)
+        {
+            accumulatedDividendPool = 0L;
+            return 0L;
+        }
+
+        if (userDeployedTroops <= 0)
+        {
+            accumulatedDividendPool = 0L;
+            return 0L;
+        }
+
+        int u = userDeployedTroops;
+        int g = Mathf.Max(0, currentAiGarrison);
+        int denom = u + g;
+        if (denom <= 0)
+        {
+            accumulatedDividendPool = 0L;
+            return 0L;
+        }
+
+        double share = u / (double)denom;
+        double payoutD = pool * share;
+        long payout = 0L;
+        if (payoutD > 0d && !double.IsNaN(payoutD) && !double.IsInfinity(payoutD))
+            payout = (long)Math.Floor(payoutD);
+        if (payout < 0L) payout = 0L;
+        if (payout > pool) payout = pool;
+
+        accumulatedDividendPool = 0L;
+        return payout;
+    }
+
     public void ApplyPopulationDelta(int delta, bool notify = true)
     {
         int old = currentPopulation;

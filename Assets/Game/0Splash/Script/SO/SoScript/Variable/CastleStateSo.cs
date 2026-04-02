@@ -27,6 +27,7 @@ public class CastleStateSo : ScriptableObject
         public int currentAiGarrison;
         public long goldReserve;
         public double constantK;
+        public long accumulatedDividendPool;
         public List<float> historyPopulation7Day = new List<float>();
         public List<float> historySentiment7Day = new List<float>();
         public float buyPricePrevDayClose;

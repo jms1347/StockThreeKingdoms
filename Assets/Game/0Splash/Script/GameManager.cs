@@ -24,6 +24,22 @@ public class BalanceConfig
     public double soldierGradeCostMult = 1.25;
     public double soldierGradeBaseMult = 1;   // 배율 시작값
     public double soldierGradeMultPerLevel = 0.1;
+
+    [Header("천하 · AI 대규모 징병")]
+    [Tooltip("이 악명(0~100) 이상이면 주변·전쟁·공백 조건 없이, 정원·백성 한도 안에서만 징병합니다.")]
+    public int aiRecruitInfamyBypassThreshold = 72;
+    [Tooltip("인접 성 최대 주둔이 (우리 총병력 × 이 배율) 이상이면 병력 열세로 징병 후보.")]
+    public float aiRecruitNeighborTroopPressureRatio = 1.28f;
+    [Tooltip("인접 최대 병력 − 우리 총병력이 이 값 이상이면 병력 열세로 징병 후보.")]
+    public int aiRecruitNeighborTroopAbsoluteGap = 400;
+    [Tooltip("최근 이 시간(초) 안의 뉴스에서 전쟁성 키워드 + 해당 성이 언급되면 징병 후보.")]
+    public float aiRecruitWarNewsLookbackSeconds = 259200f;
+    [Tooltip("현재인구 / maxGarrison 이 이 비율 이상이고, 아래 공백 비율도 만족하면 징병 후보.")]
+    public float aiRecruitPopulationPressureRatio = 0.22f;
+    [Tooltip("(max−유저−AI)/max 가 이 비율 이상일 때만 위 인구 압력과 조합.")]
+    public float aiRecruitMinVacantGarrisonRatio = 0.10f;
+    [Tooltip("능력치 기반 징병 규모에 대한 성 정원(maxGarrison) 대비 상한 비율. 0.1 = 하루 배치 최대 약 10%.")]
+    public float aiRecruitBatchCap = 0.10f;
 }
 
 /// <summary>TimeManager(-200)보다 먼저 Awake되어 <see cref="RealSecondsPerGameDay"/>를 씁니다.</summary>

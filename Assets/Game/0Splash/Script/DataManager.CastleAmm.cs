@@ -80,20 +80,18 @@ public partial class DataManager
     }
 
     /// <summary>
-    /// 게임 일자마다 태수(AI) 방침: 목표(Max의 약 50%, 유저 주둔 제외)보다 많으면 해제, 적으면 징병.
-    /// 풀 매수(G=0) 후에는 1명 재징병으로 매수 재개 가능.
+    /// 게임 일자마다 AI 주둔 조정 및 <see cref="CastleManager"/> 징병.
     /// </summary>
     internal void TickAiGarrisonRegenForNewGameDay()
     {
         if (!IsStateReady || castleStateDataMap == null) return;
-        long day = TimeManager.GetGameDayBucket();
         bool any = false;
         foreach (var kv in castleStateDataMap)
         {
             var s = kv.Value;
             if (s == null || !CastleAmmCore.IsInitialized(s)) continue;
-            int u = s.userDeployedTroops;
-            int g = s.currentAiGarrison;
+            int u = Mathf.Max(0, s.userDeployedTroops);
+            int g = Mathf.Max(0, s.currentAiGarrison);
             int cap = Mathf.Max(2, s.maxGarrison);
             int maxAiAllowed = Mathf.Max(0, cap - u);
             int targetHalf = Mathf.Max(1, cap / 2);
@@ -101,14 +99,6 @@ public partial class DataManager
 
             if (maxAiAllowed <= 0)
                 continue;
-
-            if (g <= 0)
-            {
-                s.currentAiGarrison = 1;
-                s.goldReserve = (long)Math.Round(s.constantK);
-                any = true;
-                continue;
-            }
 
             if (g > desiredAi)
             {
@@ -128,28 +118,23 @@ public partial class DataManager
                 continue;
             }
 
-            if (g < desiredAi && u + g < cap)
+            int room = cap - u - g;
+            int maxFromPop = Mathf.Max(0, s.currentPopulation - 1);
+
+            if (g <= 0)
             {
-                if (!GovernorAllowsRecruitToday(s, day))
-                    continue;
-                s.currentAiGarrison = g + 1;
-                s.goldReserve = (long)Math.Round(s.constantK / s.currentAiGarrison);
-                any = true;
+                if (CastleManager.TryRestoreMinimumAiGarrisonForMarket(s, room, maxFromPop))
+                    any = true;
+                continue;
             }
+
+            castleMasterDataMap.TryGetValue(s.id, out var master);
+            if (CastleManager.TryRecruitAiGarrison(this, s, master, u, g, cap, out _, out _))
+                any = true;
         }
 
         if (any)
             _stateDirty = true;
-    }
-
-    /// <summary>태수 id·일자에 따라 징병(증원) 실행 여부. 해제는 목표 초과 시 항상 적용.</summary>
-    static bool GovernorAllowsRecruitToday(CastleStateData s, long gameDayBucket)
-    {
-        string gid = s.currentGovernorId;
-        if (string.IsNullOrWhiteSpace(gid))
-            return true;
-        int h = gid.GetHashCode() ^ (int)(gameDayBucket & 0x7fffffff);
-        return (h & 1) == 0;
     }
 
     static int MaxAffordableAmmBuy(CastleStateData s, long gold, float taxPercent)
@@ -224,6 +209,12 @@ public partial class DataManager
         var gmSpend = GameManager.InstanceOrNull;
         if (goldCost > 0L && (gmSpend == null || !gmSpend.UseGold(goldCost)))
             return;
+
+        if (taxGold > 0L)
+        {
+            double sumPool = (double)s.accumulatedDividendPool + taxGold;
+            s.accumulatedDividendPool = sumPool >= long.MaxValue ? long.MaxValue : (long)sumPool;
+        }
 
         int u = s.userDeployedTroops;
         CastleAmmCore.ApplyBuyFill(s, additionalTroops);

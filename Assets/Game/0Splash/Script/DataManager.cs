@@ -156,6 +156,11 @@ public partial class DataManager : Singleton<DataManager>
     public bool IsReady { get; private set; } = false;
     public bool IsStateReady { get; private set; } = false;
 
+    public long LastWeeklyDividendPaidAnchorUnix => _lastWeeklyDividendPaidAnchorUnix;
+
+    public void SetLastWeeklyDividendPaidAnchorUnix(long anchorUnixSeconds) =>
+        _lastWeeklyDividendPaidAnchorUnix = anchorUnixSeconds;
+
     float _nextSaveAt;
     bool _stateDirty;
 
@@ -175,6 +180,9 @@ public partial class DataManager : Singleton<DataManager>
     bool _gameManagerStepsHooked;
     string _pendingHqMoveCastleId = "";
     float _pendingHqMoveCost;
+
+    /// <summary>마지막 주간 배당이 반영된 로컬 월요일 06:00 앵커(Unix 초). 세이브에 포함.</summary>
+    long _lastWeeklyDividendPaidAnchorUnix;
 
 #if UNITY_EDITOR
     float _nextEditorLiveSoSaveTime;
@@ -224,6 +232,7 @@ public partial class DataManager : Singleton<DataManager>
 
         TickTravelGaugeIdle(Time.unscaledDeltaTime);
         TickCastleDailyHistoryRollover();
+        DividendManager.Tick(this, Time.unscaledTime);
 
         float now = Time.unscaledTime;
         if (_stateDirty && now >= _nextSaveAt)
@@ -326,6 +335,8 @@ public partial class DataManager : Singleton<DataManager>
         _nextSaveAt = now + 10f;
         _stateDirty = true; // 첫 저장 보장
         FlushLiveScriptableObjects();
+
+        DividendManager.TryProcessWeeklyDividend(this);
     }
 
     void BuildStateDataFromMaster()
@@ -516,6 +527,7 @@ public partial class DataManager : Singleton<DataManager>
                     currentAiGarrison = s.currentAiGarrison,
                     goldReserve = s.goldReserve,
                     constantK = s.constantK,
+                    accumulatedDividendPool = s.accumulatedDividendPool,
                     historyPopulation7Day = s.historyPopulation7Day != null ? new List<float>(s.historyPopulation7Day) : new List<float>(),
                     historySentiment7Day = s.historySentiment7Day != null ? new List<float>(s.historySentiment7Day) : new List<float>(),
                     buyPricePrevDayClose = s.buyPricePrevDayClose
@@ -660,6 +672,9 @@ public partial class DataManager : Singleton<DataManager>
             worldNews = payload.news ?? new List<WorldNewsItem>();
             TrimWorldNewsToCap();
             pendingRumorWorldEvents = payload.pendingRumorWorldEvents ?? new List<PendingRumorWorldEvent>();
+            _lastWeeklyDividendPaidAnchorUnix = payload.lastWeeklyDividendPaidAnchorUnix;
+            PlayerPrefs.SetString(DividendManager.PlayerPrefsLastAnchorUnix,
+                _lastWeeklyDividendPaidAnchorUnix.ToString());
 
             // 마스터가 바뀌었을 때를 대비해 누락분 보강
             foreach (var kv in castleMasterDataMap)
@@ -736,7 +751,8 @@ public partial class DataManager : Singleton<DataManager>
             {
                 castles = castleStateDataMap.Values.ToList(),
                 news = worldNews ?? new List<WorldNewsItem>(),
-                pendingRumorWorldEvents = pendingRumorWorldEvents ?? new List<PendingRumorWorldEvent>()
+                pendingRumorWorldEvents = pendingRumorWorldEvents ?? new List<PendingRumorWorldEvent>(),
+                lastWeeklyDividendPaidAnchorUnix = _lastWeeklyDividendPaidAnchorUnix
             };
             string json = JsonUtility.ToJson(payload, prettyPrint: true);
 
