@@ -10,7 +10,6 @@ public class HomeController : MonoBehaviour
     public const int BaseGoldPerClick = 10;
     public const int ExtraValuePerLaborLevel = 5;
     public const double UpgradeCostMult = 1.15;
-    public const int FarmWorkerCost = 100;
     public const int GrainCost = 2;
     public const double LaborBaseCost = 50;
     public const double MarketBaseCost = 100;
@@ -239,21 +238,6 @@ public class HomeController : MonoBehaviour
         }
     }
 
-    /// <summary>병사 모집 (금화 차감 후 병사 수 증가).</summary>
-    public void HireSoldiers(int count) => HireFarmWorkers(count);
-
-    public void HireFarmWorkers(int count)
-    {
-        var gm = GameManager.InstanceOrNull;
-        if (gm == null || count <= 0 || gm.currentUser == null) return;
-        int maxAfford = (int)(gm.currentGold / FarmWorkerCost);
-        int actual = Mathf.Min(count, maxAfford);
-        if (actual <= 0) return;
-        if (!gm.UseGold(actual * FarmWorkerCost)) return;
-        gm.currentUser.soldierCount += actual;
-        gm.SaveUserData();
-    }
-
     public void BuyGrain(int count)
     {
         var gm = GameManager.InstanceOrNull;
@@ -264,14 +248,6 @@ public class HomeController : MonoBehaviour
         if (!gm.UseGold(actual * GrainCost)) return;
         gm.AddGrain(actual);
         gm.SaveUserData();
-    }
-
-    public int GetMaxAffordableSoldiers() => GetMaxAffordableFarmWorkers();
-
-    public int GetMaxAffordableFarmWorkers()
-    {
-        var gm = GameManager.InstanceOrNull;
-        return gm != null ? (int)(gm.currentGold / FarmWorkerCost) : 0;
     }
 
     public int GetMaxAffordableGrain()

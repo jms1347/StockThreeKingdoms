@@ -1,5 +1,7 @@
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// 한 씬에서 GlobalUIManager 하단 탭과 본영·천하·뉴스 UI 루트를 연결합니다.
@@ -14,6 +16,13 @@ public class GameHubTabController : MonoBehaviour
 
     [Tooltip("5번째(Orders) 탭 전용. 비우면 Orders 시 본영과 동일하게 유지.")]
     [SerializeField] GameObject ordersPanel;
+
+    [Tooltip("Portfolio 탭 전용(스크롤 리스트 등). 비우면 Portfolio 탭에서 본영 패널을 유지하고 아래 요약 오버레이만 사용.")]
+    [SerializeField] GameObject portfolioPanel;
+
+    [Header("포트폴리오 요약 오버레이 (portfolioPanel 미할당 시)")]
+    [SerializeField] GameObject portfolioSummaryOverlay;
+    [SerializeField] TextMeshProUGUI portfolioSummaryText;
 
     [Header("시작 탭")]
     [SerializeField] string initialTabId = "Home";
@@ -55,6 +64,7 @@ public class GameHubTabController : MonoBehaviour
         FixHubRootCanvasScale(worldMarketPanel);
         FixHubRootCanvasScale(newsPanel);
         FixHubRootCanvasScale(ordersPanel);
+        FixHubRootCanvasScale(portfolioPanel);
     }
 
     void BindScreenSpaceCameras()
@@ -62,7 +72,7 @@ public class GameHubTabController : MonoBehaviour
         var cam = Camera.main;
         if (cam == null) return;
 
-        foreach (var root in new[] { homeTerritoryPanel, worldMarketPanel, newsPanel, ordersPanel })
+        foreach (var root in new[] { homeTerritoryPanel, worldMarketPanel, newsPanel, ordersPanel, portfolioPanel })
         {
             if (root == null) continue;
             var canvases = root.GetComponentsInChildren<Canvas>(true);
@@ -86,6 +96,7 @@ public class GameHubTabController : MonoBehaviour
         bool showWorld = false;
         bool showNews = false;
         bool showOrders = false;
+        bool showPortfolio = false;
 
         switch (tabId)
         {
@@ -96,7 +107,10 @@ public class GameHubTabController : MonoBehaviour
                 showWorld = true;
                 break;
             case "Portfolio":
-                showHome = true;
+                if (portfolioPanel != null)
+                    showPortfolio = true;
+                else
+                    showHome = true;
                 break;
             case "News":
                 showNews = true;
@@ -116,9 +130,62 @@ public class GameHubTabController : MonoBehaviour
         SetActiveSafe(worldMarketPanel, showWorld);
         SetActiveSafe(newsPanel, showNews);
         SetActiveSafe(ordersPanel, showOrders);
+        SetActiveSafe(portfolioPanel, showPortfolio);
+
+        bool portfolioTab = tabId == "Portfolio";
+        if (portfolioTab && showPortfolio)
+        {
+            var pm = portfolioPanel != null
+                ? portfolioPanel.GetComponentInChildren<UserPortfolioManager>(true)
+                : null;
+            pm?.Refresh();
+        }
+
+        if (portfolioSummaryOverlay != null)
+        {
+            if (portfolioTab && portfolioPanel == null)
+            {
+                portfolioSummaryOverlay.SetActive(true);
+                FillPortfolioSummaryOverlay();
+            }
+            else if (portfolioSummaryOverlay.activeSelf)
+                portfolioSummaryOverlay.SetActive(false);
+        }
 
         if (showNews && newsPanel != null)
             RefreshNewsFeedUnder(newsPanel);
+    }
+
+    void FillPortfolioSummaryOverlay()
+    {
+        if (portfolioSummaryText == null) return;
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady || dm.castleStateDataMap == null)
+        {
+            portfolioSummaryText.text = "데이터 준비 중…";
+            return;
+        }
+
+        long totalSoldiers = 0;
+        float domSum = 0f;
+        int domCount = 0;
+        var sb = new StringBuilder();
+        foreach (var kv in dm.castleStateDataMap)
+        {
+            var st = kv.Value;
+            if (st == null || st.userDeployedTroops <= 0) continue;
+            int cap = Mathf.Max(1, st.maxGarrison);
+            float dom = st.userDeployedTroops / (float)cap * 100f;
+            totalSoldiers += st.userDeployedTroops;
+            domSum += dom;
+            domCount++;
+            sb.AppendLine($"{st.id}: 병 {st.userDeployedTroops:N0} · 지배 {dom:0.#}%");
+        }
+
+        string head = domCount > 0
+            ? $"총 주둔 <b>{totalSoldiers:N0}</b>명 · 거점 <b>{domCount}</b>성 · 평균 지배력 <b>{domSum / domCount:0.#}%</b>\n\n"
+            : "보유 성 주둔이 없습니다.\n\n";
+        portfolioSummaryText.text = head + (sb.Length > 0 ? sb.ToString().TrimEnd() : "");
     }
 
     /// <summary>GameScene 등에서 뉴스 패널이 켜질 때 NewsScene 레이아웃(피드)을 즉시 갱신합니다.</summary>
@@ -146,10 +213,14 @@ public class GameHubTabController : MonoBehaviour
         var gui = GlobalUIManager.InstanceOrNull;
         if (gm?.currentUser == null || gui == null) return;
 
+        var dm = DataManager.InstanceOrNull;
+        long soldiers = dm != null && dm.IsStateReady
+            ? UserPortfolioManager.GetTotalOwnedSoldiers(dm)
+            : gm.currentUser.soldierCount;
         gui.SetTopBarNumbers(
             gm.currentUser.userName,
             gm.currentGold,
             gm.currentGrain,
-            gm.currentUser.soldierCount);
+            soldiers);
     }
 }

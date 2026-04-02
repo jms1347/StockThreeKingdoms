@@ -14,6 +14,7 @@ public class HomeUIController : MonoBehaviour
     [Header("자원 표시")]
     public TextMeshProUGUI goldText;
     public TextMeshProUGUI grainText;
+    [Tooltip("천하 거점에 배치한 병력 합계(본영에서는 모집 불가).")]
     public TextMeshProUGUI farmWorkersText;
 
     [Header("업그레이드 UI - 노동력")]
@@ -36,6 +37,7 @@ public class HomeUIController : MonoBehaviour
 
     [Header("보급 UI")]
     public TextMeshProUGUI supplyLabelText;
+    [Tooltip("구버전 병사 모집 버튼 슬롯. 런타임에서 숨깁니다.")]
     public Button hireFarmWorkerButton;
     public Button buyGrainButton;
 
@@ -60,13 +62,6 @@ public class HomeUIController : MonoBehaviour
     long _displayGrain;
     Tweener _goldRollTween;
     Tweener _grainRollTween;
-
-    RectTransform _recruitDialogRoot;
-    Slider _recruitSlider;
-    TextMeshProUGUI _recruitValueText;
-    Button _recruitConfirmButton;
-    Button _recruitCancelButton;
-    int _recruitMaxThisOpen;
 
     RectTransform _grainDialogRoot;
     Slider _grainSlider;
@@ -242,8 +237,6 @@ public class HomeUIController : MonoBehaviour
 
     void BindButtons()
     {
-        if (hireFarmWorkerButton == null)
-            hireFarmWorkerButton = transform.Find("SupplyPanel/SupplyButtons/HireFarmWorkerButton")?.GetComponent<Button>();
         if (buyGrainButton == null)
             buyGrainButton = transform.Find("SupplyPanel/SupplyButtons/BuyGrainButton")?.GetComponent<Button>();
 
@@ -269,6 +262,7 @@ public class HomeUIController : MonoBehaviour
         WireHoldRepeat(marketUpgradeButton, () =>
         {
             _controller?.UpgradeMarket();
+            DataManager.InstanceOrNull?.RefreshHomeCastleMaxGarrisonFromUserBuildings();
             UpdateMarketUI();
             UpdateSupplyUI();
         });
@@ -278,18 +272,12 @@ public class HomeUIController : MonoBehaviour
         WireHoldRepeat(farmUpgradeButton, () =>
         {
             _controller?.UpgradeFarm();
+            DataManager.InstanceOrNull?.RefreshHomeCastleMaxGarrisonFromUserBuildings();
             UpdateFarmUI();
             UpdateSupplyUI();
         });
-        // 농장 수거는 창고 수거(단일 버튼)로 통합됨
         if (hireFarmWorkerButton != null)
-        {
-            hireFarmWorkerButton.onClick.RemoveAllListeners();
-            var hr = hireFarmWorkerButton.GetComponent<ButtonHoldRepeat>();
-            if (hr != null)
-                Destroy(hr);
-            hireFarmWorkerButton.onClick.AddListener(OpenRecruitDialog);
-        }
+            hireFarmWorkerButton.gameObject.SetActive(false);
 
         if (buyGrainButton != null)
         {
@@ -333,7 +321,7 @@ public class HomeUIController : MonoBehaviour
         if (gm == null) return;
         UpdateGoldUI(gm.currentGold, instant: true);
         UpdateGrainUI(gm.currentGrain, instant: true);
-        UpdateFarmWorkersUI(gm.currentUser?.soldierCount ?? 0);
+        UpdateFarmWorkersUI();
         PushGlobalTopBar();
         UpdateLaborUI();
         UpdateMarketUI();
@@ -439,9 +427,12 @@ public class HomeUIController : MonoBehaviour
         }
     }
 
-    void UpdateFarmWorkersUI(long farmWorkers)
+    void UpdateFarmWorkersUI()
     {
-        if (farmWorkersText != null) farmWorkersText.text = farmWorkers.ToString("N0"); // 구 로컬 표시용(선택)
+        if (farmWorkersText == null) return;
+        var dm = DataManager.InstanceOrNull;
+        long n = dm != null && dm.IsStateReady ? UserPortfolioManager.GetTotalOwnedSoldiers(dm) : 0L;
+        farmWorkersText.text = n.ToString("N0");
     }
 
     void PushGlobalTopBar()
@@ -452,7 +443,10 @@ public class HomeUIController : MonoBehaviour
 
         // 홈탭은 로컬 ResourceBar 대신 GlobalUI 탑바에 표시
         string userName = gm.currentUser.userName;
-        gui.SetTopBarNumbers(userName, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
+        long soldiers = DataManager.InstanceOrNull != null && DataManager.InstanceOrNull.IsStateReady
+            ? UserPortfolioManager.GetTotalOwnedSoldiers(DataManager.InstanceOrNull)
+            : gm.currentUser.soldierCount;
+        gui.SetTopBarNumbers(userName, gm.currentGold, gm.currentGrain, soldiers);
     }
 
     void UpdateLaborUI()
@@ -507,11 +501,10 @@ public class HomeUIController : MonoBehaviour
     {
         if (supplyLabelText == null || _controller == null) return;
 
-        int maxFarmWorkers = _controller.GetMaxAffordableFarmWorkers();
         int maxGrain = _controller.GetMaxAffordableGrain();
 
         supplyLabelText.text =
-            $"(병사: 최대 {maxFarmWorkers}명 모집 가능 · 버튼으로 수량 선택)\n" +
+            "병사는 <b>천하</b> 탭에서 AI 수비군을 매수하세요.\n" +
             $"(식량: 최대 {maxGrain} 구매 가능 · 버튼으로 수량 선택)";
     }
 
@@ -525,91 +518,8 @@ public class HomeUIController : MonoBehaviour
     {
         if (_supplyDialogsBuilt) return;
         var parent = SupplyDialogCanvasRoot();
-        BuildRecruitDialog(parent);
         BuildGrainDialog(parent);
         _supplyDialogsBuilt = true;
-    }
-
-    void OpenRecruitDialog()
-    {
-        EnsureSupplyDialogsBuilt();
-        if (_recruitDialogRoot == null || _controller == null || _recruitSlider == null) return;
-
-        _recruitMaxThisOpen = _controller.GetMaxAffordableFarmWorkers();
-        _recruitDialogRoot.SetAsLastSibling();
-        _recruitDialogRoot.gameObject.SetActive(true);
-
-        if (_recruitMaxThisOpen <= 0)
-        {
-            _recruitSlider.wholeNumbers = true;
-            _recruitSlider.minValue = 0;
-            _recruitSlider.maxValue = 0;
-            _recruitSlider.SetValueWithoutNotify(0);
-            _recruitSlider.interactable = false;
-            if (_recruitValueText != null)
-            {
-                _recruitValueText.text =
-                    "<color=#8899aa>보유 금화로 모집할 수 없습니다.</color>\n\n" +
-                    $"단가 (1명)   {HomeController.FarmWorkerCost:N0}  G";
-            }
-
-            if (_recruitConfirmButton != null)
-                _recruitConfirmButton.interactable = false;
-        }
-        else
-        {
-            _recruitSlider.wholeNumbers = true;
-            _recruitSlider.minValue = 1;
-            _recruitSlider.maxValue = _recruitMaxThisOpen;
-            _recruitSlider.interactable = true;
-            int start = Mathf.Max(1, _recruitMaxThisOpen / 2);
-            _recruitSlider.SetValueWithoutNotify(start);
-            if (_recruitConfirmButton != null)
-                _recruitConfirmButton.interactable = true;
-            OnRecruitSlider(_recruitSlider.value);
-        }
-    }
-
-    void CloseRecruitDialog()
-    {
-        if (_recruitDialogRoot != null)
-            _recruitDialogRoot.gameObject.SetActive(false);
-    }
-
-    void OnRecruitSlider(float v)
-    {
-        if (_recruitValueText == null || _controller == null) return;
-        int n = Mathf.RoundToInt(v);
-        int unit = HomeController.FarmWorkerCost;
-        if (n <= 0)
-        {
-            _recruitValueText.text =
-                "<color=#8899aa>보유 금화로 모집할 수 없습니다.</color>\n\n" +
-                $"단가 (1명)   {unit:N0}  G";
-            return;
-        }
-
-        long total = (long)n * unit;
-        _recruitValueText.text =
-            $"<b>{n:N0}명</b> 모집\n\n" +
-            $"단가 (1명)       {unit:N0}  G\n" +
-            $"<color=#8899aa>─────────────────</color>\n" +
-            $"<color=#ffd080>총 비용</color>         <b>{total:N0}</b>  G";
-    }
-
-    void OnRecruitConfirm()
-    {
-        if (_controller == null || _recruitSlider == null) return;
-        int n = Mathf.RoundToInt(_recruitSlider.value);
-        if (n <= 0) return;
-        _controller.HireFarmWorkers(n);
-        CloseRecruitDialog();
-        UpdateFarmWorkersUI(GameManager.InstanceOrNull?.currentUser?.soldierCount ?? 0);
-        UpdateSupplyUI();
-        PushGlobalTopBar();
-        var gm = GameManager.InstanceOrNull;
-        if (gm != null)
-            RollGoldDisplay(gm.currentGold);
     }
 
     void OpenGrainDialog()
@@ -695,39 +605,6 @@ public class HomeUIController : MonoBehaviour
         }
 
         PushGlobalTopBar();
-    }
-
-    void BuildRecruitDialog(Transform parent)
-    {
-        _recruitDialogRoot = BuildSupplyPurchaseDialog(
-            parent,
-            "HomeRecruitDialog",
-            "병사 모집",
-            new Color(0.22f, 0.48f, 0.34f, 1f),
-            CloseRecruitDialog,
-            out _recruitSlider,
-            out _recruitValueText,
-            out _recruitCancelButton,
-            out _recruitConfirmButton);
-        _recruitDialogRoot.gameObject.SetActive(false);
-
-        if (_recruitCancelButton != null)
-        {
-            _recruitCancelButton.onClick.RemoveAllListeners();
-            _recruitCancelButton.onClick.AddListener(CloseRecruitDialog);
-        }
-
-        if (_recruitConfirmButton != null)
-        {
-            _recruitConfirmButton.onClick.RemoveAllListeners();
-            _recruitConfirmButton.onClick.AddListener(OnRecruitConfirm);
-        }
-
-        if (_recruitSlider != null)
-        {
-            _recruitSlider.onValueChanged.RemoveListener(OnRecruitSlider);
-            _recruitSlider.onValueChanged.AddListener(OnRecruitSlider);
-        }
     }
 
     void BuildGrainDialog(Transform parent)

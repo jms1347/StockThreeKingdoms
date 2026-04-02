@@ -38,6 +38,9 @@ public partial class DataManager
         _lastUtcDayBucket = day;
         _stateDirty = true;
 
+        TickAiGarrisonRegenForNewGameDay();
+        FlushLiveScriptableObjects();
+
         WorldEventBuffApplier.TickActiveBuffsForNewUtcDay(this, (int)day);
         WorldEventCenter.InstanceOrNull?.CheckDailyEventsFromDataManager();
     }
@@ -134,15 +137,17 @@ public partial class DataManager
         return true;
     }
 
-    /// <summary>주둔 추정(AI) + <see cref="CastleStateData.userDeployedTroops"/> 합. 상한은 <see cref="CastleMasterData.maxTroops"/>.</summary>
+    /// <summary>AMM 시 <see cref="CastleStateData.currentAiGarrison"/> + <see cref="CastleStateData.userDeployedTroops"/> (상한 <see cref="CastleStateData.maxGarrison"/>).</summary>
     public int EstimateCastleTotalGarrisonTroops(string castleId)
     {
         if (string.IsNullOrWhiteSpace(castleId) || !castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null)
             return 0;
-        if (!castleMasterDataMap.TryGetValue(s.id, out var m) || m == null)
-            return Mathf.Max(0, s.userDeployedTroops);
+        castleMasterDataMap.TryGetValue(s.id, out var m);
+        EnsureCastleAmmForState(s, m);
+        if (CastleAmmCore.IsInitialized(s))
+            return Mathf.Min(s.maxGarrison, Mathf.Max(0, s.userDeployedTroops) + Mathf.Max(0, s.currentAiGarrison));
 
-        int cap = Mathf.Max(1, m.maxTroops);
+        int cap = m != null ? Mathf.Max(1, m.maxTroops) : 5000;
         float popRatio = Mathf.Clamp01(s.currentPopulation / (float)cap);
         int ai = Mathf.Clamp(Mathf.RoundToInt(cap * (0.28f + 0.55f * popRatio)), 0, cap);
         return Mathf.Min(cap, ai + Mathf.Max(0, s.userDeployedTroops));

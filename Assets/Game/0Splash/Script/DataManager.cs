@@ -32,19 +32,15 @@ public readonly struct DeployTroopCapBreakdown
         if (b.FinalMax <= 0)
         {
             if (b.CastleVacancy <= 0)
-                return "<color=#8899aa>이 성 주둔 정원이 가득 찼습니다.</color>";
-            if (b.LimitByPool <= 0)
-                return "<color=#8899aa>미투입 병력이 없습니다. 본영 탭에서 병사를 모집하세요.</color>";
+                return "<color=#8899aa>AI 수비군을 더 이상 매수할 수 없습니다.</color>";
             if (b.LimitByGold < int.MaxValue && b.LimitByGold <= 0)
-                return "<color=#8899aa>보유 금화로는 투입할 수 없습니다.</color>";
-            return "<color=#8899aa>지금은 투입할 수 없습니다.</color>";
+                return "<color=#8899aa>보유 금화로는 매수할 수 없습니다.</color>";
+            return "<color=#8899aa>지금은 매수할 수 없습니다.</color>";
         }
 
         var parts = new List<string>(3);
-        if (b.FinalMax == b.LimitByPool)
-            parts.Add($"미투입 병력 <color=#ffb88a>{b.LimitByPool:N0}명</color>");
         if (b.CastleVacancy > 0 && b.FinalMax == b.CastleVacancy)
-            parts.Add($"남은 주둔 정원 <color=#aaccff>{b.CastleVacancy:N0}명</color>");
+            parts.Add($"AI 수비군 매수 한도 <color=#aaccff>{b.CastleVacancy:N0}명</color>");
         if (b.LimitByGold < int.MaxValue && b.FinalMax == b.LimitByGold)
             parts.Add($"금화로 약 <color=#ffd080>{b.LimitByGold:N0}명</color>");
         if (parts.Count == 0)
@@ -57,12 +53,10 @@ public readonly struct DeployTroopCapBreakdown
     {
         if (b.FinalMax > 0) return "";
         if (b.CastleVacancy <= 0)
-            return "이 성 주둔 정원이 가득 찼습니다.";
-        if (b.LimitByPool <= 0)
-            return "미투입 병력이 없습니다. 본영 탭에서 병사를 모집하세요.";
+            return "AI 수비군을 더 이상 매수할 수 없습니다.";
         if (b.LimitByGold < int.MaxValue && b.LimitByGold <= 0)
-            return "보유 금화로는 투입할 수 없습니다.";
-        return "지금은 투입할 수 없습니다.";
+            return "보유 금화로는 매수할 수 없습니다.";
+        return "지금은 매수할 수 없습니다.";
     }
 }
 
@@ -307,6 +301,8 @@ public partial class DataManager : Singleton<DataManager>
 
         SyncCastleTaxRateFromMaster();
 
+        EnsureAllCastlesAmmInitialized();
+
         RecalculateAllPrices();
 
         foreach (var kv in castleStateDataMap)
@@ -516,6 +512,10 @@ public partial class DataManager : Singleton<DataManager>
                     castleTaxRatePercent = s.castleTaxRatePercent,
                     userDeployedTroops = s.userDeployedTroops,
                     averagePurchasePrice = s.averagePurchasePrice,
+                    maxGarrison = s.maxGarrison,
+                    currentAiGarrison = s.currentAiGarrison,
+                    goldReserve = s.goldReserve,
+                    constantK = s.constantK,
                     historyPopulation7Day = s.historyPopulation7Day != null ? new List<float>(s.historyPopulation7Day) : new List<float>(),
                     historySentiment7Day = s.historySentiment7Day != null ? new List<float>(s.historySentiment7Day) : new List<float>(),
                     buyPricePrevDayClose = s.buyPricePrevDayClose
@@ -914,171 +914,25 @@ public partial class DataManager : Singleton<DataManager>
         return (int)m.grade;
     }
 
-    /// <summary>홈/상단바에 표시되는 미투입 보유 병사 수.</summary>
-    public long GetUserSoldierPool()
-    {
-        var gm = GameManager.InstanceOrNull;
-        return gm?.currentUser != null ? Math.Max(0L, gm.currentUser.soldierCount) : 0L;
-    }
-
-    /// <summary>
-    /// 한 번에 투입 가능한 병력 상한: 남은 주둔 정원(<c>maxTroops</c> − 내 투입)·<see cref="GetUserSoldierPool"/>·보유 금화 중 최소.
-    /// </summary>
-    public DeployTroopCapBreakdown ComputeDeployTroopCapBreakdown(string castleId)
-    {
-        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId))
-            return new DeployTroopCapBreakdown(0, 0, 0, 0);
-        castleId = castleId.Trim();
-        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null)
-            return new DeployTroopCapBreakdown(0, 0, 0, 0);
-        castleMasterDataMap.TryGetValue(castleId, out var master);
-        int cap = master != null ? master.maxTroops : 5000;
-        int room = Mathf.Max(0, cap - s.userDeployedTroops);
-        long pool = GetUserSoldierPool();
-        int poolCap = pool > int.MaxValue ? int.MaxValue : (int)Mathf.Max(0L, pool);
-        int maxByGold = int.MaxValue;
-        var gm = GameManager.InstanceOrNull;
-        long gold = gm?.currentGold ?? 0L;
-        int unitGold = Mathf.Max(0, Mathf.RoundToInt(EvaluateCastleQuoteForCastle(castleId)));
-        if (unitGold > 0)
-        {
-            float taxP = s.castleTaxRatePercent;
-            maxByGold = MaxAffordableDeployTroopsForGold(gold, unitGold, taxP);
-        }
-
-        if (room <= 0)
-            return new DeployTroopCapBreakdown(0, poolCap, maxByGold, 0);
-        if (pool <= 0L)
-            return new DeployTroopCapBreakdown(0, 0, maxByGold, room);
-        int final = Mathf.Min(room, poolCap, maxByGold);
-        return new DeployTroopCapBreakdown(final, poolCap, maxByGold, room);
-    }
+    /// <summary>천하 거점에 배치된 병력 합계(상단바 병사 표시와 동일 기준).</summary>
+    public long GetUserSoldierPool() => UserPortfolioManager.GetTotalOwnedSoldiers(this);
 
     /// <summary><see cref="ComputeDeployTroopCapBreakdown"/>의 <see cref="DeployTroopCapBreakdown.FinalMax"/>.</summary>
     public int ComputeMaxDeployTroopsForCastle(string castleId) =>
         ComputeDeployTroopCapBreakdown(castleId).FinalMax;
 
-    static void RefreshGlobalTopBarIfPossible()
+    void RefreshGlobalTopBarIfPossible()
     {
         var gm = GameManager.InstanceOrNull;
         var gui = GlobalUIManager.InstanceOrNull;
         if (gm?.currentUser == null || gui == null) return;
         string name = string.IsNullOrEmpty(gm.currentUser.userName) ? "—" : gm.currentUser.userName;
-        gui.SetTopBarNumbers(name, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
-    }
-
-    /// <summary>병력 추가 시 본금+입성 관부를 차감하고, 관부 포함 실제 단가로 <see cref="CastleStateData.averagePurchasePrice"/>를 가중 갱신.</summary>
-    public void AddUserCastleDeployment(string castleId, int additionalTroops, float pricePerTroop)
-    {
-        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || additionalTroops <= 0) return;
-        castleId = castleId.Trim();
-        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null) return;
-
-        long pool = GetUserSoldierPool();
-        if (pool <= 0L) return;
-        int poolCap = pool > int.MaxValue ? int.MaxValue : (int)pool;
-        castleMasterDataMap.TryGetValue(castleId, out var masterCap);
-        int mcap = masterCap != null ? masterCap.maxTroops : 5000;
-        int roomLeft = Mathf.Max(0, mcap - s.userDeployedTroops);
-        additionalTroops = Mathf.Min(additionalTroops, poolCap, roomLeft);
-        if (additionalTroops <= 0) return;
-
-        long unitGold = Math.Max(0L, (long)Mathf.RoundToInt(pricePerTroop));
-        long principalGold = unitGold * additionalTroops;
-        double taxRate = Mathf.Clamp(s.castleTaxRatePercent, 0f, 500f) / 100.0;
-        long taxGold = (long)Math.Round(principalGold * taxRate);
-        long goldCost = principalGold + taxGold;
-        float effectivePerTroop = additionalTroops > 0
-            ? (float)((principalGold + taxGold) / (double)additionalTroops)
-            : pricePerTroop;
-        var gmSpend = GameManager.InstanceOrNull;
-        if (goldCost > 0L)
-        {
-            if (gmSpend == null || !gmSpend.UseGold(goldCost))
-                return;
-        }
-
-        long newTotal = (long)s.userDeployedTroops + additionalTroops;
-        if (newTotal > int.MaxValue) newTotal = int.MaxValue;
-
-        if (s.userDeployedTroops <= 0)
-            s.averagePurchasePrice = effectivePerTroop;
-        else
-        {
-            double sumCost = s.averagePurchasePrice * s.userDeployedTroops + effectivePerTroop * additionalTroops;
-            s.averagePurchasePrice = (float)(sumCost / newTotal);
-        }
-
-        s.userDeployedTroops = (int)newTotal;
-
-        var gm = GameManager.InstanceOrNull;
-        if (gm?.currentUser != null)
-        {
-            gm.currentUser.soldierCount = Math.Max(0L, gm.currentUser.soldierCount - additionalTroops);
-            gm.SaveUserData();
-            RefreshGlobalTopBarIfPossible();
-        }
-
-        _stateDirty = true;
-        FlushLiveScriptableObjects();
-        OnStateTicked?.Invoke();
-    }
-
-    /// <summary>천하 탭 [회수]: 해당 성에 투입한 병력을 모두 철수합니다.</summary>
-    public void RecallUserCastleDeployment(string castleId) =>
-        RecallUserCastleDeployment(castleId, int.MaxValue);
-
-    /// <summary>회군 시 지급: 병 1단위 <see cref="EvaluateBasePriceForCastle"/> 액면가(내재가) × 인원. 입성 관부·수수료 없음.</summary>
-    public bool TryComputeRecallGoldPayout(string castleId, int troops, out long unitFaceGold, out long totalGold)
-    {
-        unitFaceGold = totalGold = 0;
-        if (string.IsNullOrWhiteSpace(castleId) || troops <= 0) return false;
-        castleId = castleId.Trim();
-        if (!castleStateDataMap.ContainsKey(castleId)) return false;
-        float face = EvaluateBasePriceForCastle(castleId);
-        unitFaceGold = Math.Max(0L, (long)Mathf.RoundToInt(face));
-        totalGold = unitFaceGold * troops;
-        return true;
-    }
-
-    /// <summary>투입 병력 중 <paramref name="troopsToRecall"/>명만 철수. 액면가×인원 금화 지급(수수료 없음). 잔여 0이 되면 평단 초기화.</summary>
-    public void RecallUserCastleDeployment(string castleId, int troopsToRecall)
-    {
-        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || troopsToRecall <= 0) return;
-        castleId = castleId.Trim();
-        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null) return;
-        int have = s.userDeployedTroops;
-        if (have <= 0) return;
-        int recall = Mathf.Min(troopsToRecall, have);
-        if (recall <= 0) return;
-
-        TryComputeRecallGoldPayout(castleId, recall, out _, out long payoutGold);
-
-        s.userDeployedTroops = have - recall;
-        if (s.userDeployedTroops <= 0)
-        {
-            s.userDeployedTroops = 0;
-            s.averagePurchasePrice = 0f;
-        }
-
-        var gm = GameManager.InstanceOrNull;
-        if (payoutGold > 0L && gm != null)
-            gm.AddGold(payoutGold);
-        if (gm?.currentUser != null)
-        {
-            gm.currentUser.soldierCount = Math.Max(0L, gm.currentUser.soldierCount + recall);
-            gm.SaveUserData();
-            RefreshGlobalTopBarIfPossible();
-        }
-
-        _stateDirty = true;
-        FlushLiveScriptableObjects();
-        OnStateTicked?.Invoke();
+        long soldiers = IsStateReady ? UserPortfolioManager.GetTotalOwnedSoldiers(this) : gm.currentUser.soldierCount;
+        gui.SetTopBarNumbers(name, gm.currentGold, gm.currentGrain, soldiers);
     }
 
     /// <summary>
-    /// 모든 성의 유저 투입 병력·매수 평단을 0으로 초기화. 라이브 SO 반영·즉시 디스크 저장·UI 갱신.
-    /// (에디터 메뉴·테스트용)
+    /// 모든 성의 유저 주둔을 0으로 하고, 해당 병력을 AI 수비군 풀로 환원(K 불변).
     /// </summary>
     public void ClearAllUserCastleDeployments()
     {
@@ -1087,6 +941,26 @@ public partial class DataManager : Singleton<DataManager>
         {
             var s = kv.Value;
             if (s == null) continue;
+            int u = s.userDeployedTroops;
+            if (u <= 0)
+            {
+                s.averagePurchasePrice = 0f;
+                continue;
+            }
+
+            castleMasterDataMap.TryGetValue(s.id, out var m);
+            EnsureCastleAmmForState(s, m);
+            if (CastleAmmCore.IsInitialized(s))
+            {
+                int g = s.currentAiGarrison;
+                int merge = Mathf.Min(u, Mathf.Max(0, s.maxGarrison - g));
+                if (merge > 0)
+                {
+                    s.currentAiGarrison = g + merge;
+                    s.goldReserve = (long)Math.Round(s.constantK / s.currentAiGarrison);
+                }
+            }
+
             s.userDeployedTroops = 0;
             s.averagePurchasePrice = 0f;
         }
@@ -1110,59 +984,11 @@ public partial class DataManager : Singleton<DataManager>
         }
     }
 
-    /// <summary>병 1단위 호가(금화). JSON 호환을 위해 <see cref="CastleStateData.currentBuyPrice"/>에 저장.</summary>
-    float CalculateCastleQuote(CastleStateData s)
-    {
-        float basePrice = CalculateBasePrice(s);
-        float buffMul = 1f + GetGovernorQuoteModifier(s.currentGovernorId);
-        return Mathf.Max(0f, basePrice * buffMul);
-    }
-
-    /// <summary>입성 n명 시 본금·관부·합계 금화.</summary>
-    public bool TryComputeDeployGoldBreakdown(string castleId, int troops, out long principalGold, out long taxGold, out long totalGold)
-    {
-        principalGold = taxGold = totalGold = 0;
-        if (string.IsNullOrWhiteSpace(castleId) || troops <= 0) return false;
-        castleId = castleId.Trim();
-        if (!castleStateDataMap.ContainsKey(castleId)) return false;
-        float q = EvaluateCastleQuoteForCastle(castleId);
-        long unit = Math.Max(0L, (long)Mathf.RoundToInt(q));
-        principalGold = unit * troops;
-        double rate = Mathf.Clamp(GetCastleTaxRatePercent(castleId), 0f, 500f) / 100.0;
-        taxGold = (long)Math.Round(principalGold * rate);
-        totalGold = principalGold + taxGold;
-        return true;
-    }
-
     public float GetCastleTaxRatePercent(string castleId)
     {
         if (string.IsNullOrWhiteSpace(castleId)) return 0f;
         if (!castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null) return 0f;
         return Mathf.Max(0f, s.castleTaxRatePercent);
-    }
-
-    static int MaxAffordableDeployTroopsForGold(long gold, long unitQuote, float taxPercent)
-    {
-        if (gold <= 0L || unitQuote <= 0L) return 0;
-        int lo = 0;
-        int hi = (int)Math.Min((long)int.MaxValue, gold / unitQuote + 2L);
-        int best = 0;
-        while (lo <= hi)
-        {
-            int mid = lo + (hi - lo) / 2;
-            long principal = unitQuote * mid;
-            double rate = Mathf.Clamp(taxPercent, 0f, 500f) / 100.0;
-            long tax = (long)Math.Round(principal * rate);
-            long total = principal + tax;
-            if (total <= gold)
-            {
-                best = mid;
-                lo = mid + 1;
-            }
-            else hi = mid - 1;
-        }
-
-        return best;
     }
 
     float CalculateBasePrice(CastleStateData s)

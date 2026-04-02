@@ -23,6 +23,10 @@ public class CastleStateSo : ScriptableObject
         public float castleTaxRatePercent;
         public int userDeployedTroops;
         public float averagePurchasePrice;
+        public int maxGarrison;
+        public int currentAiGarrison;
+        public long goldReserve;
+        public double constantK;
         public List<float> historyPopulation7Day = new List<float>();
         public List<float> historySentiment7Day = new List<float>();
         public float buyPricePrevDayClose;

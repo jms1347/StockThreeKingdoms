@@ -96,15 +96,20 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     {
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
-        SetTopBarNumbers(gm.currentUser.userName, gm.currentGold, gm.currentGrain, gm.currentUser.soldierCount);
+        var dm = DataManager.InstanceOrNull;
+        long soldiers = dm != null && dm.IsStateReady
+            ? UserPortfolioManager.GetTotalOwnedSoldiers(dm)
+            : gm.currentUser.soldierCount;
+        SetTopBarNumbers(gm.currentUser.userName, gm.currentGold, gm.currentGrain, soldiers);
     }
 
     void WireTabs()
     {
         if (homeButton != null) homeButton.onClick.AddListener(() => TabSelected?.Invoke("Home"));
         if (marketButton != null) marketButton.onClick.AddListener(() => TabSelected?.Invoke("Market"));
-        // 포트폴리오·상점(맨 오른쪽)은 TabSelected 탭 전환에만 연결하지 않음
+        if (portfolioButton != null) portfolioButton.onClick.AddListener(() => TabSelected?.Invoke("Portfolio"));
         if (newsButton != null) newsButton.onClick.AddListener(() => TabSelected?.Invoke("News"));
+        if (ordersButton != null) ordersButton.onClick.AddListener(() => TabSelected?.Invoke("Orders"));
     }
 
     void ApplyResourceTextColors()

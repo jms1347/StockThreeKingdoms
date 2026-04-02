@@ -59,10 +59,19 @@ public partial class CastleStateData
     /// <summary>해 성 입성 관부율(%). 마스터 초기값에서 시드 후 성별로 유지.</summary>
     public float castleTaxRatePercent;
 
-    // 유저 투자 (천하 탭)
+    // 천하 탭: 성별 유저 주둔(지분). AMM 매매로 AI 수비군과 금화 풀에서 이동.
     public int userDeployedTroops;
-    /// <summary>병력 1단위당 평균 실질 진입 비용(호가+입성 관부 분담). 수익률은 성채 호가 대비.</summary>
+    /// <summary>가중 평균 매수 단가(금화, UI·수익률용). AMM 총액/인원으로 갱신.</summary>
     public float averagePurchasePrice;
+
+    /// <summary>주둔·AMM 정원 상한(내정·마스터). <c>userDeployedTroops + currentAiGarrison</c> ≤ 이 값.</summary>
+    public int maxGarrison;
+    /// <summary>성에 남은 AI 수비군. constant product 풀.</summary>
+    public int currentAiGarrison;
+    /// <summary>성 금화 창고. 거래 후 <c>round(constantK / currentAiGarrison)</c>로 정렬.</summary>
+    public long goldReserve;
+    /// <summary>AMM 상수 K (= R·G). 초기화 후 불변(double).</summary>
+    public double constantK;
 
     public bool IsUserInvested => userDeployedTroops > 0;
 
