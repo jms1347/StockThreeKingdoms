@@ -556,7 +556,7 @@ public partial class DataManager : Singleton<DataManager>
             }
 
             var gm = GameManager.InstanceOrNull;
-            userPortfolioLiveSo.totalGold = gm != null && gm.currentUser != null ? gm.currentUser.gold : 0L;
+            userPortfolioLiveSo.totalGold = gm != null && gm.currentUser != null ? (long)gm.currentUser.gold : 0L;
             userPortfolioLiveSo.homeCastleId = _homeCastleId ?? "";
             userPortfolioLiveSo.travelGaugePoints = _travelGaugePoints;
             userPortfolioLiveSo.currentStepCount = _lastStepCountSyncedForGauge;
@@ -944,7 +944,7 @@ public partial class DataManager : Singleton<DataManager>
         if (gm?.currentUser == null || gui == null) return;
         string name = string.IsNullOrEmpty(gm.currentUser.userName) ? "—" : gm.currentUser.userName;
         long soldiers = IsStateReady ? UserPortfolioManager.GetTotalOwnedSoldiers(this) : gm.currentUser.soldierCount;
-        gui.SetTopBarNumbers(name, gm.currentGold, gm.currentGrain, soldiers);
+        gui.SetTopBarNumbers(name, gm.currentGold, soldiers);
     }
 
     /// <summary>

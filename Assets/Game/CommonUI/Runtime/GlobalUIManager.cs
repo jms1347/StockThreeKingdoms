@@ -16,8 +16,10 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     [SerializeField] RectTransform topBarRoot;
     [SerializeField] TextMeshProUGUI userNameText;
     [SerializeField] TextMeshProUGUI totalAssetsText;
-    [SerializeField] TextMeshProUGUI foodText;
     [SerializeField] TextMeshProUGUI soldiersText;
+    [Header("일일 유지비(정오)")]
+    [SerializeField] TextMeshProUGUI maintenancePreviewText;
+    [SerializeField] TextMeshProUGUI maintenanceCountdownText;
 
     [Header("Bottom Tab Bar (5)")]
     [SerializeField] RectTransform bottomTabRoot;
@@ -30,28 +32,25 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     public event Action<string> TabSelected;
 
     public RectTransform AssetsTarget => totalAssetsText != null ? totalAssetsText.rectTransform : null;
-    public RectTransform FoodTarget => foodText != null ? foodText.rectTransform : null;
-    public RectTransform SoldiersTarget => soldiersText != null ? soldiersText.rectTransform : null;
 
     [Header("자원 텍스트 색")]
-    [SerializeField] Color foodTextColor = new Color(0.42f, 0.92f, 0.48f, 1f);
     [SerializeField] Color soldiersTextColor = Color.white;
+    [SerializeField] Color assetsPositiveColor = Color.white;
+    static readonly Color AssetsDebtColor = new Color(1f, 0f, 0f);
+
     [Header("탑바 자원 숫자 롤링")]
-    [Tooltip("금화·식량·병사가 늘거나 줄 때 탑바 숫자가 보간되는 시간(초). 구매 시 금화↓·식량↑ 등 모두 적용. 0이면 즉시 반영.")]
+    [Tooltip("금화·병사가 늘거나 줄 때 탑바 숫자가 보간되는 시간(초). 0이면 즉시 반영.")]
     [FormerlySerializedAs("topBarDecreaseDuration")]
     [SerializeField] float topBarResourceRollDuration = 0.28f;
 
     Tweener _assetsTween;
-    Tweener _foodTween;
     Tweener _soldiersTween;
     double _displayAssets;
-    double _displayFood;
     double _displaySoldiers;
 
     protected override void Awake()
     {
         base.Awake();
-        ApplyResourceTextColors();
         WireTabs();
     }
 
@@ -63,14 +62,10 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     void OnDestroy()
     {
         _assetsTween?.Kill();
-        _foodTween?.Kill();
         _soldiersTween?.Kill();
         var gm = GameManager.InstanceOrNull;
         if (gm != null)
-        {
-            gm.OnGoldChanged -= OnGameManagerGoldOrGrainChanged;
-            gm.OnGrainChanged -= OnGameManagerGoldOrGrainChanged;
-        }
+            gm.OnGoldChanged -= OnGameManagerGoldChanged;
     }
 
     IEnumerator BindGameManagerTopBarSync()
@@ -79,19 +74,17 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
             yield return null;
 
         var gm = GameManager.InstanceOrNull;
-        gm.OnGoldChanged -= OnGameManagerGoldOrGrainChanged;
-        gm.OnGoldChanged += OnGameManagerGoldOrGrainChanged;
-        gm.OnGrainChanged -= OnGameManagerGoldOrGrainChanged;
-        gm.OnGrainChanged += OnGameManagerGoldOrGrainChanged;
+        gm.OnGoldChanged -= OnGameManagerGoldChanged;
+        gm.OnGoldChanged += OnGameManagerGoldChanged;
         RefreshTopBarFromGameManager();
     }
 
-    void OnGameManagerGoldOrGrainChanged(long _)
+    void OnGameManagerGoldChanged(double _)
     {
         RefreshTopBarFromGameManager();
     }
 
-    /// <summary>GameManager 현재 값으로 상단 자원 숫자를 맞춥니다. (홈 UI 비활성 시에도 호출 가능)</summary>
+    /// <summary>GameManager 현재 값으로 상단 자원 숫자를 맞춥니다.</summary>
     public void RefreshTopBarFromGameManager()
     {
         var gm = GameManager.InstanceOrNull;
@@ -100,7 +93,8 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         long soldiers = dm != null && dm.IsStateReady
             ? UserPortfolioManager.GetTotalOwnedSoldiers(dm)
             : gm.currentUser.soldierCount;
-        SetTopBarNumbers(gm.currentUser.userName, gm.currentGold, gm.currentGrain, soldiers);
+        SetTopBarNumbers(gm.currentUser.userName, gm.currentGold, soldiers);
+        RefreshMaintenanceHudFromEconomy();
     }
 
     void WireTabs()
@@ -112,49 +106,44 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (ordersButton != null) ordersButton.onClick.AddListener(() => TabSelected?.Invoke("Orders"));
     }
 
-    void ApplyResourceTextColors()
+    /// <summary>다음 정산 예정액·카운트다운 텍스트 갱신.</summary>
+    public void RefreshMaintenanceHudFromEconomy()
     {
-        if (foodText != null) foodText.color = foodTextColor;
-        if (soldiersText != null) soldiersText.color = soldiersTextColor;
+        double amt = EconomyManager.InstanceOrNull != null
+            ? EconomyManager.InstanceOrNull.ComputeNextSettlementGold()
+            : 0d;
+        if (maintenancePreviewText != null)
+            maintenancePreviewText.text = $"다음 정산 예정: {Utils.AbbreviateScore(amt)} G";
+        if (maintenanceCountdownText != null)
+            maintenanceCountdownText.text = $"정산까지: {EconomyManager.FormatCountdownUntilNextLocalNoon()}";
     }
 
-    public void SetTopBar(string userName, string totalAssets, string food)
+    public void SetTopBar(string userName, string totalAssets, string soldiersLine)
     {
         if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
-        if (totalAssetsText != null) totalAssetsText.text = totalAssets;
-        if (foodText != null)
+        if (totalAssetsText != null)
         {
-            foodText.text = food;
-            foodText.color = foodTextColor;
+            totalAssetsText.text = totalAssets;
+            totalAssetsText.color = assetsPositiveColor;
         }
-    }
 
-    public void SetTopBar(string userName, string totalAssets, string food, string soldiers)
-    {
-        SetTopBar(userName, totalAssets, food);
         if (soldiersText != null)
         {
-            soldiersText.text = soldiers;
+            soldiersText.text = soldiersLine;
             soldiersText.color = soldiersTextColor;
         }
     }
 
-    public void SetTopBarNumbers(string userName, double totalAssets, double food, long soldiers)
+    public void SetTopBarNumbers(string userName, double totalAssets, long soldiers)
     {
         if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
-        ApplyResourceTextColors();
 
         ApplyTopBarField(ref _assetsTween, () => _displayAssets, v => _displayAssets = v, totalAssets, v =>
         {
-            if (totalAssetsText != null) totalAssetsText.text = FormatCompact(v);
-        });
-
-        ApplyTopBarField(ref _foodTween, () => _displayFood, v => _displayFood = v, food, v =>
-        {
-            if (foodText != null)
+            if (totalAssetsText != null)
             {
-                foodText.text = FormatCompact(v);
-                foodText.color = foodTextColor;
+                totalAssetsText.text = FormatCompact(v);
+                totalAssetsText.color = v < 0d ? AssetsDebtColor : assetsPositiveColor;
             }
         });
 
@@ -168,7 +157,6 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         });
     }
 
-    /// <summary>표시값이 목표와 다르면 증가·감소 모두 짧게 롤링합니다(구매 시 금화↓·식량/병사↑ 포함).</summary>
     void ApplyTopBarField(ref Tweener tweenRef, Func<double> getDisplay, Action<double> setDisplay, double target,
         Action<double> applyFormatted)
     {
@@ -222,13 +210,16 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     static string FormatCompact(double value)
     {
         if (double.IsNaN(value) || double.IsInfinity(value)) return "0";
-        double abs = Math.Abs(value);
+        bool neg = value < 0d;
+        double av = Math.Abs(value);
+        string core;
+        if (av < 1000d) core = Math.Round(av).ToString("0");
+        else if (av < 1_000_000d) core = (av / 1_000d).ToString("0.#") + "K";
+        else if (av < 1_000_000_000d) core = (av / 1_000_000d).ToString("0.#") + "M";
+        else if (av < 1_000_000_000_000d) core = (av / 1_000_000_000d).ToString("0.#") + "G";
+        else core = (av / 1_000_000_000_000d).ToString("0.#") + "T";
 
-        if (abs < 1000d) return Math.Round(value).ToString("0");
-        if (abs < 1_000_000d) return (value / 1_000d).ToString("0.#") + "K";
-        if (abs < 1_000_000_000d) return (value / 1_000_000d).ToString("0.#") + "M";
-        if (abs < 1_000_000_000_000d) return (value / 1_000_000_000d).ToString("0.#") + "G";
-        return (value / 1_000_000_000_000d).ToString("0.#") + "T";
+        return neg ? "-" + core : core;
     }
 
     public void SetVisible(bool visible)
@@ -236,24 +227,12 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         gameObject.SetActive(visible);
     }
 
-    /// <summary>비행 수거 아이콘이 금화(자산) 텍스트에 도착했을 때 펀치 연출.</summary>
     public void PunchAssetsText(float strength = 0.12f, float duration = 0.22f, int vibrato = 6)
     {
         if (totalAssetsText == null) return;
         var rt = totalAssetsText.rectTransform;
         rt.DOKill();
-        rt.localScale = Vector3.one; // 이전 펀치가 중단돼도 원상복구
-        rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
-    }
-
-    /// <summary>비행 수거 아이콘이 식량 텍스트에 도착했을 때 펀치 연출.</summary>
-    public void PunchFoodText(float strength = 0.12f, float duration = 0.22f, int vibrato = 6)
-    {
-        if (foodText == null) return;
-        var rt = foodText.rectTransform;
-        rt.DOKill();
         rt.localScale = Vector3.one;
         rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
     }
 }
-

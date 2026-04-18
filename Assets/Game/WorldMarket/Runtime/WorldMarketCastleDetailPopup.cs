@@ -404,8 +404,9 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             recallButton.interactable = invested;
 
         _deployMaxThisOpen = dm.ComputeMaxDeployTroopsForCastle(_castleId);
+        var gmSpend = GameManager.InstanceOrNull;
         if (deployButton != null)
-            deployButton.interactable = _deployMaxThisOpen > 0;
+            deployButton.interactable = _deployMaxThisOpen > 0 && (gmSpend?.CanSpendStrategicPurchases ?? false);
 
         bool isHq = !string.IsNullOrWhiteSpace(dm.HomeCastleId)
                     && string.Equals(dm.HomeCastleId.Trim(), _castleId, StringComparison.Ordinal);

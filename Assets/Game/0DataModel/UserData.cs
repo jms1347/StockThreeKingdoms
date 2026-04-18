@@ -10,14 +10,13 @@ public class UserData
     public string rankTitle;        // 작위 (평민, 현령 등) [cite: 21, 112]
 
     // [핵심 자원]
-    public long gold;               // 보유 금화 [cite: 3, 44]
-    public long grain;              // 보유 식량 [cite: 7, 47]
-    public long soldierCount;       // 보유 병사 수 [cite: 6, 45]
+    public double gold;             // 보유 금화 (음수 = 부채)
+    public long soldierCount;       // 레거시/폴백 병력 수 (천하 미로드 시)
 
     // [성장 레벨]
     public int laborLevel;          // 노동력 레벨 (클릭당 금화) [cite: 12, 149]
     public int marketLevel;         // 시장 레벨 (자동 수익) [cite: 12, 151]
-    public int farmLevel;           // 농장 레벨 (식량 자동 생성용) [cite: 13, 41]
+    public int farmLevel;           // 농장 레벨 (보조 금화 자동 생성)
     public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
     // [창고] Timestamp 기반 - 마지막 수거 시점 (UTC Unix 초, 정수)
@@ -43,8 +42,7 @@ public class UserData
         userName = "초보 군주";
         honorPoints = 0;
         rankTitle = "평민";
-        gold = 1000;      // 초기 정착 자금 [cite: 4]
-        grain = 500;
+        gold = 1000d;
         soldierCount = 0;
         laborLevel = 1;
         marketLevel = 0;

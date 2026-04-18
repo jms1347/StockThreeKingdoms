@@ -180,9 +180,7 @@ public static class HomeSceneLayoutWizard
 
         var gui = GlobalUIManager.InstanceOrNull;
         var goldRt = gui != null ? gui.AssetsTarget : null;
-        var grainRt = gui != null ? gui.FoodTarget : null;
         cm.goldFlyTarget = goldRt;
-        cm.grainFlyTarget = grainRt;
 
         AssignPilesNearWarehouseLabels(cm, hp.transform);
         EditorUtility.SetDirty(cm);
@@ -359,8 +357,8 @@ public static class HomeSceneLayoutWizard
 
     static void CreateFarmPanel(Transform parent)
     {
-        GameObject panel = CreatePanel(parent, "FarmPanel", "농장 (초당 식량)");
-        CreateText(panel.transform, "FarmLabelText", "초당 식량 자동 생산\n(Level 0)\n비용: 80 Gold", 14);
+        GameObject panel = CreatePanel(parent, "FarmPanel", "농장 (초당 금화)");
+        CreateText(panel.transform, "FarmLabelText", "초당 금화 자동 생산 (농장)\n(Level 0)\n비용: 80 Gold", 14);
         GameObject btnRow = new GameObject("FarmButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
         Undo.RegisterCreatedObjectUndo(btnRow, "FarmButtons");
         btnRow.transform.SetParent(panel.transform, false);
@@ -487,7 +485,7 @@ public static class HomeSceneLayoutWizard
     static void CreateSupplyPanel(Transform parent)
     {
         GameObject panel = CreatePanel(parent, "SupplyPanel", "보급");
-        CreateText(panel.transform, "SupplyLabelText", "(병사: 최대 0명 모집 가능)\n(식량: 최대 0 구매 가능)", 12);
+        CreateText(panel.transform, "SupplyLabelText", "병사는 천하 탭에서 매수합니다.\n재화는 금화만 사용합니다.", 12);
         GameObject btnRow = new GameObject("SupplyButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
         Undo.RegisterCreatedObjectUndo(btnRow, "SupplyButtons");
         btnRow.transform.SetParent(panel.transform, false);
@@ -813,7 +811,6 @@ public static class HomeSceneLayoutWizard
     static void EnsureFlyIconTemplates(CollectionManager cm, RectTransform flyRoot)
     {
         if (cm == null || flyRoot == null) return;
-        // 기존 CollectionManager가 템플릿을 요구 (골드/그레인)
         Transform goldTr = flyRoot.Find("FlyGoldTemplate");
         if (goldTr == null)
         {
@@ -823,17 +820,7 @@ public static class HomeSceneLayoutWizard
             ConfigureFlyTemplate(go, new Color(1f, 0.85f, 0.2f, 1f));
             goldTr = go.transform;
         }
-        Transform grainTr = flyRoot.Find("FlyGrainTemplate");
-        if (grainTr == null)
-        {
-            var go = new GameObject("FlyGrainTemplate", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            Undo.RegisterCreatedObjectUndo(go, "FlyGrainTemplate");
-            go.transform.SetParent(flyRoot, false);
-            ConfigureFlyTemplate(go, new Color(0.5f, 0.85f, 0.35f, 1f));
-            grainTr = go.transform;
-        }
         if (cm.flyingGoldPrefab == null) cm.flyingGoldPrefab = goldTr.gameObject;
-        if (cm.flyingGrainPrefab == null) cm.flyingGrainPrefab = grainTr.gameObject;
     }
 
     static void ConfigureFlyTemplate(GameObject go, Color color)
@@ -853,62 +840,21 @@ public static class HomeSceneLayoutWizard
     {
         if (cm == null || homeRoot == null) return;
 
-        // 시장 창고 헤더 옆: 금화 더미(2열)
         var marketGrid = homeRoot.Find("WarehouseRow/WarehousePanelsRow/MarketWarehouse/HeaderRow/PilesGrid") as RectTransform;
         if (marketGrid != null)
         {
             cm.goldPiles = EnsurePileIcons(marketGrid, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
-            cm.pileArea = marketGrid; // 시작 위치 기준도 시장 쪽으로
+            cm.pileArea = marketGrid;
         }
 
-        // 농장 창고 헤더 옆: 식량 더미(2열)
-        var farmGrid = homeRoot.Find("WarehouseRow/WarehousePanelsRow/FarmWarehouse/HeaderRow/PilesGrid") as RectTransform;
-        if (farmGrid != null)
-        {
-            cm.grainPiles = EnsurePileIcons(farmGrid, "GrainPile", new Color(0.45f, 0.75f, 0.25f, 1f));
-            if (cm.pileArea == null) cm.pileArea = farmGrid;
-        }
-
-        // 구버전 씬 호환: 기존 PileDock이 남아있으면 거기서도 생성 가능
-        if ((cm.goldPiles == null || cm.goldPiles.Length == 0) || (cm.grainPiles == null || cm.grainPiles.Length == 0))
+        if (cm.goldPiles == null || cm.goldPiles.Length == 0)
         {
             var legacyDock = homeRoot.Find("PileDock") as RectTransform;
-            if (legacyDock != null)
-            {
-                var goldRow = legacyDock.Find("GoldPilesRow");
-                if (goldRow == null)
-                {
-                    goldRow = new GameObject("GoldPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
-                    Undo.RegisterCreatedObjectUndo(goldRow.gameObject, "GoldPilesRow");
-                    goldRow.SetParent(legacyDock, false);
-                    var h = goldRow.GetComponent<HorizontalLayoutGroup>();
-                    h.spacing = 6f;
-                    h.childAlignment = TextAnchor.MiddleCenter;
-                    h.childControlWidth = false;
-                    h.childControlHeight = false;
-                    h.childForceExpandWidth = false;
-                    h.childForceExpandHeight = false;
-                }
-                var grainRow = legacyDock.Find("GrainPilesRow");
-                if (grainRow == null)
-                {
-                    grainRow = new GameObject("GrainPilesRow", typeof(RectTransform), typeof(HorizontalLayoutGroup)).transform;
-                    Undo.RegisterCreatedObjectUndo(grainRow.gameObject, "GrainPilesRow");
-                    grainRow.SetParent(legacyDock, false);
-                    var h = grainRow.GetComponent<HorizontalLayoutGroup>();
-                    h.spacing = 6f;
-                    h.childAlignment = TextAnchor.MiddleCenter;
-                    h.childControlWidth = false;
-                    h.childControlHeight = false;
-                    h.childForceExpandWidth = false;
-                    h.childForceExpandHeight = false;
-                }
-                if (cm.goldPiles == null || cm.goldPiles.Length == 0)
-                    cm.goldPiles = EnsurePileIcons(goldRow, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
-                if (cm.grainPiles == null || cm.grainPiles.Length == 0)
-                    cm.grainPiles = EnsurePileIcons(grainRow, "GrainPile", new Color(0.45f, 0.75f, 0.25f, 1f));
-                if (cm.pileArea == null) cm.pileArea = legacyDock;
-            }
+            var goldRow = legacyDock != null ? legacyDock.Find("GoldPilesRow") : null;
+            if (goldRow != null)
+                cm.goldPiles = EnsurePileIcons(goldRow, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
+            if (cm.pileArea == null && legacyDock != null)
+                cm.pileArea = legacyDock;
         }
     }
 

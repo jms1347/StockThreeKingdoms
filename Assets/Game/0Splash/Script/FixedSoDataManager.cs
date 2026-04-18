@@ -228,7 +228,6 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
     {
         if (globalEconomyDefaultsSo == null) return;
         GlobalEconomy.totalServerSoldiers = globalEconomyDefaultsSo.initialTotalServerSoldiers;
-        GlobalEconomy.grainPriceIndex = globalEconomyDefaultsSo.initialGrainPriceIndex;
     }
 
     public void ClearConditionLibrary()

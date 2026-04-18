@@ -131,8 +131,14 @@ public static class GlobalUIFramePrefabCreator
 
         var assetsRow = CreateIconValueRow(resourceBox.transform, "AssetsRow", uiSprite, font, new Color(0.96f, 0.88f, 0.35f, 1f), out var assetsTmp);
         assetsTmp.text = "1.5M";
-        var foodRow = CreateIconValueRow(resourceBox.transform, "FoodRow", uiSprite, font, new Color(0.85f, 0.90f, 1f, 1f), out var foodTmp);
-        foodTmp.text = "80K";
+        var maintAmtRow =
+            CreateIconValueRow(resourceBox.transform, "MaintenancePreviewRow", uiSprite, font,
+                new Color(0.85f, 0.92f, 1f, 1f), out var maintAmtTmp);
+        maintAmtTmp.text = "다음 정산 예정: —";
+        var maintCdRow =
+            CreateIconValueRow(resourceBox.transform, "MaintenanceCountdownRow", uiSprite, font,
+                new Color(0.78f, 0.84f, 0.92f, 1f), out var maintCdTmp);
+        maintCdTmp.text = "정산까지: —";
         var soldiersRow = CreateIconValueRow(resourceBox.transform, "SoldiersRow", uiSprite, font, new Color(0.70f, 1f, 0.75f, 1f), out var soldiersTmp);
         soldiersTmp.text = "0명";
 
@@ -171,7 +177,8 @@ public static class GlobalUIFramePrefabCreator
         so.FindProperty("topBarRoot").objectReferenceValue = topRt;
         so.FindProperty("userNameText").objectReferenceValue = userTmp;
         so.FindProperty("totalAssetsText").objectReferenceValue = assetsTmp;
-        so.FindProperty("foodText").objectReferenceValue = foodTmp;
+        so.FindProperty("maintenancePreviewText").objectReferenceValue = maintAmtTmp;
+        so.FindProperty("maintenanceCountdownText").objectReferenceValue = maintCdTmp;
         so.FindProperty("soldiersText").objectReferenceValue = soldiersTmp;
         so.FindProperty("bottomTabRoot").objectReferenceValue = bRt;
         so.FindProperty("homeButton").objectReferenceValue = homeBtn;

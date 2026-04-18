@@ -70,10 +70,11 @@ public class UpgradeButton : MonoBehaviour
             costText.text = Utils.AbbreviateScore(cachedCost) + " 골드";
     }
 
-    private void HandleGoldChanged(long currentGold)
+    void HandleGoldChanged(double currentGold)
     {
         if (myButton != null)
-            myButton.interactable = currentGold >= cachedCost;
+            myButton.interactable = (GameManager.InstanceOrNull?.CanSpendStrategicPurchases ?? false) &&
+                                    currentGold >= cachedCost;
     }
 
     public void OnUpgradeClicked()

@@ -10,7 +10,6 @@ public class HomeController : MonoBehaviour
     public const int BaseGoldPerClick = 10;
     public const int ExtraValuePerLaborLevel = 5;
     public const double UpgradeCostMult = 1.15;
-    public const int GrainCost = 2;
     public const double LaborBaseCost = 50;
     public const double MarketBaseCost = 100;
     public const double FarmBaseCost = 80;
@@ -18,8 +17,8 @@ public class HomeController : MonoBehaviour
     /// <summary>만보기 목표 걸음 수 (2k, 5k, 7k, 10k)</summary>
     public static readonly int[] StepMilestones = { 2000, 5000, 7000, 10000 };
 
-    /// <summary>목표별 식량 보상</summary>
-    public static readonly int[] StepRewardGrain = { 100, 250, 400, 600 };
+    /// <summary>목표별 금화 보상 (만보기)</summary>
+    public static readonly int[] StepRewardGold = { 100, 250, 400, 600 };
 
     static long NowUnixSeconds() => TimeManager.GetUnixNow();
 
@@ -163,7 +162,7 @@ public class HomeController : MonoBehaviour
     {
         var gm = GameManager.InstanceOrNull;
         if (gm == null) return;
-        gm.AddGold((long)GoldPerClick);
+        gm.AddGold(GoldPerClick);
     }
 
     /// <summary>
@@ -238,24 +237,6 @@ public class HomeController : MonoBehaviour
         }
     }
 
-    public void BuyGrain(int count)
-    {
-        var gm = GameManager.InstanceOrNull;
-        if (gm == null || count <= 0 || gm.currentUser == null) return;
-        int maxAfford = (int)(gm.currentGold / GrainCost);
-        int actual = Mathf.Min(count, maxAfford);
-        if (actual <= 0) return;
-        if (!gm.UseGold(actual * GrainCost)) return;
-        gm.AddGrain(actual);
-        gm.SaveUserData();
-    }
-
-    public int GetMaxAffordableGrain()
-    {
-        var gm = GameManager.InstanceOrNull;
-        return gm != null ? (int)(gm.currentGold / GrainCost) : 0;
-    }
-
     public void CollectMarketGold()
     {
         var gm = GameManager.InstanceOrNull;
@@ -266,18 +247,18 @@ public class HomeController : MonoBehaviour
         gm.currentUser.lastMarketCollectTime = NowUnixSeconds();
     }
 
-    public void CollectFarmGrain()
+    public void CollectFarmGold()
     {
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
         double acc = CurrentFarmAccumulated;
         if (acc <= 0) return;
-        gm.AddGrain((long)acc);
+        gm.AddGold((long)acc);
         gm.currentUser.lastFarmCollectTime = NowUnixSeconds();
     }
 
     /// <summary>
-    /// 창고(시장 금화 + 농장 식량) 수거를 비행 연출 후 입금으로 처리.
+    /// 창고(시장 금화 + 농장 금화) 수거를 비행 연출 후 입금으로 처리.
     /// requireActivePiles: true면 CollectionManager에 켜진 더미가 1개 이상 있어야 함 (대문).
     /// lastCollectTime은 모든 비행 OnComplete 후 갱신됩니다.
     /// </summary>
@@ -289,27 +270,24 @@ public class HomeController : MonoBehaviour
 
         if (requireActivePiles && !cm.HasActivePileVisual()) return false;
 
-        long totalGold = (long)CurrentMarketAccumulated;
-        long totalGrain = (long)CurrentFarmAccumulated;
-        if (totalGold <= 0 && totalGrain <= 0) return false;
+        long totalMarket = (long)CurrentMarketAccumulated;
+        long totalFarm = (long)CurrentFarmAccumulated;
+        if (totalMarket <= 0 && totalFarm <= 0) return false;
 
-        int goldPiles = cm.CountActiveGoldPiles();
-        int grainPiles = cm.CountActiveGrainPiles();
-        if (totalGold > 0 && goldPiles <= 0) return false;
-        if (totalGrain > 0 && grainPiles <= 0) return false;
+        if (!cm.HasActivePileVisual()) return false;
 
-        cm.PlayFlyEffect(totalGold, totalGrain, () =>
+        cm.PlayFlyEffect(totalMarket, totalFarm, () =>
         {
             long now = NowUnixSeconds();
-            if (totalGold > 0) gm.currentUser.lastMarketCollectTime = now;
-            if (totalGrain > 0) gm.currentUser.lastFarmCollectTime = now;
+            if (totalMarket > 0) gm.currentUser.lastMarketCollectTime = now;
+            if (totalFarm > 0) gm.currentUser.lastFarmCollectTime = now;
             gm.SaveUserData();
         });
         return true;
     }
 
     /// <summary>
-    /// 만보기 분기 보상. 해당 목표 걸음을 넘었고 미수령이면 식량 지급.
+    /// 만보기 분기 보상. 해당 목표 걸음을 넘었고 미수령이면 금화 지급.
     /// </summary>
     public bool ClaimStepReward(int milestoneIndex)
     {
@@ -326,7 +304,8 @@ public class HomeController : MonoBehaviour
         if (u.stepsToday < need) return false;
         if (u.stepRewardsClaimed[milestoneIndex]) return false;
 
-        gm.AddGrain(StepRewardGrain[milestoneIndex]);
+        int reward = milestoneIndex < StepRewardGold.Length ? StepRewardGold[milestoneIndex] : 0;
+        gm.AddGold(reward);
         u.stepRewardsClaimed[milestoneIndex] = true;
         gm.SaveUserData();
         return true;

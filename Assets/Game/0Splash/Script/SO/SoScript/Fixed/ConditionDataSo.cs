@@ -14,7 +14,7 @@ public enum ConditionType
     None = 0,
     PublicOrder = 1,    // 민심 (public_order)
     Gold = 2,           // 금화 (gold)
-    Food = 3,           // 식량 (food)
+    Food = 3,           // 레거시 키(식량) — 평가 시 플레이어 금화로 처리
     Population = 4,     // 백성수 (population)
     Might = 5,          // 무력 (might)
     Intel = 6,          // 지력 (intel)

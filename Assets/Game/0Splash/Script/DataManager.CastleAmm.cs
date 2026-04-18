@@ -137,9 +137,9 @@ public partial class DataManager
             _stateDirty = true;
     }
 
-    static int MaxAffordableAmmBuy(CastleStateData s, long gold, float taxPercent)
+    static int MaxAffordableAmmBuy(CastleStateData s, double gold, float taxPercent)
     {
-        if (!CastleAmmCore.IsInitialized(s) || gold <= 0L) return 0;
+        if (!CastleAmmCore.IsInitialized(s) || gold < 0d) return 0;
         int hi = Mathf.Max(0, s.currentAiGarrison);
         int lo = 1;
         int best = 0;
@@ -151,7 +151,7 @@ public partial class DataManager
             double rate = Mathf.Clamp(taxPercent, 0f, 500f) / 100.0;
             long tax = (long)Math.Round(principal * rate);
             long total = principal + tax;
-            if (total <= gold)
+            if ((double)total <= gold)
             {
                 best = mid;
                 lo = mid + 1;
@@ -178,7 +178,7 @@ public partial class DataManager
 
         int maxByAi = Mathf.Max(0, s.currentAiGarrison);
         var gm = GameManager.InstanceOrNull;
-        long gold = gm?.currentGold ?? 0L;
+        double gold = gm?.currentGold ?? 0d;
         float taxP = s.castleTaxRatePercent;
         int maxByGold = maxByAi > 0 ? MaxAffordableAmmBuy(s, gold, taxP) : 0;
         int final = Mathf.Min(maxByAi, maxByGold);

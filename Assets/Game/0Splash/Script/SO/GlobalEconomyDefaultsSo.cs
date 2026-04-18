@@ -7,6 +7,4 @@ using UnityEngine;
 public class GlobalEconomyDefaultsSo : ScriptableObject
 {
     public long initialTotalServerSoldiers;
-    [Tooltip("1.0 = 기준. 인플레이션 등 시뮬에 사용.")]
-    public float initialGrainPriceIndex = 1f;
 }

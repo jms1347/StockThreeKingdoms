@@ -92,7 +92,7 @@ public static class EventConditionEvaluator
                 value = GetPlayerGoldF();
                 return true;
             case ConditionType.Food:
-                value = GetPlayerGrainF();
+                value = GetPlayerGoldF();
                 return true;
             default:
                 return false;
@@ -103,14 +103,10 @@ public static class EventConditionEvaluator
     {
         var gm = GameManager.InstanceOrNull;
         if (gm == null) return 0f;
-        return gm.currentGold > (long)int.MaxValue ? int.MaxValue : (float)gm.currentGold;
-    }
-
-    static float GetPlayerGrainF()
-    {
-        var gm = GameManager.InstanceOrNull;
-        if (gm == null) return 0f;
-        return gm.currentGrain > (long)int.MaxValue ? int.MaxValue : (float)gm.currentGrain;
+        double g = gm.currentGold;
+        if (g > int.MaxValue) return int.MaxValue;
+        if (g < int.MinValue) return int.MinValue;
+        return (float)g;
     }
 
     public static bool Compare(ConditionOperator op, float actual, float threshold)

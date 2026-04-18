@@ -82,8 +82,7 @@ public class GameManager : Singleton<GameManager>
     [Header("유저 데이터")]
     public UserData currentUser;
 
-    public Action<long> OnGoldChanged;
-    public Action<long> OnGrainChanged;
+    public Action<double> OnGoldChanged;
     /// <summary>만보기 stepsToday 갱신 시 (PedometerManager 등)</summary>
     public Action<int> OnStepsChanged;
 
@@ -99,7 +98,15 @@ public class GameManager : Singleton<GameManager>
         if (balanceConfigSo != null)
             balance = balanceConfigSo.CreateRuntimeCopy();
         LoadUserData();
+        if (gameObject.GetComponent<EconomyManager>() == null)
+            gameObject.AddComponent<EconomyManager>();
     }
+
+    /// <summary>금화가 0 미만이면 부채 상태입니다.</summary>
+    public bool IsInDebt => currentUser != null && currentUser.gold < 0d;
+
+    /// <summary>천하 병사 매수·본영 건물 업그레이드 등 전략적 지출 가능 여부.</summary>
+    public bool CanSpendStrategicPurchases => !IsInDebt;
 
     // ---- 밸런스 계산 (레벨 → 비용/효과) ----
     public double GetClickPowerCost(int level) => balance.clickPowerBaseCost * Math.Pow(balance.clickPowerCostMult, level - 1);
@@ -121,53 +128,49 @@ public class GameManager : Singleton<GameManager>
 
     // ---- 글로벌 재화 (은행장) ----
 
-    public long currentGold
+    public double currentGold
     {
-        get => currentUser != null ? currentUser.gold : 0;
+        get => currentUser != null ? currentUser.gold : 0d;
         set
         {
             if (currentUser == null) return;
-            currentUser.gold = Math.Max(0L, value);
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                value = 0d;
+            currentUser.gold = value;
             OnGoldChanged?.Invoke(currentUser.gold);
-            // OnGoldChanged 구독 순서/누락과 무관하게 글로벌 탑바 숫자를 맞춤 (대문·업그레이드 등)
             GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
         }
     }
 
-    public long currentGrain
-    {
-        get => currentUser != null ? currentUser.grain : 0;
-        set
-        {
-            if (currentUser == null) return;
-            currentUser.grain = Math.Max(0L, value);
-            OnGrainChanged?.Invoke(currentUser.grain);
-            GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
-        }
-    }
+    /// <summary> 금화 추가 (배당·수거·클릭 등). 부채 상쇄에 그대로 사용됩니다. </summary>
+    public void AddGold(long amount) => AddGold((double)amount);
 
-    /// <summary> 금화 추가 (수거 등) </summary>
-    public void AddGold(long amount)
+    public void AddGold(double amount)
     {
         if (currentUser == null)
         {
             LoadUserData();
             if (currentUser == null) return;
         }
+
+        if (double.IsNaN(amount) || double.IsInfinity(amount))
+            return;
+
         currentGold += amount;
     }
-    public void AddGold(double amount) => AddGold((long)amount);
 
-    /// <summary> 금화 차감. 성공 시 true </summary>
-    public bool UseGold(long amount)
+    /// <summary> 금화 차감. 성공 시 true (잔고 부족 시 false). </summary>
+    public bool UseGold(long amount) => UseGold((double)amount);
+
+    public bool UseGold(double amount)
     {
-        if (currentUser == null || currentUser.gold < amount) return false;
+        if (currentUser == null || amount < 0d || double.IsNaN(amount) || double.IsInfinity(amount))
+            return false;
+        if (currentUser.gold < amount)
+            return false;
         currentGold -= amount;
         return true;
     }
-
-    /// <summary> 식량 추가 (수거 등) </summary>
-    public void AddGrain(long amount) => currentGrain += amount;
 
     public int clickPowerLevel { get => currentUser?.laborLevel ?? 1; set { if (currentUser != null) currentUser.laborLevel = value; } }
     public int autoIncomeLevel { get => currentUser?.marketLevel ?? 0; set { if (currentUser != null) currentUser.marketLevel = value; } }

@@ -33,6 +33,5 @@ public class UserInvestment {
 
 public static class GlobalEconomy {
     public static long totalServerSoldiers; // 서버 전체 병사 총합 [cite: 7, 160]
-    public static float grainPriceIndex;    // 실시간 식량 가격 지수 (인플레이션 반영) [cite: 7, 49, 160]
     public const float Threshold = 1000000f; // 인플레이션 임계점 [cite: 50, 161]
 }

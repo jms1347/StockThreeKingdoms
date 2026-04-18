@@ -220,7 +220,6 @@ public class GameHubTabController : MonoBehaviour
         gui.SetTopBarNumbers(
             gm.currentUser.userName,
             gm.currentGold,
-            gm.currentGrain,
             soldiers);
     }
 }
