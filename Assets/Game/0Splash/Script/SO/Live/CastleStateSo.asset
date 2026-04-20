@@ -14,42 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CastleStateSo
   castles:
   - castleId: C01
-    currentPopulation: 100033
-    currentSentiment: 98.87758
+    currentPopulation: 100633
+    currentSentiment: 95.76598
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 160293.02
+    currentBuyPrice: 160686.86
     castleTaxRatePercent: 5
-    userDeployedTroops: 228
-    averagePurchasePrice: 168153.36
+    userDeployedTroops: 534
+    averagePurchasePrice: 168359.61
     maxGarrison: 502400
-    currentAiGarrison: 249772
-    goldReserve: 40036513300
+    currentAiGarrison: 249466
+    goldReserve: 40085622890
     constantK: 10000000000000000
-    accumulatedDividendPool: 0
+    accumulatedDividendPool: 2455480
     historyPopulation7Day:
-    - 100033
-    - 100033
-    - 100033
-    - 100033
-    - 100033
-    - 100033
-    - 100033
+    - 100633
+    - 100633
+    - 100633
+    - 100633
+    - 100633
+    - 100633
+    - 100633
     historySentiment7Day:
-    - 98.87758
-    - 98.87758
-    - 98.87758
-    - 98.87758
-    - 98.87758
-    - 98.87758
-    - 98.87758
-    buyPricePrevDayClose: 160293.02
+    - 95.76598
+    - 95.76598
+    - 95.76598
+    - 95.76598
+    - 95.76598
+    - 95.76598
+    - 95.76598
+    buyPricePrevDayClose: 160686.86
   - castleId: C02
-    currentPopulation: 70000
-    currentSentiment: 100
+    currentPopulation: 70141
+    currentSentiment: 100.23643
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -65,25 +65,25 @@ MonoBehaviour:
     constantK: 2315250000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 70000
-    - 70000
-    - 70000
-    - 70000
-    - 70000
-    - 70000
-    - 70000
+    - 70141
+    - 70141
+    - 70141
+    - 70141
+    - 70141
+    - 70141
+    - 70141
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 100.23643
+    - 100.23643
+    - 100.23643
+    - 100.23643
+    - 100.23643
+    - 100.23643
+    - 100.23643
     buyPricePrevDayClose: 75600.43
   - castleId: C03
-    currentPopulation: 40031
-    currentSentiment: 99.9466
+    currentPopulation: 39959
+    currentSentiment: 99.563576
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -105,7 +105,7 @@ MonoBehaviour:
     - 40031
     - 40031
     - 40031
-    - 40031
+    - 39959
     historySentiment7Day:
     - 99.9466
     - 99.9466
@@ -113,11 +113,11 @@ MonoBehaviour:
     - 99.9466
     - 99.9466
     - 99.9466
-    - 99.9466
+    - 99.563576
     buyPricePrevDayClose: 24000.24
   - castleId: C04
-    currentPopulation: 80048
-    currentSentiment: 95.5881
+    currentPopulation: 80273
+    currentSentiment: 95.06936
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -133,21 +133,21 @@ MonoBehaviour:
     constantK: 3240000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 80045
-    - 80045
-    - 80045
-    - 80048
-    - 80048
-    - 80048
-    - 80048
+    - 80273
+    - 80273
+    - 80273
+    - 80273
+    - 80273
+    - 80273
+    - 80273
     historySentiment7Day:
-    - 97.86221
-    - 97.86221
-    - 97.86221
-    - 95.5881
-    - 95.5881
-    - 95.5881
-    - 95.5881
+    - 95.06936
+    - 95.06936
+    - 95.06936
+    - 95.06936
+    - 95.06936
+    - 95.06936
+    - 95.06936
     buyPricePrevDayClose: 81000.41
   - castleId: C05
     currentPopulation: 30000
@@ -218,8 +218,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 6000.12
   - castleId: C07
-    currentPopulation: 90000
-    currentSentiment: 100
+    currentPopulation: 89402
+    currentSentiment: 95.382385
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -235,25 +235,25 @@ MonoBehaviour:
     constantK: 6561000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 90000
-    - 90000
-    - 90000
-    - 90000
-    - 90000
-    - 90000
-    - 90000
+    - 89402
+    - 89402
+    - 89402
+    - 89402
+    - 89402
+    - 89402
+    - 89402
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 95.382385
+    - 95.382385
+    - 95.382385
+    - 95.382385
+    - 95.382385
+    - 95.382385
+    - 95.382385
     buyPricePrevDayClose: 129600.58
   - castleId: C08
-    currentPopulation: 24961
-    currentSentiment: 95.91855
+    currentPopulation: 24850
+    currentSentiment: 93.41325
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -269,25 +269,25 @@ MonoBehaviour:
     constantK: 34650000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 24961
-    - 24961
-    - 24961
-    - 24961
-    - 24961
-    - 24961
-    - 24961
+    - 24850
+    - 24850
+    - 24850
+    - 24850
+    - 24850
+    - 24850
+    - 24850
     historySentiment7Day:
-    - 95.91855
-    - 95.91855
-    - 95.91855
-    - 95.91855
-    - 95.91855
-    - 95.91855
-    - 95.91855
+    - 93.41325
+    - 93.41325
+    - 93.41325
+    - 93.41325
+    - 93.41325
+    - 93.41325
+    - 93.41325
     buyPricePrevDayClose: 9625.16
   - castleId: C09
-    currentPopulation: 20095
-    currentSentiment: 99.26525
+    currentPopulation: 20232
+    currentSentiment: 90.774
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -303,21 +303,21 @@ MonoBehaviour:
     constantK: 16500000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20112
-    - 20112
-    - 20112
-    - 20112
-    - 20112
-    - 20112
-    - 20095
+    - 20232
+    - 20232
+    - 20232
+    - 20232
+    - 20232
+    - 20232
+    - 20232
     historySentiment7Day:
-    - 99.30165
-    - 99.30165
-    - 99.30165
-    - 99.30165
-    - 99.30165
-    - 99.30165
-    - 99.26525
+    - 90.774
+    - 90.774
+    - 90.774
+    - 90.774
+    - 90.774
+    - 90.774
+    - 90.774
     buyPricePrevDayClose: 6600.132
   - castleId: C10
     currentPopulation: 50000
@@ -354,8 +354,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 40500.324
   - castleId: C11
-    currentPopulation: 45000
-    currentSentiment: 100
+    currentPopulation: 44971
+    currentSentiment: 101.693054
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -371,21 +371,21 @@ MonoBehaviour:
     constantK: 404291250000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
-    - 45000
+    - 44971
+    - 44971
+    - 44971
+    - 44971
+    - 44971
+    - 44971
+    - 44971
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 101.693054
+    - 101.693054
+    - 101.693054
+    - 101.693054
+    - 101.693054
+    - 101.693054
+    - 101.693054
     buyPricePrevDayClose: 33412.805
   - castleId: C12
     currentPopulation: 15000
@@ -422,8 +422,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 3750.0938
   - castleId: C13
-    currentPopulation: 85228
-    currentSentiment: 100.91818
+    currentPopulation: 85969
+    currentSentiment: 102.01164
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -439,25 +439,25 @@ MonoBehaviour:
     constantK: 5097960000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 85228
-    - 85228
-    - 85228
-    - 85228
-    - 85228
-    - 85228
-    - 85228
+    - 85969
+    - 85969
+    - 85969
+    - 85969
+    - 85969
+    - 85969
+    - 85969
     historySentiment7Day:
-    - 100.91818
-    - 100.91818
-    - 100.91818
-    - 100.91818
-    - 100.91818
-    - 100.91818
-    - 100.91818
+    - 102.01164
+    - 102.01164
+    - 102.01164
+    - 102.01164
+    - 102.01164
+    - 102.01164
+    - 102.01164
     buyPricePrevDayClose: 115600.55
   - castleId: C14
-    currentPopulation: 59964
-    currentSentiment: 103.8605
+    currentPopulation: 59173
+    currentSentiment: 99.69418
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -473,25 +473,25 @@ MonoBehaviour:
     constantK: 1184625000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 59964
-    - 59964
-    - 59964
-    - 59964
-    - 59964
-    - 59964
-    - 59964
+    - 59173
+    - 59173
+    - 59173
+    - 59173
+    - 59173
+    - 59173
+    - 59173
     historySentiment7Day:
-    - 103.8605
-    - 103.8605
-    - 103.8605
-    - 103.8605
-    - 103.8605
-    - 103.8605
-    - 103.8605
+    - 99.69418
+    - 99.69418
+    - 99.69418
+    - 99.69418
+    - 99.69418
+    - 99.69418
+    - 99.69418
     buyPricePrevDayClose: 52650.35
   - castleId: C16
-    currentPopulation: 76018
-    currentSentiment: 105.534386
+    currentPopulation: 76022
+    currentSentiment: 106.44477
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -507,25 +507,25 @@ MonoBehaviour:
     constantK: 2558587500000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 76027
-    - 76018
-    - 76018
-    - 76018
-    - 76018
-    - 76018
-    - 76018
+    - 75854
+    - 75854
+    - 76022
+    - 76022
+    - 76022
+    - 76022
+    - 76022
     historySentiment7Day:
-    - 107.318886
-    - 105.534386
-    - 105.534386
-    - 105.534386
-    - 105.534386
-    - 105.534386
-    - 105.534386
+    - 105.01976
+    - 105.01976
+    - 106.44477
+    - 106.44477
+    - 106.44477
+    - 106.44477
+    - 106.44477
     buyPricePrevDayClose: 70875.375
   - castleId: C17
-    currentPopulation: 29921
-    currentSentiment: 96.82632
+    currentPopulation: 30186
+    currentSentiment: 94.77308
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -541,21 +541,21 @@ MonoBehaviour:
     constantK: 74250000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 29950
-    - 29950
-    - 29921
-    - 29921
-    - 29921
-    - 29921
-    - 29921
+    - 30186
+    - 30186
+    - 30186
+    - 30186
+    - 30186
+    - 30186
+    - 30186
     historySentiment7Day:
-    - 98.25572
-    - 98.25572
-    - 96.82632
-    - 96.82632
-    - 96.82632
-    - 96.82632
-    - 96.82632
+    - 94.77308
+    - 94.77308
+    - 94.77308
+    - 94.77308
+    - 94.77308
+    - 94.77308
+    - 94.77308
     buyPricePrevDayClose: 13200.176
   - castleId: C18
     currentPopulation: 10000
@@ -592,8 +592,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 2000.08
   - castleId: C19
-    currentPopulation: 44820
-    currentSentiment: 104.99257
+    currentPopulation: 43994
+    currentSentiment: 98.231255
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -609,21 +609,21 @@ MonoBehaviour:
     constantK: 270000019531250
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 44820
-    - 44820
-    - 44820
-    - 44820
-    - 44820
-    - 44820
-    - 44820
+    - 43994
+    - 43994
+    - 43994
+    - 43994
+    - 43994
+    - 43994
+    - 43994
     historySentiment7Day:
-    - 104.99257
-    - 104.99257
-    - 104.99257
-    - 104.99257
-    - 104.99257
-    - 104.99257
-    - 104.99257
+    - 98.231255
+    - 98.231255
+    - 98.231255
+    - 98.231255
+    - 98.231255
+    - 98.231255
+    - 98.231255
     buyPricePrevDayClose: 27000.584
   - castleId: C20
     currentPopulation: 5000
@@ -660,8 +660,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 675.045
   - castleId: C21
-    currentPopulation: 14937
-    currentSentiment: 97.81212
+    currentPopulation: 14926
+    currentSentiment: 97.12818
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -677,25 +677,25 @@ MonoBehaviour:
     constantK: 16500000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14937
-    - 14937
-    - 14937
-    - 14937
-    - 14937
-    - 14937
-    - 14937
+    - 14940
+    - 14926
+    - 14926
+    - 14926
+    - 14926
+    - 14926
+    - 14926
     historySentiment7Day:
-    - 97.81212
-    - 97.81212
-    - 97.81212
-    - 97.81212
-    - 97.81212
-    - 97.81212
-    - 97.81212
+    - 99.42213
+    - 97.12818
+    - 97.12818
+    - 97.12818
+    - 97.12818
+    - 97.12818
+    - 97.12818
     buyPricePrevDayClose: 6600.132
   - castleId: C22
-    currentPopulation: 29268
-    currentSentiment: 110.72414
+    currentPopulation: 29269
+    currentSentiment: 113.985054
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -711,21 +711,21 @@ MonoBehaviour:
     constantK: 83531250000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 29929
-    - 29929
-    - 29929
-    - 29929
-    - 29929
-    - 29268
-    - 29268
+    - 29269
+    - 29269
+    - 29269
+    - 29269
+    - 29269
+    - 29269
+    - 29269
     historySentiment7Day:
-    - 99.45645
-    - 99.45645
-    - 99.45645
-    - 99.45645
-    - 99.45645
-    - 110.72414
-    - 110.72414
+    - 113.985054
+    - 113.985054
+    - 113.985054
+    - 113.985054
+    - 113.985054
+    - 113.985054
+    - 113.985054
     buyPricePrevDayClose: 14850.198
   - castleId: C23
     currentPopulation: 25000
@@ -762,8 +762,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 9625.16
   - castleId: C24
-    currentPopulation: 30103
-    currentSentiment: 98.3159
+    currentPopulation: 30004
+    currentSentiment: 100.46135
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -779,25 +779,25 @@ MonoBehaviour:
     constantK: 74250000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 30103
-    - 30103
-    - 30103
-    - 30103
-    - 30103
-    - 30103
-    - 30103
+    - 30004
+    - 30004
+    - 30004
+    - 30004
+    - 30004
+    - 30004
+    - 30004
     historySentiment7Day:
-    - 98.3159
-    - 98.3159
-    - 98.3159
-    - 98.3159
-    - 98.3159
-    - 98.3159
-    - 98.3159
+    - 100.46135
+    - 100.46135
+    - 100.46135
+    - 100.46135
+    - 100.46135
+    - 100.46135
+    - 100.46135
     buyPricePrevDayClose: 13200.176
   - castleId: C25
-    currentPopulation: 20058
-    currentSentiment: 94.960396
+    currentPopulation: 20091
+    currentSentiment: 94.02876
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -813,21 +813,21 @@ MonoBehaviour:
     constantK: 15000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 19994
-    - 20058
-    - 20058
-    - 20058
-    - 20058
-    - 20058
-    - 20058
+    - 20091
+    - 20091
+    - 20091
+    - 20091
+    - 20091
+    - 20091
+    - 20091
     historySentiment7Day:
-    - 97.283264
-    - 94.960396
-    - 94.960396
-    - 94.960396
-    - 94.960396
-    - 94.960396
-    - 94.960396
+    - 94.02876
+    - 94.02876
+    - 94.02876
+    - 94.02876
+    - 94.02876
+    - 94.02876
+    - 94.02876
     buyPricePrevDayClose: 6000.12
   - castleId: C26
     currentPopulation: 35000
@@ -864,8 +864,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 18900.21
   - castleId: C27
-    currentPopulation: 39883
-    currentSentiment: 99.156395
+    currentPopulation: 39966
+    currentSentiment: 102.660904
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -881,21 +881,21 @@ MonoBehaviour:
     constantK: 240000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 39883
-    - 39883
-    - 39883
-    - 39883
-    - 39883
-    - 39883
-    - 39883
+    - 40031
+    - 39966
+    - 39966
+    - 39966
+    - 39966
+    - 39966
+    - 39966
     historySentiment7Day:
-    - 99.156395
-    - 99.156395
-    - 99.156395
-    - 99.156395
-    - 99.156395
-    - 99.156395
-    - 99.156395
+    - 100.17036
+    - 102.660904
+    - 102.660904
+    - 102.660904
+    - 102.660904
+    - 102.660904
+    - 102.660904
     buyPricePrevDayClose: 24000.24
   - castleId: C28
     currentPopulation: 20000
@@ -932,8 +932,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 7700.154
   - castleId: C29
-    currentPopulation: 9942
-    currentSentiment: 97.747375
+    currentPopulation: 9947
+    currentSentiment: 97.29457
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -949,25 +949,25 @@ MonoBehaviour:
     constantK: 1125000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 9942
-    - 9942
-    - 9942
-    - 9942
-    - 9942
-    - 9942
-    - 9942
+    - 9947
+    - 9947
+    - 9947
+    - 9947
+    - 9947
+    - 9947
+    - 9947
     historySentiment7Day:
-    - 97.747375
-    - 97.747375
-    - 97.747375
-    - 97.747375
-    - 97.747375
-    - 97.747375
-    - 97.747375
+    - 97.29457
+    - 97.29457
+    - 97.29457
+    - 97.29457
+    - 97.29457
+    - 97.29457
+    - 97.29457
     buyPricePrevDayClose: 1800.072
   - castleId: C30
-    currentPopulation: 34960
-    currentSentiment: 99.31272
+    currentPopulation: 34947
+    currentSentiment: 102.3659
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -983,25 +983,25 @@ MonoBehaviour:
     constantK: 153090000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 34960
-    - 34960
-    - 34960
-    - 34960
-    - 34960
-    - 34960
-    - 34960
+    - 34947
+    - 34947
+    - 34947
+    - 34947
+    - 34947
+    - 34947
+    - 34947
     historySentiment7Day:
-    - 99.31272
-    - 99.31272
-    - 99.31272
-    - 99.31272
-    - 99.31272
-    - 99.31272
-    - 99.31272
+    - 102.3659
+    - 102.3659
+    - 102.3659
+    - 102.3659
+    - 102.3659
+    - 102.3659
+    - 102.3659
     buyPricePrevDayClose: 18900.21
   - castleId: C31
-    currentPopulation: 25051
-    currentSentiment: 98.07352
+    currentPopulation: 25037
+    currentSentiment: 97.227066
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1017,21 +1017,21 @@ MonoBehaviour:
     constantK: 34650000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 25044
-    - 25044
-    - 25044
-    - 25051
-    - 25051
-    - 25051
-    - 25051
+    - 25037
+    - 25037
+    - 25037
+    - 25037
+    - 25037
+    - 25037
+    - 25037
     historySentiment7Day:
-    - 100.11775
-    - 100.11775
-    - 100.11775
-    - 98.07352
-    - 98.07352
-    - 98.07352
-    - 98.07352
+    - 97.227066
+    - 97.227066
+    - 97.227066
+    - 97.227066
+    - 97.227066
+    - 97.227066
+    - 97.227066
     buyPricePrevDayClose: 9625.16
   - castleId: C32
     currentPopulation: 15000
@@ -1170,8 +1170,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 13200.176
   - castleId: C36
-    currentPopulation: 39417
-    currentSentiment: 99.23341
+    currentPopulation: 39382
+    currentSentiment: 100.01073
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1190,18 +1190,18 @@ MonoBehaviour:
     - 39417
     - 39417
     - 39417
-    - 39417
-    - 39417
-    - 39417
-    - 39417
+    - 39382
+    - 39382
+    - 39382
+    - 39382
     historySentiment7Day:
     - 99.23341
     - 99.23341
     - 99.23341
-    - 99.23341
-    - 99.23341
-    - 99.23341
-    - 99.23341
+    - 100.01073
+    - 100.01073
+    - 100.01073
+    - 100.01073
     buyPricePrevDayClose: 24000.24
   - castleId: C37
     currentPopulation: 12000
@@ -1238,8 +1238,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 2160.072
   - castleId: C38
-    currentPopulation: 15059
-    currentSentiment: 98.90243
+    currentPopulation: 14655
+    currentSentiment: 75.49229
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1255,21 +1255,21 @@ MonoBehaviour:
     constantK: 6000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 15023
-    - 15023
-    - 15023
-    - 15023
-    - 15059
-    - 15059
-    - 15059
+    - 14655
+    - 14655
+    - 14655
+    - 14655
+    - 14655
+    - 14655
+    - 14655
     historySentiment7Day:
-    - 96.90938
-    - 96.90938
-    - 96.90938
-    - 96.90938
-    - 98.90243
-    - 98.90243
-    - 98.90243
+    - 75.49229
+    - 75.49229
+    - 75.49229
+    - 75.49229
+    - 75.49229
+    - 75.49229
+    - 75.49229
     buyPricePrevDayClose: 3750.0938
   - castleId: C39
     currentPopulation: 35000
@@ -1408,8 +1408,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 9625.16
   - castleId: C43
-    currentPopulation: 11992
-    currentSentiment: 101.83182
+    currentPopulation: 11724
+    currentSentiment: 95.73598
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1425,21 +1425,21 @@ MonoBehaviour:
     constantK: 1944000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 11992
-    - 11992
-    - 11992
-    - 11992
-    - 11992
-    - 11992
-    - 11992
+    - 11724
+    - 11724
+    - 11724
+    - 11724
+    - 11724
+    - 11724
+    - 11724
     historySentiment7Day:
-    - 101.83182
-    - 101.83182
-    - 101.83182
-    - 101.83182
-    - 101.83182
-    - 101.83182
-    - 101.83182
+    - 95.73598
+    - 95.73598
+    - 95.73598
+    - 95.73598
+    - 95.73598
+    - 95.73598
+    - 95.73598
     buyPricePrevDayClose: 2160.072
   - castleId: C44
     currentPopulation: 30000
@@ -1510,8 +1510,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 1800.072
   - castleId: C46
-    currentPopulation: 44790
-    currentSentiment: 97.586815
+    currentPopulation: 44957
+    currentSentiment: 95.91913
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1527,21 +1527,21 @@ MonoBehaviour:
     constantK: 404291250000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 44853
-    - 44853
-    - 44853
-    - 44853
-    - 44853
-    - 44853
-    - 44790
+    - 44957
+    - 44957
+    - 44957
+    - 44957
+    - 44957
+    - 44957
+    - 44957
     historySentiment7Day:
-    - 95.53436
-    - 95.53436
-    - 95.53436
-    - 95.53436
-    - 95.53436
-    - 95.53436
-    - 97.586815
+    - 95.91913
+    - 95.91913
+    - 95.91913
+    - 95.91913
+    - 95.91913
+    - 95.91913
+    - 95.91913
     buyPricePrevDayClose: 33412.805
   - castleId: C47
     currentPopulation: 30000
@@ -1612,8 +1612,8 @@ MonoBehaviour:
     - 100
     buyPricePrevDayClose: 9625.16
   - castleId: C49
-    currentPopulation: 35000
-    currentSentiment: 100
+    currentPopulation: 35047
+    currentSentiment: 97.06027
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1629,25 +1629,25 @@ MonoBehaviour:
     constantK: 153090000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
-    - 35000
+    - 35047
+    - 35047
+    - 35047
+    - 35047
+    - 35047
+    - 35047
+    - 35047
     historySentiment7Day:
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
-    - 100
+    - 97.06027
+    - 97.06027
+    - 97.06027
+    - 97.06027
+    - 97.06027
+    - 97.06027
+    - 97.06027
     buyPricePrevDayClose: 18900.21
   - castleId: C50
-    currentPopulation: 4999
-    currentSentiment: 101.13639
+    currentPopulation: 4987
+    currentSentiment: 102.25721
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -1663,19 +1663,19 @@ MonoBehaviour:
     constantK: 151875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 5002
-    - 5002
-    - 5002
-    - 5002
-    - 5002
-    - 4999
-    - 4999
+    - 4987
+    - 4987
+    - 4987
+    - 4987
+    - 4987
+    - 4987
+    - 4987
     historySentiment7Day:
-    - 101.059586
-    - 101.059586
-    - 101.059586
-    - 101.059586
-    - 101.059586
-    - 101.13639
-    - 101.13639
+    - 102.25721
+    - 102.25721
+    - 102.25721
+    - 102.25721
+    - 102.25721
+    - 102.25721
+    - 102.25721
     buyPricePrevDayClose: 675.045

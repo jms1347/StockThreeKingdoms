@@ -15,8 +15,8 @@ MonoBehaviour:
   totalGold: 82622128
   holdings:
   - castleId: C01
-    troopCount: 228
-    averagePurchasePrice: 168153.36
+    troopCount: 534
+    averagePurchasePrice: 168359.61
   homeCastleId: C01
-  travelGaugePoints: 98280.69
+  travelGaugePoints: 98288.69
   currentStepCount: 33000

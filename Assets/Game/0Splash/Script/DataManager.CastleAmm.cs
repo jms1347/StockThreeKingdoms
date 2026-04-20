@@ -162,6 +162,46 @@ public partial class DataManager
         return best;
     }
 
+    /// <summary>주어진 금화 예산(본금+관부 합산 한도)으로 살 수 있는 최대 병력 수.</summary>
+    public int ComputeMaxAffordableTroopsForGoldBudget(string castleId, double goldBudget)
+    {
+        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || goldBudget <= 0d)
+            return 0;
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null)
+            return 0;
+        castleMasterDataMap.TryGetValue(castleId, out var master);
+        EnsureCastleAmmForState(s, master);
+        if (!CastleAmmCore.IsInitialized(s))
+            return 0;
+        int maxByAi = Mathf.Max(0, s.currentAiGarrison);
+        if (maxByAi <= 0)
+            return 0;
+        float taxP = s.castleTaxRatePercent;
+        int byGold = MaxAffordableAmmBuy(s, goldBudget, taxP);
+        return Mathf.Min(maxByAi, byGold);
+    }
+
+    /// <summary>현재 보유 금화의 일정 비율만큼으로 즉시 AMM 매수(팝업 없음).</summary>
+    public bool TryQuickBuyWithFractionOfGold(string castleId, double goldFraction)
+    {
+        if (goldFraction <= 0d)
+            return false;
+        if (goldFraction > 1d)
+            goldFraction = 1d;
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null)
+            return false;
+        double budget = gm.currentGold * goldFraction;
+        if (budget <= 0d)
+            return false;
+        int n = ComputeMaxAffordableTroopsForGoldBudget(castleId, budget);
+        if (n <= 0)
+            return false;
+        AddUserCastleDeployment(castleId, n, 0f);
+        return true;
+    }
+
     /// <summary>AI 수비군 매수 한도: 현재 AI 보유 수(빈 정원은 매물 아님).</summary>
     public DeployTroopCapBreakdown ComputeDeployTroopCapBreakdown(string castleId)
     {
