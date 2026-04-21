@@ -72,13 +72,17 @@ public class EconomyManager : MonoBehaviour
         return $"{Mathf.Max(0, span.Minutes)}분 {Mathf.Max(0, span.Seconds)}초";
     }
 
-    /// <summary>현재 시점 다음 정산 예정 금화 (보유 병사 × 일일 단가).</summary>
+    /// <summary>현재 시점 다음 정산 예정 금화 (보유 병사 × 일일 단가 × 병참 유지비 할인).</summary>
     public double ComputeNextSettlementGold()
     {
         long soldiers = ResolveSoldierHeadcountForMaintenance();
         var inst = InstanceOrNull;
         double rate = inst != null ? inst.MaintenanceGoldPerSoldierPerDay : 1d;
-        return soldiers * rate;
+        double raw = soldiers * rate;
+        var gm = GameManager.InstanceOrNull;
+        int logisticsLv = gm?.currentUser?.farmLevel ?? 0;
+        double discount = System.Math.Min(0.5d, logisticsLv * 0.02d);
+        return raw * (1d - discount);
     }
 
     static DateTime NextLocalNoonAfter(DateTime instant)

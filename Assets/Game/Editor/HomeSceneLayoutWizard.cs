@@ -138,8 +138,8 @@ public static class HomeSceneLayoutWizard
 
         CreateLaborPanel(root.transform);
         CreateMarketPanel(root.transform);
-        CreateFarmPanel(root.transform);
-        CreateWarehouseRow(root.transform); // 시장/농장 수거(창고) 2열 영역
+        CreateLogisticsPanel(root.transform);
+        CreateWarehouseRow(root.transform);
         CreateSupplyPanel(root.transform);
 
         AddScriptsAndWireReferences(root);
@@ -250,7 +250,6 @@ public static class HomeSceneLayoutWizard
 
         Transform t = root.transform;
         ui.goldText = t.Find("ResourceBar/GoldText")?.GetComponent<TextMeshProUGUI>();
-        ui.grainText = t.Find("ResourceBar/GrainText")?.GetComponent<TextMeshProUGUI>();
         ui.farmWorkersText = t.Find("ResourceBar/FarmWorkersText")?.GetComponent<TextMeshProUGUI>();
         ui.gateButton = t.Find("GateButton")?.GetComponent<Button>();
 
@@ -263,15 +262,12 @@ public static class HomeSceneLayoutWizard
         ui.marketUpgradeButton = t.Find("MarketPanel/MarketButtons/MarketUpgradeButton")?.GetComponent<Button>();
         ui.collectMarketButton = t.Find("WarehouseRow/CollectAllWarehouseButton")?.GetComponent<Button>();
 
-        ui.farmLabelText = t.Find("FarmPanel/FarmLabelText")?.GetComponent<TextMeshProUGUI>();
-        ui.farmAccumulateText = t.Find("WarehouseRow/WarehousePanelsRow/FarmWarehouse/FarmAccumulateText")?.GetComponent<TextMeshProUGUI>();
-        ui.farmAccumulateSlider = t.Find("WarehouseRow/WarehousePanelsRow/FarmWarehouse/FarmAccumulateSlider")?.GetComponent<Slider>();
-        ui.farmUpgradeButton = t.Find("FarmPanel/FarmButtons/FarmUpgradeButton")?.GetComponent<Button>();
-        ui.collectFarmButton = null;
+        ui.logisticsLabelText = t.Find("LogisticsPanel/LogisticsLabelText")?.GetComponent<TextMeshProUGUI>()
+            ?? t.Find("FarmPanel/FarmLabelText")?.GetComponent<TextMeshProUGUI>();
+        ui.logisticsUpgradeButton = t.Find("LogisticsPanel/LogisticsButtons/LogisticsUpgradeButton")?.GetComponent<Button>()
+            ?? t.Find("FarmPanel/FarmButtons/FarmUpgradeButton")?.GetComponent<Button>();
 
         ui.supplyLabelText = t.Find("SupplyPanel/SupplyLabelText")?.GetComponent<TextMeshProUGUI>();
-        ui.hireFarmWorkerButton = t.Find("SupplyPanel/SupplyButtons/HireFarmWorkerButton")?.GetComponent<Button>();
-        ui.buyGrainButton = t.Find("SupplyPanel/SupplyButtons/BuyGrainButton")?.GetComponent<Button>();
 
         EditorUtility.SetDirty(ui);
     }
@@ -355,12 +351,12 @@ public static class HomeSceneLayoutWizard
         ule.flexibleHeight = 1f;
     }
 
-    static void CreateFarmPanel(Transform parent)
+    static void CreateLogisticsPanel(Transform parent)
     {
-        GameObject panel = CreatePanel(parent, "FarmPanel", "농장 (초당 금화)");
-        CreateText(panel.transform, "FarmLabelText", "초당 금화 자동 생산 (농장)\n(Level 0)\n비용: 80 Gold", 14);
-        GameObject btnRow = new GameObject("FarmButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
-        Undo.RegisterCreatedObjectUndo(btnRow, "FarmButtons");
+        GameObject panel = CreatePanel(parent, "LogisticsPanel", "병참 (유지비 할인)");
+        CreateText(panel.transform, "LogisticsLabelText", "보유 병사 일일 유지비 감소\n(Level 0)\n비용: 80 Gold", 14);
+        GameObject btnRow = new GameObject("LogisticsButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(btnRow, "LogisticsButtons");
         btnRow.transform.SetParent(panel.transform, false);
         var hlg = btnRow.GetComponent<HorizontalLayoutGroup>();
         hlg.spacing = 8;
@@ -369,7 +365,7 @@ public static class HomeSceneLayoutWizard
         hlg.childForceExpandWidth = true;
         hlg.childForceExpandHeight = true;
 
-        var upgrade = CreateButton(btnRow.transform, "FarmUpgradeButton", "업그레이드");
+        var upgrade = CreateButton(btnRow.transform, "LogisticsUpgradeButton", "업그레이드");
         var ule = upgrade.GetComponent<LayoutElement>() ?? upgrade.gameObject.AddComponent<LayoutElement>();
         ule.minHeight = 140f;
         ule.preferredHeight = 160f;
@@ -411,7 +407,6 @@ public static class HomeSceneLayoutWizard
         panelsLe.flexibleWidth = 1f;
 
         CreateWarehousePanel(panelsRow.transform, "MarketWarehouse", "시장 창고", "MarketAccumulateText", "MarketAccumulateSlider", null);
-        CreateWarehousePanel(panelsRow.transform, "FarmWarehouse", "농장 창고", "FarmAccumulateText", "FarmAccumulateSlider", null);
         CreateWarehouseCollectAllButton(row.transform);
     }
 
@@ -486,27 +481,6 @@ public static class HomeSceneLayoutWizard
     {
         GameObject panel = CreatePanel(parent, "SupplyPanel", "보급");
         CreateText(panel.transform, "SupplyLabelText", "병사는 천하 탭에서 매수합니다.\n재화는 금화만 사용합니다.", 12);
-        GameObject btnRow = new GameObject("SupplyButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
-        Undo.RegisterCreatedObjectUndo(btnRow, "SupplyButtons");
-        btnRow.transform.SetParent(panel.transform, false);
-        var supplyHlg = btnRow.GetComponent<HorizontalLayoutGroup>();
-        supplyHlg.spacing = 8;
-        supplyHlg.childControlWidth = true;
-        supplyHlg.childControlHeight = true;
-        supplyHlg.childForceExpandWidth = true;
-        supplyHlg.childForceExpandHeight = false;
-        CreateSupplyActionButton(btnRow.transform, "HireFarmWorkerButton", "병사 모집 (100G)");
-        CreateSupplyActionButton(btnRow.transform, "BuyGrainButton", "식량 구매 (2G)");
-    }
-
-    static Button CreateSupplyActionButton(Transform parent, string name, string label)
-    {
-        Button btn = CreateButton(parent, name, label);
-        var le = btn.GetComponent<LayoutElement>() ?? btn.gameObject.AddComponent<LayoutElement>();
-        le.minHeight = 110f;
-        le.preferredHeight = 120f;
-        le.flexibleWidth = 1f;
-        return btn;
     }
 
     static GameObject CreateText(Transform parent, string name, string content, int fontSize, FontStyles style = FontStyles.Normal)
@@ -588,7 +562,8 @@ public static class HomeSceneLayoutWizard
     {
         Transform labor = FindDeep(homeRoot, "LaborPanel");
         Transform market = FindDeep(homeRoot, "MarketPanel");
-        Transform farm = FindDeep(homeRoot, "FarmPanel");
+        Transform farm = FindDeep(homeRoot, "LogisticsPanel");
+        if (farm == null) farm = FindDeep(homeRoot, "FarmPanel");
         if (labor == null || market == null || farm == null) return;
 
         Transform existing = homeRoot.Find("CenterPanelsRow");

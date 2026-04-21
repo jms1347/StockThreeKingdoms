@@ -103,8 +103,83 @@ public static class GlobalUIFramePrefabCreator
         var avatarLe = avatar.GetComponent<LayoutElement>();
         avatarLe.preferredWidth = 84f;
         avatarLe.preferredHeight = 84f;
+        avatar.AddComponent<RectMask2D>();
 
-        var userTmp = CreateTMP(profileBox.transform, "UserNameText", font, 30, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
+        var portraitGo = new GameObject("Portrait", typeof(RectTransform), typeof(Image), typeof(Outline));
+        portraitGo.transform.SetParent(avatar.transform, false);
+        portraitGo.transform.SetAsFirstSibling();
+        var portraitImg = portraitGo.GetComponent<Image>();
+        portraitImg.sprite = uiSprite;
+        portraitImg.type = Image.Type.Sliced;
+        portraitImg.preserveAspect = true;
+        portraitImg.raycastTarget = false;
+        portraitImg.color = new Color(0.25f, 0.28f, 0.32f, 1f);
+        var portraitRt = portraitGo.GetComponent<RectTransform>();
+        portraitRt.anchorMin = Vector2.zero;
+        portraitRt.anchorMax = Vector2.one;
+        portraitRt.offsetMin = new Vector2(4f, 4f);
+        portraitRt.offsetMax = new Vector2(-4f, -4f);
+        var portraitOutline = portraitGo.GetComponent<Outline>();
+        portraitOutline.effectColor = new Color(0.4f, 0.45f, 0.5f, 0.75f);
+        portraitOutline.effectDistance = new Vector2(0.9f, -0.9f);
+
+        var profileColumn = new GameObject("ProfileTextColumn", typeof(RectTransform));
+        profileColumn.transform.SetParent(profileBox.transform, false);
+        var colV = profileColumn.AddComponent<VerticalLayoutGroup>();
+        colV.spacing = 6f;
+        colV.padding = new RectOffset(0, 0, 2, 0);
+        colV.childAlignment = TextAnchor.UpperLeft;
+        colV.childControlWidth = true;
+        colV.childControlHeight = true;
+        colV.childForceExpandWidth = true;
+        colV.childForceExpandHeight = false;
+        var colLe = profileColumn.AddComponent<LayoutElement>();
+        colLe.flexibleWidth = 1f;
+        colLe.minWidth = 160f;
+
+        var titleBadge = new GameObject("TitleBadge", typeof(RectTransform), typeof(Image), typeof(LayoutElement), typeof(HorizontalLayoutGroup));
+        titleBadge.transform.SetParent(profileColumn.transform, false);
+        var titleBgImg = titleBadge.GetComponent<Image>();
+        titleBgImg.sprite = uiSprite;
+        titleBgImg.type = Image.Type.Sliced;
+        titleBgImg.color = new Color(0.22f, 0.24f, 0.28f, 0.88f);
+        var titleBadgeLe = titleBadge.GetComponent<LayoutElement>();
+        titleBadgeLe.minHeight = 28f;
+        titleBadgeLe.preferredHeight = 30f;
+        titleBadgeLe.flexibleWidth = 1f;
+        var titleHg = titleBadge.GetComponent<HorizontalLayoutGroup>();
+        titleHg.padding = new RectOffset(10, 10, 4, 6);
+        titleHg.childAlignment = TextAnchor.MiddleLeft;
+        titleHg.childControlWidth = true;
+        titleHg.childControlHeight = true;
+        titleHg.childForceExpandWidth = true;
+        titleHg.childForceExpandHeight = true;
+
+        var titleTmpGo = new GameObject("TitleBadgeText", typeof(RectTransform), typeof(TextMeshProUGUI));
+        titleTmpGo.transform.SetParent(titleBadge.transform, false);
+        var titleTmp = titleTmpGo.GetComponent<TextMeshProUGUI>();
+        titleTmp.font = font;
+        titleTmp.fontSize = 18f;
+        titleTmp.fontStyle = FontStyles.Bold;
+        titleTmp.alignment = TextAlignmentOptions.Left;
+        titleTmp.color = new Color(0.92f, 0.93f, 0.95f);
+        titleTmp.text = "평민";
+        titleTmp.enableAutoSizing = true;
+        titleTmp.fontSizeMin = 14;
+        titleTmp.fontSizeMax = 18;
+        titleTmp.overflowMode = TextOverflowModes.Ellipsis;
+        titleTmp.raycastTarget = false;
+        var titleTmpRt = titleTmpGo.GetComponent<RectTransform>();
+        titleTmpRt.anchorMin = Vector2.zero;
+        titleTmpRt.anchorMax = Vector2.one;
+        titleTmpRt.offsetMin = Vector2.zero;
+        titleTmpRt.offsetMax = Vector2.zero;
+
+        var titleBadgeOutline = titleBadge.AddComponent<Outline>();
+        titleBadgeOutline.effectColor = new Color(0.45f, 0.48f, 0.52f, 0.75f);
+        titleBadgeOutline.effectDistance = new Vector2(0.65f, -0.65f);
+
+        var userTmp = CreateTMP(profileColumn.transform, "UserNameText", font, 30, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
         userTmp.text = "ZhugeMaster01";
         userTmp.enableAutoSizing = true;
         userTmp.fontSizeMin = 18;
@@ -114,23 +189,31 @@ public static class GlobalUIFramePrefabCreator
         userLe.flexibleWidth = 1f;
         userLe.minWidth = 140f;
 
-        // 우측: 자원 3개(세로), 각 항목은 아이콘 + 값(라벨 텍스트 없음)
-        var resourceBox = new GameObject("ResourceBox", typeof(RectTransform));
+        // 중앙: 위치 + 금화 + 병력 + 유지비 미리보기
+        var resourceBox = new GameObject("CenterResourceBox", typeof(RectTransform));
         resourceBox.transform.SetParent(topBar.transform, false);
         var resLe = resourceBox.AddComponent<LayoutElement>();
         resLe.flexibleWidth = 1f;
-        resLe.minWidth = 320f;
+        resLe.minWidth = 280f;
 
         var resV = resourceBox.AddComponent<VerticalLayoutGroup>();
-        resV.spacing = 8f;
+        resV.spacing = 6f;
         resV.childAlignment = TextAnchor.MiddleRight;
         resV.childControlWidth = true;
         resV.childControlHeight = true;
         resV.childForceExpandWidth = true;
         resV.childForceExpandHeight = true;
 
+        var locationTmp = CreateTMP(resourceBox.transform, "LocationText", font, 22, FontStyles.Bold, TextAlignmentOptions.Right, new Color(0.9f, 0.92f, 0.95f));
+        locationTmp.text = "낙양";
+        locationTmp.enableAutoSizing = true;
+        locationTmp.fontSizeMin = 16;
+        locationTmp.fontSizeMax = 24;
+
         var assetsRow = CreateIconValueRow(resourceBox.transform, "AssetsRow", uiSprite, font, new Color(0.96f, 0.88f, 0.35f, 1f), out var assetsTmp);
         assetsTmp.text = "1.5M";
+        var soldiersRow = CreateIconValueRow(resourceBox.transform, "SoldiersRow", uiSprite, font, new Color(0.70f, 1f, 0.75f, 1f), out var soldiersTmp);
+        soldiersTmp.text = "0명";
         var maintAmtRow =
             CreateIconValueRow(resourceBox.transform, "MaintenancePreviewRow", uiSprite, font,
                 new Color(0.85f, 0.92f, 1f, 1f), out var maintAmtTmp);
@@ -139,8 +222,22 @@ public static class GlobalUIFramePrefabCreator
             CreateIconValueRow(resourceBox.transform, "MaintenanceCountdownRow", uiSprite, font,
                 new Color(0.78f, 0.84f, 0.92f, 1f), out var maintCdTmp);
         maintCdTmp.text = "정산까지: —";
-        var soldiersRow = CreateIconValueRow(resourceBox.transform, "SoldiersRow", uiSprite, font, new Color(0.70f, 1f, 0.75f, 1f), out var soldiersTmp);
-        soldiersTmp.text = "0명";
+
+        // 우측: MP 단독
+        var rightMp = new GameObject("RightMarchColumn", typeof(RectTransform));
+        rightMp.transform.SetParent(topBar.transform, false);
+        var rLe = rightMp.AddComponent<LayoutElement>();
+        rLe.minWidth = 120f;
+        rLe.preferredWidth = 140f;
+        var rV = rightMp.AddComponent<VerticalLayoutGroup>();
+        rV.childAlignment = TextAnchor.MiddleRight;
+        rV.childControlWidth = true;
+        rV.childControlHeight = true;
+        var mpTmp = CreateTMP(rightMp.transform, "MarchPointsText", font, 28, FontStyles.Bold, TextAlignmentOptions.Right, Color.white);
+        mpTmp.text = "0 MP";
+        mpTmp.enableAutoSizing = true;
+        mpTmp.fontSizeMin = 18;
+        mpTmp.fontSizeMax = 32;
 
         // BottomTabBar
         var bottom = new GameObject("BottomTabBar", typeof(RectTransform), typeof(Image));
@@ -176,10 +273,17 @@ public static class GlobalUIFramePrefabCreator
         var so = new SerializedObject(mgr);
         so.FindProperty("topBarRoot").objectReferenceValue = topRt;
         so.FindProperty("userNameText").objectReferenceValue = userTmp;
+        so.FindProperty("locationText").objectReferenceValue = locationTmp;
         so.FindProperty("totalAssetsText").objectReferenceValue = assetsTmp;
+        so.FindProperty("soldiersText").objectReferenceValue = soldiersTmp;
         so.FindProperty("maintenancePreviewText").objectReferenceValue = maintAmtTmp;
         so.FindProperty("maintenanceCountdownText").objectReferenceValue = maintCdTmp;
-        so.FindProperty("soldiersText").objectReferenceValue = soldiersTmp;
+        so.FindProperty("userPortraitImage").objectReferenceValue = portraitImg;
+        so.FindProperty("titleBadgeBackground").objectReferenceValue = titleBgImg;
+        so.FindProperty("titleBadgeText").objectReferenceValue = titleTmp;
+        so.FindProperty("titleBadgeOutline").objectReferenceValue = titleBadgeOutline;
+        so.FindProperty("avatarPortraitOutline").objectReferenceValue = portraitOutline;
+        so.FindProperty("marchPointsText").objectReferenceValue = mpTmp;
         so.FindProperty("bottomTabRoot").objectReferenceValue = bRt;
         so.FindProperty("homeButton").objectReferenceValue = homeBtn;
         so.FindProperty("marketButton").objectReferenceValue = marketBtn;

@@ -809,7 +809,7 @@ public partial class DataManager : Singleton<DataManager>
     }
 
     /// <summary>
-    /// 천하 탭 상단 필터별 목록. 필터 적용 후 공통 정렬: 이슈(전쟁·재해·호재) &gt; 내 투자 성 &gt; 등급.
+    /// 천하 탭 상단 필터별 목록. 필터 적용 후 공통 정렬: <b>본영 고정 1번</b> → 나머지는 <b>본영과의 거리</b>(posX,posY) 오름차순.
     /// </summary>
     public List<string> GetOrderedWorldCastleIds(WorldMarketCastleListFilter filter)
     {
@@ -867,25 +867,10 @@ public partial class DataManager : Singleton<DataManager>
         return OrderWorldCastle_LiveSo(q);
     }
 
-    static int MtsIssueSortKeyLive(CastleStateSo.CastleLiveStateEntry e)
-    {
-        if (e == null) return 0;
-        if (e.isWar || e.isDisaster) return 2;
-        if (e.isFavorableEvent) return 1;
-        return 0;
-    }
-
     List<string> OrderWorldCastle_LiveSo(IEnumerable<CastleStateSo.CastleLiveStateEntry> q)
     {
-        string home = (_homeCastleId ?? "").Trim();
-        return q.OrderByDescending(MtsIssueSortKeyLive)
-            .ThenByDescending(e => !string.IsNullOrEmpty(home) &&
-                                   string.Equals(e.castleId.Trim(), home, StringComparison.Ordinal))
-            .ThenByDescending(e => HasUserStockInPortfolio(e.castleId))
-            .ThenBy(e => GetCastleGradeSortKey(e.castleId))
-            .ThenBy(e => e.castleId.Trim(), StringComparer.Ordinal)
-            .Select(e => e.castleId.Trim())
-            .ToList();
+        var ids = q.Select(e => e.castleId.Trim()).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToList();
+        return OrderIdsHomeFirstThenDistance(ids);
     }
 
     /// <summary>요주의: B·C·D 등급 성만 (하이리스크·저평가 종목 필터).</summary>
@@ -899,15 +884,6 @@ public partial class DataManager : Singleton<DataManager>
         return m.grade >= Grade.B;
     }
 
-    /// <summary>MTS 공통 정렬: 이슈(전쟁·재해 우선, 호재 보조) &gt; 내 투자 성 &gt; 등급 &gt; ID.</summary>
-    static int MtsIssueSortKey(CastleStateData s)
-    {
-        if (s == null) return 0;
-        if (s.isWar || s.isDisaster) return 2;
-        if (s.isFavorableEvent) return 1;
-        return 0;
-    }
-
     bool IsPremiumCastleId(string castleId)
     {
         if (string.IsNullOrWhiteSpace(castleId)) return false;
@@ -915,13 +891,59 @@ public partial class DataManager : Singleton<DataManager>
         return m.grade <= Grade.A;
     }
 
-    List<string> OrderWorldCastle_MtsDefault(IEnumerable<CastleStateData> q) =>
-        q.OrderByDescending(MtsIssueSortKey)
-            .ThenByDescending(s => s.userDeployedTroops > 0)
-            .ThenBy(s => GetCastleGradeSortKey(s.id))
-            .ThenBy(s => s.id, StringComparer.Ordinal)
-            .Select(s => s.id)
-            .ToList();
+    List<string> OrderWorldCastle_MtsDefault(IEnumerable<CastleStateData> q)
+    {
+        var ids = q.Select(s => s.id.Trim()).Where(id => !string.IsNullOrEmpty(id)).Distinct().ToList();
+        return OrderIdsHomeFirstThenDistance(ids);
+    }
+
+    /// <summary>
+    /// 본영 성은 필터에 포함되지 않아도 항상 첫 카드로 고정하고,
+    /// 나머지는 본영까지 거리 오름차순입니다.
+    /// </summary>
+    List<string> OrderIdsHomeFirstThenDistance(List<string> ids)
+    {
+        string home = (_homeCastleId ?? "").Trim();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var others = new List<string>();
+        if (ids != null)
+        {
+            foreach (var id in ids)
+            {
+                if (string.IsNullOrWhiteSpace(id)) continue;
+                string t = id.Trim();
+                if (!string.IsNullOrEmpty(home) && string.Equals(t, home, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                if (seen.Add(t))
+                    others.Add(t);
+            }
+        }
+
+        if (!string.IsNullOrEmpty(home))
+            others.Sort((a, b) => CompareCastleDistanceFromHome(home, a, b));
+        else
+            others.Sort(StringComparer.OrdinalIgnoreCase);
+
+        var result = new List<string>(others.Count + 1);
+        if (!string.IsNullOrEmpty(home) && castleStateDataMap != null && castleStateDataMap.ContainsKey(home))
+            result.Add(home);
+        result.AddRange(others);
+        return result;
+    }
+
+    int CompareCastleDistanceFromHome(string home, string a, string b)
+    {
+        if (string.IsNullOrEmpty(home))
+            return string.Compare(a, b, StringComparison.Ordinal);
+
+        float da = GetDistance(home, a);
+        float db = GetDistance(home, b);
+        const float bad = 1e15f;
+        if (da < 0f) da = bad;
+        if (db < 0f) db = bad;
+        int c = da.CompareTo(db);
+        return c != 0 ? c : string.Compare(a, b, StringComparison.Ordinal);
+    }
 
     int GetCastleGradeSortKey(string castleId)
     {
@@ -942,9 +964,7 @@ public partial class DataManager : Singleton<DataManager>
         var gm = GameManager.InstanceOrNull;
         var gui = GlobalUIManager.InstanceOrNull;
         if (gm?.currentUser == null || gui == null) return;
-        string name = string.IsNullOrEmpty(gm.currentUser.userName) ? "—" : gm.currentUser.userName;
-        long soldiers = IsStateReady ? UserPortfolioManager.GetTotalOwnedSoldiers(this) : gm.currentUser.soldierCount;
-        gui.SetTopBarNumbers(name, gm.currentGold, soldiers);
+        gui.RefreshTopBarFromGameManager();
     }
 
     /// <summary>

@@ -9,7 +9,7 @@ using TMPro;
 /// 천하탭(MTS) 레이아웃 자동 생성.
 /// 메뉴: StockThreeKingdoms/Layout/천하 메뉴/천하탭 만들기 (MTS Layout)
 /// - 상단: Faction Market Share(가로 스택 막대)
-/// - 중단: 필터 탭(전체·보유·교전·이벤트·우량) + Castle Stocks 리스트(ScrollRect + 템플릿 2종)
+/// - 지도/리스트 전환(ViewModeRow) + ListViewRoot(필터·가상 스크롤) + MapViewRoot(스크롤·줌·성 핀)
 /// - 팝업: CityDetailPanel(기본 비활성)
 /// </summary>
 public static class WorldMarketLayoutWizard
@@ -70,11 +70,26 @@ public static class WorldMarketLayoutWizard
         vlg.childForceExpandHeight = false;
 
         CreateFactionMarketSharePanel(root.transform);
-        CreateCastleStocksPanel(root.transform);
+
+        var listRootGo = new GameObject("ListViewRoot", typeof(RectTransform), typeof(LayoutElement), typeof(VerticalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(listRootGo, "ListViewRoot");
+        listRootGo.transform.SetParent(root.transform, false);
+        var listLe = listRootGo.GetComponent<LayoutElement>();
+        listLe.flexibleHeight = 1f;
+        listLe.minHeight = 280f;
+        var listV = listRootGo.GetComponent<VerticalLayoutGroup>();
+        listV.childControlWidth = true;
+        listV.childForceExpandWidth = true;
+        listV.childControlHeight = true;
+        listV.childForceExpandHeight = true;
+
+        CreateCastleStocksPanel(listRootGo.transform);
+        WorldMarketMapSplitMigrationWizard.SetupSplitUiForNewWizard(root, listRootGo);
+
         CreateCityDetailPanel(root.transform);
 
         Selection.activeGameObject = root;
-        Debug.Log("[WorldMarketLayoutWizard] 천하탭(MTS) 레이아웃 생성 완료. 씬 저장 후 런타임 바인딩 스크립트를 연결하세요.");
+        Debug.Log("[WorldMarketLayoutWizard] 천하탭(MTS) + 지도/리스트 분할 생성 완료. 씬 저장 후 런타임 바인딩을 연결하세요.");
     }
 
     static RectTransform EnsureContentRoot(RectTransform canvasRoot)
@@ -780,7 +795,7 @@ public static class WorldMarketLayoutWizard
         z4v.childForceExpandHeight = true;
 
         CreateCastleCardActionButton(z4.transform, "DeployButton", "투입", new Color(0.16f, 0.48f, 0.32f, 0.98f));
-        CreateCastleCardActionButton(z4.transform, "HqMoveButton", "본영 이주", new Color(0.22f, 0.38f, 0.62f, 0.98f));
+        CreateCastleCardActionButton(z4.transform, "HqMoveButton", "이주하기", new Color(0.22f, 0.38f, 0.62f, 0.98f));
         var recallGo = CreateCastleCardActionButton(z4.transform, "RecallButton", "회수", new Color(0.82f, 0.42f, 0.22f, 0.98f));
         recallGo.SetActive(false);
 

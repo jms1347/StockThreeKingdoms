@@ -65,7 +65,7 @@ public partial class DataManager
         int baseCap = Mathf.Max(2, m.maxTroops);
         int bonus = 0;
         if (gm?.currentUser != null)
-            bonus = gm.currentUser.marketLevel * 25 + gm.currentUser.farmLevel * 15;
+            bonus = gm.currentUser.marketLevel * 25 + gm.currentUser.farmLevel * 15; // farmLevel = 병참
 
         int target = Mathf.Max(s.maxGarrison, baseCap + bonus);
         if (target == s.maxGarrison) return;

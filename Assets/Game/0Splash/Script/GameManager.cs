@@ -85,6 +85,8 @@ public class GameManager : Singleton<GameManager>
     public Action<double> OnGoldChanged;
     /// <summary>만보기 stepsToday 갱신 시 (PedometerManager 등)</summary>
     public Action<int> OnStepsChanged;
+    /// <summary>행군 포인트(MP) 변동 시</summary>
+    public Action<int> OnMarchPointsChanged;
 
     private string savePath;
 
@@ -212,8 +214,6 @@ public class GameManager : Singleton<GameManager>
         // 생산 중인 창고만 기준 시각이 없을 때 현재 시각으로 초기화 (레벨 0이면 두지 않음 → 경과/주머니 0)
         if (currentUser.marketLevel > 0 && currentUser.lastMarketCollectTime <= 0)
             currentUser.lastMarketCollectTime = now;
-        if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime <= 0)
-            currentUser.lastFarmCollectTime = now;
         if (FixWarehouseTimestampsIfBehindClock(now))
             SaveUserData();
     }
@@ -227,11 +227,6 @@ public class GameManager : Singleton<GameManager>
         if (currentUser.marketLevel > 0 && currentUser.lastMarketCollectTime <= 0)
         {
             currentUser.lastMarketCollectTime = now;
-            dirty = true;
-        }
-        if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime <= 0)
-        {
-            currentUser.lastFarmCollectTime = now;
             dirty = true;
         }
 
@@ -253,12 +248,16 @@ public class GameManager : Singleton<GameManager>
             changed = true;
         }
 
-        if (currentUser.farmLevel > 0 && currentUser.lastFarmCollectTime > nowUnix)
-        {
-            currentUser.lastFarmCollectTime = nowUnix;
-            changed = true;
-        }
-
         return changed;
+    }
+
+    /// <summary>행군 포인트(MP) 증감. 보상·소비 등에서 호출.</summary>
+    public void AddMarchPoints(int delta)
+    {
+        if (currentUser == null || delta == 0) return;
+        long next = (long)currentUser.marchPoints + delta;
+        currentUser.marchPoints = (int)Mathf.Clamp(next, 0, int.MaxValue);
+        OnMarchPointsChanged?.Invoke(currentUser.marchPoints);
+        GlobalUIManager.InstanceOrNull?.RollMarchPointsTo(currentUser.marchPoints);
     }
 }

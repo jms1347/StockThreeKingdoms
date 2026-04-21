@@ -6,7 +6,7 @@ using DG.Tweening;
 
 /// <summary>
 /// 성문 앞 금화 더미 시각화, 흔들기 수거, DOTween 비행 후 지연 입금.
-/// 시장·농장 누적은 모두 금화로 합산되어 표시됩니다.
+/// 시장 창고 누적만 금화로 표시됩니다.
 /// </summary>
 public class CollectionManager : MonoBehaviour
 {
@@ -221,24 +221,9 @@ public class CollectionManager : MonoBehaviour
             return;
         }
 
-        long mElapsed;
-        long fElapsed;
-        if (homeController != null)
-        {
-            mElapsed = homeController.GetMarketElapsedSeconds();
-            fElapsed = homeController.GetFarmElapsedSeconds();
-        }
-        else
-        {
-            mElapsed = 0;
-            fElapsed = 0;
-        }
-
+        long mElapsed = homeController != null ? homeController.GetMarketElapsedSeconds() : 0L;
         int mTier = PileCountFromElapsedTiered(mElapsed);
-        int fTier = PileCountFromElapsedTiered(fElapsed);
-        int combined = Mathf.Max(mTier, fTier);
-
-        SetPileArray(goldPiles, combined);
+        SetPileArray(goldPiles, mTier);
     }
 
     public static int PileCountFromElapsedTiered(long elapsedSec)
@@ -282,7 +267,7 @@ public class CollectionManager : MonoBehaviour
         homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: true);
     }
 
-    /// <summary>시장·농장에서 나온 금화를 합산해 비행 입금합니다.</summary>
+    /// <summary>시장 창고 금화를 비행 입금합니다. totalFarmGold는 레거시 인자(0 고정).</summary>
     public void PlayFlyEffect(long totalMarketGold, long totalFarmGold, Action onAllComplete = null)
     {
         EnsureFlyRootIfNeeded();

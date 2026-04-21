@@ -65,6 +65,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] TextMeshProUGUI recallSliderValueText;
     [SerializeField] Button recallConfirmButton;
     [SerializeField] Button recallCancelButton;
+    [SerializeField] TextMeshProUGUI marchPointsTravelLineText;
 
     const string GaugeTweenId = "CastleDetailGauges";
 
@@ -437,8 +438,10 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             relocateButton.interactable = canRelocate && !travelInProgress;
             var rLbl = relocateButton.GetComponentInChildren<TextMeshProUGUI>(true);
             if (rLbl != null)
-                rLbl.text = "HQ 본영 이주";
+                rLbl.text = "이주하기";
         }
+
+        ApplyMarchPointsTravelLine(dm, isHq);
 
         if (relocateHintText != null)
         {
@@ -450,6 +453,30 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
                 relocateHintText.text =
                     $"이주까지 {cost:N0}pt 필요 — 시간·걸음으로 게이지를 채우면 이동 완료 (현재 {gauge:N0} / {cost:N0}) · 만보기 누적 {syncedSteps:N0}보";
         }
+    }
+
+    void ApplyMarchPointsTravelLine(DataManager dm, bool isHq)
+    {
+        if (marchPointsTravelLineText == null) return;
+        if (isHq)
+        {
+            marchPointsTravelLineText.gameObject.SetActive(false);
+            return;
+        }
+
+        marchPointsTravelLineText.gameObject.SetActive(true);
+        marchPointsTravelLineText.richText = true;
+        int mp = dm.GetTravelMarchPointsCostRounded(_castleId);
+        var gm = GameManager.InstanceOrNull;
+        int have = gm?.currentUser != null ? gm.currentUser.marchPoints : 0;
+        if (mp < 0)
+            marchPointsTravelLineText.text =
+                "<color=#aab4c0>거리 기준 필요 MP를 계산할 수 없습니다.</color>";
+        else
+            marchPointsTravelLineText.text =
+                $"<color=#aab4c0>거리 기준 이동 비용</color> <color=#ffd866>{mp:N0} MP</color> · " +
+                $"<color=#aab4c0>보유 행군 MP</color> {have:N0} · " +
+                "<color=#8899aa><size=13>이주 완료는 이동 게이지 충전 후 자동 처리됩니다.</size></color>";
     }
 
     /// <summary>이주 게이지·만보기 안내와 발자국 행은, 본영 이주 <b>목적지가 이 성</b>일 때만 표시합니다.</summary>

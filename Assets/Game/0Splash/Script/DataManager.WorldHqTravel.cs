@@ -66,6 +66,14 @@ public partial class DataManager
         return Mathf.Max(0f, d / 100f * travelPointsPer100Distance);
     }
 
+    /// <summary>UI 표시용 — 거리 기반 이동 비용을 정수 MP로 반올림(이동 게이지 차감량과 동일 스케일).</summary>
+    public int GetTravelMarchPointsCostRounded(string targetCastleId)
+    {
+        float c = GetTravelCostPoints(targetCastleId);
+        if (c >= float.MaxValue * 0.25f) return -1;
+        return Mathf.Max(0, Mathf.RoundToInt(c));
+    }
+
     /// <summary>이동 포인트를 만보기 충전 규칙(1걸음당 travelPointsPerStep)으로 환산한 보수적 걸음 수(올림).</summary>
     public int GetTravelCostStepEquivalent(float costPoints)
     {

@@ -46,7 +46,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [SerializeField] Button recallButton;
 
     [Header("가격 롤링")]
-    [SerializeField, Min(18f)] float largeBuyPriceFontSize = 34f;
+    [SerializeField, Min(18f)] float largeBuyPriceFontSize = 40f;
 
     [Header("퀵 투입")]
     [Tooltip("0이면 가능한 최대(정원·병력·금화)만큼 투입. 1 이상이면 그 수와 상한 중 작은 값.")]
@@ -154,7 +154,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         var lab = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
         lab.transform.SetParent(go.transform, false);
         var tmp = lab.GetComponent<TextMeshProUGUI>();
-        tmp.text = "본영 이주";
+        tmp.text = "이주하기";
         tmp.fontSize = 15;
         tmp.fontStyle = FontStyles.Bold;
         tmp.color = Color.white;
@@ -555,6 +555,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
             sentimentChangeText.color = !riskDown && trendFlat
                 ? new Color(0.65f, 0.68f, 0.74f)
                 : (trendUp ? RiseColor : FallColor);
+            bool eventHeavy = isWar || isDisaster || isFavorable;
+            sentimentChangeText.fontSize = eventHeavy ? 22f : 17f;
         }
 
         if (buyPriceBackground != null)
@@ -585,7 +587,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
             hqMoveButton.gameObject.SetActive(!isHqHome && !hqTravelBusy);
             var hqLbl = hqMoveButton.GetComponentInChildren<TextMeshProUGUI>(true);
             if (hqLbl != null)
-                hqLbl.text = "본영 이주";
+                hqLbl.text = "이주하기";
         }
 
         // 지분율: 주둔 상한(maxTroops)이 아니라 성 인구(유통/규모 지표) 대비 내 투입 병력 비율.
@@ -625,18 +627,21 @@ public class WorldMarketCastleCardView : MonoBehaviour
             {
                 roiText.text = "미투자";
                 roiText.color = PersonalGoldDim;
+                roiText.fontSize = 18f;
                 ResetRoiZoneTint();
             }
             else if (dm.TryGetCastleRoiSellBasis(castleId, out float roiSell))
             {
                 roiText.text = $"{(roiSell >= 0 ? "+" : "")}{roiSell:F1}%";
                 roiText.color = roiSell > 0.001f ? RiseColor : (roiSell < -0.001f ? FallColor : PersonalGoldDim);
+                roiText.fontSize = 26f;
                 ApplyRoiZoneTint(roiSell);
             }
             else
             {
                 roiText.text = "—";
                 roiText.color = PersonalGoldDim;
+                roiText.fontSize = 18f;
                 ResetRoiZoneTint();
             }
         }

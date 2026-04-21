@@ -15,11 +15,26 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     [Header("Top Bar")]
     [SerializeField] RectTransform topBarRoot;
     [SerializeField] TextMeshProUGUI userNameText;
+    [Tooltip("중앙: 현재 거점 위치(본영 성 이름 등)")]
+    [SerializeField] TextMeshProUGUI locationText;
     [SerializeField] TextMeshProUGUI totalAssetsText;
     [SerializeField] TextMeshProUGUI soldiersText;
     [Header("일일 유지비(정오)")]
     [SerializeField] TextMeshProUGUI maintenancePreviewText;
     [SerializeField] TextMeshProUGUI maintenanceCountdownText;
+
+    [Header("프로필 (좌측)")]
+    [Tooltip("장착 캐릭터 초상.")]
+    [SerializeField] Image userPortraitImage;
+    [SerializeField] Image titleBadgeBackground;
+    [SerializeField] TextMeshProUGUI titleBadgeText;
+    [SerializeField] Outline titleBadgeOutline;
+    [SerializeField] Outline avatarPortraitOutline;
+
+    [Header("우측: 행군 MP")]
+    [FormerlySerializedAs("foodText")]
+    [SerializeField] TextMeshProUGUI marchPointsText;
+    [SerializeField] Color marchPointsTextColor = Color.white;
 
     [Header("Bottom Tab Bar (5)")]
     [SerializeField] RectTransform bottomTabRoot;
@@ -34,19 +49,21 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     public RectTransform AssetsTarget => totalAssetsText != null ? totalAssetsText.rectTransform : null;
 
     [Header("자원 텍스트 색")]
-    [SerializeField] Color soldiersTextColor = Color.white;
-    [SerializeField] Color assetsPositiveColor = Color.white;
+    [SerializeField] Color soldiersTextColor = new Color(0.7f, 1f, 0.75f);
+    [SerializeField] Color assetsPositiveColor = new Color(0.96f, 0.88f, 0.35f);
     static readonly Color AssetsDebtColor = new Color(1f, 0f, 0f);
 
     [Header("탑바 자원 숫자 롤링")]
-    [Tooltip("금화·병사가 늘거나 줄 때 탑바 숫자가 보간되는 시간(초). 0이면 즉시 반영.")]
+    [Tooltip("금화·병사·MP가 변할 때 숫자 보간 시간(초). 0이면 즉시.")]
     [FormerlySerializedAs("topBarDecreaseDuration")]
     [SerializeField] float topBarResourceRollDuration = 0.28f;
 
     Tweener _assetsTween;
     Tweener _soldiersTween;
+    Tweener _mpTween;
     double _displayAssets;
     double _displaySoldiers;
+    int _displayMp;
 
     protected override void Awake()
     {
@@ -63,9 +80,13 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     {
         _assetsTween?.Kill();
         _soldiersTween?.Kill();
+        _mpTween?.Kill();
         var gm = GameManager.InstanceOrNull;
         if (gm != null)
+        {
             gm.OnGoldChanged -= OnGameManagerGoldChanged;
+            gm.OnMarchPointsChanged -= OnMarchPointsChangedHandler;
+        }
     }
 
     IEnumerator BindGameManagerTopBarSync()
@@ -76,15 +97,17 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         var gm = GameManager.InstanceOrNull;
         gm.OnGoldChanged -= OnGameManagerGoldChanged;
         gm.OnGoldChanged += OnGameManagerGoldChanged;
+        gm.OnMarchPointsChanged -= OnMarchPointsChangedHandler;
+        gm.OnMarchPointsChanged += OnMarchPointsChangedHandler;
         RefreshTopBarFromGameManager();
+        InitMarchPointsDisplayFromSave();
     }
 
-    void OnGameManagerGoldChanged(double _)
-    {
-        RefreshTopBarFromGameManager();
-    }
+    void OnGameManagerGoldChanged(double _) => RefreshTopBarFromGameManager();
 
-    /// <summary>GameManager 현재 값으로 상단 자원 숫자를 맞춥니다.</summary>
+    void OnMarchPointsChangedHandler(int v) => RollMarchPointsTo(v);
+
+    /// <summary>GameManager 현재 값으로 상단바를 맞춥니다.</summary>
     public void RefreshTopBarFromGameManager()
     {
         var gm = GameManager.InstanceOrNull;
@@ -93,12 +116,15 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         long soldiers = dm != null && dm.IsStateReady
             ? UserPortfolioManager.GetTotalOwnedSoldiers(dm)
             : gm.currentUser.soldierCount;
-        SetTopBarNumbers(gm.currentUser.userName, gm.currentGold, soldiers);
+        SetTopBarNumbers(gm.currentGold, soldiers);
+        RefreshLocationHud();
         RefreshMaintenanceHudFromEconomy();
     }
 
     void WireTabs()
     {
+        ResolveBottomTabButtonsIfMissing();
+
         if (homeButton != null) homeButton.onClick.AddListener(() => TabSelected?.Invoke("Home"));
         if (marketButton != null) marketButton.onClick.AddListener(() => TabSelected?.Invoke("Market"));
         if (portfolioButton != null) portfolioButton.onClick.AddListener(() => TabSelected?.Invoke("Portfolio"));
@@ -106,7 +132,19 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (ordersButton != null) ordersButton.onClick.AddListener(() => TabSelected?.Invoke("Orders"));
     }
 
-    /// <summary>다음 정산 예정액·카운트다운 텍스트 갱신.</summary>
+    void ResolveBottomTabButtonsIfMissing()
+    {
+        if (bottomTabRoot == null)
+            return;
+
+        if (homeButton == null) homeButton = bottomTabRoot.Find("HomeTabButton")?.GetComponent<Button>();
+        if (marketButton == null) marketButton = bottomTabRoot.Find("MarketTabButton")?.GetComponent<Button>();
+        if (portfolioButton == null) portfolioButton = bottomTabRoot.Find("PortfolioTabButton")?.GetComponent<Button>();
+        if (newsButton == null) newsButton = bottomTabRoot.Find("NewsTabButton")?.GetComponent<Button>();
+        if (ordersButton == null) ordersButton = bottomTabRoot.Find("OrdersTabButton")?.GetComponent<Button>();
+    }
+
+    /// <summary>다음 정산 예정액·카운트다운 (병참 할인 반영은 <see cref="EconomyManager.ComputeNextSettlementGold"/>).</summary>
     public void RefreshMaintenanceHudFromEconomy()
     {
         double amt = EconomyManager.InstanceOrNull != null
@@ -118,9 +156,28 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
             maintenanceCountdownText.text = $"정산까지: {EconomyManager.FormatCountdownUntilNextLocalNoon()}";
     }
 
+    void RefreshLocationHud()
+    {
+        if (locationText == null) return;
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady)
+        {
+            locationText.text = "—";
+            return;
+        }
+        string id = dm.HomeCastleId?.Trim();
+        if (string.IsNullOrEmpty(id))
+        {
+            locationText.text = "본영 미정";
+            return;
+        }
+        string name = dm.GetCastleDisplayName(id);
+        locationText.text = string.IsNullOrWhiteSpace(name) ? id : name;
+    }
+
     public void SetTopBar(string userName, string totalAssets, string soldiersLine)
     {
-        if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
+        if (userNameText != null) userNameText.text = string.IsNullOrEmpty(userName) ? "—" : userName;
         if (totalAssetsText != null)
         {
             totalAssetsText.text = totalAssets;
@@ -134,10 +191,62 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         }
     }
 
-    public void SetTopBarNumbers(string userName, double totalAssets, long soldiers)
+    public void SetTopBarNumbers(double totalAssets, long soldiers)
     {
-        if (userNameText != null) userNameText.text = FormatUserNameWithHomeCastle(userName);
+        RefreshProfileHud();
+        ApplyTopBarResourceNumbers(totalAssets, soldiers);
+    }
 
+    /// <summary>세이브 로드 직후 등 MP 트윈 없이 표시값만 맞출 때 사용.</summary>
+    public void InitMarchPointsDisplayFromSave()
+    {
+        _mpTween?.Kill();
+        var u = UserManager.Current;
+        if (marchPointsText == null || u == null) return;
+        _displayMp = u.marchPoints;
+        ApplyMarchPointsText(_displayMp);
+    }
+
+    /// <summary>MP 숫자를 DOTween으로 롤링합니다. <see cref="GameManager.AddMarchPoints"/>에서 호출됩니다.</summary>
+    public void RollMarchPointsTo(int targetMp)
+    {
+        if (marchPointsText == null) return;
+        _mpTween?.Kill();
+        int start = _displayMp;
+        if (Mathf.Abs(start - targetMp) < 1)
+        {
+            _displayMp = targetMp;
+            ApplyMarchPointsText(targetMp);
+            return;
+        }
+        if (topBarResourceRollDuration <= 0f)
+        {
+            _displayMp = targetMp;
+            ApplyMarchPointsText(targetMp);
+            return;
+        }
+        _mpTween = DOVirtual.Float(0f, 1f, topBarResourceRollDuration, u =>
+        {
+            float uu = Mathf.Clamp01(u);
+            int v = Mathf.RoundToInt(Mathf.Lerp(start, targetMp, uu));
+            _displayMp = v;
+            ApplyMarchPointsText(v);
+        }).SetEase(Ease.OutCubic).SetUpdate(true).OnComplete(() =>
+        {
+            _displayMp = targetMp;
+            ApplyMarchPointsText(targetMp);
+        });
+    }
+
+    void ApplyMarchPointsText(int mp)
+    {
+        if (marchPointsText == null) return;
+        marchPointsText.text = $"{FormatCompactInt(mp)} MP";
+        marchPointsText.color = marchPointsTextColor;
+    }
+
+    void ApplyTopBarResourceNumbers(double totalAssets, long soldiers)
+    {
         ApplyTopBarField(ref _assetsTween, () => _displayAssets, v => _displayAssets = v, totalAssets, v =>
         {
             if (totalAssetsText != null)
@@ -155,6 +264,58 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
                 soldiersText.color = soldiersTextColor;
             }
         });
+    }
+
+    /// <summary><see cref="UserManager"/>·<see cref="UserData"/> 기준으로 프로필을 갱신합니다.</summary>
+    public void RefreshProfileHud()
+    {
+        var u = UserManager.Current;
+        if (u == null) return;
+
+        if (userNameText != null)
+            userNameText.text = UserManager.GetNickname();
+
+        string titleId = UserManager.GetRankTitleId();
+        string titleDisp = UserManager.GetRankTitleDisplay();
+        int tier = PlayerTitleVisuals.ResolveTier(titleId, titleDisp);
+        var st = PlayerTitleVisuals.GetStyle(tier);
+
+        if (titleBadgeText != null)
+        {
+            titleBadgeText.text = titleDisp;
+            titleBadgeText.color = st.BadgeText;
+        }
+
+        if (titleBadgeBackground != null)
+            titleBadgeBackground.color = st.BadgeBackground;
+
+        ApplyOutlineStyle(titleBadgeOutline, st.BadgeOutline, st.BadgeOutlineWidth);
+        ApplyOutlineStyle(avatarPortraitOutline, st.AvatarOutline, st.AvatarOutlineWidth);
+
+        if (userPortraitImage != null)
+        {
+            var sp = UserPortraitLoader.GetPortrait(UserManager.GetEquippedCharacterId());
+            userPortraitImage.sprite = sp;
+            userPortraitImage.preserveAspect = true;
+            userPortraitImage.color = sp != null ? Color.white : new Color(0.25f, 0.28f, 0.32f, 1f);
+        }
+    }
+
+    static void ApplyOutlineStyle(Outline outline, Color color, float width)
+    {
+        if (outline == null) return;
+        bool on = width > 0.05f;
+        outline.enabled = on;
+        if (!on) return;
+        outline.effectColor = color;
+        float w = Mathf.Max(0.5f, width);
+        outline.effectDistance = new Vector2(w * 0.65f, -w * 0.65f);
+    }
+
+    static string FormatCompactInt(int value)
+    {
+        double v = value;
+        return FormatCompact(v);
     }
 
     void ApplyTopBarField(ref Tweener tweenRef, Func<double> getDisplay, Action<double> setDisplay, double target,
@@ -193,18 +354,6 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
         setDisplay(target);
         applyFormatted(target);
-    }
-
-    static string FormatUserNameWithHomeCastle(string userName)
-    {
-        string n = userName ?? "";
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null) return n;
-        string hid = dm.HomeCastleId?.Trim();
-        if (string.IsNullOrEmpty(hid)) return n;
-        string cn = dm.GetCastleDisplayName(hid);
-        if (string.IsNullOrWhiteSpace(cn)) cn = hid;
-        return $"{n} · 본영 {cn}";
     }
 
     static string FormatCompact(double value)

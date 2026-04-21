@@ -104,7 +104,7 @@ MonoBehaviour:
     - 40031
     - 40031
     - 40031
-    - 40031
+    - 39959
     - 39959
     historySentiment7Day:
     - 99.9466
@@ -112,7 +112,7 @@ MonoBehaviour:
     - 99.9466
     - 99.9466
     - 99.9466
-    - 99.9466
+    - 99.563576
     - 99.563576
     buyPricePrevDayClose: 24000.24
   - castleId: C04
@@ -508,7 +508,7 @@ MonoBehaviour:
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 75854
-    - 75854
+    - 76022
     - 76022
     - 76022
     - 76022
@@ -516,7 +516,7 @@ MonoBehaviour:
     - 76022
     historySentiment7Day:
     - 105.01976
-    - 105.01976
+    - 106.44477
     - 106.44477
     - 106.44477
     - 106.44477
@@ -677,7 +677,7 @@ MonoBehaviour:
     constantK: 16500000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14940
+    - 14926
     - 14926
     - 14926
     - 14926
@@ -685,7 +685,7 @@ MonoBehaviour:
     - 14926
     - 14926
     historySentiment7Day:
-    - 99.42213
+    - 97.12818
     - 97.12818
     - 97.12818
     - 97.12818
@@ -881,7 +881,7 @@ MonoBehaviour:
     constantK: 240000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 40031
+    - 39966
     - 39966
     - 39966
     - 39966
@@ -889,7 +889,7 @@ MonoBehaviour:
     - 39966
     - 39966
     historySentiment7Day:
-    - 100.17036
+    - 102.660904
     - 102.660904
     - 102.660904
     - 102.660904
@@ -1189,7 +1189,7 @@ MonoBehaviour:
     historyPopulation7Day:
     - 39417
     - 39417
-    - 39417
+    - 39382
     - 39382
     - 39382
     - 39382
@@ -1197,7 +1197,7 @@ MonoBehaviour:
     historySentiment7Day:
     - 99.23341
     - 99.23341
-    - 99.23341
+    - 100.01073
     - 100.01073
     - 100.01073
     - 100.01073

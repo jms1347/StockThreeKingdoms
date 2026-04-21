@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
@@ -17,10 +19,7 @@ public class HomeUIController : MonoBehaviour
     [Header("자원 표시")]
     public TextMeshProUGUI goldText;
 
-    [Tooltip("레거시 식량 필드 — 런타임에서 비활성화합니다.")]
-    public TextMeshProUGUI grainText;
-
-    [Tooltip("천하 거점에 배치한 병력 합계(본영에서는 모집 불가).")]
+    [Tooltip("천하 거점에 배치한 병력 합계(본영 표시).")]
     public TextMeshProUGUI farmWorkersText;
 
     [Header("업그레이드 UI - 노동력")]
@@ -34,21 +33,14 @@ public class HomeUIController : MonoBehaviour
     public Button marketUpgradeButton;
     public Button collectMarketButton;
 
-    [Header("업그레이드 UI - 농장")]
-    public TextMeshProUGUI farmLabelText;
-    public TextMeshProUGUI farmAccumulateText;
-    public Slider farmAccumulateSlider;
-    public Button farmUpgradeButton;
-    public Button collectFarmButton;
+    [Header("업그레이드 UI - 병참 (유지비 할인)")]
+    [FormerlySerializedAs("farmLabelText")]
+    public TextMeshProUGUI logisticsLabelText;
+    [FormerlySerializedAs("farmUpgradeButton")]
+    public Button logisticsUpgradeButton;
 
     [Header("보급 UI")]
     public TextMeshProUGUI supplyLabelText;
-
-    [Tooltip("구버전 병사 모집 버튼 슬롯. 런타임에서 숨깁니다.")]
-    public Button hireFarmWorkerButton;
-
-    [Tooltip("레거시 식량 구매 버튼 — 런타임에서 비활성화합니다.")]
-    public Button buyGrainButton;
 
     [Header("대문 터치")]
     public Button gateButton;
@@ -92,11 +84,6 @@ public class HomeUIController : MonoBehaviour
 
         if (gateButton == null)
             gateButton = transform.Find("GateButton")?.GetComponent<Button>();
-
-        if (grainText != null)
-            grainText.gameObject.SetActive(false);
-        if (buyGrainButton != null)
-            buyGrainButton.gameObject.SetActive(false);
 
         FixHomeCanvasScaleIfBroken();
         EnsureUiInputInfrastructure();
@@ -190,7 +177,7 @@ public class HomeUIController : MonoBehaviour
         RefreshStrategicUpgradeButtons();
     }
 
-    System.Collections.IEnumerator UpdateAccumulateUICoroutine()
+    IEnumerator UpdateAccumulateUICoroutine()
     {
         while (true)
         {
@@ -208,18 +195,6 @@ public class HomeUIController : MonoBehaviour
 
             if (marketAccumulateSlider != null && mMax > 0)
                 marketAccumulateSlider.value = (float)Math.Min(1.0, mAcc / mMax);
-
-            double fAcc = _controller.CurrentFarmAccumulated;
-            double fMax = _controller.GetFarmMaxCapacity();
-            if (collectionManager != null && collectionManager.IsFlyBusy) fAcc = 0;
-            if (farmAccumulateText != null)
-            {
-                farmAccumulateText.text = fMax > 0 ? $"{fAcc:F0} / {fMax:F0}" : "0 / 0";
-                farmAccumulateText.color = (fMax > 0 && fAcc >= fMax) ? Color.red : Color.white;
-            }
-
-            if (farmAccumulateSlider != null && fMax > 0)
-                farmAccumulateSlider.value = (float)Math.Min(1.0, fAcc / fMax);
 
             RefreshPedometerUI();
         }
@@ -252,11 +227,10 @@ public class HomeUIController : MonoBehaviour
             UpdateMarketUI();
             UpdateSupplyUI();
         });
-        WireHoldRepeat(farmUpgradeButton, () =>
+        WireHoldRepeat(logisticsUpgradeButton, () =>
         {
-            _controller?.UpgradeFarm();
-            DataManager.InstanceOrNull?.RefreshHomeCastleMaxGarrisonFromUserBuildings();
-            UpdateFarmUI();
+            _controller?.UpgradeLogistics();
+            UpdateLogisticsUI();
             UpdateSupplyUI();
         });
 
@@ -267,11 +241,6 @@ public class HomeUIController : MonoBehaviour
 
         if (collectMarketButton != null)
             collectMarketButton.onClick.AddListener(CollectWarehouse);
-        if (collectFarmButton != null)
-            collectFarmButton.onClick.AddListener(CollectWarehouse);
-
-        if (hireFarmWorkerButton != null)
-            hireFarmWorkerButton.gameObject.SetActive(false);
 
         if (stepRewardButtons != null && _controller != null)
         {
@@ -308,7 +277,7 @@ public class HomeUIController : MonoBehaviour
         PushGlobalTopBar();
         UpdateLaborUI();
         UpdateMarketUI();
-        UpdateFarmUI();
+        UpdateLogisticsUI();
         UpdateSupplyUI();
         RefreshStrategicUpgradeButtons();
         RefreshPedometerUI();
@@ -380,11 +349,11 @@ public class HomeUIController : MonoBehaviour
 
             if (i < stepRewardLabels.Length && stepRewardLabels[i] != null)
             {
-                int rw = i < HomeController.StepRewardGold.Length ? HomeController.StepRewardGold[i] : 0;
+                int rw = i < HomeController.StepRewardMarchPoints.Length ? HomeController.StepRewardMarchPoints[i] : 0;
                 string state = claimed ? "완료" : canClaim ? "수령" : "";
                 stepRewardLabels[i].text = state.Length > 0
-                    ? $"{HomeController.StepMilestones[i]:N0}\n+{rw} G\n{state}"
-                    : $"{HomeController.StepMilestones[i]:N0}\n+{rw} G";
+                    ? $"{HomeController.StepMilestones[i]:N0}\n+{rw} MP\n{state}"
+                    : $"{HomeController.StepMilestones[i]:N0}\n+{rw} MP";
             }
         }
     }
@@ -403,11 +372,10 @@ public class HomeUIController : MonoBehaviour
         var gui = GlobalUIManager.InstanceOrNull;
         if (gm?.currentUser == null || gui == null) return;
 
-        string userName = gm.currentUser.userName;
         long soldiers = DataManager.InstanceOrNull != null && DataManager.InstanceOrNull.IsStateReady
             ? UserPortfolioManager.GetTotalOwnedSoldiers(DataManager.InstanceOrNull)
             : gm.currentUser.soldierCount;
-        gui.SetTopBarNumbers(userName, gm.currentGold, soldiers);
+        gui.SetTopBarNumbers(gm.currentGold, soldiers);
     }
 
     void RefreshStrategicUpgradeButtons()
@@ -416,7 +384,7 @@ public class HomeUIController : MonoBehaviour
         bool allow = gm != null && gm.CanSpendStrategicPurchases;
         if (laborUpgradeButton != null) laborUpgradeButton.interactable = allow;
         if (marketUpgradeButton != null) marketUpgradeButton.interactable = allow;
-        if (farmUpgradeButton != null) farmUpgradeButton.interactable = allow;
+        if (logisticsUpgradeButton != null) logisticsUpgradeButton.interactable = allow;
     }
 
     void UpdateLaborUI()
@@ -451,19 +419,19 @@ public class HomeUIController : MonoBehaviour
             $"비용: {cost:F0} Gold";
     }
 
-    void UpdateFarmUI()
+    void UpdateLogisticsUI()
     {
         var gm = GameManager.InstanceOrNull;
-        if (farmLabelText == null || _controller == null || gm == null) return;
+        if (logisticsLabelText == null || _controller == null || gm == null) return;
 
         int lv = gm.currentUser?.farmLevel ?? 0;
-        double current = lv <= 0 ? 0 : gm.GetAutoIncomeValue(lv);
-        double next = lv <= 0 ? 1 : gm.GetAutoIncomeValue(lv + 1);
-        double cost = HomeController.UpgradeCost(HomeController.FarmBaseCost, lv);
+        double discNow = Math.Min(0.5d, lv * 0.02d) * 100d;
+        double discNext = Math.Min(0.5d, (lv + 1) * 0.02d) * 100d;
+        double cost = HomeController.UpgradeCost(HomeController.LogisticsBaseCost, lv);
 
-        farmLabelText.text =
-            $"초당 금화 자동 생산 (농장)\n(Level {lv})\n" +
-            $"현재: +{current:F0} Gold/Sec -> 다음: +{next:F0} Gold/Sec\n" +
+        logisticsLabelText.text =
+            $"병참 — 보유 병사 일일 유지비 감소\n(Level {lv})\n" +
+            $"현재 할인: {discNow:F0}% -> 다음: {discNext:F0}%\n" +
             $"비용: {cost:F0} Gold";
     }
 

@@ -29,6 +29,49 @@ public class GameHubTabController : MonoBehaviour
 
     GlobalUIManager _gui;
 
+    void Awake()
+    {
+        EnsureTabPanelReferencesFromHierarchy();
+    }
+
+    /// <summary>
+    /// 씬에서 직렬화 참조가 빠졌을 때 TabContent 아래 프리팹 루트를 자동으로 찾습니다.
+    /// (예: GameHub_HomeCanvas, GameHub_WorldCanvas …)
+    /// </summary>
+    void EnsureTabPanelReferencesFromHierarchy()
+    {
+        Transform tabContent = transform.Find("TabContent");
+        if (tabContent == null)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                var c = transform.GetChild(i);
+                if (c != null && c.name == "TabContent")
+                {
+                    tabContent = c;
+                    break;
+                }
+            }
+        }
+
+        if (tabContent == null)
+            return;
+
+        TryAssignTabPanel(ref homeTerritoryPanel, tabContent, "GameHub_HomeCanvas");
+        TryAssignTabPanel(ref worldMarketPanel, tabContent, "GameHub_WorldCanvas");
+        TryAssignTabPanel(ref newsPanel, tabContent, "GameHub_NewsCanvas");
+        TryAssignTabPanel(ref portfolioPanel, tabContent, "GameHub_PortfolioCanvas");
+        TryAssignTabPanel(ref ordersPanel, tabContent, "GameHub_OrdersCanvas");
+    }
+
+    static void TryAssignTabPanel(ref GameObject slot, Transform parent, string childName)
+    {
+        if (slot != null || parent == null) return;
+        var t = parent.Find(childName);
+        if (t != null)
+            slot = t.gameObject;
+    }
+
     void Start()
     {
         FixHubRootCanvasScales();
@@ -217,9 +260,6 @@ public class GameHubTabController : MonoBehaviour
         long soldiers = dm != null && dm.IsStateReady
             ? UserPortfolioManager.GetTotalOwnedSoldiers(dm)
             : gm.currentUser.soldierCount;
-        gui.SetTopBarNumbers(
-            gm.currentUser.userName,
-            gm.currentGold,
-            soldiers);
+        gui.SetTopBarNumbers(gm.currentGold, soldiers);
     }
 }
