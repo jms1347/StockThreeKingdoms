@@ -1,0 +1,735 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f32a371581f0049947a1995210a1c9, type: 3}
+  m_Name: MockCastleData
+  m_EditorClassIdentifier: Assembly-CSharp::CastleData
+  rows:
+  - castleId: 1001
+    castleName: "\uB099\uC591"
+    countryId: 0
+    governorName: "\uC870\uBE44"
+    army: 1234
+    population: 95034
+    publicSentiment: 79
+    castleValue: 4034
+    mapPosition: {x: 0.7640472, y: 0.0963615}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1002
+    castleName: "\uD5C8\uCC3D"
+    countryId: 0
+    governorName: "\uD654\uD754"
+    army: 690
+    population: 60890
+    publicSentiment: 60
+    castleValue: 7890
+    mapPosition: {x: 3.0024705, y: -0.55427605}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1003
+    castleName: "\uC5C5"
+    countryId: 0
+    governorName: "\uB9CC\uCD1D"
+    army: 1389
+    population: 49589
+    publicSentiment: 84
+    castleValue: 4589
+    mapPosition: {x: 5.2235947, y: -0.35403204}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1004
+    castleName: "\uC9C4\uB958"
+    countryId: 0
+    governorName: "\uC804\uC608"
+    army: 794
+    population: 100594
+    publicSentiment: 89
+    castleValue: 3594
+    mapPosition: {x: 8.072577, y: -0.3709041}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1005
+    castleName: "\uC870\uAD70"
+    countryId: 0
+    governorName: "\uC7A5\uB8CC"
+    army: 995
+    population: 103195
+    publicSentiment: 65
+    castleValue: 10195
+    mapPosition: {x: 9.661137, y: -0.71287286}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1006
+    castleName: "\uC774\uB989"
+    countryId: 0
+    governorName: "\uC8FC\uD658"
+    army: 1036
+    population: 45636
+    publicSentiment: 31
+    castleValue: 10636
+    mapPosition: {x: 0.7964833, y: 1.5336192}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1007
+    castleName: "\uD3C9\uC6D0"
+    countryId: 0
+    governorName: "\uC7A5\uAC70"
+    army: 297
+    population: 100097
+    publicSentiment: 42
+    castleValue: 11097
+    mapPosition: {x: 2.818158, y: 1.7696495}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1008
+    castleName: "\uBD81\uD574"
+    countryId: 0
+    governorName: "\uACF5\uC735"
+    army: 968
+    population: 58768
+    publicSentiment: 38
+    castleValue: 13768
+    mapPosition: {x: 5.8573046, y: 1.1386367}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1009
+    castleName: "\uC11C\uC8FC"
+    countryId: 0
+    governorName: "\uC7A5\uAC01"
+    army: 256
+    population: 103656
+    publicSentiment: 76
+    castleValue: 12656
+    mapPosition: {x: 7.420169, y: 1.4526335}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1010
+    castleName: "\uD0DC\uC6D0"
+    countryId: 0
+    governorName: "\uACE0\uC720"
+    army: 805
+    population: 112605
+    publicSentiment: 25
+    castleValue: 7605
+    mapPosition: {x: 9.772054, y: 1.2092328}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1011
+    castleName: "\uC0C1\uB2F9"
+    countryId: 0
+    governorName: "\uD558\uC9C4"
+    army: 1140
+    population: 111740
+    publicSentiment: 60
+    castleValue: 14740
+    mapPosition: {x: 1.856568, y: 3.8350782}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1012
+    castleName: "\uC9C4\uC591"
+    countryId: 0
+    governorName: "\uC591\uBD80"
+    army: 321
+    population: 48521
+    publicSentiment: 66
+    castleValue: 5521
+    mapPosition: {x: 2.767532, y: 3.076282}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1013
+    castleName: "\uD558\uB0B4"
+    countryId: 0
+    governorName: "\uC0AC\uB9C8\uC758"
+    army: 1332
+    population: 87932
+    publicSentiment: 27
+    castleValue: 12932
+    mapPosition: {x: 4.92442, y: 3.7119126}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1014
+    castleName: "\uD64D\uB18D"
+    countryId: 0
+    governorName: "\uC885\uC694"
+    army: 1395
+    population: 71195
+    publicSentiment: 90
+    castleValue: 4195
+    mapPosition: {x: 8.145336, y: 3.7550695}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1015
+    castleName: "\uAD00\uB3C4"
+    countryId: 0
+    governorName: "\uD5C8\uC720"
+    army: 1133
+    population: 80533
+    publicSentiment: 53
+    castleValue: 7533
+    mapPosition: {x: 9.884117, y: 3.4341464}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1016
+    castleName: "\uC5F0\uAD50"
+    countryId: 0
+    governorName: "\uC804\uC6B1"
+    army: 854
+    population: 58654
+    publicSentiment: 74
+    castleValue: 9654
+    mapPosition: {x: 1.880736, y: 5.2668304}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1017
+    castleName: "\uD3EC\uD310"
+    countryId: 0
+    governorName: "\uC655\uB989"
+    army: 893
+    population: 45493
+    publicSentiment: 38
+    castleValue: 4493
+    mapPosition: {x: 3.9372633, y: 5.5747}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1018
+    castleName: "\uD558\uAC70"
+    countryId: 0
+    governorName: "\uD558\uD6C4\uB3C8"
+    army: 846
+    population: 86246
+    publicSentiment: 66
+    castleValue: 13246
+    mapPosition: {x: 5.3060203, y: 4.911364}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1019
+    castleName: "\uC218\uCD98"
+    countryId: 0
+    governorName: "\uD558\uD6C4\uC5F0"
+    army: 589
+    population: 125589
+    publicSentiment: 34
+    castleValue: 16589
+    mapPosition: {x: 7.8072386, y: 5.5073895}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1020
+    castleName: "\uC591\uC8FC"
+    countryId: 0
+    governorName: "\uC7A5\uD760"
+    army: 1104
+    population: 60104
+    publicSentiment: 24
+    castleValue: 11104
+    mapPosition: {x: 9.750813, y: 4.921043}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1021
+    castleName: "\uC131\uB3C4"
+    countryId: 1
+    governorName: "\uC81C\uAC08\uB7C9"
+    army: 928
+    population: 92328
+    publicSentiment: 73
+    castleValue: 5328
+    mapPosition: {x: -9.536934, y: -5.729643}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1022
+    castleName: "\uD55C\uC911"
+    countryId: 1
+    governorName: "\uC704\uC5F0"
+    army: 1096
+    population: 78096
+    publicSentiment: 91
+    castleValue: 5096
+    mapPosition: {x: -7.03953, y: -4.8018246}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1023
+    castleName: "\uC790\uB3D9"
+    countryId: 1
+    governorName: "\uAD00\uC6B0"
+    army: 1032
+    population: 108032
+    publicSentiment: 27
+    castleValue: 5032
+    mapPosition: {x: -5.484606, y: -5.3642163}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1024
+    castleName: "\uAC74\uB155"
+    countryId: 1
+    governorName: "\uC7A5\uC758"
+    army: 1041
+    population: 111641
+    publicSentiment: 36
+    castleValue: 12641
+    mapPosition: {x: -2.9914865, y: -5.130143}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1025
+    castleName: "\uC601\uC548"
+    countryId: 1
+    governorName: "\uC774\uC5C4"
+    army: 430
+    population: 102630
+    publicSentiment: 25
+    castleValue: 9630
+    mapPosition: {x: -1.7887322, y: -4.560304}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1026
+    castleName: "\uC735\uC911"
+    countryId: 1
+    governorName: "\uB9C8\uC18D"
+    army: 452
+    population: 54652
+    publicSentiment: 47
+    castleValue: 7652
+    mapPosition: {x: -9.36633, y: -3.105746}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1027
+    castleName: "\uC808\uAD00"
+    countryId: 1
+    governorName: "\uC655\uD3C9"
+    army: 285
+    population: 106085
+    publicSentiment: 30
+    castleValue: 13085
+    mapPosition: {x: -8.032158, y: -3.06851}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1028
+    castleName: "\uB0A8\uC911"
+    countryId: 1
+    governorName: "\uC8FC\uD658"
+    army: 1228
+    population: 65028
+    publicSentiment: 73
+    castleValue: 10028
+    mapPosition: {x: -5.2665, y: -1.9572079}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1029
+    castleName: "\uBB34\uC591"
+    countryId: 1
+    governorName: "\uB4F1\uC9C0"
+    army: 553
+    population: 48753
+    publicSentiment: 73
+    castleValue: 13753
+    mapPosition: {x: -4.0486264, y: -2.342023}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1030
+    castleName: "\uC0C1\uC6B4"
+    countryId: 1
+    governorName: "\uB9C8\uB300"
+    army: 1183
+    population: 73383
+    publicSentiment: 28
+    castleValue: 8383
+    mapPosition: {x: -1.2852362, y: -1.8609083}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1031
+    castleName: "\uAC15\uC8FC"
+    countryId: 1
+    governorName: "\uAD00\uD765"
+    army: 958
+    population: 47958
+    publicSentiment: 28
+    castleValue: 14958
+    mapPosition: {x: -10.30755, y: 0.7500204}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1032
+    castleName: "\uBC88\uAD70"
+    countryId: 1
+    governorName: "\uC7A5\uB0A8"
+    army: 508
+    population: 115908
+    publicSentiment: 28
+    castleValue: 14908
+    mapPosition: {x: -7.271118, y: -0.008310082}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1033
+    castleName: "\uC6B4\uB0A8"
+    countryId: 1
+    governorName: "\uC774\uD68C"
+    army: 528
+    population: 105128
+    publicSentiment: 48
+    castleValue: 10128
+    mapPosition: {x: -5.157132, y: 0.37650484}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1034
+    castleName: "\uAC74\uC704"
+    countryId: 1
+    governorName: "\uAD6C\uB825"
+    army: 260
+    population: 96460
+    publicSentiment: 80
+    castleValue: 13460
+    mapPosition: {x: -3.3754084, y: 0.19841403}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1035
+    castleName: "\uAC15\uC591"
+    countryId: 1
+    governorName: "\uC870\uC6B4"
+    army: 433
+    population: 105033
+    publicSentiment: 28
+    castleValue: 8033
+    mapPosition: {x: -0.7824963, y: -0.0074114646}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1036
+    castleName: "\uBC31\uC81C"
+    countryId: 1
+    governorName: "\uD669\uCDA9"
+    army: 514
+    population: 63114
+    publicSentiment: 34
+    castleValue: 14114
+    mapPosition: {x: -9.541092, y: 2.4409628}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1037
+    castleName: "\uC74C\uD3C9"
+    countryId: 1
+    governorName: "\uBC95\uC815"
+    army: 652
+    population: 113652
+    publicSentiment: 22
+    castleValue: 12652
+    mapPosition: {x: -7.25814, y: 2.2524712}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1038
+    castleName: "\uBBF8\uB450"
+    countryId: 1
+    governorName: "\uC7A5\uBE44"
+    army: 1076
+    population: 78076
+    publicSentiment: 71
+    castleValue: 13076
+    mapPosition: {x: -5.4602876, y: 2.8320694}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1039
+    castleName: "\uCE58\uB3C4"
+    countryId: 1
+    governorName: "\uC720\uC120"
+    army: 703
+    population: 87303
+    publicSentiment: 73
+    castleValue: 16303
+    mapPosition: {x: -3.3776765, y: 2.511454}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1040
+    castleName: "\uB0A8\uD5A5"
+    countryId: 1
+    governorName: "\uBE44\uC758"
+    army: 1087
+    population: 86487
+    publicSentiment: 82
+    castleValue: 3487
+    mapPosition: {x: -1.715148, y: 2.4059098}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1041
+    castleName: "\uAC74\uC5C5"
+    countryId: 2
+    governorName: "\uC721\u900A"
+    army: 667
+    population: 44067
+    publicSentiment: 37
+    castleValue: 11067
+    mapPosition: {x: -0.03980399, y: -5.975983}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1042
+    castleName: "\uD68C\uACC4"
+    countryId: 2
+    governorName: "\uC8FC\uC5F0"
+    army: 211
+    population: 67611
+    publicSentiment: 31
+    castleValue: 14611
+    mapPosition: {x: 3.3907, y: -5.3864}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1043
+    castleName: "\uC624\uAD70"
+    countryId: 2
+    governorName: "\uC190\uAD8C"
+    army: 1103
+    population: 103303
+    publicSentiment: 23
+    castleValue: 8303
+    mapPosition: {x: 4.698116, y: -6.1677117}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1044
+    castleName: "\uC2E0\uB3C4"
+    countryId: 2
+    governorName: "\uC721\uAE30"
+    army: 1122
+    population: 85322
+    publicSentiment: 42
+    castleValue: 14322
+    mapPosition: {x: 6.8351517, y: -5.5801377}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1045
+    castleName: "\uC7A5\uC0AC"
+    countryId: 2
+    governorName: "\uD3EC\uB95C"
+    army: 1210
+    population: 63810
+    publicSentiment: 55
+    castleValue: 4810
+    mapPosition: {x: 9.518007, y: -6.13133}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1046
+    castleName: "\uACFC\uC5C5"
+    countryId: 2
+    governorName: "\uC5EC\uBABD"
+    army: 1211
+    population: 116611
+    publicSentiment: 56
+    castleValue: 13611
+    mapPosition: {x: 0.87112796, y: -2.976919}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1047
+    castleName: "\uACC4\uC591"
+    countryId: 2
+    governorName: "\uD0DC\uC0AC\uC790"
+    army: 938
+    population: 86338
+    publicSentiment: 83
+    castleValue: 7338
+    mapPosition: {x: 2.4071681, y: -2.9645312}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1048
+    castleName: "\uC5EC\uAC15"
+    countryId: 2
+    governorName: "\uC190\uC815"
+    army: 1013
+    population: 90013
+    publicSentiment: 83
+    castleValue: 5013
+    mapPosition: {x: 5.045936, y: -3.2464328}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1049
+    castleName: "\uC2DC\uC791"
+    countryId: 2
+    governorName: "\uC8FC\uCE58"
+    army: 547
+    population: 124347
+    publicSentiment: 67
+    castleValue: 5347
+    mapPosition: {x: 7.496208, y: -2.8098538}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1050
+    castleName: "\uADFC\uD574"
+    countryId: 2
+    governorName: "\uC804\uC885"
+    army: 237
+    population: 72437
+    publicSentiment: 57
+    castleValue: 11437
+    mapPosition: {x: 9.996903, y: -3.1274674}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1051
+    castleName: "\uAC15\uB3C4"
+    countryId: 2
+    governorName: "\uC721\uD56D"
+    army: 808
+    population: 51408
+    publicSentiment: 28
+    castleValue: 10408
+    mapPosition: {x: 0.50892, y: -0.6404239}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1052
+    castleName: "\uBB34\uB989"
+    countryId: 2
+    governorName: "\uBC18\uC7A5"
+    army: 574
+    population: 87174
+    publicSentiment: 94
+    castleValue: 12174
+    mapPosition: {x: 2.579296, y: -0.9080406}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1053
+    castleName: "\uD569\uBE44"
+    countryId: 2
+    governorName: "\uC7A5\uC18C"
+    army: 976
+    population: 94776
+    publicSentiment: 46
+    castleValue: 3776
+    mapPosition: {x: 5.226644, y: -0.92344195}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1054
+    castleName: "\uC5EC\uC694"
+    countryId: 2
+    governorName: "\uC815\uBD09"
+    army: 460
+    population: 79860
+    publicSentiment: 55
+    castleValue: 4860
+    mapPosition: {x: 6.85416, y: -1.3109167}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1055
+    castleName: "\uB3D9\uD0C1"
+    countryId: 2
+    governorName: "\uD669\uAC1C"
+    army: 860
+    population: 113860
+    publicSentiment: 80
+    castleValue: 12860
+    mapPosition: {x: 9.26536, y: -0.6960009}
+    grade: 2
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1056
+    castleName: "\uC784\uD574"
+    countryId: 2
+    governorName: "\uACE0\uB2F9"
+    army: 910
+    population: 53910
+    publicSentiment: 55
+    castleValue: 6910
+    mapPosition: {x: 1.071504, y: 1.0771371}
+    grade: 3
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1057
+    castleName: "\uC601\uAC00"
+    countryId: 2
+    governorName: "\uC0AC\uB9C8"
+    army: 786
+    population: 129386
+    publicSentiment: 81
+    castleValue: 8386
+    mapPosition: {x: 2.992984, y: 1.6581266}
+    grade: 4
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1058
+    castleName: "\uC548\uACE0"
+    countryId: 2
+    governorName: "\uBCF4\uC5F0\uC0AC"
+    army: 504
+    population: 73904
+    publicSentiment: 24
+    castleValue: 14904
+    mapPosition: {x: 4.552124, y: 1.0322741}
+    grade: 5
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1059
+    castleName: "\uAD50\uC9C0"
+    countryId: 2
+    governorName: "\uC0AC\uC0AC"
+    army: 602
+    population: 82402
+    publicSentiment: 47
+    castleValue: 11402
+    mapPosition: {x: 7.1295123, y: 1.7902611}
+    grade: 0
+    masterId: 
+    adjacentIdsRaw: 
+  - castleId: 1060
+    castleName: "\uD3C9\uB0A8"
+    countryId: 2
+    governorName: "\uC815\uC2E0"
+    army: 878
+    population: 40678
+    publicSentiment: 23
+    castleValue: 9678
+    mapPosition: {x: 9.16174, y: 1.4717548}
+    grade: 1
+    masterId: 
+    adjacentIdsRaw: 
