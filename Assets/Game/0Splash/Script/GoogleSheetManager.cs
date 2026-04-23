@@ -239,13 +239,14 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
 
     static Faction ParseFaction(string raw)
     {
-        if (string.IsNullOrWhiteSpace(raw)) return Faction.NONE;
+        if (string.IsNullOrWhiteSpace(raw))
+            return Faction.OTHERS;
         raw = raw.Trim();
         if (int.TryParse(raw, out int n) && Enum.IsDefined(typeof(Faction), n))
-            return (Faction)n;
+            return (Faction)n == Faction.NONE ? Faction.OTHERS : (Faction)n;
         if (Enum.TryParse(raw, true, out Faction f))
-            return f;
-        return Faction.NONE;
+            return f == Faction.NONE ? Faction.OTHERS : f;
+        return Faction.OTHERS;
     }
 
     /// <summary>장수 마스터 시트 G열(7번째, 0-based index 6). 0~100으로 클램프. 레거시 "B12" 형태는 숫자 부분만 사용.</summary>

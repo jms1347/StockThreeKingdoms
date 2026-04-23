@@ -153,7 +153,7 @@ public partial class DataManager
             case Faction.WEI: return "위";
             case Faction.SHU: return "촉";
             case Faction.WU: return "오";
-            case Faction.OTHERS: return "기타";
+            case Faction.OTHERS: return "OTHERS";
             default: return "중립";
         }
     }
@@ -166,7 +166,7 @@ public partial class DataManager
             case Faction.WEI: return "위나라";
             case Faction.SHU: return "촉나라";
             case Faction.WU: return "오나라";
-            case Faction.OTHERS: return "기타 세력";
+            case Faction.OTHERS: return "OTHERS 세력";
             default: return "중립";
         }
     }

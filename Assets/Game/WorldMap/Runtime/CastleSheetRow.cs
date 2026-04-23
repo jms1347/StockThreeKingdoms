@@ -9,6 +9,8 @@ public class CastleSheetRow
     public string castleName;
     public CountryId countryId;
     public string governorName;
+    /// <summary>태수 장수 <see cref="GeneralMasterData.id"/>. 시트 동기화 시 채움.</summary>
+    public string governorGeneralId;
     public int army;
     public int population;
     [Range(0, 100)] public int publicSentiment;

@@ -10,14 +10,13 @@ public static class WorldMapRowFactory
         Dictionary<string, GeneralMasterData> generals)
     {
         if (castles == null || castles.Count == 0) return Array.Empty<CastleSheetRow>();
-        var gov = BuildGovernorByCastleId(generals);
         var list = new List<CastleSheetRow>(castles.Count);
         foreach (var kv in castles)
         {
             var m = kv.Value;
             if (m == null || string.IsNullOrWhiteSpace(m.id)) continue;
             var id = m.id.Trim();
-            gov.TryGetValue(id, out var govName);
+            PickBestGovernorForCastle(id, generals, out var govId, out var govName);
             if (string.IsNullOrEmpty(govName)) govName = "미정";
 
             var faction = m.GetInitialLordFaction();
@@ -27,6 +26,7 @@ public static class WorldMapRowFactory
                 castleName = CastleMapDisplayName.FromMaster(m),
                 countryId = FactionToCountryId(faction),
                 governorName = govName,
+                governorGeneralId = govId,
                 army = Mathf.Max(1, m.maxTroops / 2),
                 population = Mathf.Max(0, m.initPopulation),
                 publicSentiment = 55,
@@ -74,20 +74,50 @@ public static class WorldMapRowFactory
         return FromCastleMasterDictionary(dictC, dictG);
     }
 
-    static Dictionary<string, string> BuildGovernorByCastleId(Dictionary<string, GeneralMasterData> generals)
+    /// <summary><see cref="DataManager.ApplyInitialGovernorsFromGenerals"/>와 동일: 등급 우선, 동급이면 ID 순.</summary>
+    public static void PickBestGovernorForCastle(
+        string castleMasterId,
+        Dictionary<string, GeneralMasterData> generals,
+        out string governorId,
+        out string governorName)
     {
-        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        if (generals == null) return map;
+        governorId = string.Empty;
+        governorName = string.Empty;
+        if (string.IsNullOrWhiteSpace(castleMasterId) || generals == null) return;
+
+        var target = castleMasterId.Trim();
+        string bestId = null;
+        GeneralMasterData bestG = null;
+
         foreach (var kv in generals)
         {
             var g = kv.Value;
             if (g == null || string.IsNullOrWhiteSpace(g.initialCastleId)) continue;
             var cid = g.initialCastleId.Trim();
-            if (!map.ContainsKey(cid))
-                map[cid] = string.IsNullOrEmpty(g.name) ? "미정" : g.name;
+            if (!string.Equals(cid, target, StringComparison.OrdinalIgnoreCase)) continue;
+
+            if (bestG == null)
+            {
+                bestId = g.id.Trim();
+                bestG = g;
+                continue;
+            }
+
+            if (g.grade < bestG.grade)
+            {
+                bestId = g.id.Trim();
+                bestG = g;
+            }
+            else if (g.grade == bestG.grade && string.CompareOrdinal(g.id, bestId) < 0)
+            {
+                bestId = g.id.Trim();
+                bestG = g;
+            }
         }
 
-        return map;
+        if (bestG == null) return;
+        governorId = bestId ?? string.Empty;
+        governorName = string.IsNullOrEmpty(bestG.name) ? "미정" : bestG.name;
     }
 
     static int CastleIdToNumeric(string id)
@@ -111,6 +141,17 @@ public static class WorldMapRowFactory
         if (f == Faction.WEI) return CountryId.Wei;
         if (f == Faction.SHU) return CountryId.Shu;
         if (f == Faction.WU) return CountryId.Wu;
-        return CountryId.Wei;
+        if (f == Faction.OTHERS) return CountryId.Others;
+        return CountryId.Others;
+    }
+
+    /// <summary>월드맵 성 마커(<see cref="CountryId"/>)와 저장용 <see cref="Faction"/>을 맞춥니다.</summary>
+    public static Faction CountryIdToFaction(CountryId id)
+    {
+        if (id == CountryId.Wei) return Faction.WEI;
+        if (id == CountryId.Shu) return Faction.SHU;
+        if (id == CountryId.Wu) return Faction.WU;
+        if (id == CountryId.Others) return Faction.OTHERS;
+        return Faction.OTHERS;
     }
 }

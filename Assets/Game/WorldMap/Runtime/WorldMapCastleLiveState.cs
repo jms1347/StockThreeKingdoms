@@ -51,7 +51,7 @@ public static class WorldMapCastleLiveState
         {
             s.isWar |= castle.SimWarDays > 0;
             if (WorldMapWarManager.InstanceOrNull != null)
-                s.isWar |= WorldMapWarManager.InstanceOrNull.IsCastleInAnyWar(castle);
+                s.isWar |= WorldMapWarManager.InstanceOrNull.IsCastleSiegeDefender(castle);
             s.isDisaster |= castle.SimDisasterDays > 0;
             s.isFavorableEvent |= castle.SimFavorableDays > 0;
             s.pendingRumor |= castle.SimRumorDays > 0;

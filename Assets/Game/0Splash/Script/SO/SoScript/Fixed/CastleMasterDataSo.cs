@@ -56,17 +56,21 @@ public class CastleMasterData
     /// </summary>
     public Vector2 GetPosition() => new Vector2(posX, posY);
 
-    /// <summary><see cref="CastleStateData.currentLord"/> 초기화용. <see cref="initialNationId"/> → WEI/SHU 등.</summary>
+    /// <summary><see cref="CastleStateData.currentLord"/> 초기화용. <see cref="initialNationId"/> → WEI/SHU/WU/OTHERS(단일 네 번째 국가).</summary>
     public Faction GetInitialLordFaction()
     {
-        if (string.IsNullOrWhiteSpace(initialNationId)) return Faction.NONE;
+        if (string.IsNullOrWhiteSpace(initialNationId))
+            return Faction.OTHERS;
         string raw = initialNationId.Trim();
         if (int.TryParse(raw, out int n) && Enum.IsDefined(typeof(Faction), n))
-            return (Faction)n;
+            return NormalizeFourthNation((Faction)n);
         if (Enum.TryParse(raw, true, out Faction f))
-            return f;
-        return Faction.NONE;
+            return NormalizeFourthNation(f);
+        return Faction.OTHERS;
     }
+
+    /// <summary>NONE·미기입은 위·촉·오와 동등한 하나의 OTHERS 세력으로 통일합니다.</summary>
+    static Faction NormalizeFourthNation(Faction f) => f == Faction.NONE ? Faction.OTHERS : f;
 }
 
 [CreateAssetMenu(fileName = "CastleMasterDataSo", menuName = "ScriptableObject/CastleMasterDataSo")]

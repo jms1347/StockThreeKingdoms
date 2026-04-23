@@ -221,6 +221,52 @@ public static class WorldMapSceneBuilder
         var population = CreateTmpRow(layoutGo.transform, "Population", 22f, FontStyles.Normal);
         var sentiment = CreateTmpRow(layoutGo.transform, "Sentiment", 22f, FontStyles.Normal);
         var value = CreateTmpRow(layoutGo.transform, "Value", 22f, FontStyles.Normal);
+        var generals = CreateTmpMultilineRow(layoutGo.transform, "Generals", 20f, dayFont, 100f);
+        var genMove = CreateTmpMultilineRow(layoutGo.transform, "GeneralMovement", 20f, dayFont, 72f);
+        var supHint = CreateTmpRow(layoutGo.transform, "SiegeSupportHint", 20f, FontStyles.Italic);
+
+        var supBtnGo = new GameObject("SiegeSupportButton", typeof(RectTransform));
+        supBtnGo.transform.SetParent(layoutGo.transform, false);
+        var supBtnRt = supBtnGo.GetComponent<RectTransform>();
+        supBtnRt.sizeDelta = new Vector2(0f, 44f);
+        var supBtnLe = supBtnGo.AddComponent<LayoutElement>();
+        supBtnLe.minHeight = 44f;
+        var supBtnImg = supBtnGo.AddComponent<Image>();
+        supBtnImg.color = new Color(0.32f, 0.42f, 0.28f, 1f);
+        var supBtn = supBtnGo.AddComponent<Button>();
+        supBtn.targetGraphic = supBtnImg;
+        var supLabelGo = new GameObject("Label", typeof(RectTransform));
+        supLabelGo.transform.SetParent(supBtnGo.transform, false);
+        StretchFull(supLabelGo.GetComponent<RectTransform>());
+        var supLabel = supLabelGo.AddComponent<TextMeshProUGUI>();
+        supLabel.text = "인접 수비 지원";
+        supLabel.alignment = TextAlignmentOptions.Center;
+        supLabel.fontSize = 20f;
+        if (dayFont != null)
+            supLabel.font = dayFont;
+        supBtnGo.SetActive(false);
+
+        var atkHint = CreateTmpRow(layoutGo.transform, "SiegeAttackSupportHint", 20f, FontStyles.Italic);
+
+        var atkBtnGo = new GameObject("SiegeAttackSupportButton", typeof(RectTransform));
+        atkBtnGo.transform.SetParent(layoutGo.transform, false);
+        atkBtnGo.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 44f);
+        var atkBtnLe = atkBtnGo.AddComponent<LayoutElement>();
+        atkBtnLe.minHeight = 44f;
+        var atkBtnImg = atkBtnGo.AddComponent<Image>();
+        atkBtnImg.color = new Color(0.42f, 0.28f, 0.22f, 1f);
+        var atkBtn = atkBtnGo.AddComponent<Button>();
+        atkBtn.targetGraphic = atkBtnImg;
+        var atkLabelGo = new GameObject("Label", typeof(RectTransform));
+        atkLabelGo.transform.SetParent(atkBtnGo.transform, false);
+        StretchFull(atkLabelGo.GetComponent<RectTransform>());
+        var atkLabel = atkLabelGo.AddComponent<TextMeshProUGUI>();
+        atkLabel.text = "인접 공격 지원";
+        atkLabel.alignment = TextAlignmentOptions.Center;
+        atkLabel.fontSize = 20f;
+        if (dayFont != null)
+            atkLabel.font = dayFont;
+        atkBtnGo.SetActive(false);
 
         var closeGo = new GameObject("CloseButton", typeof(RectTransform));
         closeGo.transform.SetParent(layoutGo.transform, false);
@@ -258,6 +304,12 @@ public static class WorldMapSceneBuilder
         so.FindProperty("populationText").objectReferenceValue = population;
         so.FindProperty("sentimentText").objectReferenceValue = sentiment;
         so.FindProperty("valueText").objectReferenceValue = value;
+        so.FindProperty("generalsText").objectReferenceValue = generals;
+        so.FindProperty("generalMovementText").objectReferenceValue = genMove;
+        so.FindProperty("siegeSupportHintText").objectReferenceValue = supHint;
+        so.FindProperty("siegeSupportButton").objectReferenceValue = supBtn;
+        so.FindProperty("siegeAttackSupportHintText").objectReferenceValue = atkHint;
+        so.FindProperty("siegeAttackSupportButton").objectReferenceValue = atkBtn;
         so.ApplyModifiedPropertiesWithoutUndo();
 
         BuildMarchTroopInfoPopup(canvasGo.transform, dayFont);
@@ -371,6 +423,33 @@ public static class WorldMapSceneBuilder
         var font = ResolveTmpFont();
         if (font != null)
             tmp.font = font;
+        return tmp;
+    }
+
+    static TMP_Text CreateTmpMultilineRow(Transform parent, string name, float fontSize, TMP_FontAsset font,
+        float minHeight)
+    {
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        var le = go.AddComponent<LayoutElement>();
+        le.minHeight = minHeight;
+        le.flexibleWidth = 1f;
+        le.preferredHeight = minHeight;
+        var tmp = go.AddComponent<TextMeshProUGUI>();
+        tmp.fontSize = fontSize;
+        tmp.fontStyle = FontStyles.Normal;
+        tmp.color = new Color(0.95f, 0.96f, 0.98f, 1f);
+        tmp.alignment = TextAlignmentOptions.TopLeft;
+        tmp.enableWordWrapping = true;
+        tmp.overflowMode = TextOverflowModes.Overflow;
+        if (font != null)
+            tmp.font = font;
+        else
+        {
+            var f = ResolveTmpFont();
+            if (f != null) tmp.font = f;
+        }
+
         return tmp;
     }
 

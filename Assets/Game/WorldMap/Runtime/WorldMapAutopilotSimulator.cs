@@ -62,56 +62,75 @@ public class WorldMapAutopilotSimulator : MonoBehaviour
         for (int i = 0; i < _castles.Count; i++)
         {
             var a = _castles[i];
-            if (a == null || string.IsNullOrEmpty(a.MasterId) || string.IsNullOrWhiteSpace(a.AdjacentIdsRaw))
+            if (a == null || string.IsNullOrEmpty(a.MasterId))
                 continue;
 
-            ForEachAdjacentId(a.AdjacentIdsRaw, raw =>
+            if (!string.IsNullOrWhiteSpace(a.AdjacentIdsRaw))
             {
-                if (!_byMaster.TryGetValue(raw, out var b) || b == null) return;
-                if (a.CountryId == b.CountryId) return;
-
-                string k = PairKey(a.MasterId, b.MasterId);
-                if (!seen.Add(k)) return;
-                if (UnityEngine.Random.value > aiBorderMarchChance) return;
-
-                Castle attacker;
-                Castle defender;
-                if (a.Army > b.Army)
+                ForEachAdjacentId(a.AdjacentIdsRaw, raw =>
                 {
-                    attacker = a;
-                    defender = b;
-                }
-                else if (b.Army > a.Army)
+                    if (!_byMaster.TryGetValue(raw, out var b) || b == null) return;
+                    TryAiMarchPair(day, map, seen, a, b);
+                });
+            }
+            else if (map != null)
+            {
+                for (int j = 0; j < _castles.Count; j++)
                 {
-                    attacker = b;
-                    defender = a;
+                    var b = _castles[j];
+                    if (b == null || b == a || string.IsNullOrEmpty(b.MasterId)) continue;
+                    if (a.CountryId == b.CountryId) continue;
+                    if (!map.AreConnectedByRoads(a, b)) continue;
+                    TryAiMarchPair(day, map, seen, a, b);
                 }
-                else
-                {
-                    if (UnityEngine.Random.value < 0.5f)
-                    {
-                        attacker = a;
-                        defender = b;
-                    }
-                    else
-                    {
-                        attacker = b;
-                        defender = a;
-                    }
-                }
-
-                if (attacker.Army < 1) return;
-                if (map == null) return;
-
-                map.StartMarch(attacker, defender);
-
-                if (UnityEngine.Random.value < postMarchRumorChance)
-                    attacker.AddSimRumorDays(rumorFlagDays);
-
-                Debug.Log(
-                    $"[Day {day}] [AI 출정] {attacker.DisplayCastleName}({attacker.CountryDisplayName}) → {defender.DisplayCastleName}({defender.CountryDisplayName})");
-            });
+            }
         }
+    }
+
+    void TryAiMarchPair(int day, MapManager map, HashSet<string> seen, Castle a, Castle b)
+    {
+        if (a == null || b == null || a.CountryId == b.CountryId) return;
+
+        string k = PairKey(a.MasterId, b.MasterId);
+        if (!seen.Add(k)) return;
+        if (UnityEngine.Random.value > aiBorderMarchChance) return;
+
+        Castle attacker;
+        Castle defender;
+        if (a.Army > b.Army)
+        {
+            attacker = a;
+            defender = b;
+        }
+        else if (b.Army > a.Army)
+        {
+            attacker = b;
+            defender = a;
+        }
+        else
+        {
+            if (UnityEngine.Random.value < 0.5f)
+            {
+                attacker = a;
+                defender = b;
+            }
+            else
+            {
+                attacker = b;
+                defender = a;
+            }
+        }
+
+        if (attacker.Army < 1) return;
+        if (map == null) return;
+
+        map.StartMarch(attacker, defender);
+
+        if (UnityEngine.Random.value < postMarchRumorChance)
+            attacker.AddSimRumorDays(rumorFlagDays);
+
+        Debug.Log(
+            $"[Day {day}] [AI 출정] {attacker.DisplayCastleName}({attacker.CountryDisplayName}) → {defender.DisplayCastleName}({defender.CountryDisplayName})");
     }
 
     void RunGlobalDisaster(int day)

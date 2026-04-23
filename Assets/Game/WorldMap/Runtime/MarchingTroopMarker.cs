@@ -10,6 +10,7 @@ public class MarchingTroopMarker : MonoBehaviour
     Castle _fromCastle;
     Castle _toCastle;
     string _generalName;
+    string _leadingGeneralId;
     int _troopCount;
 
     Vector3 _start;
@@ -31,11 +32,13 @@ public class MarchingTroopMarker : MonoBehaviour
         col.radius = 0.22f;
     }
 
-    public void Begin(Castle from, Castle to, string generalName, int troopCount, float worldUnitsPerSecond)
+    public void Begin(Castle from, Castle to, string generalName, int troopCount, float worldUnitsPerSecond,
+        string leadingGeneralId = null)
     {
         _fromCastle = from;
         _toCastle = to;
         _generalName = string.IsNullOrEmpty(generalName) ? "(무장)" : generalName;
+        _leadingGeneralId = string.IsNullOrWhiteSpace(leadingGeneralId) ? string.Empty : leadingGeneralId.Trim();
         _troopCount = Mathf.Max(0, troopCount);
 
         _start = from != null ? new Vector3(from.transform.position.x, from.transform.position.y, RoadZ) : Vector3.zero;
@@ -86,6 +89,8 @@ public class MarchingTroopMarker : MonoBehaviour
             {
                 _fromCastle.AddArmy(_troopCount);
                 _toCastle.SetArmy(0);
+                if (!string.IsNullOrEmpty(_leadingGeneralId))
+                    WorldMapGeneralRoster.NotifyMarchReturnedHome(_leadingGeneralId, _fromCastle);
                 Debug.Log($"[월드맵 출정] {_fromCastle.DisplayCastleName} → {_toCastle.DisplayCastleName} 도착 — 수비 병력 없음, 공격측 회군.");
                 Destroy(gameObject);
                 MapManager.InstanceOrNull?.RefreshAllCastleMapStatuses();
@@ -99,6 +104,8 @@ public class MarchingTroopMarker : MonoBehaviour
             else
             {
                 _fromCastle.AddArmy(_troopCount);
+                if (!string.IsNullOrEmpty(_leadingGeneralId))
+                    WorldMapGeneralRoster.NotifyMarchReturnedHome(_leadingGeneralId, _fromCastle);
                 Debug.LogWarning(
                     $"[월드맵 출정] {_fromCastle.DisplayCastleName} → {_toCastle.DisplayCastleName} 도착했으나 공성 불가(전쟁 중 등) — 병력 회수.");
                 Destroy(gameObject);
@@ -134,5 +141,10 @@ public class MarchingTroopMarker : MonoBehaviour
             _troopCount,
             _toCastle.DisplayCastleName,
             _arrived);
+    }
+
+    void OnDestroy()
+    {
+        WorldMapGeneralRoster.NotifyMarchMarkerDestroyed(this);
     }
 }

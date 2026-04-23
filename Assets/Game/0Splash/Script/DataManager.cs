@@ -768,7 +768,7 @@ public partial class DataManager : Singleton<DataManager>
     }
 
     /// <summary>
-    /// <see cref="castleStateDataMap"/> 전수: 위(WEI)·촉(SHU)·오(WU)·기타(NONE/OTHERS 등) 점령 성 비율 (각 0~1, 합계 1).
+    /// <see cref="castleStateDataMap"/> 전수: 위(WEI)·촉(SHU)·오(WU)·OTHERS(네 번째 국가, NONE은 OTHERS로 집계) 점령 성 비율 (각 0~1, 합계 1).
     /// </summary>
     public FactionCastleShare GetFactionCastleOwnershipShare()
     {

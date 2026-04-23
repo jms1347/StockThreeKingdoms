@@ -393,7 +393,7 @@ public class CastleWorldMapEditorWindow : EditorWindow
         LegendSwatch("위(魏)", NationColor(Faction.WEI));
         LegendSwatch("촉(蜀)", NationColor(Faction.SHU));
         LegendSwatch("오(吳)", NationColor(Faction.WU));
-        LegendSwatch("기타", NationColor(Faction.OTHERS));
+        LegendSwatch("OTHERS", NationColor(Faction.OTHERS));
         LegendSwatch("NONE", NationColor(Faction.NONE));
         EditorGUILayout.EndHorizontal();
     }

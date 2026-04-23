@@ -45,6 +45,12 @@ public class Castle : MonoBehaviour
     public CountryId CountryId => _definition.countryId;
     public string CountryDisplayName => _countryDisplayName;
     public string GovernorName => _definition.governorName;
+
+    /// <summary>태수 장수 마스터 ID(없으면 빈 문자열).</summary>
+    public string GovernorGeneralId =>
+        _definition == null || string.IsNullOrWhiteSpace(_definition.governorGeneralId)
+            ? string.Empty
+            : _definition.governorGeneralId.Trim();
     public int Army => _army;
     public int Population => _population;
     public int PublicSentiment => _publicSentiment;
@@ -89,6 +95,46 @@ public class Castle : MonoBehaviour
         if (hud == null)
             hud = gameObject.AddComponent<CastleWorldHud>();
         hud.Bind(this, colors);
+    }
+
+    /// <summary>공성 승리 시 수비 성의 세력·색·태수(공격 성 기준)를 갱신합니다.</summary>
+    public void ApplyConquestFromAttacker(Castle attacker, CountryColorProvider colors)
+    {
+        if (attacker == null || _definition == null) return;
+
+        _definition.countryId = attacker.CountryId;
+        _definition.governorName = attacker.GovernorName;
+        _definition.governorGeneralId = attacker.GovernorGeneralId;
+        _countryDisplayName = colors != null
+            ? colors.GetCountryDisplayName(_definition.countryId)
+            : _definition.countryId.ToString();
+
+        if (spriteRenderer != null)
+            spriteRenderer.color = colors != null ? colors.GetColor(_definition.countryId) : Color.white;
+
+        var hud = GetComponent<CastleWorldHud>();
+        if (hud != null)
+            hud.Bind(this, colors);
+
+        MirrorStatsToDefinition();
+    }
+
+    /// <summary>태수를 장수 데이터로 설정합니다.</summary>
+    public void InstallGovernor(GeneralMasterData gen)
+    {
+        if (_definition == null || gen == null) return;
+        _definition.governorGeneralId = string.IsNullOrWhiteSpace(gen.id) ? string.Empty : gen.id.Trim();
+        _definition.governorName = string.IsNullOrWhiteSpace(gen.name) ? "미정" : gen.name.Trim();
+        MirrorStatsToDefinition();
+    }
+
+    /// <summary>태수 공석(임시 명칭).</summary>
+    public void ClearGovernorToProvisional()
+    {
+        if (_definition == null) return;
+        _definition.governorGeneralId = string.Empty;
+        _definition.governorName = "미정";
+        MirrorStatsToDefinition();
     }
 
     static string ResolveDisplayCastleName(CastleSheetRow row)
@@ -169,18 +215,53 @@ public class Castle : MonoBehaviour
         col.offset = Vector2.zero;
     }
 
-    public void AddArmy(int delta) => _army = Mathf.Max(0, _army + delta);
+    public void AddArmy(int delta)
+    {
+        _army = Mathf.Max(0, _army + delta);
+        MirrorStatsToDefinition();
+    }
 
     /// <summary>월드맵 공성 등에서 주둔 병력을 직접 설정합니다.</summary>
-    public void SetArmy(int value) => _army = Mathf.Max(0, value);
-    public void AddSentiment(int delta) => _publicSentiment = Mathf.Clamp(_publicSentiment + delta, 0, 100);
-    public void AddCastleValue(int delta) => _castleValue = Mathf.Max(0, _castleValue + delta);
+    public void SetArmy(int value)
+    {
+        _army = Mathf.Max(0, value);
+        MirrorStatsToDefinition();
+    }
+
+    public void AddSentiment(int delta)
+    {
+        _publicSentiment = Mathf.Clamp(_publicSentiment + delta, 0, 100);
+        MirrorStatsToDefinition();
+    }
+
+    public void AddCastleValue(int delta)
+    {
+        _castleValue = Mathf.Max(0, _castleValue + delta);
+        MirrorStatsToDefinition();
+    }
+
+    /// <summary>징발 등으로 백성 인구를 변경합니다.</summary>
+    public void AddPopulation(int delta)
+    {
+        _population = Mathf.Max(0, _population + delta);
+        MirrorStatsToDefinition();
+    }
+
+    void MirrorStatsToDefinition()
+    {
+        if (_definition == null) return;
+        _definition.army = _army;
+        _definition.population = _population;
+        _definition.publicSentiment = _publicSentiment;
+        _definition.castleValue = _castleValue;
+    }
 
     public void ApplyArmyPercentLoss(int percent)
     {
         if (percent <= 0) return;
         int loss = Mathf.Max(1, Mathf.RoundToInt(_army * (percent / 100f)));
         _army = Mathf.Max(0, _army - loss);
+        MirrorStatsToDefinition();
     }
 
     public void ApplyPopulationPercentLoss(int percent)
@@ -188,6 +269,7 @@ public class Castle : MonoBehaviour
         if (percent <= 0) return;
         int loss = Mathf.Max(1, Mathf.RoundToInt(_population * (percent / 100f)));
         _population = Mathf.Max(0, _population - loss);
+        MirrorStatsToDefinition();
     }
 
     public void TickSimulationCounters()

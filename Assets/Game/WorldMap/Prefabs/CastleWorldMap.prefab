@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff03a64b3a884645a5dac4261aba1a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GovernorAI
+  baseRecruitChance: 0.44
 --- !u!1 &2788600458766403867
 GameObject:
   m_ObjectHideFlags: 0

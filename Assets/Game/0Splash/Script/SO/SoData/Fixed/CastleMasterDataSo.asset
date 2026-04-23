@@ -20,11 +20,83 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 5
     baseValue: 1000
-    maxTroops: 500000
-    initPopulation: 100000
+    maxTroops: 0
+    initPopulation: 0
     posX: 500
     posY: 500
-    adjacentIdsRaw: C21,C22,C04,C07,C10
+    adjacentIdsRaw: C21,C22,C04,C07,C10,C51,C72,C82
+  - id: C21
+    name: R01
+    regionId: "\uD638\uB85C\uAD00"
+    grade: 4
+    initialNationId: WEI
+    initialTaxRatePercent: 1.5
+    baseValue: 250
+    maxTroops: 0
+    initPopulation: 0
+    posX: 530
+    posY: 510
+    adjacentIdsRaw: C01,C24
+  - id: C51
+    name: R01
+    regionId: "\uD64D\uB18D"
+    grade: 3
+    initialNationId: WEI
+    initialTaxRatePercent: 2.5
+    baseValue: 400
+    maxTroops: 0
+    initPopulation: 0
+    posX: 430
+    posY: 510
+    adjacentIdsRaw: C01,C55,C56,C72,C82
+  - id: C56
+    name: R01
+    regionId: "\uD558\uB3D9"
+    grade: 3
+    initialNationId: WEI
+    initialTaxRatePercent: 2.2
+    baseValue: 350
+    maxTroops: 0
+    initPopulation: 0
+    posX: 390
+    posY: 560
+    adjacentIdsRaw: C31,C51,C55,C72,C73
+  - id: C72
+    name: R01
+    regionId: "\uD558\uB0B4"
+    grade: 3
+    initialNationId: WEI
+    initialTaxRatePercent: 2.6
+    baseValue: 380
+    maxTroops: 0
+    initPopulation: 0
+    posX: 450
+    posY: 540
+    adjacentIdsRaw: C01,C51,C56,C81,C82
+  - id: C81
+    name: R01
+    regionId: "\uC18C\uAD00"
+    grade: 4
+    initialNationId: WEI
+    initialTaxRatePercent: 1.5
+    baseValue: 250
+    maxTroops: 0
+    initPopulation: 0
+    posX: 390
+    posY: 580
+    adjacentIdsRaw: C07,C55,C72,C82
+  - id: C82
+    name: R01
+    regionId: "\uD55C\uACE1\uAD00"
+    grade: 4
+    initialNationId: WEI
+    initialTaxRatePercent: 1.2
+    baseValue: 220
+    maxTroops: 0
+    initPopulation: 0
+    posX: 460
+    posY: 505
+    adjacentIdsRaw: C01,C51,C81,C72
   - id: C02
     name: R02
     regionId: "\uD5C8\uCC3D"
@@ -32,8 +104,8 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 4.5
     baseValue: 800
-    maxTroops: 350000
-    initPopulation: 70000
+    maxTroops: 0
+    initPopulation: 0
     posX: 550
     posY: 480
     adjacentIdsRaw: C01,C22,C23,C26
@@ -44,215 +116,11 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 3.5
     baseValue: 500
-    maxTroops: 200000
-    initPopulation: 40000
+    maxTroops: 0
+    initPopulation: 0
     posX: 580
     posY: 500
     adjacentIdsRaw: C02,C24,C30,C49
-  - id: C04
-    name: R03
-    regionId: "\uC5C5\uC131"
-    grade: 1
-    initialNationId: WEI
-    initialTaxRatePercent: 4
-    baseValue: 750
-    maxTroops: 400000
-    initPopulation: 80000
-    posX: 550
-    posY: 650
-    adjacentIdsRaw: C01,C27,C30,C28
-  - id: C05
-    name: R04
-    regionId: "\uBD81\uD3C9"
-    grade: 3
-    initialNationId: OTHERS
-    initialTaxRatePercent: 2
-    baseValue: 400
-    maxTroops: 150000
-    initPopulation: 30000
-    posX: 680
-    posY: 820
-    adjacentIdsRaw: C28,C06,C27
-  - id: C06
-    name: R04
-    regionId: "\uC591\uD3C9"
-    grade: 4
-    initialNationId: OTHERS
-    initialTaxRatePercent: 1.2
-    baseValue: 300
-    maxTroops: 100000
-    initPopulation: 20000
-    posX: 800
-    posY: 880
-    adjacentIdsRaw: C05,C29
-  - id: C07
-    name: R05
-    regionId: "\uC7A5\uC548"
-    grade: 0
-    initialNationId: WEI
-    initialTaxRatePercent: 5
-    baseValue: 900
-    maxTroops: 450000
-    initPopulation: 90000
-    posX: 350
-    posY: 520
-    adjacentIdsRaw: C01,C31,C34,C10,C08
-  - id: C08
-    name: R05
-    regionId: "\uC11C\uB7C9"
-    grade: 3
-    initialNationId: OTHERS
-    initialTaxRatePercent: 2
-    baseValue: 350
-    maxTroops: 120000
-    initPopulation: 25000
-    posX: 150
-    posY: 650
-    adjacentIdsRaw: C07,C09,C32
-  - id: C09
-    name: R05
-    regionId: "\uCC9C\uC218"
-    grade: 3
-    initialNationId: OTHERS
-    initialTaxRatePercent: 2.2
-    baseValue: 300
-    maxTroops: 100000
-    initPopulation: 20000
-    posX: 250
-    posY: 580
-    adjacentIdsRaw: C08,C31,C34
-  - id: C10
-    name: R06
-    regionId: "\uC591\uC591"
-    grade: 1
-    initialNationId: OTHERS
-    initialTaxRatePercent: 4
-    baseValue: 600
-    maxTroops: 250000
-    initPopulation: 50000
-    posX: 450
-    posY: 350
-    adjacentIdsRaw: C01,C07,C11,C25,C35
-  - id: C11
-    name: R07
-    regionId: "\uAC15\uB989"
-    grade: 1
-    initialNationId: SHU
-    initialTaxRatePercent: 3.8
-    baseValue: 550
-    maxTroops: 220000
-    initPopulation: 45000
-    posX: 450
-    posY: 280
-    adjacentIdsRaw: C10,C35,C44,C12
-  - id: C12
-    name: R07
-    regionId: "\uBB34\uB989"
-    grade: 4
-    initialNationId: SHU
-    initialTaxRatePercent: 1.5
-    baseValue: 250
-    maxTroops: 80000
-    initPopulation: 15000
-    posX: 400
-    posY: 220
-    adjacentIdsRaw: C11,C37,C38
-  - id: C13
-    name: R08
-    regionId: "\uAC74\uC5C5"
-    grade: 0
-    initialNationId: WU
-    initialTaxRatePercent: 4.8
-    baseValue: 850
-    maxTroops: 420000
-    initPopulation: 85000
-    posX: 800
-    posY: 300
-    adjacentIdsRaw: C14,C39,C41,C49,C35
-  - id: C14
-    name: R08
-    regionId: "\uC624\uAD70"
-    grade: 1
-    initialNationId: WU
-    initialTaxRatePercent: 4
-    baseValue: 650
-    maxTroops: 300000
-    initPopulation: 60000
-    posX: 880
-    posY: 280
-    adjacentIdsRaw: C13,C39,C15
-  - id: C16
-    name: R10
-    regionId: "\uC131\uB3C4"
-    grade: 1
-    initialNationId: SHU
-    initialTaxRatePercent: 4.5
-    baseValue: 700
-    maxTroops: 380000
-    initPopulation: 75000
-    posX: 180
-    posY: 350
-    adjacentIdsRaw: C17,C42,C43,C44
-  - id: C17
-    name: R10
-    regionId: "\uAC15\uC8FC"
-    grade: 3
-    initialNationId: SHU
-    initialTaxRatePercent: 2.5
-    baseValue: 400
-    maxTroops: 150000
-    initPopulation: 30000
-    posX: 250
-    posY: 320
-    adjacentIdsRaw: C16,C44,C42
-  - id: C18
-    name: R11
-    regionId: "\uAC74\uB155"
-    grade: 4
-    initialNationId: OTHERS
-    initialTaxRatePercent: 0.8
-    baseValue: 200
-    maxTroops: 50000
-    initPopulation: 10000
-    posX: 150
-    posY: 150
-    adjacentIdsRaw: C43,C45
-  - id: C19
-    name: R12
-    regionId: "\uC11C\uC8FC"
-    grade: 2
-    initialNationId: OTHERS
-    initialTaxRatePercent: 3.5
-    baseValue: 500
-    maxTroops: 200000
-    initPopulation: 45000
-    posX: 750
-    posY: 550
-    adjacentIdsRaw: C20,C46,C47,C48,C30
-  - id: C20
-    name: R12
-    regionId: "\uC18C\uD328"
-    grade: 5
-    initialNationId: OTHERS
-    initialTaxRatePercent: 0.7
-    baseValue: 150
-    maxTroops: 30000
-    initPopulation: 5000
-    posX: 680
-    posY: 520
-    adjacentIdsRaw: C19,C46,C24
-  - id: C21
-    name: R01
-    regionId: "\uD638\uB85C\uAD00"
-    grade: 3
-    initialNationId: WEI
-    initialTaxRatePercent: 2.5
-    baseValue: 400
-    maxTroops: 100000
-    initPopulation: 15000
-    posX: 530
-    posY: 510
-    adjacentIdsRaw: C01,C24
   - id: C22
     name: R02
     regionId: "\uC644"
@@ -260,11 +128,11 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 2.5
     baseValue: 450
-    maxTroops: 150000
-    initPopulation: 30000
+    maxTroops: 0
+    initPopulation: 0
     posX: 510
     posY: 420
-    adjacentIdsRaw: C01,C02,C25,C23
+    adjacentIdsRaw: C01,C02,C23,C25,C57
   - id: C23
     name: R02
     regionId: "\uC5EC\uB0A8"
@@ -272,11 +140,11 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 2
     baseValue: 350
-    maxTroops: 120000
-    initPopulation: 25000
+    maxTroops: 0
+    initPopulation: 0
     posX: 580
     posY: 420
-    adjacentIdsRaw: C02,C22,C26
+    adjacentIdsRaw: C02,C22,C26,C57
   - id: C24
     name: R02
     regionId: "\uBCF5\uC591"
@@ -284,8 +152,8 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 2.2
     baseValue: 400
-    maxTroops: 150000
-    initPopulation: 30000
+    maxTroops: 0
+    initPopulation: 0
     posX: 600
     posY: 550
     adjacentIdsRaw: C03,C21,C27,C30,C20
@@ -296,23 +164,35 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 1.5
     baseValue: 300
-    maxTroops: 100000
-    initPopulation: 20000
+    maxTroops: 0
+    initPopulation: 0
     posX: 480
     posY: 380
-    adjacentIdsRaw: C22,C10
-  - id: C26
-    name: R09
-    regionId: "\uC218\uCD98"
+    adjacentIdsRaw: C10,C22,C57,C67
+  - id: C57
+    name: R06
+    regionId: "\uB0A8\uC591"
     grade: 2
     initialNationId: WEI
-    initialTaxRatePercent: 3.5
-    baseValue: 450
-    maxTroops: 180000
-    initPopulation: 35000
-    posX: 650
-    posY: 400
-    adjacentIdsRaw: C02,C23,C49,C35
+    initialTaxRatePercent: 3
+    baseValue: 500
+    maxTroops: 0
+    initPopulation: 0
+    posX: 500
+    posY: 390
+    adjacentIdsRaw: C10,C22,C23,C25,C67
+  - id: C04
+    name: R03
+    regionId: "\uC5C5\uC131"
+    grade: 1
+    initialNationId: WEI
+    initialTaxRatePercent: 4
+    baseValue: 750
+    maxTroops: 0
+    initPopulation: 0
+    posX: 550
+    posY: 650
+    adjacentIdsRaw: C01,C27,C30,C28
   - id: C27
     name: R03
     regionId: "\uB0A8\uD53C"
@@ -320,11 +200,11 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 3.2
     baseValue: 500
-    maxTroops: 200000
-    initPopulation: 40000
+    maxTroops: 0
+    initPopulation: 0
     posX: 620
     posY: 700
-    adjacentIdsRaw: C04,C24,C30,C05
+    adjacentIdsRaw: C04,C05,C24,C30,C59
   - id: C28
     name: R03
     regionId: "\uACC4"
@@ -332,23 +212,11 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 2.5
     baseValue: 350
-    maxTroops: 100000
-    initPopulation: 20000
+    maxTroops: 0
+    initPopulation: 0
     posX: 580
     posY: 780
     adjacentIdsRaw: C04,C05,C30
-  - id: C29
-    name: R04
-    regionId: "\uB099\uB791"
-    grade: 5
-    initialNationId: OTHERS
-    initialTaxRatePercent: 0.5
-    baseValue: 200
-    maxTroops: 50000
-    initPopulation: 10000
-    posX: 920
-    posY: 850
-    adjacentIdsRaw: C06
   - id: C30
     name: R03
     regionId: "\uD3C9\uC6D0"
@@ -356,11 +224,95 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 3
     baseValue: 450
-    maxTroops: 180000
-    initPopulation: 35000
+    maxTroops: 0
+    initPopulation: 0
     posX: 600
     posY: 620
-    adjacentIdsRaw: C03,C04,C24,C27,C28,C19
+    adjacentIdsRaw: C03,C04,C19,C24,C27,C28,C59
+  - id: C59
+    name: R03
+    regionId: "\uC784\uCE58"
+    grade: 3
+    initialNationId: OTH
+    initialTaxRatePercent: 2.2
+    baseValue: 360
+    maxTroops: 0
+    initPopulation: 0
+    posX: 700
+    posY: 690
+    adjacentIdsRaw: C27,C30,C47
+  - id: C05
+    name: R04
+    regionId: "\uBD81\uD3C9"
+    grade: 2
+    initialNationId: OTH
+    initialTaxRatePercent: 3
+    baseValue: 400
+    maxTroops: 0
+    initPopulation: 0
+    posX: 680
+    posY: 820
+    adjacentIdsRaw: C28,C06,C27
+  - id: C06
+    name: R04
+    regionId: "\uC591\uD3C9"
+    grade: 4
+    initialNationId: OTH
+    initialTaxRatePercent: 1.2
+    baseValue: 300
+    maxTroops: 0
+    initPopulation: 0
+    posX: 800
+    posY: 880
+    adjacentIdsRaw: C05,C29,C74
+  - id: C29
+    name: R04
+    regionId: "\uB099\uB791"
+    grade: 5
+    initialNationId: OTH
+    initialTaxRatePercent: 0.5
+    baseValue: 200
+    maxTroops: 0
+    initPopulation: 0
+    posX: 920
+    posY: 850
+    adjacentIdsRaw: C06,C74
+  - id: C07
+    name: R05
+    regionId: "\uC7A5\uC548"
+    grade: 0
+    initialNationId: WEI
+    initialTaxRatePercent: 5
+    baseValue: 900
+    maxTroops: 0
+    initPopulation: 0
+    posX: 350
+    posY: 520
+    adjacentIdsRaw: C01,C08,C10,C31,C34,C55,C67,C81
+  - id: C08
+    name: R05
+    regionId: "\uC11C\uB7C9"
+    grade: 3
+    initialNationId: OTH
+    initialTaxRatePercent: 2
+    baseValue: 350
+    maxTroops: 0
+    initPopulation: 0
+    posX: 150
+    posY: 650
+    adjacentIdsRaw: C07,C09,C32
+  - id: C09
+    name: R05
+    regionId: "\uCC9C\uC218"
+    grade: 3
+    initialNationId: OTH
+    initialTaxRatePercent: 2.2
+    baseValue: 300
+    maxTroops: 0
+    initPopulation: 0
+    posX: 250
+    posY: 580
+    adjacentIdsRaw: C08,C31,C34
   - id: C31
     name: R05
     regionId: "\uC548\uC815"
@@ -368,35 +320,35 @@ MonoBehaviour:
     initialNationId: WEI
     initialTaxRatePercent: 2
     baseValue: 350
-    maxTroops: 120000
-    initPopulation: 25000
+    maxTroops: 0
+    initPopulation: 0
     posX: 300
     posY: 620
-    adjacentIdsRaw: C07,C09,C32
+    adjacentIdsRaw: C07,C09,C32,C55,C56,C73
   - id: C32
     name: R05
     regionId: "\uBB34\uC704"
     grade: 4
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 1
     baseValue: 250
-    maxTroops: 80000
-    initPopulation: 15000
+    maxTroops: 0
+    initPopulation: 0
     posX: 120
     posY: 720
-    adjacentIdsRaw: C08,C31,C33
+    adjacentIdsRaw: C08,C31,C33,C80
   - id: C33
     name: R05
     regionId: "\uB3C8\uD669"
     grade: 4
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 0.8
     baseValue: 300
-    maxTroops: 70000
-    initPopulation: 12000
+    maxTroops: 0
+    initPopulation: 0
     posX: 50
     posY: 750
-    adjacentIdsRaw: C32
+    adjacentIdsRaw: C32,C80
   - id: C34
     name: R05
     regionId: "\uBB34\uB3C4"
@@ -404,23 +356,95 @@ MonoBehaviour:
     initialNationId: SHU
     initialTaxRatePercent: 1.2
     baseValue: 300
-    maxTroops: 100000
-    initPopulation: 20000
+    maxTroops: 0
+    initPopulation: 0
     posX: 280
     posY: 450
-    adjacentIdsRaw: C07,C09,C42
-  - id: C35
-    name: R09
-    regionId: "\uAC15\uD558"
+    adjacentIdsRaw: C07,C09,C42,C52,C63,C66
+  - id: C55
+    name: R05
+    regionId: "\uB3D9\uAD00"
     grade: 3
     initialNationId: WEI
-    initialTaxRatePercent: 2.2
-    baseValue: 400
-    maxTroops: 150000
-    initPopulation: 30000
-    posX: 550
-    posY: 320
-    adjacentIdsRaw: C10,C11,C13,C15,C26
+    initialTaxRatePercent: 2
+    baseValue: 300
+    maxTroops: 0
+    initPopulation: 0
+    posX: 340
+    posY: 560
+    adjacentIdsRaw: C07,C31,C51,C56,C81
+  - id: C10
+    name: R06
+    regionId: "\uC591\uC591"
+    grade: 1
+    initialNationId: OTH
+    initialTaxRatePercent: 4
+    baseValue: 600
+    maxTroops: 0
+    initPopulation: 0
+    posX: 450
+    posY: 350
+    adjacentIdsRaw: C01,C07,C11,C25,C35,C52,C57,C76,C83
+  - id: C52
+    name: R06
+    regionId: "\uD55C\uC911"
+    grade: 2
+    initialNationId: OTH
+    initialTaxRatePercent: 3.2
+    baseValue: 500
+    maxTroops: 0
+    initPopulation: 0
+    posX: 340
+    posY: 380
+    adjacentIdsRaw: C10,C34,C53,C63,C66,C76,C83
+  - id: C66
+    name: R06
+    regionId: "\uC591\uD3C9\uAD00"
+    grade: 3
+    initialNationId: SHU
+    initialTaxRatePercent: 1.4
+    baseValue: 240
+    maxTroops: 0
+    initPopulation: 0
+    posX: 330
+    posY: 420
+    adjacentIdsRaw: C34,C52,C63
+  - id: C67
+    name: R06
+    regionId: "\uBB34\uAD00"
+    grade: 3
+    initialNationId: WEI
+    initialTaxRatePercent: 1.8
+    baseValue: 280
+    maxTroops: 0
+    initPopulation: 0
+    posX: 430
+    posY: 430
+    adjacentIdsRaw: C07,C25,C57,C83
+  - id: C11
+    name: R07
+    regionId: "\uAC15\uB989"
+    grade: 0
+    initialNationId: SHU
+    initialTaxRatePercent: 3.8
+    baseValue: 550
+    maxTroops: 0
+    initPopulation: 0
+    posX: 450
+    posY: 280
+    adjacentIdsRaw: C10,C12,C35,C44,C62,C75,C86
+  - id: C12
+    name: R07
+    regionId: "\uBB34\uB989"
+    grade: 4
+    initialNationId: SHU
+    initialTaxRatePercent: 1.5
+    baseValue: 250
+    maxTroops: 0
+    initPopulation: 0
+    posX: 400
+    posY: 220
+    adjacentIdsRaw: C11,C37,C38
   - id: C36
     name: R07
     regionId: "\uC7A5\uC0AC"
@@ -428,8 +452,8 @@ MonoBehaviour:
     initialNationId: WU
     initialTaxRatePercent: 3
     baseValue: 500
-    maxTroops: 200000
-    initPopulation: 40000
+    maxTroops: 0
+    initPopulation: 0
     posX: 520
     posY: 180
     adjacentIdsRaw: C15,C37,C38,C41
@@ -437,11 +461,11 @@ MonoBehaviour:
     name: R07
     regionId: "\uC601\uB989"
     grade: 5
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 0.7
     baseValue: 200
-    maxTroops: 60000
-    initPopulation: 12000
+    maxTroops: 0
+    initPopulation: 0
     posX: 450
     posY: 150
     adjacentIdsRaw: C12,C36,C38
@@ -449,14 +473,62 @@ MonoBehaviour:
     name: R07
     regionId: "\uACC4\uC591"
     grade: 4
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 1.2
     baseValue: 250
-    maxTroops: 80000
-    initPopulation: 15000
+    maxTroops: 0
+    initPopulation: 0
     posX: 500
     posY: 120
     adjacentIdsRaw: C12,C36,C37
+  - id: C76
+    name: R07
+    regionId: "\uC0C1\uC6A9"
+    grade: 3
+    initialNationId: SHU
+    initialTaxRatePercent: 2.4
+    baseValue: 380
+    maxTroops: 0
+    initPopulation: 0
+    posX: 390
+    posY: 230
+    adjacentIdsRaw: C10,C52,C62,C83
+  - id: C83
+    name: R07
+    regionId: "\uB300\uC0B0\uAD00"
+    grade: 4
+    initialNationId: SHU
+    initialTaxRatePercent: 1
+    baseValue: 200
+    maxTroops: 0
+    initPopulation: 0
+    posX: 410
+    posY: 315
+    adjacentIdsRaw: C10,C52,C67,C76
+  - id: C13
+    name: R08
+    regionId: "\uAC74\uC5C5"
+    grade: 0
+    initialNationId: WU
+    initialTaxRatePercent: 4.8
+    baseValue: 850
+    maxTroops: 0
+    initPopulation: 0
+    posX: 800
+    posY: 300
+    adjacentIdsRaw: C14,C35,C39,C41,C49,C54,C60,C70,C71,C77
+  - id: C14
+    name: R08
+    regionId: "\uC624\uAD70"
+    grade: 1
+    initialNationId: WU
+    initialTaxRatePercent: 4
+    baseValue: 650
+    maxTroops: 0
+    initPopulation: 0
+    posX: 880
+    posY: 280
+    adjacentIdsRaw: C13,C15,C39,C71
   - id: C39
     name: R08
     regionId: "\uD68C\uACC4"
@@ -464,8 +536,8 @@ MonoBehaviour:
     initialNationId: WU
     initialTaxRatePercent: 2.5
     baseValue: 450
-    maxTroops: 180000
-    initPopulation: 35000
+    maxTroops: 0
+    initPopulation: 0
     posX: 920
     posY: 220
     adjacentIdsRaw: C13,C14,C40
@@ -476,8 +548,8 @@ MonoBehaviour:
     initialNationId: WU
     initialTaxRatePercent: 1.5
     baseValue: 300
-    maxTroops: 100000
-    initPopulation: 20000
+    maxTroops: 0
+    initPopulation: 0
     posX: 880
     posY: 120
     adjacentIdsRaw: C39,C41
@@ -488,11 +560,191 @@ MonoBehaviour:
     initialNationId: WU
     initialTaxRatePercent: 1.5
     baseValue: 250
-    maxTroops: 80000
-    initPopulation: 15000
+    maxTroops: 0
+    initPopulation: 0
     posX: 750
     posY: 200
-    adjacentIdsRaw: C13,C15,C36,C40
+    adjacentIdsRaw: C13,C15,C36,C40,C54,C68,C69,C77,C78
+  - id: C54
+    name: R08
+    regionId: "\uD30C\uC591"
+    grade: 3
+    initialNationId: WU
+    initialTaxRatePercent: 2.2
+    baseValue: 350
+    maxTroops: 0
+    initPopulation: 0
+    posX: 660
+    posY: 260
+    adjacentIdsRaw: C13,C35,C41,C69,C75,C77
+  - id: C69
+    name: R08
+    regionId: "\uD30C\uC591\uD56D"
+    grade: 4
+    initialNationId: WU
+    initialTaxRatePercent: 1
+    baseValue: 180
+    maxTroops: 0
+    initPopulation: 0
+    posX: 700
+    posY: 240
+    adjacentIdsRaw: C41,C54,C71,C84
+  - id: C71
+    name: R08
+    regionId: "\uAC74\uC5C5\uD56D"
+    grade: 4
+    initialNationId: WU
+    initialTaxRatePercent: 1.1
+    baseValue: 200
+    maxTroops: 0
+    initPopulation: 0
+    posX: 820
+    posY: 320
+    adjacentIdsRaw: C13,C14,C69,C85
+  - id: C77
+    name: R08
+    regionId: "\uC2DC\uC0C1"
+    grade: 3
+    initialNationId: WU
+    initialTaxRatePercent: 2.8
+    baseValue: 420
+    maxTroops: 0
+    initPopulation: 0
+    posX: 690
+    posY: 360
+    adjacentIdsRaw: C13,C41,C54,C84,C85
+  - id: C84
+    name: R08
+    regionId: "\uC2DC\uC0C1\uD56D"
+    grade: 5
+    initialNationId: WU
+    initialTaxRatePercent: 0.7
+    baseValue: 120
+    maxTroops: 0
+    initPopulation: 0
+    posX: 700
+    posY: 390
+    adjacentIdsRaw: C69,C77,C85
+  - id: C26
+    name: R09
+    regionId: "\uC218\uCD98"
+    grade: 2
+    initialNationId: WEI
+    initialTaxRatePercent: 3.5
+    baseValue: 450
+    maxTroops: 0
+    initPopulation: 0
+    posX: 650
+    posY: 400
+    adjacentIdsRaw: C02,C23,C35,C49,C60,C78
+  - id: C35
+    name: R09
+    regionId: "\uAC15\uD558"
+    grade: 3
+    initialNationId: WEI
+    initialTaxRatePercent: 2.2
+    baseValue: 400
+    maxTroops: 0
+    initPopulation: 0
+    posX: 550
+    posY: 320
+    adjacentIdsRaw: C10,C11,C13,C15,C26,C54,C60,C68,C70,C75
+  - id: C49
+    name: R09
+    regionId: "\uD569\uBE44"
+    grade: 2
+    initialNationId: WEI
+    initialTaxRatePercent: 3.2
+    baseValue: 450
+    maxTroops: 0
+    initPopulation: 0
+    posX: 720
+    posY: 380
+    adjacentIdsRaw: C03,C13,C26,C48,C58,C60,C78
+  - id: C60
+    name: R09
+    regionId: "\uD68C\uB0A8"
+    grade: 3
+    initialNationId: WEI
+    initialTaxRatePercent: 2.4
+    baseValue: 380
+    maxTroops: 0
+    initPopulation: 0
+    posX: 690
+    posY: 340
+    adjacentIdsRaw: C13,C26,C35,C49,C58,C70,C78
+  - id: C68
+    name: R09
+    regionId: "\uD558\uAD6C\uD56D"
+    grade: 4
+    initialNationId: WU
+    initialTaxRatePercent: 1
+    baseValue: 180
+    maxTroops: 0
+    initPopulation: 0
+    posX: 610
+    posY: 290
+    adjacentIdsRaw: C35,C41,C70,C86
+  - id: C70
+    name: R09
+    regionId: "\uAC15\uD558\uD56D"
+    grade: 4
+    initialNationId: WU
+    initialTaxRatePercent: 1
+    baseValue: 180
+    maxTroops: 0
+    initPopulation: 0
+    posX: 590
+    posY: 300
+    adjacentIdsRaw: C13,C35,C60,C68,C85
+  - id: C78
+    name: R09
+    regionId: "\uC5EC\uAC15"
+    grade: 4
+    initialNationId: WU
+    initialTaxRatePercent: 1.8
+    baseValue: 300
+    maxTroops: 0
+    initPopulation: 0
+    posX: 790
+    posY: 380
+    adjacentIdsRaw: C26,C41,C49,C60,C85
+  - id: C85
+    name: R09
+    regionId: "\uC5EC\uAC15\uD56D"
+    grade: 5
+    initialNationId: WU
+    initialTaxRatePercent: 0.7
+    baseValue: 120
+    maxTroops: 0
+    initPopulation: 0
+    posX: 810
+    posY: 360
+    adjacentIdsRaw: C70,C71,C77,C78,C84
+  - id: C16
+    name: R10
+    regionId: "\uC131\uB3C4"
+    grade: 0
+    initialNationId: SHU
+    initialTaxRatePercent: 4.5
+    baseValue: 700
+    maxTroops: 0
+    initPopulation: 0
+    posX: 180
+    posY: 350
+    adjacentIdsRaw: C17,C42,C43,C44,C53,C79
+  - id: C17
+    name: R10
+    regionId: "\uAC15\uC8FC"
+    grade: 3
+    initialNationId: SHU
+    initialTaxRatePercent: 2.5
+    baseValue: 400
+    maxTroops: 0
+    initPopulation: 0
+    posX: 250
+    posY: 320
+    adjacentIdsRaw: C16,C42,C44,C53,C62,C79
   - id: C42
     name: R10
     regionId: "\uC790\uB3D9"
@@ -500,8 +752,8 @@ MonoBehaviour:
     initialNationId: SHU
     initialTaxRatePercent: 2.2
     baseValue: 350
-    maxTroops: 120000
-    initPopulation: 25000
+    maxTroops: 0
+    initPopulation: 0
     posX: 220
     posY: 420
     adjacentIdsRaw: C16,C17,C34
@@ -512,8 +764,8 @@ MonoBehaviour:
     initialNationId: SHU
     initialTaxRatePercent: 0.8
     baseValue: 200
-    maxTroops: 60000
-    initPopulation: 12000
+    maxTroops: 0
+    initPopulation: 0
     posX: 150
     posY: 280
     adjacentIdsRaw: C16,C18
@@ -524,80 +776,260 @@ MonoBehaviour:
     initialNationId: SHU
     initialTaxRatePercent: 2
     baseValue: 400
-    maxTroops: 150000
-    initPopulation: 30000
+    maxTroops: 0
+    initPopulation: 0
     posX: 320
     posY: 320
-    adjacentIdsRaw: C16,C17,C11
+    adjacentIdsRaw: C11,C16,C17,C62
+  - id: C53
+    name: R10
+    regionId: "\uAC80\uAC01"
+    grade: 3
+    initialNationId: SHU
+    initialTaxRatePercent: 1.5
+    baseValue: 250
+    maxTroops: 0
+    initPopulation: 0
+    posX: 250
+    posY: 340
+    adjacentIdsRaw: C16,C17,C52,C63,C79
+  - id: C62
+    name: R10
+    regionId: "\uAC74\uD3C9"
+    grade: 4
+    initialNationId: SHU
+    initialTaxRatePercent: 1.3
+    baseValue: 220
+    maxTroops: 0
+    initPopulation: 0
+    posX: 360
+    posY: 300
+    adjacentIdsRaw: C11,C17,C44,C76
+  - id: C63
+    name: R10
+    regionId: "\uC74C\uD3C9"
+    grade: 4
+    initialNationId: SHU
+    initialTaxRatePercent: 1.1
+    baseValue: 200
+    maxTroops: 0
+    initPopulation: 0
+    posX: 300
+    posY: 400
+    adjacentIdsRaw: C34,C52,C53,C66
+  - id: C79
+    name: R10
+    regionId: "\uD30C\uC11C"
+    grade: 3
+    initialNationId: SHU
+    initialTaxRatePercent: 2.6
+    baseValue: 390
+    maxTroops: 0
+    initPopulation: 0
+    posX: 220
+    posY: 280
+    adjacentIdsRaw: C16,C17,C18,C53
+  - id: C18
+    name: R11
+    regionId: "\uAC74\uB155"
+    grade: 2
+    initialNationId: OTH
+    initialTaxRatePercent: 3.5
+    baseValue: 500
+    maxTroops: 0
+    initPopulation: 0
+    posX: 150
+    posY: 150
+    adjacentIdsRaw: C43,C45,C64,C79
   - id: C45
     name: R11
     regionId: "\uC6B4\uB0A8"
-    grade: 5
-    initialNationId: OTHERS
-    initialTaxRatePercent: 0.5
-    baseValue: 200
-    maxTroops: 50000
-    initPopulation: 10000
+    grade: 2
+    initialNationId: OTH
+    initialTaxRatePercent: 3.5
+    baseValue: 500
+    maxTroops: 0
+    initPopulation: 0
     posX: 80
     posY: 100
-    adjacentIdsRaw: C18
+    adjacentIdsRaw: C18,C64
+  - id: C64
+    name: R11
+    regionId: "\uC7A5\uAC00"
+    grade: 5
+    initialNationId: OTH
+    initialTaxRatePercent: 0.6
+    baseValue: 120
+    maxTroops: 0
+    initPopulation: 0
+    posX: 60
+    posY: 60
+    adjacentIdsRaw: C18,C45,C65
+  - id: C65
+    name: R11
+    regionId: "\uC77C\uB0A8"
+    grade: 5
+    initialNationId: OTH
+    initialTaxRatePercent: 0.4
+    baseValue: 100
+    maxTroops: 0
+    initPopulation: 0
+    posX: 35
+    posY: 20
+    adjacentIdsRaw: C64
+  - id: C19
+    name: R12
+    regionId: "\uC11C\uC8FC"
+    grade: 2
+    initialNationId: OTH
+    initialTaxRatePercent: 3.5
+    baseValue: 550
+    maxTroops: 0
+    initPopulation: 0
+    posX: 750
+    posY: 550
+    adjacentIdsRaw: C20,C46,C47,C48,C30
+  - id: C20
+    name: R12
+    regionId: "\uC18C\uD328"
+    grade: 5
+    initialNationId: OTH
+    initialTaxRatePercent: 0.7
+    baseValue: 150
+    maxTroops: 0
+    initPopulation: 0
+    posX: 680
+    posY: 520
+    adjacentIdsRaw: C19,C24,C46,C58
   - id: C46
     name: R12
     regionId: "\uD558\uBE44"
     grade: 1
-    initialNationId: OTHERS
-    initialTaxRatePercent: 4
-    baseValue: 550
-    maxTroops: 220000
-    initPopulation: 45000
+    initialNationId: OTH
+    initialTaxRatePercent: 4.5
+    baseValue: 750
+    maxTroops: 0
+    initPopulation: 0
     posX: 780
     posY: 500
-    adjacentIdsRaw: C19,C20,C48
+    adjacentIdsRaw: C19,C20,C48,C58,C61
   - id: C47
     name: R12
     regionId: "\uBD81\uD574"
     grade: 3
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 2.5
     baseValue: 400
-    maxTroops: 150000
-    initPopulation: 30000
+    maxTroops: 0
+    initPopulation: 0
     posX: 780
     posY: 650
-    adjacentIdsRaw: C19,C50
+    adjacentIdsRaw: C19,C50,C59
   - id: C48
     name: R12
     regionId: "\uAD11\uB989"
     grade: 3
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 2
     baseValue: 350
-    maxTroops: 120000
-    initPopulation: 25000
+    maxTroops: 0
+    initPopulation: 0
     posX: 820
     posY: 450
-    adjacentIdsRaw: C19,C46,C49
-  - id: C49
-    name: R09
-    regionId: "\uD569\uBE44"
-    grade: 2
-    initialNationId: WEI
-    initialTaxRatePercent: 3.2
-    baseValue: 450
-    maxTroops: 180000
-    initPopulation: 35000
-    posX: 720
-    posY: 380
-    adjacentIdsRaw: C03,C13,C26,C48
+    adjacentIdsRaw: C19,C46,C49,C58,C61
   - id: C50
     name: R12
     regionId: "\uB0AD\uC57C"
     grade: 5
-    initialNationId: OTHERS
+    initialNationId: OTH
     initialTaxRatePercent: 0.8
     baseValue: 150
-    maxTroops: 30000
-    initPopulation: 5000
+    maxTroops: 0
+    initPopulation: 0
     posX: 820
     posY: 600
-    adjacentIdsRaw: C47
+    adjacentIdsRaw: C47,C61
+  - id: C58
+    name: R12
+    regionId: "\uD33D\uC131"
+    grade: 3
+    initialNationId: OTH
+    initialTaxRatePercent: 2.6
+    baseValue: 420
+    maxTroops: 0
+    initPopulation: 0
+    posX: 730
+    posY: 470
+    adjacentIdsRaw: C20,C46,C48,C49,C60,C61
+  - id: C61
+    name: R12
+    regionId: "\uB3D9\uD574"
+    grade: 4
+    initialNationId: OTH
+    initialTaxRatePercent: 1.6
+    baseValue: 260
+    maxTroops: 0
+    initPopulation: 0
+    posX: 860
+    posY: 540
+    adjacentIdsRaw: C46,C48,C50,C58
+  - id: C73
+    name: R05
+    regionId: "\uC9C4\uC591"
+    grade: 4
+    initialNationId: WEI
+    initialTaxRatePercent: 1.8
+    baseValue: 260
+    maxTroops: 0
+    initPopulation: 0
+    posX: 300
+    posY: 610
+    adjacentIdsRaw: C56,C31,C80
+  - id: C74
+    name: R03
+    regionId: "\uD3C9\uC591"
+    grade: 5
+    initialNationId: OTH
+    initialTaxRatePercent: 0.8
+    baseValue: 120
+    maxTroops: 0
+    initPopulation: 0
+    posX: 900
+    posY: 890
+    adjacentIdsRaw: C06,C29
+  - id: C75
+    name: R06
+    regionId: "\uACF5\uC548"
+    grade: 3
+    initialNationId: SHU
+    initialTaxRatePercent: 2.2
+    baseValue: 350
+    maxTroops: 0
+    initPopulation: 0
+    posX: 250
+    posY: 260
+    adjacentIdsRaw: C11,C35,C54,C86
+  - id: C80
+    name: R05
+    regionId: "\uC7A5\uC561"
+    grade: 5
+    initialNationId: OTH
+    initialTaxRatePercent: 0.9
+    baseValue: 160
+    maxTroops: 0
+    initPopulation: 0
+    posX: 120
+    posY: 735
+    adjacentIdsRaw: C32,C33,C73
+  - id: C86
+    name: R06
+    regionId: "\uAC15\uB989\uD56D"
+    grade: 5
+    initialNationId: SHU
+    initialTaxRatePercent: 0.7
+    baseValue: 120
+    maxTroops: 0
+    initPopulation: 0
+    posX: 240
+    posY: 290
+    adjacentIdsRaw: C11,C68,C75

@@ -47,6 +47,7 @@ public static class MockCastleDataProvider
         };
         PlaceInRect(list, ref nextId, CountryId.Wu, wu, -0.5f, 10.5f, -6.8f, 2.5f, 200);
 
+        WireProximityRoadGraph(list, maxDistance: 9f, maxNeighborsPerCastle: 10);
         return list.ToArray();
     }
 
@@ -84,9 +85,10 @@ public static class MockCastleDataProvider
 
             var (city, gov) = towns[i];
             int h = Hash(seedSalt + i * 131 + (int)country * 7);
+            int cid = nextId++;
             list.Add(new CastleSheetRow
             {
-                castleId = nextId++,
+                castleId = cid,
                 castleName = city,
                 countryId = country,
                 governorName = gov,
@@ -96,7 +98,54 @@ public static class MockCastleDataProvider
                 castleValue = 3000 + (h % 14000),
                 mapPosition = new Vector2(x, y),
                 grade = (Grade)(i % 6),
+                masterId = $"MK{cid}",
+                adjacentIdsRaw = string.Empty,
             });
+        }
+    }
+
+    /// <summary>목 맵에서 시트 인접 열이 없을 때를 대비해, 가까운 성들을 도로 그래프로 연결합니다.</summary>
+    static void WireProximityRoadGraph(List<CastleSheetRow> list, float maxDistance, int maxNeighborsPerCastle)
+    {
+        if (list == null || list.Count == 0) return;
+        int n = list.Count;
+        var neighborIdx = new List<int>[n];
+        for (int i = 0; i < n; i++)
+            neighborIdx[i] = new List<int>(16);
+
+        for (int i = 0; i < n; i++)
+        {
+            var pi = list[i].mapPosition;
+            for (int j = i + 1; j < n; j++)
+            {
+                if (Vector2.Distance(pi, list[j].mapPosition) > maxDistance)
+                    continue;
+                neighborIdx[i].Add(j);
+                neighborIdx[j].Add(i);
+            }
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            var idxs = neighborIdx[i];
+            if (idxs.Count == 0)
+            {
+                list[i].adjacentIdsRaw = string.Empty;
+                continue;
+            }
+
+            idxs.Sort((ja, jb) =>
+            {
+                float da = Vector2.Distance(list[i].mapPosition, list[ja].mapPosition);
+                float db = Vector2.Distance(list[i].mapPosition, list[jb].mapPosition);
+                return da.CompareTo(db);
+            });
+
+            int take = Mathf.Min(maxNeighborsPerCastle, idxs.Count);
+            var parts = new string[take];
+            for (int k = 0; k < take; k++)
+                parts[k] = list[idxs[k]].masterId;
+            list[i].adjacentIdsRaw = string.Join(",", parts);
         }
     }
 

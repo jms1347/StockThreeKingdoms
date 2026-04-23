@@ -24,6 +24,11 @@ public class MapManager : WorldMapSingleton<MapManager>
     [SerializeField] float marchArmyFraction = 0.28f;
     [SerializeField] int marchArmyMinimum = 400;
 
+    [Header("도로·출정 연결")]
+    [Tooltip(
+        "한쪽(또는 양쪽) 성의 인접 시트가 비어 있거나 BFS로 못 찾을 때, 이 월드 거리 이내면 출정 허용(목 맵·데이터 누락 보정). 실데이터 양쪽 모두 인접이 채워진 경우에는 BFS만 사용합니다.")]
+    [SerializeField] float roadlessTacticalNeighborDistance = 9f;
+
     WorldMapAutopilotSimulator _autopilot;
 
     Castle _selected;
@@ -31,6 +36,8 @@ public class MapManager : WorldMapSingleton<MapManager>
     Transform _marchesRoot;
 
     public Transform CastleParentOrSelf => castleParent != null ? castleParent : transform;
+
+    public CountryColorProvider CountryColorsOrNull => countryColorProvider;
 
     void Start()
     {
@@ -56,16 +63,24 @@ public class MapManager : WorldMapSingleton<MapManager>
         RebuildRoads();
         EnsureMarchesRoot();
 
+        WorldMapGeneralRoster.RebuildFromDataManager(DataManager.InstanceOrNull);
+
         if (WorldTimeManager.InstanceOrNull != null)
             WorldTimeManager.InstanceOrNull.OnNewDayTick += OnWorldSimulationDay;
 
         var dm = DataManager.InstanceOrNull;
         if (dm != null)
         {
-            dm.OnStateTicked += RefreshAllCastleMapStatuses;
-            dm.OnStateDataReady += RefreshAllCastleMapStatuses;
+            dm.OnStateTicked += OnDataManagerStateForWorldMap;
+            dm.OnStateDataReady += OnDataManagerStateForWorldMap;
         }
 
+        RefreshAllCastleMapStatuses();
+    }
+
+    void OnDataManagerStateForWorldMap()
+    {
+        WorldMapGeneralRoster.RebuildFromDataManager(DataManager.InstanceOrNull);
         RefreshAllCastleMapStatuses();
     }
 
@@ -83,8 +98,8 @@ public class MapManager : WorldMapSingleton<MapManager>
         var dm = DataManager.InstanceOrNull;
         if (dm != null)
         {
-            dm.OnStateTicked -= RefreshAllCastleMapStatuses;
-            dm.OnStateDataReady -= RefreshAllCastleMapStatuses;
+            dm.OnStateTicked -= OnDataManagerStateForWorldMap;
+            dm.OnStateDataReady -= OnDataManagerStateForWorldMap;
         }
     }
 
@@ -209,6 +224,23 @@ public class MapManager : WorldMapSingleton<MapManager>
         return _castleByMasterId.TryGetValue(masterId.Trim(), out castle) && castle != null;
     }
 
+    /// <summary>인접 목록 중 같은 세력 성만 반환합니다.</summary>
+    public List<Castle> GetAdjacentAlliedCastles(Castle from)
+    {
+        var list = new List<Castle>(8);
+        if (from == null || string.IsNullOrEmpty(from.MasterId))
+            return list;
+
+        foreach (var nid in SplitAdjacentIdsRaw(from.AdjacentIdsRaw))
+        {
+            if (!TryGetCastleByMasterId(nid, out var to) || to == null) continue;
+            if (to.CountryId != from.CountryId) continue;
+            list.Add(to);
+        }
+
+        return list;
+    }
+
     /// <summary>인접 목록 중 다른 국가(적) 성만 반환합니다.</summary>
     public List<Castle> GetAdjacentEnemyCastles(Castle from)
     {
@@ -251,6 +283,94 @@ public class MapManager : WorldMapSingleton<MapManager>
         return false;
     }
 
+    /// <summary>인접 도로 그래프상 출발 성에서 목표 성까지 도달 가능하면 true.</summary>
+    public bool AreConnectedByRoads(Castle from, Castle to)
+    {
+        if (from == null || to == null || string.IsNullOrEmpty(from.MasterId) || string.IsNullOrEmpty(to.MasterId))
+            return false;
+        var start = from.MasterId.Trim();
+        var goal = to.MasterId.Trim();
+        if (string.Equals(start, goal, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (AreAdjacentByMasterId(from, to) || AreAdjacentByMasterId(to, from))
+            return true;
+
+        bool fromHasGraph = !string.IsNullOrWhiteSpace(from.AdjacentIdsRaw);
+        bool toHasGraph = !string.IsNullOrWhiteSpace(to.AdjacentIdsRaw);
+
+        if (fromHasGraph && toHasGraph && TryReachByBfsRoads(start, goal))
+            return true;
+
+        if (fromHasGraph && toHasGraph)
+            return false;
+
+        return TacticalWorldDistanceAllowsMarch(from, to);
+    }
+
+    bool TryReachByBfsRoads(string start, string goal)
+    {
+        var q = new Queue<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        q.Enqueue(start);
+        seen.Add(start);
+
+        while (q.Count > 0)
+        {
+            var cur = q.Dequeue();
+            if (string.Equals(cur, goal, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (!TryGetCastleByMasterId(cur, out var c) || c == null) continue;
+            foreach (var nid in SplitAdjacentIdsRaw(c.AdjacentIdsRaw))
+            {
+                if (string.IsNullOrEmpty(nid) || seen.Contains(nid)) continue;
+                seen.Add(nid);
+                q.Enqueue(nid);
+            }
+        }
+
+        return false;
+    }
+
+    bool TacticalWorldDistanceAllowsMarch(Castle from, Castle to)
+    {
+        float d = Vector2.Distance((Vector2)from.transform.position, (Vector2)to.transform.position);
+        return d <= Mathf.Max(0.1f, roadlessTacticalNeighborDistance);
+    }
+
+    /// <summary>같은 세력 성만 도로를 따라 만나는 성들(자기 자신 제외). 전장 지원 대상 탐색에 사용.</summary>
+    public List<Castle> GetAlliesConnectedByRoadsExceptSelf(Castle origin)
+    {
+        var list = new List<Castle>(32);
+        if (origin == null || string.IsNullOrEmpty(origin.MasterId))
+            return list;
+
+        var faction = origin.CountryId;
+        var start = origin.MasterId.Trim();
+        var q = new Queue<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        q.Enqueue(start);
+        seen.Add(start);
+
+        while (q.Count > 0)
+        {
+            var curId = q.Dequeue();
+            if (!TryGetCastleByMasterId(curId, out var c) || c == null) continue;
+            foreach (var nid in SplitAdjacentIdsRaw(c.AdjacentIdsRaw))
+            {
+                if (string.IsNullOrEmpty(nid) || seen.Contains(nid)) continue;
+                if (!TryGetCastleByMasterId(nid, out var n) || n == null) continue;
+                if (n.CountryId != faction) continue;
+                seen.Add(nid);
+                q.Enqueue(nid);
+                if (!string.Equals(nid, start, StringComparison.OrdinalIgnoreCase))
+                    list.Add(n);
+            }
+        }
+
+        return list;
+    }
+
     /// <summary>출발 성에서 목표 성으로 행군 마커를 보냅니다. 도착 시 목표에 전쟁중이 표시됩니다.</summary>
     public void StartMarch(Castle from, Castle to)
     {
@@ -262,9 +382,9 @@ public class MapManager : WorldMapSingleton<MapManager>
             return;
         }
 
-        if (!AreAdjacentByMasterId(from, to))
+        if (!AreConnectedByRoads(from, to))
         {
-            Debug.LogWarning("[MapManager] 인접하지 않은 성으로는 출정할 수 없습니다.");
+            Debug.LogWarning("[MapManager] 도로로 연결되지 않은 성으로는 출정할 수 없습니다.");
             return;
         }
 
@@ -274,12 +394,27 @@ public class MapManager : WorldMapSingleton<MapManager>
             return;
         }
 
-        if (WorldMapWarManager.InstanceOrNull != null &&
-            (WorldMapWarManager.InstanceOrNull.IsCastleInAnyWar(from) ||
-             WorldMapWarManager.InstanceOrNull.IsCastleInAnyWar(to)))
+        var wm = WorldMapWarManager.InstanceOrNull;
+        if (wm != null)
         {
-            Debug.LogWarning("[MapManager] 전쟁(공성) 중인 성은 전쟁이 끝날 때까지 공격할 수 없습니다.");
-            return;
+            if (wm.IsCastleSiegeDefender(from))
+            {
+                Debug.LogWarning("[MapManager] 수비 공성 중인 성에서는 출정할 수 없습니다.");
+                return;
+            }
+
+            if (wm.CountActiveSiegesWhereAttacker(from) >= wm.MaxConcurrentAttacksPerCastle)
+            {
+                Debug.LogWarning(
+                    $"[MapManager] 이 성에서 동시에 벌일 수 있는 공격이 상한({wm.MaxConcurrentAttacksPerCastle})에 도달했습니다.");
+                return;
+            }
+
+            if (wm.IsCastleInAnyWar(to))
+            {
+                Debug.LogWarning("[MapManager] 전쟁(공성) 중인 성은 전쟁이 끝날 때까지 공격할 수 없습니다.");
+                return;
+            }
         }
 
         EnsureMarchesRoot();
@@ -293,7 +428,10 @@ public class MapManager : WorldMapSingleton<MapManager>
         var go = new GameObject($"March_{from.MasterId}_to_{to.MasterId}");
         go.transform.SetParent(_marchesRoot, false);
         var marker = go.AddComponent<MarchingTroopMarker>();
-        marker.Begin(from, to, from.GovernorName, troops, marchWorldUnitsPerSecond);
+        string leadGen = WorldMapGeneralRoster.ResolveMarchingGovernorId(from);
+        WorldMapGovernorSuccession.TryHandOverWhenGovernorMarches(leadGen, from, countryColorProvider);
+        marker.Begin(from, to, from.GovernorName, troops, marchWorldUnitsPerSecond, leadGen);
+        WorldMapGeneralRoster.BeginMarch(leadGen, from, to, marker);
 
         if (detailPanel != null && _selected == from)
             detailPanel.RefreshFromBound();
@@ -307,5 +445,80 @@ public class MapManager : WorldMapSingleton<MapManager>
         _selected = castle;
         if (detailPanel != null)
             detailPanel.Bind(castle);
+    }
+
+    static int ComputeSupportTroopPlan(Castle supporter)
+    {
+        if (supporter == null) return 0;
+        int n = Mathf.Max(100, Mathf.RoundToInt(supporter.Army * 0.16f));
+        return Mathf.Min(n, supporter.Army);
+    }
+
+    /// <summary>도로로 연결된 아군 성이 <b>수비</b> 공성 중이면 그 성과 지원 병력(예정)을 반환합니다.</summary>
+    public bool TryGetSiegeDefenseSupportOpportunity(Castle supporter, out Castle besiegedAlly, out int plannedTroops)
+    {
+        besiegedAlly = null;
+        plannedTroops = 0;
+        if (supporter == null) return false;
+        var wm = WorldMapWarManager.InstanceOrNull;
+        if (wm == null) return false;
+
+        foreach (var n in GetAlliesConnectedByRoadsExceptSelf(supporter))
+        {
+            if (n == null) continue;
+            if (!wm.TryFindWarDefendingCastle(n, out _)) continue;
+            besiegedAlly = n;
+            plannedTroops = ComputeSupportTroopPlan(supporter);
+            return plannedTroops > 0;
+        }
+
+        return false;
+    }
+
+    /// <summary>도로로 연결된 아군 성이 <b>공격(공성)</b> 중이면 그 성과 지원 병력(예정)을 반환합니다.</summary>
+    public bool TryGetSiegeAttackSupportOpportunity(Castle supporter, out Castle attackerAlly, out int plannedTroops)
+    {
+        attackerAlly = null;
+        plannedTroops = 0;
+        if (supporter == null) return false;
+        var wm = WorldMapWarManager.InstanceOrNull;
+        if (wm == null) return false;
+
+        foreach (var n in GetAlliesConnectedByRoadsExceptSelf(supporter))
+        {
+            if (n == null) continue;
+            if (!wm.TryFindWarAttackingCastle(n, out _)) continue;
+            attackerAlly = n;
+            plannedTroops = ComputeSupportTroopPlan(supporter);
+            return plannedTroops > 0;
+        }
+
+        return false;
+    }
+
+    /// <summary>인접 아군 수비 공성에 병력을 보냅니다.</summary>
+    public bool TrySendSiegeDefenseSupport(Castle supporter, Castle besiegedAlly)
+    {
+        if (supporter == null || besiegedAlly == null) return false;
+        if (!TryGetSiegeDefenseSupportOpportunity(supporter, out var target, out var troops)) return false;
+        if (target != besiegedAlly) return false;
+        var wm = WorldMapWarManager.InstanceOrNull;
+        return wm != null && wm.TrySendNeighborReinforcement(supporter, besiegedAlly, troops);
+    }
+
+    /// <summary>인접 아군 공격 공성에 병력을 보냅니다.</summary>
+    public bool TrySendSiegeAttackSupport(Castle supporter, Castle attackerAlly)
+    {
+        if (supporter == null || attackerAlly == null) return false;
+        if (!TryGetSiegeAttackSupportOpportunity(supporter, out var target, out var troops)) return false;
+        if (target != attackerAlly) return false;
+        var wm = WorldMapWarManager.InstanceOrNull;
+        return wm != null && wm.TrySendNeighborAttackReinforcement(supporter, attackerAlly, troops);
+    }
+
+    public void RefreshCastleDetailIfOpen()
+    {
+        if (detailPanel != null && _selected != null)
+            detailPanel.RefreshFromBound();
     }
 }

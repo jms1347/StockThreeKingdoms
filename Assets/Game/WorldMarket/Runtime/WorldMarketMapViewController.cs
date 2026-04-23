@@ -30,7 +30,7 @@ public class WorldMarketMapViewController : MonoBehaviour
             case Faction.WEI: return new Color(0.85f, 0.32f, 0.28f, 1f);
             case Faction.SHU: return new Color(0.35f, 0.72f, 0.42f, 1f);
             case Faction.WU: return new Color(0.35f, 0.52f, 0.92f, 1f);
-            case Faction.OTHERS: return new Color(0.75f, 0.62f, 0.38f, 1f);
+            case Faction.OTHERS: return new Color(0.58f, 0.58f, 0.6f, 1f);
             default: return new Color(0.55f, 0.58f, 0.64f, 1f);
         }
     }
