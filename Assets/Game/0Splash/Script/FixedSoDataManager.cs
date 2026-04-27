@@ -28,6 +28,10 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
     [SerializeField] EventStatModifierSo eventStatModifierSo;
     [Tooltip("뉴스 마스터(기사 분리). newsCode → headline/script/icon")]
     [SerializeField] NewsMasterDataSo newsMasterDataSo;
+    [Tooltip("무작위 방문객 이벤트. A:id, B:visitorType, C:probability, D:effectReward")]
+    [SerializeField] RandomVisitorDataSo randomVisitorDataSo;
+    [Tooltip("만보기 미션. A:step, B:targetSteps, C:mpReward, D:remarks")]
+    [SerializeField] StepMissionDataSo stepMissionDataSo;
 
     [Header("경제·월드 초기값 SO (선택)")]
     [Tooltip("GlobalEconomy 정적 필드 초기화.")]
@@ -77,6 +81,15 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
     public Dictionary<string, NewsMasterData> newsMasterDataMap =
         new Dictionary<string, NewsMasterData>(StringComparer.Ordinal);
 
+    [ShowInInspector]
+    [DictionaryDrawerSettings(KeyLabel = "이벤트 ID", ValueLabel = "방문객 데이터", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+    public Dictionary<string, RandomVisitorData> randomVisitorMap =
+        new Dictionary<string, RandomVisitorData>(StringComparer.Ordinal);
+
+    [ShowInInspector]
+    [DictionaryDrawerSettings(KeyLabel = "단계", ValueLabel = "만보기 미션", DisplayMode = DictionaryDisplayOptions.ExpandedFoldout)]
+    public Dictionary<int, StepMissionData> stepMissionMap = new Dictionary<int, StepMissionData>();
+
     /// <summary>성 ID → 지역 코드(R01 등). <see cref="RebuildRegionCastleLookup"/>로 갱신.</summary>
     public Dictionary<string, string> castleIdToRegionIdMap = new Dictionary<string, string>();
 
@@ -86,6 +99,19 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
     public LevelRuleData GetLevelData(int level)
     {
         if (levelRuleMap.TryGetValue(level, out LevelRuleData data)) return data;
+        return null;
+    }
+
+    public RandomVisitorData GetRandomVisitor(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id)) return null;
+        if (randomVisitorMap.TryGetValue(id.Trim(), out RandomVisitorData data)) return data;
+        return null;
+    }
+
+    public StepMissionData GetStepMission(int step)
+    {
+        if (stepMissionMap.TryGetValue(step, out StepMissionData data)) return data;
         return null;
     }
 
@@ -370,6 +396,19 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
         SyncEventStatModifierFromSoIfNeeded();
         SyncNewsMasterFromSoIfNeeded();
         SyncConditionFromSoIfNeeded();
+        SyncRandomVisitorFromSoIfNeeded();
+        SyncStepMissionFromSoIfNeeded();
+        ApplyCastleMasterDerivedDefaults();
+    }
+
+    void ApplyCastleMasterDerivedDefaults()
+    {
+        if (castleMasterDataMap == null) return;
+        foreach (var kv in castleMasterDataMap)
+        {
+            if (kv.Value == null) continue;
+            kv.Value.EnsureDerivedDefaults();
+        }
     }
 
     public void SyncSoFromRuntimeMaps()
@@ -429,6 +468,16 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
                 : newsMasterDataMap.Values.OrderBy(x => x.newsCode ?? "", StringComparer.Ordinal).ToList();
         }
 
+        if (randomVisitorDataSo != null)
+            randomVisitorDataSo.list = randomVisitorMap.Count == 0
+                ? new List<RandomVisitorData>()
+                : randomVisitorMap.Values.OrderBy(x => x.id ?? "", StringComparer.Ordinal).ToList();
+
+        if (stepMissionDataSo != null)
+            stepMissionDataSo.list = stepMissionMap.Count == 0
+                ? new List<StepMissionData>()
+                : stepMissionMap.Values.OrderBy(x => x.step).ToList();
+
 #if UNITY_EDITOR
         if (levelRuleDataSo != null) EditorUtility.SetDirty(levelRuleDataSo);
         if (castleMasterDataSo != null) EditorUtility.SetDirty(castleMasterDataSo);
@@ -440,6 +489,8 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
         if (conditionDataSo != null) EditorUtility.SetDirty(conditionDataSo);
         if (eventStatModifierSo != null) EditorUtility.SetDirty(eventStatModifierSo);
         if (newsMasterDataSo != null) EditorUtility.SetDirty(newsMasterDataSo);
+        if (randomVisitorDataSo != null) EditorUtility.SetDirty(randomVisitorDataSo);
+        if (stepMissionDataSo != null) EditorUtility.SetDirty(stepMissionDataSo);
         AssetDatabase.SaveAssets();
 #endif
     }
@@ -584,5 +635,33 @@ public class FixedSoDataManager : Singleton<FixedSoDataManager>
             return;
 
         RebuildConditionDataMapFromSoList();
+    }
+
+    void SyncRandomVisitorFromSoIfNeeded()
+    {
+        if (randomVisitorMap.Count > 0 || randomVisitorDataSo == null || randomVisitorDataSo.list == null)
+            return;
+
+        for (int i = 0; i < randomVisitorDataSo.list.Count; i++)
+        {
+            var item = randomVisitorDataSo.list[i];
+            if (item == null || string.IsNullOrWhiteSpace(item.id))
+                continue;
+            randomVisitorMap[item.id.Trim()] = item;
+        }
+    }
+
+    void SyncStepMissionFromSoIfNeeded()
+    {
+        if (stepMissionMap.Count > 0 || stepMissionDataSo == null || stepMissionDataSo.list == null)
+            return;
+
+        for (int i = 0; i < stepMissionDataSo.list.Count; i++)
+        {
+            var item = stepMissionDataSo.list[i];
+            if (item == null)
+                continue;
+            stepMissionMap[item.step] = item;
+        }
     }
 }

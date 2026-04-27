@@ -425,9 +425,17 @@ public class HomeUIController : MonoBehaviour
         if (logisticsLabelText == null || _controller == null || gm == null) return;
 
         int lv = gm.currentUser?.farmLevel ?? 0;
-        double discNow = Math.Min(0.5d, lv * 0.02d) * 100d;
-        double discNext = Math.Min(0.5d, (lv + 1) * 0.02d) * 100d;
-        double cost = HomeController.UpgradeCost(HomeController.LogisticsBaseCost, lv);
+        double discNow = 0d;
+        double discNext = 0d;
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var nowRule = DataManager.Instance.GetLevelData(lv);
+            var nextRule = DataManager.Instance.GetLevelData(lv + 1);
+            if (nowRule != null) discNow = nowRule.logisticsDiscountRate;
+            if (nextRule != null) discNext = nextRule.logisticsDiscountRate;
+        }
+
+        double cost = HomeController.GetLogisticsUpgradeGoldCost(lv);
 
         logisticsLabelText.text =
             $"병참 — 보유 병사 일일 유지비 감소\n(Level {lv})\n" +

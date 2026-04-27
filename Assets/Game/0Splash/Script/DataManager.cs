@@ -99,6 +99,8 @@ public partial class DataManager : Singleton<DataManager>
     static Dictionary<string, EventStatModifierData> _fbStatMod;
     static Dictionary<string, NewsMasterData> _fbNews;
     static Dictionary<string, string> _fbCastleRegion;
+    static Dictionary<string, RandomVisitorData> _fbRandomVisitor;
+    static Dictionary<int, StepMissionData> _fbStepMission;
 
     /// <summary><see cref="FixedSoDataManager.levelRuleMap"/> 위임(FixedSo 없으면 빈 맵).</summary>
     public Dictionary<int, LevelRuleData> levelRuleMap =>
@@ -141,6 +143,14 @@ public partial class DataManager : Singleton<DataManager>
 
     public Dictionary<string, string> castleIdToRegionIdMap =>
         FixedSo != null ? FixedSo.castleIdToRegionIdMap : (_fbCastleRegion ??= new Dictionary<string, string>());
+
+    public Dictionary<string, RandomVisitorData> randomVisitorMap =>
+        FixedSo != null
+            ? FixedSo.randomVisitorMap
+            : (_fbRandomVisitor ??= new Dictionary<string, RandomVisitorData>(StringComparer.Ordinal));
+
+    public Dictionary<int, StepMissionData> stepMissionMap =>
+        FixedSo != null ? FixedSo.stepMissionMap : (_fbStepMission ??= new Dictionary<int, StepMissionData>());
 
     [Header("State Data (Runtime)")]
     [ShowInInspector]
@@ -221,7 +231,7 @@ public partial class DataManager : Singleton<DataManager>
         }
 
         Debug.Log(
-            $"[DataManager] 변동 데이터 매니저 준비. 마스터(FixedSo): {(FixedSo != null ? "OK" : "없음")} — 레벨룰 {levelRuleMap.Count}, 성 {castleMasterDataMap.Count}, 장수 {generalMasterDataMap.Count}, 버프 {buffMasterDataMap.Count}, 세력 {nationMasterDataMap.Count}, 지역 {regionMasterDataMap.Count}, 이벤트 {eventMasterDataMap.Count}종(행 {eventRowTotal}), 조건 {conditionDataMap.Count}, 확률보정 {eventStatModifierMap.Count}, 뉴스마스터 {newsMasterDataMap.Count}.");
+            $"[DataManager] 변동 데이터 매니저 준비. 마스터(FixedSo): {(FixedSo != null ? "OK" : "없음")} — 레벨룰 {levelRuleMap.Count}, 성 {castleMasterDataMap.Count}, 장수 {generalMasterDataMap.Count}, 버프 {buffMasterDataMap.Count}, 세력 {nationMasterDataMap.Count}, 지역 {regionMasterDataMap.Count}, 이벤트 {eventMasterDataMap.Count}종(행 {eventRowTotal}), 조건 {conditionDataMap.Count}, 확률보정 {eventStatModifierMap.Count}, 뉴스마스터 {newsMasterDataMap.Count}, 방문객 {randomVisitorMap.Count}, 만보기미션 {stepMissionMap.Count}.");
 
         InitializeStateData();
     }
@@ -243,6 +253,19 @@ public partial class DataManager : Singleton<DataManager>
     }
 
     public LevelRuleData GetLevelData(int level) => FixedSo != null ? FixedSo.GetLevelData(level) : null;
+
+    public RandomVisitorData GetRandomVisitor(string id)
+    {
+        if (FixedSo != null) return FixedSo.GetRandomVisitor(id);
+        if (string.IsNullOrWhiteSpace(id)) return null;
+        return randomVisitorMap.TryGetValue(id.Trim(), out RandomVisitorData d) ? d : null;
+    }
+
+    public StepMissionData GetStepMission(int step)
+    {
+        if (FixedSo != null) return FixedSo.GetStepMission(step);
+        return stepMissionMap.TryGetValue(step, out StepMissionData d) ? d : null;
+    }
 
     public CastleMasterData GetCastleMasterData(string id) => FixedSo != null ? FixedSo.GetCastleMasterData(id) : null;
 
@@ -308,6 +331,8 @@ public partial class DataManager : Singleton<DataManager>
         if (!loaded)
             BuildStateDataFromMaster();
 
+        RepairCastlesWithZeroPopulationFromMaster();
+
         SyncCastleTaxRateFromMaster();
 
         EnsureAllCastlesAmmInitialized();
@@ -337,6 +362,30 @@ public partial class DataManager : Singleton<DataManager>
         FlushLiveScriptableObjects();
 
         DividendManager.TryProcessWeeklyDividend(this);
+    }
+
+    /// <summary>
+    /// 이전 세이브에 <see cref="CastleStateData.currentPopulation"/>이 0으로 박힌 경우(마스터 I열 누락 시) 마스터 기준으로 복구합니다.
+    /// </summary>
+    void RepairCastlesWithZeroPopulationFromMaster()
+    {
+        if (castleStateDataMap == null) return;
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null) continue;
+            if (s.currentPopulation > 0) continue;
+            if (!castleMasterDataMap.TryGetValue(s.id, out var m) || m == null) continue;
+            m.EnsureDerivedDefaults();
+            if (m.initPopulation <= 0) continue;
+            s.currentPopulation = m.initPopulation;
+            if (s.populationHistory == null)
+                s.populationHistory = new List<int> { s.currentPopulation };
+            else if (s.populationHistory.Count == 0)
+                s.populationHistory.Add(s.currentPopulation);
+            else
+                s.populationHistory[s.populationHistory.Count - 1] = s.currentPopulation;
+        }
     }
 
     void BuildStateDataFromMaster()

@@ -34,6 +34,12 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     const string newsMasterDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=301270709&range=A2:D";
     /// <summary>EventStatModifier TSV. A:eventId, B:flatProbBonus, C:perMight, D:perIntel, E:perCharm, F:perInfamy. 비우면 다운로드 생략(SO·기존 맵 유지).</summary>
     const string eventStatModifierDataURL = "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1830339338&range=A2:F";
+    /// <summary>무작위 방문객 이벤트. A:id, B:visitorType, C:probability(예: 10%), D:effectReward</summary>
+    const string randomVisitorDataURL =
+        "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=814956030&range=A2:D";
+    /// <summary>만보기 미션. A:step, B:targetSteps, C:mpReward, D:remarks</summary>
+    const string stepMissionDataURL =
+        "https://docs.google.com/spreadsheets/d/1lKO3bQFraPLt6cu-SsOGGH2-qQLxzOaEWHnMXOcgEMU/export?format=tsv&gid=1272332026&range=A2:D";
 
     public BoolReactiveProperty IsSetData = new BoolReactiveProperty(false);
 
@@ -68,12 +74,18 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         string newsMasterResult = string.IsNullOrWhiteSpace(newsMasterDataURL)
             ? ""
             : await GetGSDataToURL(newsMasterDataURL);
+        string randomVisitorResult = string.IsNullOrWhiteSpace(randomVisitorDataURL)
+            ? ""
+            : await GetGSDataToURL(randomVisitorDataURL);
+        string stepMissionResult = string.IsNullOrWhiteSpace(stepMissionDataURL)
+            ? ""
+            : await GetGSDataToURL(stepMissionDataURL);
 
 #if UNITY_EDITOR
         // 에디터에서 수동 실행(비플레이) 시 DataManager가 없더라도 SO에 직접 반영
         if (!Application.isPlaying && DataManager.InstanceOrNull == null)
         {
-            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult, eventMasterResult, conditionLibraryResult, eventStatModifierResult, newsMasterResult);
+            bool saved = SaveToSoWithoutDataManager(levelRuleResult, castleMasterResult, generalMasterResult, buffMasterResult, nationMasterResult, regionMasterResult, eventMasterResult, conditionLibraryResult, eventStatModifierResult, newsMasterResult, randomVisitorResult, stepMissionResult);
             IsSetData.Value = saved;
             if (saved)
                 Debug.Log("[GoogleSheetManager] DataManager 없이 SO 저장 완료.");
@@ -111,6 +123,8 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         dm.MergeEventStatModifierFromSoMissingKeys();
         SetNewsMasterData(dm, newsMasterResult);
         dm.MergeNewsMasterFromSoMissingKeys();
+        SetRandomVisitorData(dm, randomVisitorResult);
+        SetStepMissionData(dm, stepMissionResult);
 
         // 3. 런타임 맵 내용을 SO 리스트에도 반영 (인스펙터에서 즉시 확인 가능)
         dm.SyncSoFromRuntimeMaps();
@@ -147,6 +161,98 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     // ========================================================================
     // ★ [Odin 적용] 딕셔너리에 직접 파싱
     // ========================================================================
+
+    /// <summary>시트 C열 등: <c>10%</c> → 0.1f, 숫자만이면 그대로(0~1로 클램프).</summary>
+    public static bool TryParseSheetProbability(string raw, out float probability)
+    {
+        probability = 0f;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+
+        string t = raw.Trim();
+        if (t.Length > 0 && t[t.Length - 1] == '%')
+        {
+            t = t.Substring(0, t.Length - 1).Trim();
+            if (!float.TryParse(t, NumberStyles.Float, CultureInfo.InvariantCulture, out float pct))
+                return false;
+            probability = Mathf.Clamp01(pct / 100f);
+            return true;
+        }
+
+        if (!float.TryParse(t, NumberStyles.Float, CultureInfo.InvariantCulture, out probability))
+            return false;
+        probability = Mathf.Clamp01(probability);
+        return true;
+    }
+
+    /// <summary>TSV A:id, B:visitorType, C:probability, D:effectReward. <see cref="DataManager"/>가 없으면 무시.</summary>
+    public void SetRandomVisitorData(string tsv) => SetRandomVisitorData(DataManager.InstanceOrNull, tsv);
+
+    public void SetRandomVisitorData(DataManager dm, string tsv)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrEmpty(tsv)) return;
+        if (tsv.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] RandomVisitor TSV가 아닌 HTML이 반환되었습니다.");
+            return;
+        }
+
+        dm.randomVisitorMap.Clear();
+        string[] rows = tsv.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 4) continue;
+
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            var row = new RandomVisitorData
+            {
+                id = id,
+                visitorType = cells.Length > 1 ? cells[1].Trim() : "",
+                effectReward = cells.Length > 3 ? cells[3].Trim() : ""
+            };
+            if (!TryParseSheetProbability(cells.Length > 2 ? cells[2] : "", out row.probability))
+                row.probability = 0f;
+
+            dm.randomVisitorMap[id] = row;
+        }
+    }
+
+    /// <summary>TSV A:step, B:targetSteps, C:mpReward, D:remarks</summary>
+    public void SetStepMissionData(string tsv) => SetStepMissionData(DataManager.InstanceOrNull, tsv);
+
+    public void SetStepMissionData(DataManager dm, string tsv)
+    {
+        if (dm == null) return;
+        if (string.IsNullOrEmpty(tsv)) return;
+        if (tsv.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.LogError("[GoogleSheetManager] StepMission TSV가 아닌 HTML이 반환되었습니다.");
+            return;
+        }
+
+        dm.stepMissionMap.Clear();
+        string[] rows = tsv.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 4) continue;
+
+            if (!int.TryParse(cells[0].Trim(), out int step)) continue;
+
+            var row = new StepMissionData
+            {
+                step = step,
+                remarks = cells.Length > 3 ? cells[3].Trim() : ""
+            };
+            int.TryParse(cells[1].Trim(), out row.targetSteps);
+            int.TryParse(cells[2].Trim(), out row.mpReward);
+            dm.stepMissionMap[step] = row;
+        }
+    }
+
     void SetLevelRuleData(DataManager dm, string data)
     {
         if (dm == null) return;
@@ -166,24 +272,22 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 6) continue;
+            if (cells.Length < 7) continue;
 
             LevelRuleData rule = new LevelRuleData();
 
             int.TryParse(cells[0].Trim(), out rule.level);                    // A: 레벨
             double.TryParse(cells[1].Trim(), out rule.laborCost);              // B: 노동력 비용
-            double.TryParse(cells[2].Trim(), out rule.laborValue);             // C: 노동력 추가 금화
+            double.TryParse(cells[2].Trim(), out rule.laborValue);             // C: 노동력 효과
             double.TryParse(cells[3].Trim(), out rule.marketCost);              // D: 시장 비용
-            double.TryParse(cells[4].Trim(), out rule.marketValuePerSec);      // E: 시장 금화/초
-            double.TryParse(cells.Length > 5 ? cells[5].Trim() : "0", out rule.marketMaxCapacity);  // F: 시장 창고 MAX
-            double.TryParse(cells.Length > 6 ? cells[6].Trim() : "0", out rule.farmCost);            // G: 농장 비용
-            double.TryParse(cells.Length > 7 ? cells[7].Trim() : "0", out rule.farmValuePerSec);    // H: 농장 식량/초
-            double.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out rule.farmMaxCapacity);    // I: 농장 창고 MAX
+            double.TryParse(cells[4].Trim(), out rule.marketValuePerSec);      // E: 시장 초당 생산
+            double.TryParse(cells.Length > 5 ? cells[5].Trim() : "0", out rule.warehouseCost);       // F: 창고 비용
+            double.TryParse(cells.Length > 6 ? cells[6].Trim() : "0", out rule.warehouseMaxCapacity); // G: 창고 금화 최대
+            double.TryParse(cells.Length > 7 ? cells[7].Trim() : "0", out rule.logisticsCost);       // H: 병참 비용
+            double.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out rule.logisticsDiscountRate); // I: 유지비 할인율 %
 
-            if (rule.marketMaxCapacity <= 0 && rule.marketValuePerSec > 0)
-                rule.marketMaxCapacity = rule.marketValuePerSec * 28800;
-            if (rule.farmMaxCapacity <= 0 && rule.farmValuePerSec > 0)
-                rule.farmMaxCapacity = rule.farmValuePerSec * 28800;
+            if (rule.warehouseMaxCapacity <= 0 && rule.marketValuePerSec > 0)
+                rule.warehouseMaxCapacity = rule.marketValuePerSec * 28800;
 
             dm.levelRuleMap[rule.level] = rule;
         }
@@ -232,6 +336,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out castleData.posX);
             float.TryParse(cells.Length > 10 ? cells[10].Trim() : "0", out castleData.posY);
             castleData.adjacentIdsRaw = cells.Length > 11 ? cells[11].Trim() : "";
+            castleData.EnsureDerivedDefaults();
 
             dm.castleMasterDataMap[castleData.id] = castleData;
         }
@@ -868,7 +973,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
     }
 
 #if UNITY_EDITOR
-    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData, string eventData, string conditionLibraryData = "", string eventStatModifierData = "", string newsMasterData = "")
+    bool SaveToSoWithoutDataManager(string levelRuleData, string castleData, string generalData, string buffData, string nationData, string regionData, string eventData, string conditionLibraryData = "", string eventStatModifierData = "", string newsMasterData = "", string randomVisitorData = "", string stepMissionData = "")
     {
         var levelSo = FindAsset<LevelRuleDataSo>();
         var castleSo = FindAsset<CastleMasterDataSo>();
@@ -931,6 +1036,24 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             EditorUtility.SetDirty(newsMasterSo);
         }
 
+        var randomVisitorSo = FindAsset<RandomVisitorDataSo>();
+        if (randomVisitorSo != null && !string.IsNullOrWhiteSpace(randomVisitorData)
+                                     && !randomVisitorData.TrimStart()
+                                         .StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            randomVisitorSo.list = ParseRandomVisitorList(randomVisitorData);
+            EditorUtility.SetDirty(randomVisitorSo);
+        }
+
+        var stepMissionSo = FindAsset<StepMissionDataSo>();
+        if (stepMissionSo != null && !string.IsNullOrWhiteSpace(stepMissionData)
+                                   && !stepMissionData.TrimStart()
+                                       .StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+        {
+            stepMissionSo.list = ParseStepMissionList(stepMissionData);
+            EditorUtility.SetDirty(stepMissionSo);
+        }
+
         EditorUtility.SetDirty(levelSo);
         EditorUtility.SetDirty(castleSo);
         EditorUtility.SetDirty(generalSo);
@@ -944,6 +1067,12 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         if (newsMasterSo != null && !string.IsNullOrWhiteSpace(newsMasterData)
                                 && !newsMasterData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
             EditorUtility.SetDirty(newsMasterSo);
+        if (randomVisitorSo != null && !string.IsNullOrWhiteSpace(randomVisitorData)
+                                     && !randomVisitorData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            EditorUtility.SetDirty(randomVisitorSo);
+        if (stepMissionSo != null && !string.IsNullOrWhiteSpace(stepMissionData)
+                                  && !stepMissionData.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            EditorUtility.SetDirty(stepMissionSo);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         return true;
@@ -967,21 +1096,75 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
         for (int i = 0; i < rows.Length; i++)
         {
             string[] cells = rows[i].Split('\t');
-            if (cells.Length < 6) continue;
+            if (cells.Length < 7) continue;
             var rule = new LevelRuleData();
             int.TryParse(cells[0].Trim(), out rule.level);
             double.TryParse(cells[1].Trim(), out rule.laborCost);
             double.TryParse(cells[2].Trim(), out rule.laborValue);
             double.TryParse(cells[3].Trim(), out rule.marketCost);
             double.TryParse(cells[4].Trim(), out rule.marketValuePerSec);
-            double.TryParse(cells.Length > 5 ? cells[5].Trim() : "0", out rule.marketMaxCapacity);
-            double.TryParse(cells.Length > 6 ? cells[6].Trim() : "0", out rule.farmCost);
-            double.TryParse(cells.Length > 7 ? cells[7].Trim() : "0", out rule.farmValuePerSec);
-            double.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out rule.farmMaxCapacity);
-            if (rule.marketMaxCapacity <= 0 && rule.marketValuePerSec > 0) rule.marketMaxCapacity = rule.marketValuePerSec * 28800;
-            if (rule.farmMaxCapacity <= 0 && rule.farmValuePerSec > 0) rule.farmMaxCapacity = rule.farmValuePerSec * 28800;
+            double.TryParse(cells.Length > 5 ? cells[5].Trim() : "0", out rule.warehouseCost);
+            double.TryParse(cells.Length > 6 ? cells[6].Trim() : "0", out rule.warehouseMaxCapacity);
+            double.TryParse(cells.Length > 7 ? cells[7].Trim() : "0", out rule.logisticsCost);
+            double.TryParse(cells.Length > 8 ? cells[8].Trim() : "0", out rule.logisticsDiscountRate);
+            if (rule.warehouseMaxCapacity <= 0 && rule.marketValuePerSec > 0)
+                rule.warehouseMaxCapacity = rule.marketValuePerSec * 28800;
             list.Add(rule);
         }
+        return list;
+    }
+
+    List<RandomVisitorData> ParseRandomVisitorList(string data)
+    {
+        var list = new List<RandomVisitorData>();
+        if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 4) continue;
+            string id = cells[0].Trim();
+            if (string.IsNullOrEmpty(id)) continue;
+
+            var row = new RandomVisitorData
+            {
+                id = id,
+                visitorType = cells.Length > 1 ? cells[1].Trim() : "",
+                effectReward = cells.Length > 3 ? cells[3].Trim() : ""
+            };
+            if (!TryParseSheetProbability(cells.Length > 2 ? cells[2] : "", out row.probability))
+                row.probability = 0f;
+            list.Add(row);
+        }
+
+        return list;
+    }
+
+    List<StepMissionData> ParseStepMissionList(string data)
+    {
+        var list = new List<StepMissionData>();
+        if (string.IsNullOrEmpty(data) || data.TrimStart().StartsWith("<!DOCTYPE html>", StringComparison.OrdinalIgnoreCase))
+            return list;
+
+        string[] rows = data.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            string[] cells = rows[i].Split('\t');
+            if (cells.Length < 4) continue;
+            if (!int.TryParse(cells[0].Trim(), out int step)) continue;
+
+            var row = new StepMissionData
+            {
+                step = step,
+                remarks = cells.Length > 3 ? cells[3].Trim() : ""
+            };
+            int.TryParse(cells[1].Trim(), out row.targetSteps);
+            int.TryParse(cells[2].Trim(), out row.mpReward);
+            list.Add(row);
+        }
+
         return list;
     }
 
@@ -1015,6 +1198,7 @@ public class GoogleSheetManager : Singleton<GoogleSheetManager>
             float.TryParse(cells.Length > 9 ? cells[9].Trim() : "0", out item.posX);
             float.TryParse(cells.Length > 10 ? cells[10].Trim() : "0", out item.posY);
             item.adjacentIdsRaw = cells.Length > 11 ? cells[11].Trim() : "";
+            item.EnsureDerivedDefaults();
             list.Add(item);
         }
         return list;

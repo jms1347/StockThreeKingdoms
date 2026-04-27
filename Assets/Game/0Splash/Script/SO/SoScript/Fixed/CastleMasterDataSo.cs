@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-// 1. ¼º ¸¶½ºÅÍ µ¥ÀÌÅÍ (±¸±Û ½ÃÆ® ¿¬µ¿¿ë °íÁ¤ µ¥ÀÌÅÍ)
+// 1. ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 public enum Grade
 {
     SS = 0,
@@ -16,31 +16,31 @@ public enum Grade
 [Serializable]
 public class CastleMasterData
 {
-    [Header("±âº» Á¤º¸")]
-    public string id;                // ¼º °íÀ¯ ID (C01, C02...)
-    public string name;              // ¼º ÀÌ¸§ (³«¾ç, ÇãÃ¢...)
-    public string regionId;          // Áö¿ª ÄÚµå (R01~R12)
-    public Grade grade;              // ¼º µî±Ş (SS, S, A, B, C, D)
-    public string initialNationId;   // ÃÊ±â Á¡·É ±¹°¡ (WEI, SHU, WU...)
+    [Header("ï¿½âº» ï¿½ï¿½ï¿½ï¿½")]
+    public string id;                // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ID (C01, C02...)
+    public string name;              // ï¿½ï¿½ ï¿½Ì¸ï¿½ (ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ã¢...)
+    public string regionId;          // ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ (R01~R12)
+    public Grade grade;              // ï¿½ï¿½ ï¿½ï¿½ï¿½ (SS, S, A, B, C, D)
+    public string initialNationId;   // ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (WEI, SHU, WU...)
 
-    [Header("°æÁ¦/±º»ç ½ºÅÈ")]
-    [Tooltip("ÀÔ¼º(¸Å¼ö) ½Ã Â¡¼ö °üºÎÀ²(%). ½ÃÆ® F¿­ ? 20ÀÌ¸é º»±İÀÇ 20%")]
+    [Header("ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½Ô¼ï¿½(ï¿½Å¼ï¿½) ï¿½ï¿½ Â¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(%). ï¿½ï¿½Æ® Fï¿½ï¿½ ? 20ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 20%")]
     public float initialTaxRatePercent;
-    public float baseValue;          // ÃÊ±â ¾×¸é°¡ (½ÃÆ® G¿­)
-    public int maxTroops;            // ÃÖ´ë ±º´ë ¼ö¿ë·®
-    public int initPopulation;       // ÃÊ±â ¹é¼º ¼ö
+    public float baseValue;          // ï¿½Ê±ï¿½ ï¿½×¸é°¡ (ï¿½ï¿½Æ® Gï¿½ï¿½)
+    public int maxTroops;            // ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ë·®
+    public int initPopulation;       // ï¿½Ê±ï¿½ ï¿½é¼º ï¿½ï¿½
 
-    [Header("Áöµµ ¹× ¿¬°á µ¥ÀÌÅÍ")]
-    public float posX;               // Áöµµ»óÀÇ X ÁÂÇ¥ (0 ~ 1000)
-    public float posY;               // Áöµµ»óÀÇ Y ÁÂÇ¥ (0 ~ 1000)
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public float posX;               // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ X ï¿½ï¿½Ç¥ (0 ~ 1000)
+    public float posY;               // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Y ï¿½ï¿½Ç¥ (0 ~ 1000)
 
     [TextArea(2, 5)]
-    public string adjacentIdsRaw;    // ÀÎÁ¢ ¼º ID ¸®½ºÆ® (½°Ç¥ ±¸ºĞ: "C02,C05,C10")
+    public string adjacentIdsRaw;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ID ï¿½ï¿½ï¿½ï¿½Æ® (ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½: "C02,C05,C10")
 
     // --- Helper Properties ---
 
     /// <summary>
-    /// ½°Ç¥·Î ±¸ºĞµÈ ÀÎÁ¢¼º µ¥ÀÌÅÍ¸¦ ¸®½ºÆ®·Î º¯È¯ÇÏ¿© ¹İÈ¯ÇÕ´Ï´Ù.
+    /// ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½Ğµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï¿ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
     /// </summary>
     public List<string> GetAdjacentIds()
     {
@@ -52,11 +52,11 @@ public class CastleMasterData
     }
 
     /// <summary>
-    /// °è»ê ÆíÀÇ¸¦ À§ÇØ ÁÂÇ¥¸¦ Vector2·Î ¹İÈ¯ÇÕ´Ï´Ù.
+    /// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ Vector2ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
     /// </summary>
     public Vector2 GetPosition() => new Vector2(posX, posY);
 
-    /// <summary><see cref="CastleStateData.currentLord"/> ÃÊ±âÈ­¿ë. <see cref="initialNationId"/> ¡æ WEI/SHU/WU/OTHERS(´ÜÀÏ ³× ¹øÂ° ±¹°¡).</summary>
+    /// <summary><see cref="CastleStateData.currentLord"/> ï¿½Ê±ï¿½È­ï¿½ï¿½. <see cref="initialNationId"/> ï¿½ï¿½ WEI/SHU/WU/OTHERS(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½).</summary>
     public Faction GetInitialLordFaction()
     {
         if (string.IsNullOrWhiteSpace(initialNationId))
@@ -69,8 +69,30 @@ public class CastleMasterData
         return Faction.OTHERS;
     }
 
-    /// <summary>NONE¡¤¹Ì±âÀÔÀº À§¡¤ÃË¡¤¿À¿Í µ¿µîÇÑ ÇÏ³ªÀÇ OTHERS ¼¼·ÂÀ¸·Î ÅëÀÏÇÕ´Ï´Ù.</summary>
+    /// <summary>NONEï¿½ï¿½ï¿½Ì±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ë¡ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ OTHERS ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.</summary>
     static Faction NormalizeFourthNation(Faction f) => f == Faction.NONE ? Faction.OTHERS : f;
+
+    /// <summary>
+    /// êµ¬ê¸€ ì‹œíŠ¸/ì—ì…‹ì— H(ì£¼ë‘” ìƒí•œ)Â·I(ì´ˆê¸° ì¸êµ¬)ê°€ ë¹„ì–´ 0ì¸ ê²½ìš°, <see cref="baseValue"/>Â·ë“±ê¸‰ìœ¼ë¡œ ë³´ê°•í•©ë‹ˆë‹¤.
+    /// (ë°ì´í„° ëˆ„ë½ ì‹œ ì¸êµ¬Â·ì§•ë³‘Â·ì›”ë“œ UIê°€ 0ìœ¼ë¡œ ê³ ì •ë˜ëŠ” ê²ƒì„ ë§‰ê¸° ìœ„í•¨.)
+    /// </summary>
+    public void EnsureDerivedDefaults()
+    {
+        if (baseValue < 1e-3f) baseValue = 1f;
+
+        int g = Mathf.Clamp((int)grade, 0, 5);
+        float tier = 1f + (5 - g) * 0.07f;
+
+        if (initPopulation <= 0)
+            initPopulation = Mathf.Max(2000, Mathf.RoundToInt(baseValue * 100f * tier));
+
+        if (maxTroops <= 0)
+        {
+            int fromBase = Mathf.Max(1, Mathf.RoundToInt(baseValue * 0.45f * tier));
+            int fromPop = Mathf.Max(1, initPopulation / 200);
+            maxTroops = Mathf.Max(fromBase, fromPop);
+        }
+    }
 }
 
 [CreateAssetMenu(fileName = "CastleMasterDataSo", menuName = "ScriptableObject/CastleMasterDataSo")]

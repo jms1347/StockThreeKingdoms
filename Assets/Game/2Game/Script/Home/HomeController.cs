@@ -40,6 +40,18 @@ public class HomeController : MonoBehaviour
     public static double UpgradeCost(double baseCost, int level) =>
         baseCost * Math.Pow(UpgradeCostMult, level);
 
+    /// <summary>병참 다음 레벨 업에 필요한 금화. 시트 <see cref="LevelRuleData.logisticsCost"/>가 있으면 우선.</summary>
+    public static double GetLogisticsUpgradeGoldCost(int currentLogisticsLevel)
+    {
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(currentLogisticsLevel + 1);
+            if (d != null && d.logisticsCost > 0) return d.logisticsCost;
+        }
+
+        return UpgradeCost(LogisticsBaseCost, currentLogisticsLevel);
+    }
+
     /// <summary> 시장 창고 현재 누적량 (수거 시각 이후 경과 초 × 초당 생산, MaxCap 한도) </summary>
     public double CurrentMarketAccumulated
     {
@@ -94,7 +106,7 @@ public class HomeController : MonoBehaviour
         if (DataManager.Instance != null && DataManager.Instance.IsReady)
         {
             var d = DataManager.Instance.GetLevelData(lv);
-            if (d != null && d.marketMaxCapacity > 0) return d.marketMaxCapacity;
+            if (d != null && d.warehouseMaxCapacity > 0) return d.warehouseMaxCapacity;
         }
         return gm.GetAutoIncomeValue(lv) * (gm.balance.vaultHours * 3600);
     }
@@ -168,7 +180,7 @@ public class HomeController : MonoBehaviour
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
         int lv = gm.currentUser.farmLevel;
-        double cost = UpgradeCost(LogisticsBaseCost, lv);
+        double cost = GetLogisticsUpgradeGoldCost(lv);
         if (!gm.UseGold((long)cost)) return;
 
         gm.currentUser.farmLevel++;

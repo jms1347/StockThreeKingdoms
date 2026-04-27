@@ -11,11 +11,13 @@ public class LevelRuleData
 
     public double marketCost;
     public double marketValuePerSec;
-    public double marketMaxCapacity;
 
-    public double farmCost;
-    public double farmValuePerSec;
-    public double farmMaxCapacity;
+    public double warehouseCost;
+    public double warehouseMaxCapacity;
+
+    public double logisticsCost;
+    /// <summary>병사 유지비 할인율(%). 최종 유지비 = 기본 × (1 - 값/100).</summary>
+    public double logisticsDiscountRate;
 }
 [CreateAssetMenu(fileName = "LevelRuleDataSo", menuName = "ScriptableObject/LevelRuleDataSo")]
 public class LevelRuleDataSo : ScriptableObject

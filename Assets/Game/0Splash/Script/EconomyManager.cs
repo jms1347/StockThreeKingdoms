@@ -72,6 +72,21 @@ public class EconomyManager : MonoBehaviour
         return $"{Mathf.Max(0, span.Minutes)}분 {Mathf.Max(0, span.Seconds)}초";
     }
 
+    /// <summary>기본 유지비에 곱할 계수. <see cref="LevelRuleData.logisticsDiscountRate"/>% 만큼 감면.</summary>
+    public static double ResolveLogisticsMaintenanceMultiplier()
+    {
+        var gm = GameManager.InstanceOrNull;
+        int logisticsLv = gm?.currentUser?.farmLevel ?? 0;
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsReady) return 1d;
+        var d = dm.GetLevelData(logisticsLv);
+        if (d == null) return 1d;
+        double pct = d.logisticsDiscountRate;
+        if (double.IsNaN(pct) || double.IsInfinity(pct)) return 1d;
+        pct = System.Math.Max(0d, System.Math.Min(100d, pct));
+        return System.Math.Max(0d, 1d - pct / 100d);
+    }
+
     /// <summary>현재 시점 다음 정산 예정 금화 (보유 병사 × 일일 단가 × 병참 유지비 할인).</summary>
     public double ComputeNextSettlementGold()
     {
@@ -79,10 +94,7 @@ public class EconomyManager : MonoBehaviour
         var inst = InstanceOrNull;
         double rate = inst != null ? inst.MaintenanceGoldPerSoldierPerDay : 1d;
         double raw = soldiers * rate;
-        var gm = GameManager.InstanceOrNull;
-        int logisticsLv = gm?.currentUser?.farmLevel ?? 0;
-        double discount = System.Math.Min(0.5d, logisticsLv * 0.02d);
-        return raw * (1d - discount);
+        return raw * ResolveLogisticsMaintenanceMultiplier();
     }
 
     static DateTime NextLocalNoonAfter(DateTime instant)
@@ -141,6 +153,7 @@ public class EconomyManager : MonoBehaviour
         {
             long soldiers = ResolveSoldierHeadcountForMaintenance();
             double cost = rate > 0d ? soldiers * rate : 0d;
+            cost *= ResolveLogisticsMaintenanceMultiplier();
             if (cost != 0d && !double.IsNaN(cost) && !double.IsInfinity(cost))
             {
                 gm.AddGold(-cost);

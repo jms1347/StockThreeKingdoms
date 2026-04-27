@@ -54,6 +54,8 @@ MonoBehaviour:
   conditionDataSo: {fileID: 11400000, guid: c4d8e1f92a0b3c5d6e7f8091a2b3c4d5, type: 2}
   eventStatModifierSo: {fileID: 11400000, guid: 6e6cbc186ff3b964782936c62ce9c2ea, type: 2}
   newsMasterDataSo: {fileID: 11400000, guid: 9d5574312f22f634fa532612dd5778c6, type: 2}
+  randomVisitorDataSo: {fileID: 11400000, guid: c0a1b2c3d4e5f60718293a4b5c6d7e8f, type: 2}
+  stepMissionDataSo: {fileID: 11400000, guid: d1b2c3d4e5f60718293a4b5c6d7e8f09, type: 2}
   globalEconomyDefaultsSo: {fileID: 0}
 --- !u!1 &7174210814265474002
 GameObject:
