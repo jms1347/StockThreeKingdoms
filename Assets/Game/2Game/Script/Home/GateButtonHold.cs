@@ -21,6 +21,7 @@ public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (controller == null) return;
 
         controller.OnGateClick();
+        collectionManager?.PlayGateTapFlyFeedback(transform as RectTransform);
         collectionManager?.TryCollectFromGate();
         _holdStartTime = Time.time;
         if (_holdCoroutine != null) StopCoroutine(_holdCoroutine);
@@ -36,6 +37,7 @@ public class GateButtonHold : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (controller == null) return;
         if (_holdCoroutine != null) return;
         controller.OnGateClick();
+        collectionManager?.PlayGateTapFlyFeedback(transform as RectTransform);
         collectionManager?.TryCollectFromGate();
     }
 

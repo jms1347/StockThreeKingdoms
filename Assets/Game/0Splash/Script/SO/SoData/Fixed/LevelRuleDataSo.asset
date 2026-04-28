@@ -18,1798 +18,1798 @@ MonoBehaviour:
     laborValue: 5
     marketCost: 500
     marketValuePerSec: 15
-    warehouseCost: 0
-    warehouseMaxCapacity: 432000
-    logisticsCost: 1000
-    logisticsDiscountRate: 0
+    warehouseCost: 1000
+    warehouseMaxCapacity: 0.25
+    logisticsCost: 400
+    logisticsDiscountRate: 1000000
   - level: 2
     laborCost: 107
     laborValue: 10
     marketCost: 540
     marketValuePerSec: 30
-    warehouseCost: 0
-    warehouseMaxCapacity: 864000
-    logisticsCost: 1080
-    logisticsDiscountRate: 0
+    warehouseCost: 1080
+    warehouseMaxCapacity: 0.5
+    logisticsCost: 432
+    logisticsDiscountRate: 1090000
   - level: 3
     laborCost: 114
     laborValue: 15
     marketCost: 583
     marketValuePerSec: 45
-    warehouseCost: 0
-    warehouseMaxCapacity: 1296000
-    logisticsCost: 1166
-    logisticsDiscountRate: 0
+    warehouseCost: 1166
+    warehouseMaxCapacity: 0.75
+    logisticsCost: 467
+    logisticsDiscountRate: 1188100
   - level: 4
     laborCost: 123
     laborValue: 20
     marketCost: 630
     marketValuePerSec: 60
-    warehouseCost: 0
-    warehouseMaxCapacity: 1728000
-    logisticsCost: 1260
-    logisticsDiscountRate: 0
+    warehouseCost: 1260
+    warehouseMaxCapacity: 1
+    logisticsCost: 504
+    logisticsDiscountRate: 1295029
   - level: 5
     laborCost: 131
     laborValue: 25
     marketCost: 680
     marketValuePerSec: 75
-    warehouseCost: 0
-    warehouseMaxCapacity: 2160000
-    logisticsCost: 1360
-    logisticsDiscountRate: 0
+    warehouseCost: 1360
+    warehouseMaxCapacity: 1.25
+    logisticsCost: 544
+    logisticsDiscountRate: 1411582
   - level: 6
     laborCost: 140
     laborValue: 30
     marketCost: 735
     marketValuePerSec: 90
-    warehouseCost: 0
-    warehouseMaxCapacity: 2592000
-    logisticsCost: 1469
-    logisticsDiscountRate: 0
+    warehouseCost: 1469
+    warehouseMaxCapacity: 1.5
+    logisticsCost: 588
+    logisticsDiscountRate: 1538624
   - level: 7
     laborCost: 150
     laborValue: 35
     marketCost: 793
     marketValuePerSec: 105
-    warehouseCost: 0
-    warehouseMaxCapacity: 3024000
-    logisticsCost: 1587
-    logisticsDiscountRate: 0
+    warehouseCost: 1587
+    warehouseMaxCapacity: 1.75
+    logisticsCost: 635
+    logisticsDiscountRate: 1677100
   - level: 8
     laborCost: 161
     laborValue: 40
     marketCost: 857
     marketValuePerSec: 120
-    warehouseCost: 0
-    warehouseMaxCapacity: 3456000
-    logisticsCost: 1714
-    logisticsDiscountRate: 0
+    warehouseCost: 1714
+    warehouseMaxCapacity: 2
+    logisticsCost: 686
+    logisticsDiscountRate: 1828039
   - level: 9
     laborCost: 172
     laborValue: 45
     marketCost: 925
     marketValuePerSec: 135
-    warehouseCost: 0
-    warehouseMaxCapacity: 3888000
-    logisticsCost: 1851
-    logisticsDiscountRate: 0
+    warehouseCost: 1851
+    warehouseMaxCapacity: 2.25
+    logisticsCost: 740
+    logisticsDiscountRate: 1992563
   - level: 10
     laborCost: 184
     laborValue: 50
     marketCost: 1000
     marketValuePerSec: 150
-    warehouseCost: 0
-    warehouseMaxCapacity: 4320000
-    logisticsCost: 1999
-    logisticsDiscountRate: 0
+    warehouseCost: 1999
+    warehouseMaxCapacity: 2.5
+    logisticsCost: 800
+    logisticsDiscountRate: 2171893
   - level: 11
     laborCost: 197
     laborValue: 55
     marketCost: 1079
     marketValuePerSec: 165
-    warehouseCost: 0
-    warehouseMaxCapacity: 4752000
-    logisticsCost: 2159
-    logisticsDiscountRate: 0
+    warehouseCost: 2159
+    warehouseMaxCapacity: 2.75
+    logisticsCost: 864
+    logisticsDiscountRate: 2367364
   - level: 12
     laborCost: 210
     laborValue: 60
     marketCost: 1166
     marketValuePerSec: 180
-    warehouseCost: 0
-    warehouseMaxCapacity: 5184000
-    logisticsCost: 2332
-    logisticsDiscountRate: 0
+    warehouseCost: 2332
+    warehouseMaxCapacity: 3
+    logisticsCost: 933
+    logisticsDiscountRate: 2580426
   - level: 13
     laborCost: 225
     laborValue: 65
     marketCost: 1259
     marketValuePerSec: 195
-    warehouseCost: 0
-    warehouseMaxCapacity: 5616000
-    logisticsCost: 2518
-    logisticsDiscountRate: 0
+    warehouseCost: 2518
+    warehouseMaxCapacity: 3.25
+    logisticsCost: 1007
+    logisticsDiscountRate: 2812665
   - level: 14
     laborCost: 241
     laborValue: 70
     marketCost: 1360
     marketValuePerSec: 210
-    warehouseCost: 0
-    warehouseMaxCapacity: 6048000
-    logisticsCost: 2720
-    logisticsDiscountRate: 0
+    warehouseCost: 2720
+    warehouseMaxCapacity: 3.5
+    logisticsCost: 1088
+    logisticsDiscountRate: 3065805
   - level: 15
     laborCost: 258
     laborValue: 75
     marketCost: 1469
     marketValuePerSec: 225
-    warehouseCost: 0
-    warehouseMaxCapacity: 6480000
-    logisticsCost: 2937
-    logisticsDiscountRate: 0
+    warehouseCost: 2937
+    warehouseMaxCapacity: 3.75
+    logisticsCost: 1175
+    logisticsDiscountRate: 3341727
   - level: 16
     laborCost: 276
     laborValue: 80
     marketCost: 1586
     marketValuePerSec: 240
-    warehouseCost: 0
-    warehouseMaxCapacity: 6912000
-    logisticsCost: 3172
-    logisticsDiscountRate: 0
+    warehouseCost: 3172
+    warehouseMaxCapacity: 4
+    logisticsCost: 1269
+    logisticsDiscountRate: 3642482
   - level: 17
     laborCost: 295
     laborValue: 85
     marketCost: 1713
     marketValuePerSec: 255
-    warehouseCost: 0
-    warehouseMaxCapacity: 7344000
-    logisticsCost: 3426
-    logisticsDiscountRate: 0
+    warehouseCost: 3426
+    warehouseMaxCapacity: 4.25
+    logisticsCost: 1370
+    logisticsDiscountRate: 3970306
   - level: 18
     laborCost: 316
     laborValue: 90
     marketCost: 1850
     marketValuePerSec: 270
-    warehouseCost: 0
-    warehouseMaxCapacity: 7776000
-    logisticsCost: 3700
-    logisticsDiscountRate: 0
+    warehouseCost: 3700
+    warehouseMaxCapacity: 4.5
+    logisticsCost: 1480
+    logisticsDiscountRate: 4327633
   - level: 19
     laborCost: 338
     laborValue: 95
     marketCost: 1998
     marketValuePerSec: 285
-    warehouseCost: 0
-    warehouseMaxCapacity: 8208000
-    logisticsCost: 3996
-    logisticsDiscountRate: 0
+    warehouseCost: 3996
+    warehouseMaxCapacity: 4.75
+    logisticsCost: 1598
+    logisticsDiscountRate: 4717120
   - level: 20
     laborCost: 362
     laborValue: 100
     marketCost: 2158
     marketValuePerSec: 300
-    warehouseCost: 0
-    warehouseMaxCapacity: 8640000
-    logisticsCost: 4316
-    logisticsDiscountRate: 0
+    warehouseCost: 4316
+    warehouseMaxCapacity: 5
+    logisticsCost: 1726
+    logisticsDiscountRate: 5141661
   - level: 21
     laborCost: 387
     laborValue: 105
     marketCost: 2330
     marketValuePerSec: 315
-    warehouseCost: 0
-    warehouseMaxCapacity: 9072000
-    logisticsCost: 4661
-    logisticsDiscountRate: 0
+    warehouseCost: 4661
+    warehouseMaxCapacity: 5.25
+    logisticsCost: 1864
+    logisticsDiscountRate: 5604411
   - level: 22
     laborCost: 414
     laborValue: 110
     marketCost: 2517
     marketValuePerSec: 330
-    warehouseCost: 0
-    warehouseMaxCapacity: 9504000
-    logisticsCost: 5034
-    logisticsDiscountRate: 0
+    warehouseCost: 5034
+    warehouseMaxCapacity: 5.5
+    logisticsCost: 2014
+    logisticsDiscountRate: 6108808
   - level: 23
     laborCost: 443
     laborValue: 115
     marketCost: 2718
     marketValuePerSec: 345
-    warehouseCost: 0
-    warehouseMaxCapacity: 9936000
-    logisticsCost: 5437
-    logisticsDiscountRate: 0
+    warehouseCost: 5437
+    warehouseMaxCapacity: 5.75
+    logisticsCost: 2175
+    logisticsDiscountRate: 6658600
   - level: 24
     laborCost: 474
     laborValue: 120
     marketCost: 2936
     marketValuePerSec: 360
-    warehouseCost: 0
-    warehouseMaxCapacity: 10368000
-    logisticsCost: 5871
-    logisticsDiscountRate: 0
+    warehouseCost: 5871
+    warehouseMaxCapacity: 6
+    logisticsCost: 2349
+    logisticsDiscountRate: 7257874
   - level: 25
     laborCost: 507
     laborValue: 125
     marketCost: 3171
     marketValuePerSec: 375
-    warehouseCost: 0
-    warehouseMaxCapacity: 10800000
-    logisticsCost: 6341
-    logisticsDiscountRate: 0
+    warehouseCost: 6341
+    warehouseMaxCapacity: 6.25
+    logisticsCost: 2536
+    logisticsDiscountRate: 7911083
   - level: 26
     laborCost: 543
     laborValue: 130
     marketCost: 3424
     marketValuePerSec: 390
-    warehouseCost: 0
-    warehouseMaxCapacity: 11232000
-    logisticsCost: 6848
-    logisticsDiscountRate: 0
+    warehouseCost: 6848
+    warehouseMaxCapacity: 6.5
+    logisticsCost: 2739
+    logisticsDiscountRate: 8623081
   - level: 27
     laborCost: 581
     laborValue: 135
     marketCost: 3698
     marketValuePerSec: 405
-    warehouseCost: 0
-    warehouseMaxCapacity: 11664000
-    logisticsCost: 7396
-    logisticsDiscountRate: 0
+    warehouseCost: 7396
+    warehouseMaxCapacity: 6.75
+    logisticsCost: 2959
+    logisticsDiscountRate: 9399158
   - level: 28
     laborCost: 621
     laborValue: 140
     marketCost: 3994
     marketValuePerSec: 420
-    warehouseCost: 0
-    warehouseMaxCapacity: 12096000
-    logisticsCost: 7988
-    logisticsDiscountRate: 0
+    warehouseCost: 7988
+    warehouseMaxCapacity: 7
+    logisticsCost: 3195
+    logisticsDiscountRate: 10245082
   - level: 29
     laborCost: 665
     laborValue: 145
     marketCost: 4314
     marketValuePerSec: 435
-    warehouseCost: 0
-    warehouseMaxCapacity: 12528000
-    logisticsCost: 8627
-    logisticsDiscountRate: 0
+    warehouseCost: 8627
+    warehouseMaxCapacity: 7.25
+    logisticsCost: 3451
+    logisticsDiscountRate: 11167140
   - level: 30
     laborCost: 711
     laborValue: 150
     marketCost: 4659
     marketValuePerSec: 450
-    warehouseCost: 0
-    warehouseMaxCapacity: 12960000
-    logisticsCost: 9317
-    logisticsDiscountRate: 0
+    warehouseCost: 9317
+    warehouseMaxCapacity: 7.5
+    logisticsCost: 3727
+    logisticsDiscountRate: 12172182
   - level: 31
     laborCost: 761
     laborValue: 155
     marketCost: 5031
     marketValuePerSec: 465
-    warehouseCost: 0
-    warehouseMaxCapacity: 13392000
-    logisticsCost: 10063
-    logisticsDiscountRate: 0
+    warehouseCost: 10063
+    warehouseMaxCapacity: 7.75
+    logisticsCost: 4025
+    logisticsDiscountRate: 13267678
   - level: 32
     laborCost: 815
     laborValue: 160
     marketCost: 5434
     marketValuePerSec: 480
-    warehouseCost: 0
-    warehouseMaxCapacity: 13824000
-    logisticsCost: 10868
-    logisticsDiscountRate: 0
+    warehouseCost: 10868
+    warehouseMaxCapacity: 8
+    logisticsCost: 4347
+    logisticsDiscountRate: 14461770
   - level: 33
     laborCost: 872
     laborValue: 165
     marketCost: 5869
     marketValuePerSec: 495
-    warehouseCost: 0
-    warehouseMaxCapacity: 14256000
-    logisticsCost: 11737
-    logisticsDiscountRate: 0
+    warehouseCost: 11737
+    warehouseMaxCapacity: 8.25
+    logisticsCost: 4695
+    logisticsDiscountRate: 15763329
   - level: 34
     laborCost: 933
     laborValue: 170
     marketCost: 6338
     marketValuePerSec: 510
-    warehouseCost: 0
-    warehouseMaxCapacity: 14688000
-    logisticsCost: 12676
-    logisticsDiscountRate: 0
+    warehouseCost: 12676
+    warehouseMaxCapacity: 8.5
+    logisticsCost: 5070
+    logisticsDiscountRate: 17182028
   - level: 35
     laborCost: 998
     laborValue: 175
     marketCost: 6845
     marketValuePerSec: 525
-    warehouseCost: 0
-    warehouseMaxCapacity: 15120000
-    logisticsCost: 13690
-    logisticsDiscountRate: 0
+    warehouseCost: 13690
+    warehouseMaxCapacity: 8.75
+    logisticsCost: 5476
+    logisticsDiscountRate: 18728411
   - level: 36
     laborCost: 1068
     laborValue: 180
     marketCost: 7393
     marketValuePerSec: 540
-    warehouseCost: 0
-    warehouseMaxCapacity: 15552000
-    logisticsCost: 14785
-    logisticsDiscountRate: 0
+    warehouseCost: 14785
+    warehouseMaxCapacity: 9
+    logisticsCost: 5914
+    logisticsDiscountRate: 20413968
   - level: 37
     laborCost: 1142
     laborValue: 185
     marketCost: 7984
     marketValuePerSec: 555
-    warehouseCost: 0
-    warehouseMaxCapacity: 15984000
-    logisticsCost: 15968
-    logisticsDiscountRate: 0
+    warehouseCost: 15968
+    warehouseMaxCapacity: 9.25
+    logisticsCost: 6387
+    logisticsDiscountRate: 22251225
   - level: 38
     laborCost: 1222
     laborValue: 190
     marketCost: 8623
     marketValuePerSec: 570
-    warehouseCost: 0
-    warehouseMaxCapacity: 16416000
-    logisticsCost: 17246
-    logisticsDiscountRate: 0
+    warehouseCost: 17246
+    warehouseMaxCapacity: 9.5
+    logisticsCost: 6898
+    logisticsDiscountRate: 24253835
   - level: 39
     laborCost: 1308
     laborValue: 195
     marketCost: 9313
     marketValuePerSec: 585
-    warehouseCost: 0
-    warehouseMaxCapacity: 16848000
-    logisticsCost: 18625
-    logisticsDiscountRate: 0
+    warehouseCost: 18625
+    warehouseMaxCapacity: 9.75
+    logisticsCost: 7450
+    logisticsDiscountRate: 26436680
   - level: 40
     laborCost: 1399
     laborValue: 200
     marketCost: 10058
     marketValuePerSec: 600
-    warehouseCost: 0
-    warehouseMaxCapacity: 17280000
-    logisticsCost: 20115
-    logisticsDiscountRate: 0
+    warehouseCost: 20115
+    warehouseMaxCapacity: 10
+    logisticsCost: 8046
+    logisticsDiscountRate: 28815982
   - level: 41
     laborCost: 1497
     laborValue: 205
     marketCost: 10862
     marketValuePerSec: 615
-    warehouseCost: 0
-    warehouseMaxCapacity: 17712000
-    logisticsCost: 21725
-    logisticsDiscountRate: 0
+    warehouseCost: 21725
+    warehouseMaxCapacity: 10.25
+    logisticsCost: 8690
+    logisticsDiscountRate: 31409420
   - level: 42
     laborCost: 1602
     laborValue: 210
     marketCost: 11731
     marketValuePerSec: 630
-    warehouseCost: 0
-    warehouseMaxCapacity: 18144000
-    logisticsCost: 23462
-    logisticsDiscountRate: 0
+    warehouseCost: 23462
+    warehouseMaxCapacity: 10.5
+    logisticsCost: 9385
+    logisticsDiscountRate: 34236268
   - level: 43
     laborCost: 1714
     laborValue: 215
     marketCost: 12670
     marketValuePerSec: 645
-    warehouseCost: 0
-    warehouseMaxCapacity: 18576000
-    logisticsCost: 25339
-    logisticsDiscountRate: 0
+    warehouseCost: 25339
+    warehouseMaxCapacity: 10.75
+    logisticsCost: 10136
+    logisticsDiscountRate: 37317532
   - level: 44
     laborCost: 1834
     laborValue: 220
     marketCost: 13683
     marketValuePerSec: 660
-    warehouseCost: 0
-    warehouseMaxCapacity: 19008000
-    logisticsCost: 27367
-    logisticsDiscountRate: 0
+    warehouseCost: 27367
+    warehouseMaxCapacity: 11
+    logisticsCost: 10947
+    logisticsDiscountRate: 40676110
   - level: 45
     laborCost: 1963
     laborValue: 225
     marketCost: 14778
     marketValuePerSec: 675
-    warehouseCost: 0
-    warehouseMaxCapacity: 19440000
-    logisticsCost: 29556
-    logisticsDiscountRate: 0
+    warehouseCost: 29556
+    warehouseMaxCapacity: 11.25
+    logisticsCost: 11822
+    logisticsDiscountRate: 44336960
   - level: 46
     laborCost: 2100
     laborValue: 230
     marketCost: 15960
     marketValuePerSec: 690
-    warehouseCost: 0
-    warehouseMaxCapacity: 19872000
-    logisticsCost: 31920
-    logisticsDiscountRate: 0
+    warehouseCost: 31920
+    warehouseMaxCapacity: 11.5
+    logisticsCost: 12768
+    logisticsDiscountRate: 48327286
   - level: 47
     laborCost: 2247
     laborValue: 235
     marketCost: 17237
     marketValuePerSec: 705
-    warehouseCost: 0
-    warehouseMaxCapacity: 20304000
-    logisticsCost: 34474
-    logisticsDiscountRate: 0
+    warehouseCost: 34474
+    warehouseMaxCapacity: 11.75
+    logisticsCost: 13790
+    logisticsDiscountRate: 52676742
   - level: 48
     laborCost: 2405
     laborValue: 240
     marketCost: 18616
     marketValuePerSec: 720
-    warehouseCost: 0
-    warehouseMaxCapacity: 20736000
-    logisticsCost: 37232
-    logisticsDiscountRate: 0
+    warehouseCost: 37232
+    warehouseMaxCapacity: 12
+    logisticsCost: 14893
+    logisticsDiscountRate: 57417649
   - level: 49
     laborCost: 2573
     laborValue: 245
     marketCost: 20105
     marketValuePerSec: 735
-    warehouseCost: 0
-    warehouseMaxCapacity: 21168000
-    logisticsCost: 40211
-    logisticsDiscountRate: 0
+    warehouseCost: 40211
+    warehouseMaxCapacity: 12.25
+    logisticsCost: 16084
+    logisticsDiscountRate: 62585237
   - level: 50
     laborCost: 2753
     laborValue: 250
     marketCost: 21714
     marketValuePerSec: 750
-    warehouseCost: 0
-    warehouseMaxCapacity: 21600000
-    logisticsCost: 43427
-    logisticsDiscountRate: 0
+    warehouseCost: 43427
+    warehouseMaxCapacity: 12.5
+    logisticsCost: 17371
+    logisticsDiscountRate: 68217908
   - level: 51
     laborCost: 2946
     laborValue: 255
     marketCost: 23451
     marketValuePerSec: 765
-    warehouseCost: 0
-    warehouseMaxCapacity: 22032000
-    logisticsCost: 46902
-    logisticsDiscountRate: 0
+    warehouseCost: 46902
+    warehouseMaxCapacity: 12.75
+    logisticsCost: 18761
+    logisticsDiscountRate: 74357520
   - level: 52
     laborCost: 3152
     laborValue: 260
     marketCost: 25327
     marketValuePerSec: 780
-    warehouseCost: 0
-    warehouseMaxCapacity: 22464000
-    logisticsCost: 50654
-    logisticsDiscountRate: 0
+    warehouseCost: 50654
+    warehouseMaxCapacity: 13
+    logisticsCost: 20261
+    logisticsDiscountRate: 81049697
   - level: 53
     laborCost: 3373
     laborValue: 265
     marketCost: 27353
     marketValuePerSec: 795
-    warehouseCost: 0
-    warehouseMaxCapacity: 22896000
-    logisticsCost: 54706
-    logisticsDiscountRate: 0
+    warehouseCost: 54706
+    warehouseMaxCapacity: 13.25
+    logisticsCost: 21882
+    logisticsDiscountRate: 88344170
   - level: 54
     laborCost: 3609
     laborValue: 270
     marketCost: 29541
     marketValuePerSec: 810
-    warehouseCost: 0
-    warehouseMaxCapacity: 23328000
-    logisticsCost: 59083
-    logisticsDiscountRate: 0
+    warehouseCost: 59083
+    warehouseMaxCapacity: 13.5
+    logisticsCost: 23633
+    logisticsDiscountRate: 96295145
   - level: 55
     laborCost: 3861
     laborValue: 275
     marketCost: 31905
     marketValuePerSec: 825
-    warehouseCost: 0
-    warehouseMaxCapacity: 23760000
-    logisticsCost: 63809
-    logisticsDiscountRate: 0
+    warehouseCost: 63809
+    warehouseMaxCapacity: 13.75
+    logisticsCost: 25524
+    logisticsDiscountRate: 104961708
   - level: 56
     laborCost: 4132
     laborValue: 280
     marketCost: 34457
     marketValuePerSec: 840
-    warehouseCost: 0
-    warehouseMaxCapacity: 24192000
-    logisticsCost: 68914
-    logisticsDiscountRate: 0
+    warehouseCost: 68914
+    warehouseMaxCapacity: 14
+    logisticsCost: 27566
+    logisticsDiscountRate: 114408262
   - level: 57
     laborCost: 4421
     laborValue: 285
     marketCost: 37213
     marketValuePerSec: 855
-    warehouseCost: 0
-    warehouseMaxCapacity: 24624000
-    logisticsCost: 74427
-    logisticsDiscountRate: 0
+    warehouseCost: 74427
+    warehouseMaxCapacity: 14.25
+    logisticsCost: 29771
+    logisticsDiscountRate: 124705005
   - level: 58
     laborCost: 4730
     laborValue: 290
     marketCost: 40191
     marketValuePerSec: 870
-    warehouseCost: 0
-    warehouseMaxCapacity: 25056000
-    logisticsCost: 80381
-    logisticsDiscountRate: 0
+    warehouseCost: 80381
+    warehouseMaxCapacity: 14.5
+    logisticsCost: 32152
+    logisticsDiscountRate: 135928456
   - level: 59
     laborCost: 5061
     laborValue: 295
     marketCost: 43406
     marketValuePerSec: 885
-    warehouseCost: 0
-    warehouseMaxCapacity: 25488000
-    logisticsCost: 86812
-    logisticsDiscountRate: 0
+    warehouseCost: 86812
+    warehouseMaxCapacity: 14.75
+    logisticsCost: 34725
+    logisticsDiscountRate: 148162017
   - level: 60
     laborCost: 5416
     laborValue: 300
     marketCost: 46878
     marketValuePerSec: 900
-    warehouseCost: 0
-    warehouseMaxCapacity: 25920000
-    logisticsCost: 93757
-    logisticsDiscountRate: 0
+    warehouseCost: 93757
+    warehouseMaxCapacity: 15
+    logisticsCost: 37503
+    logisticsDiscountRate: 161496598
   - level: 61
     laborCost: 5795
     laborValue: 305
     marketCost: 50629
     marketValuePerSec: 915
-    warehouseCost: 0
-    warehouseMaxCapacity: 26352000
-    logisticsCost: 101257
-    logisticsDiscountRate: 0
+    warehouseCost: 101257
+    warehouseMaxCapacity: 15.25
+    logisticsCost: 40503
+    logisticsDiscountRate: 176031292
   - level: 62
     laborCost: 6200
     laborValue: 310
     marketCost: 54679
     marketValuePerSec: 930
-    warehouseCost: 0
-    warehouseMaxCapacity: 26784000
-    logisticsCost: 109358
-    logisticsDiscountRate: 0
+    warehouseCost: 109358
+    warehouseMaxCapacity: 15.5
+    logisticsCost: 43743
+    logisticsDiscountRate: 191874108
   - level: 63
     laborCost: 6634
     laborValue: 315
     marketCost: 59053
     marketValuePerSec: 945
-    warehouseCost: 0
-    warehouseMaxCapacity: 27216000
-    logisticsCost: 118106
-    logisticsDiscountRate: 0
+    warehouseCost: 118106
+    warehouseMaxCapacity: 15.75
+    logisticsCost: 47242
+    logisticsDiscountRate: 209142778
   - level: 64
     laborCost: 7099
     laborValue: 320
     marketCost: 63777
     marketValuePerSec: 960
-    warehouseCost: 0
-    warehouseMaxCapacity: 27648000
-    logisticsCost: 127555
-    logisticsDiscountRate: 0
+    warehouseCost: 127555
+    warehouseMaxCapacity: 16
+    logisticsCost: 51022
+    logisticsDiscountRate: 227965628
   - level: 65
     laborCost: 7596
     laborValue: 325
     marketCost: 68880
     marketValuePerSec: 975
-    warehouseCost: 0
-    warehouseMaxCapacity: 28080000
-    logisticsCost: 137759
-    logisticsDiscountRate: 0
+    warehouseCost: 137759
+    warehouseMaxCapacity: 16.25
+    logisticsCost: 55104
+    logisticsDiscountRate: 248482535
   - level: 66
     laborCost: 8127
     laborValue: 330
     marketCost: 74390
     marketValuePerSec: 990
-    warehouseCost: 0
-    warehouseMaxCapacity: 28512000
-    logisticsCost: 148780
-    logisticsDiscountRate: 0
+    warehouseCost: 148780
+    warehouseMaxCapacity: 16.5
+    logisticsCost: 59512
+    logisticsDiscountRate: 270845963
   - level: 67
     laborCost: 8696
     laborValue: 335
     marketCost: 80341
     marketValuePerSec: 1005
-    warehouseCost: 0
-    warehouseMaxCapacity: 28944000
-    logisticsCost: 160682
-    logisticsDiscountRate: 0
+    warehouseCost: 160682
+    warehouseMaxCapacity: 16.75
+    logisticsCost: 64273
+    logisticsDiscountRate: 295222099
   - level: 68
     laborCost: 9305
     laborValue: 340
     marketCost: 86768
     marketValuePerSec: 1020
-    warehouseCost: 0
-    warehouseMaxCapacity: 29376000
-    logisticsCost: 173537
-    logisticsDiscountRate: 0
+    warehouseCost: 173537
+    warehouseMaxCapacity: 17
+    logisticsCost: 69415
+    logisticsDiscountRate: 321792088
   - level: 69
     laborCost: 9956
     laborValue: 345
     marketCost: 93710
     marketValuePerSec: 1035
-    warehouseCost: 0
-    warehouseMaxCapacity: 29808000
-    logisticsCost: 187420
-    logisticsDiscountRate: 0
+    warehouseCost: 187420
+    warehouseMaxCapacity: 17.25
+    logisticsCost: 74968
+    logisticsDiscountRate: 350753376
   - level: 70
     laborCost: 10653
     laborValue: 350
     marketCost: 101207
     marketValuePerSec: 1050
-    warehouseCost: 0
-    warehouseMaxCapacity: 30240000
-    logisticsCost: 202413
-    logisticsDiscountRate: 0
+    warehouseCost: 202413
+    warehouseMaxCapacity: 17.5
+    logisticsCost: 80965
+    logisticsDiscountRate: 382321180
   - level: 71
     laborCost: 11399
     laborValue: 355
     marketCost: 109303
     marketValuePerSec: 1065
-    warehouseCost: 0
-    warehouseMaxCapacity: 30672000
-    logisticsCost: 218606
-    logisticsDiscountRate: 0
+    warehouseCost: 218606
+    warehouseMaxCapacity: 17.75
+    logisticsCost: 87443
+    logisticsDiscountRate: 416730086
   - level: 72
     laborCost: 12197
     laborValue: 360
     marketCost: 118047
     marketValuePerSec: 1080
-    warehouseCost: 0
-    warehouseMaxCapacity: 31104000
-    logisticsCost: 236095
-    logisticsDiscountRate: 0
+    warehouseCost: 236095
+    warehouseMaxCapacity: 18
+    logisticsCost: 94438
+    logisticsDiscountRate: 454235794
   - level: 73
     laborCost: 13051
     laborValue: 365
     marketCost: 127491
     marketValuePerSec: 1095
-    warehouseCost: 0
-    warehouseMaxCapacity: 31536000
-    logisticsCost: 254983
-    logisticsDiscountRate: 0
+    warehouseCost: 254983
+    warehouseMaxCapacity: 18.25
+    logisticsCost: 101993
+    logisticsDiscountRate: 495117015
   - level: 74
     laborCost: 13964
     laborValue: 370
     marketCost: 137691
     marketValuePerSec: 1110
-    warehouseCost: 0
-    warehouseMaxCapacity: 31968000
-    logisticsCost: 275381
-    logisticsDiscountRate: 0
+    warehouseCost: 275381
+    warehouseMaxCapacity: 18.5
+    logisticsCost: 110152
+    logisticsDiscountRate: 539677547
   - level: 75
     laborCost: 14942
     laborValue: 375
     marketCost: 148706
     marketValuePerSec: 1125
-    warehouseCost: 0
-    warehouseMaxCapacity: 32400000
-    logisticsCost: 297412
-    logisticsDiscountRate: 0
+    warehouseCost: 297412
+    warehouseMaxCapacity: 18.75
+    logisticsCost: 118965
+    logisticsDiscountRate: 588248526
   - level: 76
     laborCost: 15988
     laborValue: 380
     marketCost: 160602
     marketValuePerSec: 1140
-    warehouseCost: 0
-    warehouseMaxCapacity: 32832000
-    logisticsCost: 321205
-    logisticsDiscountRate: 0
+    warehouseCost: 321205
+    warehouseMaxCapacity: 19
+    logisticsCost: 128482
+    logisticsDiscountRate: 641190893
   - level: 77
     laborCost: 17107
     laborValue: 385
     marketCost: 173450
     marketValuePerSec: 1155
-    warehouseCost: 0
-    warehouseMaxCapacity: 33264000
-    logisticsCost: 346901
-    logisticsDiscountRate: 0
+    warehouseCost: 346901
+    warehouseMaxCapacity: 19.25
+    logisticsCost: 138760
+    logisticsDiscountRate: 698898074
   - level: 78
     laborCost: 18304
     laborValue: 390
     marketCost: 187326
     marketValuePerSec: 1170
-    warehouseCost: 0
-    warehouseMaxCapacity: 33696000
-    logisticsCost: 374653
-    logisticsDiscountRate: 0
+    warehouseCost: 374653
+    warehouseMaxCapacity: 19.5
+    logisticsCost: 149861
+    logisticsDiscountRate: 761798900
   - level: 79
     laborCost: 19585
     laborValue: 395
     marketCost: 202313
     marketValuePerSec: 1185
-    warehouseCost: 0
-    warehouseMaxCapacity: 34128000
-    logisticsCost: 404625
-    logisticsDiscountRate: 0
+    warehouseCost: 404625
+    warehouseMaxCapacity: 19.75
+    logisticsCost: 161850
+    logisticsDiscountRate: 830360801
   - level: 80
     laborCost: 20956
     laborValue: 400
     marketCost: 218498
     marketValuePerSec: 1200
-    warehouseCost: 0
-    warehouseMaxCapacity: 34560000
-    logisticsCost: 436995
-    logisticsDiscountRate: 0
+    warehouseCost: 436995
+    warehouseMaxCapacity: 20
+    logisticsCost: 174798
+    logisticsDiscountRate: 905093274
   - level: 81
     laborCost: 22423
     laborValue: 405
     marketCost: 235977
     marketValuePerSec: 1215
-    warehouseCost: 0
-    warehouseMaxCapacity: 34992000
-    logisticsCost: 471955
-    logisticsDiscountRate: 0
+    warehouseCost: 471955
+    warehouseMaxCapacity: 20.25
+    logisticsCost: 188782
+    logisticsDiscountRate: 986551668
   - level: 82
     laborCost: 23993
     laborValue: 410
     marketCost: 254856
     marketValuePerSec: 1230
-    warehouseCost: 0
-    warehouseMaxCapacity: 35424000
-    logisticsCost: 509711
-    logisticsDiscountRate: 0
+    warehouseCost: 509711
+    warehouseMaxCapacity: 20.5
+    logisticsCost: 203884
+    logisticsDiscountRate: 1075341318
   - level: 83
     laborCost: 25673
     laborValue: 415
     marketCost: 275244
     marketValuePerSec: 1245
-    warehouseCost: 0
-    warehouseMaxCapacity: 35856000
-    logisticsCost: 550488
-    logisticsDiscountRate: 0
+    warehouseCost: 550488
+    warehouseMaxCapacity: 20.75
+    logisticsCost: 220195
+    logisticsDiscountRate: 1172122037
   - level: 84
     laborCost: 27470
     laborValue: 420
     marketCost: 297264
     marketValuePerSec: 1260
-    warehouseCost: 0
-    warehouseMaxCapacity: 36288000
-    logisticsCost: 594527
-    logisticsDiscountRate: 0
+    warehouseCost: 594527
+    warehouseMaxCapacity: 21
+    logisticsCost: 237811
+    logisticsDiscountRate: 1277613020
   - level: 85
     laborCost: 29393
     laborValue: 425
     marketCost: 321045
     marketValuePerSec: 1275
-    warehouseCost: 0
-    warehouseMaxCapacity: 36720000
-    logisticsCost: 642089
-    logisticsDiscountRate: 0
+    warehouseCost: 642089
+    warehouseMaxCapacity: 21.25
+    logisticsCost: 256836
+    logisticsDiscountRate: 1392598192
   - level: 86
     laborCost: 31450
     laborValue: 430
     marketCost: 346728
     marketValuePerSec: 1290
-    warehouseCost: 0
-    warehouseMaxCapacity: 37152000
-    logisticsCost: 693456
-    logisticsDiscountRate: 0
+    warehouseCost: 693456
+    warehouseMaxCapacity: 21.5
+    logisticsCost: 277383
+    logisticsDiscountRate: 1517932029
   - level: 87
     laborCost: 33652
     laborValue: 435
     marketCost: 374467
     marketValuePerSec: 1305
-    warehouseCost: 0
-    warehouseMaxCapacity: 37584000
-    logisticsCost: 748933
-    logisticsDiscountRate: 0
+    warehouseCost: 748933
+    warehouseMaxCapacity: 21.75
+    logisticsCost: 299573
+    logisticsDiscountRate: 1654545912
   - level: 88
     laborCost: 36007
     laborValue: 440
     marketCost: 404424
     marketValuePerSec: 1320
-    warehouseCost: 0
-    warehouseMaxCapacity: 38016000
-    logisticsCost: 808848
-    logisticsDiscountRate: 0
+    warehouseCost: 808848
+    warehouseMaxCapacity: 22
+    logisticsCost: 323539
+    logisticsDiscountRate: 1803455044
   - level: 89
     laborCost: 38528
     laborValue: 445
     marketCost: 436778
     marketValuePerSec: 1335
-    warehouseCost: 0
-    warehouseMaxCapacity: 38448000
-    logisticsCost: 873555
-    logisticsDiscountRate: 0
+    warehouseCost: 873555
+    warehouseMaxCapacity: 22.25
+    logisticsCost: 349422
+    logisticsDiscountRate: 1965765998
   - level: 90
     laborCost: 41225
     laborValue: 450
     marketCost: 471720
     marketValuePerSec: 1350
-    warehouseCost: 0
-    warehouseMaxCapacity: 38880000
-    logisticsCost: 943440
-    logisticsDiscountRate: 0
+    warehouseCost: 943440
+    warehouseMaxCapacity: 22.5
+    logisticsCost: 377376
+    logisticsDiscountRate: 2142684938
   - level: 91
     laborCost: 44110
     laborValue: 455
     marketCost: 509458
     marketValuePerSec: 1365
-    warehouseCost: 0
-    warehouseMaxCapacity: 39312000
-    logisticsCost: 1018915
-    logisticsDiscountRate: 0
+    warehouseCost: 1018915
+    warehouseMaxCapacity: 22.75
+    logisticsCost: 407566
+    logisticsDiscountRate: 2335526582
   - level: 92
     laborCost: 47198
     laborValue: 460
     marketCost: 550214
     marketValuePerSec: 1380
-    warehouseCost: 0
-    warehouseMaxCapacity: 39744000
-    logisticsCost: 1100428
-    logisticsDiscountRate: 0
+    warehouseCost: 1100428
+    warehouseMaxCapacity: 23
+    logisticsCost: 440171
+    logisticsDiscountRate: 2545723975
   - level: 93
     laborCost: 50502
     laborValue: 465
     marketCost: 594231
     marketValuePerSec: 1395
-    warehouseCost: 0
-    warehouseMaxCapacity: 40176000
-    logisticsCost: 1188463
-    logisticsDiscountRate: 0
+    warehouseCost: 1188463
+    warehouseMaxCapacity: 23.25
+    logisticsCost: 475385
+    logisticsDiscountRate: 2774839132
   - level: 94
     laborCost: 54037
     laborValue: 470
     marketCost: 641770
     marketValuePerSec: 1410
-    warehouseCost: 0
-    warehouseMaxCapacity: 40608000
-    logisticsCost: 1283540
-    logisticsDiscountRate: 0
+    warehouseCost: 1283540
+    warehouseMaxCapacity: 23.5
+    logisticsCost: 513416
+    logisticsDiscountRate: 3024574654
   - level: 95
     laborCost: 57820
     laborValue: 475
     marketCost: 693111
     marketValuePerSec: 1425
-    warehouseCost: 0
-    warehouseMaxCapacity: 41040000
-    logisticsCost: 1386223
-    logisticsDiscountRate: 0
+    warehouseCost: 1386223
+    warehouseMaxCapacity: 23.75
+    logisticsCost: 554489
+    logisticsDiscountRate: 3296786373
   - level: 96
     laborCost: 61867
     laborValue: 480
     marketCost: 748560
     marketValuePerSec: 1440
-    warehouseCost: 0
-    warehouseMaxCapacity: 41472000
-    logisticsCost: 1497121
-    logisticsDiscountRate: 0
+    warehouseCost: 1497121
+    warehouseMaxCapacity: 24
+    logisticsCost: 598848
+    logisticsDiscountRate: 3593497147
   - level: 97
     laborCost: 66198
     laborValue: 485
     marketCost: 808445
     marketValuePerSec: 1455
-    warehouseCost: 0
-    warehouseMaxCapacity: 41904000
-    logisticsCost: 1616890
-    logisticsDiscountRate: 0
+    warehouseCost: 1616890
+    warehouseMaxCapacity: 24.25
+    logisticsCost: 646756
+    logisticsDiscountRate: 3916911890
   - level: 98
     laborCost: 70831
     laborValue: 490
     marketCost: 873121
     marketValuePerSec: 1470
-    warehouseCost: 0
-    warehouseMaxCapacity: 42336000
-    logisticsCost: 1746241
-    logisticsDiscountRate: 0
+    warehouseCost: 1746241
+    warehouseMaxCapacity: 24.5
+    logisticsCost: 698497
+    logisticsDiscountRate: 4269433960
   - level: 99
     laborCost: 75790
     laborValue: 495
     marketCost: 942970
     marketValuePerSec: 1485
-    warehouseCost: 0
-    warehouseMaxCapacity: 42768000
-    logisticsCost: 1885941
-    logisticsDiscountRate: 0
+    warehouseCost: 1885941
+    warehouseMaxCapacity: 24.75
+    logisticsCost: 754376
+    logisticsDiscountRate: 4653683016
   - level: 100
     laborCost: 81095
     laborValue: 500
     marketCost: 1018408
     marketValuePerSec: 1500
-    warehouseCost: 0
-    warehouseMaxCapacity: 43200000
-    logisticsCost: 2036816
-    logisticsDiscountRate: 0
+    warehouseCost: 2036816
+    warehouseMaxCapacity: 25
+    logisticsCost: 814726
+    logisticsDiscountRate: 5072514488
   - level: 101
     laborCost: 86772
     laborValue: 505
     marketCost: 1099881
     marketValuePerSec: 1515
-    warehouseCost: 0
-    warehouseMaxCapacity: 43632000
-    logisticsCost: 2199761
-    logisticsDiscountRate: 0
+    warehouseCost: 2199761
+    warehouseMaxCapacity: 25.25
+    logisticsCost: 879905
+    logisticsDiscountRate: 5529040792
   - level: 102
     laborCost: 92846
     laborValue: 510
     marketCost: 1187871
     marketValuePerSec: 1530
-    warehouseCost: 0
-    warehouseMaxCapacity: 44064000
-    logisticsCost: 2375742
-    logisticsDiscountRate: 0
+    warehouseCost: 2375742
+    warehouseMaxCapacity: 25.5
+    logisticsCost: 950297
+    logisticsDiscountRate: 6026654463
   - level: 103
     laborCost: 99345
     laborValue: 515
     marketCost: 1282901
     marketValuePerSec: 1545
-    warehouseCost: 0
-    warehouseMaxCapacity: 44496000
-    logisticsCost: 2565802
-    logisticsDiscountRate: 0
+    warehouseCost: 2565802
+    warehouseMaxCapacity: 25.75
+    logisticsCost: 1026321
+    logisticsDiscountRate: 6569053365
   - level: 104
     laborCost: 106299
     laborValue: 520
     marketCost: 1385533
     marketValuePerSec: 1560
-    warehouseCost: 0
-    warehouseMaxCapacity: 44928000
-    logisticsCost: 2771066
-    logisticsDiscountRate: 0
+    warehouseCost: 2771066
+    warehouseMaxCapacity: 26
+    logisticsCost: 1108426
+    logisticsDiscountRate: 7160268168
   - level: 105
     laborCost: 113740
     laborValue: 525
     marketCost: 1496375
     marketValuePerSec: 1575
-    warehouseCost: 0
-    warehouseMaxCapacity: 45360000
-    logisticsCost: 2992751
-    logisticsDiscountRate: 0
+    warehouseCost: 2992751
+    warehouseMaxCapacity: 26.25
+    logisticsCost: 1197100
+    logisticsDiscountRate: 7804692303
   - level: 106
     laborCost: 121702
     laborValue: 530
     marketCost: 1616085
     marketValuePerSec: 1590
-    warehouseCost: 0
-    warehouseMaxCapacity: 45792000
-    logisticsCost: 3232171
-    logisticsDiscountRate: 0
+    warehouseCost: 3232171
+    warehouseMaxCapacity: 26.5
+    logisticsCost: 1292868
+    logisticsDiscountRate: 8507114610
   - level: 107
     laborCost: 130221
     laborValue: 535
     marketCost: 1745372
     marketValuePerSec: 1605
-    warehouseCost: 0
-    warehouseMaxCapacity: 46224000
-    logisticsCost: 3490745
-    logisticsDiscountRate: 0
+    warehouseCost: 3490745
+    warehouseMaxCapacity: 26.75
+    logisticsCost: 1396298
+    logisticsDiscountRate: 9272754925
   - level: 108
     laborCost: 139336
     laborValue: 540
     marketCost: 1885002
     marketValuePerSec: 1620
-    warehouseCost: 0
-    warehouseMaxCapacity: 46656000
-    logisticsCost: 3770004
-    logisticsDiscountRate: 0
+    warehouseCost: 3770004
+    warehouseMaxCapacity: 27
+    logisticsCost: 1508002
+    logisticsDiscountRate: 10107302868
   - level: 109
     laborCost: 149090
     laborValue: 545
     marketCost: 2035802
     marketValuePerSec: 1635
-    warehouseCost: 0
-    warehouseMaxCapacity: 47088000
-    logisticsCost: 4071605
-    logisticsDiscountRate: 0
+    warehouseCost: 4071605
+    warehouseMaxCapacity: 27.25
+    logisticsCost: 1628642
+    logisticsDiscountRate: 11016960126
   - level: 110
     laborCost: 159526
     laborValue: 550
     marketCost: 2198666
     marketValuePerSec: 1650
-    warehouseCost: 0
-    warehouseMaxCapacity: 47520000
-    logisticsCost: 4397333
-    logisticsDiscountRate: 0
+    warehouseCost: 4397333
+    warehouseMaxCapacity: 27.5
+    logisticsCost: 1758933
+    logisticsDiscountRate: 12008486538
   - level: 111
     laborCost: 170693
     laborValue: 555
     marketCost: 2374560
     marketValuePerSec: 1665
-    warehouseCost: 0
-    warehouseMaxCapacity: 47952000
-    logisticsCost: 4749120
-    logisticsDiscountRate: 0
+    warehouseCost: 4749120
+    warehouseMaxCapacity: 27.75
+    logisticsCost: 1899648
+    logisticsDiscountRate: 13089250326
   - level: 112
     laborCost: 182641
     laborValue: 560
     marketCost: 2564525
     marketValuePerSec: 1680
-    warehouseCost: 0
-    warehouseMaxCapacity: 48384000
-    logisticsCost: 5129049
-    logisticsDiscountRate: 0
+    warehouseCost: 5129049
+    warehouseMaxCapacity: 28
+    logisticsCost: 2051620
+    logisticsDiscountRate: 14267282855
   - level: 113
     laborCost: 195426
     laborValue: 565
     marketCost: 2769687
     marketValuePerSec: 1695
-    warehouseCost: 0
-    warehouseMaxCapacity: 48816000
-    logisticsCost: 5539373
-    logisticsDiscountRate: 0
+    warehouseCost: 5539373
+    warehouseMaxCapacity: 28.25
+    logisticsCost: 2215749
+    logisticsDiscountRate: 15551338312
   - level: 114
     laborCost: 209106
     laborValue: 570
     marketCost: 2991261
     marketValuePerSec: 1710
-    warehouseCost: 0
-    warehouseMaxCapacity: 49248000
-    logisticsCost: 5982523
-    logisticsDiscountRate: 0
+    warehouseCost: 5982523
+    warehouseMaxCapacity: 28.5
+    logisticsCost: 2393009
+    logisticsDiscountRate: 16950958760
   - level: 115
     laborCost: 223744
     laborValue: 575
     marketCost: 3230562
     marketValuePerSec: 1725
-    warehouseCost: 0
-    warehouseMaxCapacity: 49680000
-    logisticsCost: 6461125
-    logisticsDiscountRate: 0
+    warehouseCost: 6461125
+    warehouseMaxCapacity: 28.75
+    logisticsCost: 2584450
+    logisticsDiscountRate: 18476545049
   - level: 116
     laborCost: 239406
     laborValue: 580
     marketCost: 3489007
     marketValuePerSec: 1740
-    warehouseCost: 0
-    warehouseMaxCapacity: 50112000
-    logisticsCost: 6978015
-    logisticsDiscountRate: 0
+    warehouseCost: 6978015
+    warehouseMaxCapacity: 29
+    logisticsCost: 2791206
+    logisticsDiscountRate: 20139434103
   - level: 117
     laborCost: 256164
     laborValue: 585
     marketCost: 3768128
     marketValuePerSec: 1755
-    warehouseCost: 0
-    warehouseMaxCapacity: 50544000
-    logisticsCost: 7536256
-    logisticsDiscountRate: 0
+    warehouseCost: 7536256
+    warehouseMaxCapacity: 29.25
+    logisticsCost: 3014502
+    logisticsDiscountRate: 21951983172
   - level: 118
     laborCost: 274096
     laborValue: 590
     marketCost: 4069578
     marketValuePerSec: 1770
-    warehouseCost: 0
-    warehouseMaxCapacity: 50976000
-    logisticsCost: 8139156
-    logisticsDiscountRate: 0
+    warehouseCost: 8139156
+    warehouseMaxCapacity: 29.5
+    logisticsCost: 3255663
+    logisticsDiscountRate: 23927661658
   - level: 119
     laborCost: 293282
     laborValue: 595
     marketCost: 4395144
     marketValuePerSec: 1785
-    warehouseCost: 0
-    warehouseMaxCapacity: 51408000
-    logisticsCost: 8790289
-    logisticsDiscountRate: 0
+    warehouseCost: 8790289
+    warehouseMaxCapacity: 29.75
+    logisticsCost: 3516116
+    logisticsDiscountRate: 26081151207
   - level: 120
     laborCost: 313812
     laborValue: 600
     marketCost: 4746756
     marketValuePerSec: 1800
-    warehouseCost: 0
-    warehouseMaxCapacity: 51840000
-    logisticsCost: 9493512
-    logisticsDiscountRate: 0
+    warehouseCost: 9493512
+    warehouseMaxCapacity: 30
+    logisticsCost: 3797405
+    logisticsDiscountRate: 28428454816
   - level: 121
     laborCost: 335779
     laborValue: 605
     marketCost: 5126496
     marketValuePerSec: 1815
-    warehouseCost: 0
-    warehouseMaxCapacity: 52272000
-    logisticsCost: 10252993
-    logisticsDiscountRate: 0
+    warehouseCost: 10252993
+    warehouseMaxCapacity: 30.25
+    logisticsCost: 4101197
+    logisticsDiscountRate: 30987015749
   - level: 122
     laborCost: 359283
     laborValue: 610
     marketCost: 5536616
     marketValuePerSec: 1830
-    warehouseCost: 0
-    warehouseMaxCapacity: 52704000
-    logisticsCost: 11073232
-    logisticsDiscountRate: 0
+    warehouseCost: 11073232
+    warehouseMaxCapacity: 30.5
+    logisticsCost: 4429293
+    logisticsDiscountRate: 33775847167
   - level: 123
     laborCost: 384433
     laborValue: 615
     marketCost: 5979545
     marketValuePerSec: 1845
-    warehouseCost: 0
-    warehouseMaxCapacity: 53136000
-    logisticsCost: 11959091
-    logisticsDiscountRate: 0
+    warehouseCost: 11959091
+    warehouseMaxCapacity: 30.75
+    logisticsCost: 4783636
+    logisticsDiscountRate: 36815673412
   - level: 124
     laborCost: 411344
     laborValue: 620
     marketCost: 6457909
     marketValuePerSec: 1860
-    warehouseCost: 0
-    warehouseMaxCapacity: 53568000
-    logisticsCost: 12915818
-    logisticsDiscountRate: 0
+    warehouseCost: 12915818
+    warehouseMaxCapacity: 31
+    logisticsCost: 5166327
+    logisticsDiscountRate: 40129084019
   - level: 125
     laborCost: 440138
     laborValue: 625
     marketCost: 6974542
     marketValuePerSec: 1875
-    warehouseCost: 0
-    warehouseMaxCapacity: 54000000
-    logisticsCost: 13949084
-    logisticsDiscountRate: 0
+    warehouseCost: 13949084
+    warehouseMaxCapacity: 31.25
+    logisticsCost: 5579633
+    logisticsDiscountRate: 43740701580
   - level: 126
     laborCost: 470947
     laborValue: 630
     marketCost: 7532505
     marketValuePerSec: 1890
-    warehouseCost: 0
-    warehouseMaxCapacity: 54432000
-    logisticsCost: 15065010
-    logisticsDiscountRate: 0
+    warehouseCost: 15065010
+    warehouseMaxCapacity: 31.5
+    logisticsCost: 6026004
+    logisticsDiscountRate: 47677364723
   - level: 127
     laborCost: 503913
     laborValue: 635
     marketCost: 8135106
     marketValuePerSec: 1905
-    warehouseCost: 0
-    warehouseMaxCapacity: 54864000
-    logisticsCost: 16270211
-    logisticsDiscountRate: 0
+    warehouseCost: 16270211
+    warehouseMaxCapacity: 31.75
+    logisticsCost: 6508084
+    logisticsDiscountRate: 51968327548
   - level: 128
     laborCost: 539187
     laborValue: 640
     marketCost: 8785914
     marketValuePerSec: 1920
-    warehouseCost: 0
-    warehouseMaxCapacity: 55296000
-    logisticsCost: 17571828
-    logisticsDiscountRate: 0
+    warehouseCost: 17571828
+    warehouseMaxCapacity: 32
+    logisticsCost: 7028731
+    logisticsDiscountRate: 56645477027
   - level: 129
     laborCost: 576931
     laborValue: 645
     marketCost: 9488787
     marketValuePerSec: 1935
-    warehouseCost: 0
-    warehouseMaxCapacity: 55728000
-    logisticsCost: 18977574
-    logisticsDiscountRate: 0
+    warehouseCost: 18977574
+    warehouseMaxCapacity: 32.25
+    logisticsCost: 7591030
+    logisticsDiscountRate: 61743569959
   - level: 130
     laborCost: 617316
     laborValue: 650
     marketCost: 10247890
     marketValuePerSec: 1950
-    warehouseCost: 0
-    warehouseMaxCapacity: 56160000
-    logisticsCost: 20495780
-    logisticsDiscountRate: 0
+    warehouseCost: 20495780
+    warehouseMaxCapacity: 32.5
+    logisticsCost: 8198312
+    logisticsDiscountRate: 67300491256
   - level: 131
     laborCost: 660528
     laborValue: 655
     marketCost: 11067721
     marketValuePerSec: 1965
-    warehouseCost: 0
-    warehouseMaxCapacity: 56592000
-    logisticsCost: 22135443
-    logisticsDiscountRate: 0
+    warehouseCost: 22135443
+    warehouseMaxCapacity: 32.75
+    logisticsCost: 8854177
+    logisticsDiscountRate: 73357535469
   - level: 132
     laborCost: 706765
     laborValue: 660
     marketCost: 11953139
     marketValuePerSec: 1980
-    warehouseCost: 0
-    warehouseMaxCapacity: 57024000
-    logisticsCost: 23906278
-    logisticsDiscountRate: 0
+    warehouseCost: 23906278
+    warehouseMaxCapacity: 33
+    logisticsCost: 9562511
+    logisticsDiscountRate: 79959713661
   - level: 133
     laborCost: 756238
     laborValue: 665
     marketCost: 12909390
     marketValuePerSec: 1995
-    warehouseCost: 0
-    warehouseMaxCapacity: 57456000
-    logisticsCost: 25818780
-    logisticsDiscountRate: 0
+    warehouseCost: 25818780
+    warehouseMaxCapacity: 33.25
+    logisticsCost: 10327512
+    logisticsDiscountRate: 87156087890
   - level: 134
     laborCost: 809175
     laborValue: 670
     marketCost: 13942141
     marketValuePerSec: 2010
-    warehouseCost: 0
-    warehouseMaxCapacity: 57888000
-    logisticsCost: 27884283
-    logisticsDiscountRate: 0
+    warehouseCost: 27884283
+    warehouseMaxCapacity: 33.5
+    logisticsCost: 11153713
+    logisticsDiscountRate: 95000135800
   - level: 135
     laborCost: 865817
     laborValue: 675
     marketCost: 15057513
     marketValuePerSec: 2025
-    warehouseCost: 0
-    warehouseMaxCapacity: 58320000
-    logisticsCost: 30115026
-    logisticsDiscountRate: 0
+    warehouseCost: 30115026
+    warehouseMaxCapacity: 33.75
+    logisticsCost: 12046010
+    logisticsDiscountRate: 103550148022
   - level: 136
     laborCost: 926424
     laborValue: 680
     marketCost: 16262114
     marketValuePerSec: 2040
-    warehouseCost: 0
-    warehouseMaxCapacity: 58752000
-    logisticsCost: 32524228
-    logisticsDiscountRate: 0
+    warehouseCost: 32524228
+    warehouseMaxCapacity: 34
+    logisticsCost: 13009691
+    logisticsDiscountRate: 112869661345
   - level: 137
     laborCost: 991274
     laborValue: 685
     marketCost: 17563083
     marketValuePerSec: 2055
-    warehouseCost: 0
-    warehouseMaxCapacity: 59184000
-    logisticsCost: 35126166
-    logisticsDiscountRate: 0
+    warehouseCost: 35126166
+    warehouseMaxCapacity: 34.25
+    logisticsCost: 14050466
+    logisticsDiscountRate: 123027930866
   - level: 138
     laborCost: 1060663
     laborValue: 690
     marketCost: 18968130
     marketValuePerSec: 2070
-    warehouseCost: 0
-    warehouseMaxCapacity: 59616000
-    logisticsCost: 37936259
-    logisticsDiscountRate: 0
+    warehouseCost: 37936259
+    warehouseMaxCapacity: 34.5
+    logisticsCost: 15174504
+    logisticsDiscountRate: 134100444643
   - level: 139
     laborCost: 1134910
     laborValue: 695
     marketCost: 20485580
     marketValuePerSec: 2085
-    warehouseCost: 0
-    warehouseMaxCapacity: 60048000
-    logisticsCost: 40971160
-    logisticsDiscountRate: 0
+    warehouseCost: 40971160
+    warehouseMaxCapacity: 34.75
+    logisticsCost: 16388464
+    logisticsDiscountRate: 146169484661
   - level: 140
     laborCost: 1214353
     laborValue: 700
     marketCost: 22124426
     marketValuePerSec: 2100
-    warehouseCost: 0
-    warehouseMaxCapacity: 60480000
-    logisticsCost: 44248853
-    logisticsDiscountRate: 0
+    warehouseCost: 44248853
+    warehouseMaxCapacity: 35
+    logisticsCost: 17699541
+    logisticsDiscountRate: 159324738281
   - level: 141
     laborCost: 1299358
     laborValue: 705
     marketCost: 23894380
     marketValuePerSec: 2115
-    warehouseCost: 0
-    warehouseMaxCapacity: 60912000
-    logisticsCost: 47788761
-    logisticsDiscountRate: 0
+    warehouseCost: 47788761
+    warehouseMaxCapacity: 35.25
+    logisticsCost: 19115504
+    logisticsDiscountRate: 173663964726
   - level: 142
     laborCost: 1390313
     laborValue: 710
     marketCost: 25805931
     marketValuePerSec: 2130
-    warehouseCost: 0
-    warehouseMaxCapacity: 61344000
-    logisticsCost: 51611862
-    logisticsDiscountRate: 0
+    warehouseCost: 51611862
+    warehouseMaxCapacity: 35.5
+    logisticsCost: 20644745
+    logisticsDiscountRate: 189293721551
   - level: 143
     laborCost: 1487635
     laborValue: 715
     marketCost: 27870405
     marketValuePerSec: 2145
-    warehouseCost: 0
-    warehouseMaxCapacity: 61776000
-    logisticsCost: 55740810
-    logisticsDiscountRate: 0
+    warehouseCost: 55740810
+    warehouseMaxCapacity: 35.75
+    logisticsCost: 22296324
+    logisticsDiscountRate: 206330156491
   - level: 144
     laborCost: 1591770
     laborValue: 720
     marketCost: 30100038
     marketValuePerSec: 2160
-    warehouseCost: 0
-    warehouseMaxCapacity: 62208000
-    logisticsCost: 60200075
-    logisticsDiscountRate: 0
+    warehouseCost: 60200075
+    warehouseMaxCapacity: 36
+    logisticsCost: 24080030
+    logisticsDiscountRate: 224899870575
   - level: 145
     laborCost: 1703193
     laborValue: 725
     marketCost: 32508041
     marketValuePerSec: 2175
-    warehouseCost: 0
-    warehouseMaxCapacity: 62640000
-    logisticsCost: 65016081
-    logisticsDiscountRate: 0
+    warehouseCost: 65016081
+    warehouseMaxCapacity: 36.25
+    logisticsCost: 26006433
+    logisticsDiscountRate: 245140858927
   - level: 146
     laborCost: 1822417
     laborValue: 730
     marketCost: 35108684
     marketValuePerSec: 2190
-    warehouseCost: 0
-    warehouseMaxCapacity: 63072000
-    logisticsCost: 70217368
-    logisticsDiscountRate: 0
+    warehouseCost: 70217368
+    warehouseMaxCapacity: 36.5
+    logisticsCost: 28086947
+    logisticsDiscountRate: 267203536230
   - level: 147
     laborCost: 1949986
     laborValue: 735
     marketCost: 37917379
     marketValuePerSec: 2205
-    warehouseCost: 0
-    warehouseMaxCapacity: 63504000
-    logisticsCost: 75834757
-    logisticsDiscountRate: 0
+    warehouseCost: 75834757
+    warehouseMaxCapacity: 36.75
+    logisticsCost: 30333903
+    logisticsDiscountRate: 291251854491
   - level: 148
     laborCost: 2086485
     laborValue: 740
     marketCost: 40950769
     marketValuePerSec: 2220
-    warehouseCost: 0
-    warehouseMaxCapacity: 63936000
-    logisticsCost: 81901538
-    logisticsDiscountRate: 0
+    warehouseCost: 81901538
+    warehouseMaxCapacity: 37
+    logisticsCost: 32760615
+    logisticsDiscountRate: 317464521395
   - level: 149
     laborCost: 2232539
     laborValue: 745
     marketCost: 44226830
     marketValuePerSec: 2235
-    warehouseCost: 0
-    warehouseMaxCapacity: 64368000
-    logisticsCost: 88453661
-    logisticsDiscountRate: 0
+    warehouseCost: 88453661
+    warehouseMaxCapacity: 37.25
+    logisticsCost: 35381464
+    logisticsDiscountRate: 346036328321
   - level: 150
     laborCost: 2388817
     laborValue: 750
     marketCost: 47764977
     marketValuePerSec: 2250
-    warehouseCost: 0
-    warehouseMaxCapacity: 64800000
-    logisticsCost: 95529954
-    logisticsDiscountRate: 0
+    warehouseCost: 95529954
+    warehouseMaxCapacity: 37.5
+    logisticsCost: 38211982
+    logisticsDiscountRate: 377179597870
   - level: 151
     laborCost: 2556034
     laborValue: 755
     marketCost: 51586175
     marketValuePerSec: 2265
-    warehouseCost: 0
-    warehouseMaxCapacity: 65232000
-    logisticsCost: 103172350
-    logisticsDiscountRate: 0
+    warehouseCost: 103172350
+    warehouseMaxCapacity: 37.75
+    logisticsCost: 41268940
+    logisticsDiscountRate: 411125761678
   - level: 152
     laborCost: 2734957
     laborValue: 760
     marketCost: 55713069
     marketValuePerSec: 2280
-    warehouseCost: 0
-    warehouseMaxCapacity: 65664000
-    logisticsCost: 111426138
-    logisticsDiscountRate: 0
+    warehouseCost: 111426138
+    warehouseMaxCapacity: 38
+    logisticsCost: 44570455
+    logisticsDiscountRate: 448127080229
   - level: 153
     laborCost: 2926404
     laborValue: 765
     marketCost: 60170115
     marketValuePerSec: 2295
-    warehouseCost: 0
-    warehouseMaxCapacity: 66096000
-    logisticsCost: 120340229
-    logisticsDiscountRate: 0
+    warehouseCost: 120340229
+    warehouseMaxCapacity: 38.25
+    logisticsCost: 48136092
+    logisticsDiscountRate: 488458517450
   - level: 154
     laborCost: 3131252
     laborValue: 770
     marketCost: 64983724
     marketValuePerSec: 2310
-    warehouseCost: 0
-    warehouseMaxCapacity: 66528000
-    logisticsCost: 129967447
-    logisticsDiscountRate: 0
+    warehouseCost: 129967447
+    warehouseMaxCapacity: 38.5
+    logisticsCost: 51986979
+    logisticsDiscountRate: 532419784020
   - level: 155
     laborCost: 3350439
     laborValue: 775
     marketCost: 70182422
     marketValuePerSec: 2325
-    warehouseCost: 0
-    warehouseMaxCapacity: 66960000
-    logisticsCost: 140364843
-    logisticsDiscountRate: 0
+    warehouseCost: 140364843
+    warehouseMaxCapacity: 38.75
+    logisticsCost: 56145937
+    logisticsDiscountRate: 580337564582
   - level: 156
     laborCost: 3584970
     laborValue: 780
     marketCost: 75797015
     marketValuePerSec: 2340
-    warehouseCost: 0
-    warehouseMaxCapacity: 67392000
-    logisticsCost: 151594031
-    logisticsDiscountRate: 0
+    warehouseCost: 151594031
+    warehouseMaxCapacity: 39
+    logisticsCost: 60637612
+    logisticsDiscountRate: 632567945395
   - level: 157
     laborCost: 3835918
     laborValue: 785
     marketCost: 81860777
     marketValuePerSec: 2355
-    warehouseCost: 0
-    warehouseMaxCapacity: 67824000
-    logisticsCost: 163721553
-    logisticsDiscountRate: 0
+    warehouseCost: 163721553
+    warehouseMaxCapacity: 39.25
+    logisticsCost: 65488621
+    logisticsDiscountRate: 689499060480
   - level: 158
     laborCost: 4104432
     laborValue: 790
     marketCost: 88409639
     marketValuePerSec: 2370
-    warehouseCost: 0
-    warehouseMaxCapacity: 68256000
-    logisticsCost: 176819277
-    logisticsDiscountRate: 0
+    warehouseCost: 176819277
+    warehouseMaxCapacity: 39.5
+    logisticsCost: 70727711
+    logisticsDiscountRate: 751553975923
   - level: 159
     laborCost: 4391743
     laborValue: 795
     marketCost: 95482410
     marketValuePerSec: 2385
-    warehouseCost: 0
-    warehouseMaxCapacity: 68688000
-    logisticsCost: 190964820
-    logisticsDiscountRate: 0
+    warehouseCost: 190964820
+    warehouseMaxCapacity: 39.75
+    logisticsCost: 76385928
+    logisticsDiscountRate: 819193833756
   - level: 160
     laborCost: 4699165
     laborValue: 800
     marketCost: 103121003
     marketValuePerSec: 2400
-    warehouseCost: 0
-    warehouseMaxCapacity: 69120000
-    logisticsCost: 206242005
-    logisticsDiscountRate: 0
+    warehouseCost: 206242005
+    warehouseMaxCapacity: 40
+    logisticsCost: 82496802
+    logisticsDiscountRate: 892921278795
   - level: 161
     laborCost: 5028106
     laborValue: 805
     marketCost: 111370683
     marketValuePerSec: 2415
-    warehouseCost: 0
-    warehouseMaxCapacity: 69552000
-    logisticsCost: 222741366
-    logisticsDiscountRate: 0
+    warehouseCost: 222741366
+    warehouseMaxCapacity: 40.25
+    logisticsCost: 89096546
+    logisticsDiscountRate: 973284193886
   - level: 162
     laborCost: 5380073
     laborValue: 810
     marketCost: 120280337
     marketValuePerSec: 2430
-    warehouseCost: 0
-    warehouseMaxCapacity: 69984000
-    logisticsCost: 240560675
-    logisticsDiscountRate: 0
+    warehouseCost: 240560675
+    warehouseMaxCapacity: 40.5
+    logisticsCost: 96224270
+    logisticsDiscountRate: 1060879771336
   - level: 163
     laborCost: 5756679
     laborValue: 815
     marketCost: 129902764
     marketValuePerSec: 2445
-    warehouseCost: 0
-    warehouseMaxCapacity: 70416000
-    logisticsCost: 259805529
-    logisticsDiscountRate: 0
+    warehouseCost: 259805529
+    warehouseMaxCapacity: 40.75
+    logisticsCost: 103922212
+    logisticsDiscountRate: 1156358950756
   - level: 164
     laborCost: 6159646
     laborValue: 820
     marketCost: 140294986
     marketValuePerSec: 2460
-    warehouseCost: 0
-    warehouseMaxCapacity: 70848000
-    logisticsCost: 280589971
-    logisticsDiscountRate: 0
+    warehouseCost: 280589971
+    warehouseMaxCapacity: 41
+    logisticsCost: 112235988
+    logisticsDiscountRate: 1260431256324
   - level: 165
     laborCost: 6590821
     laborValue: 825
     marketCost: 151518584
     marketValuePerSec: 2475
-    warehouseCost: 0
-    warehouseMaxCapacity: 71280000
-    logisticsCost: 303037169
-    logisticsDiscountRate: 0
+    warehouseCost: 303037169
+    warehouseMaxCapacity: 41.25
+    logisticsCost: 121214868
+    logisticsDiscountRate: 1373870069393
   - level: 166
     laborCost: 7052179
     laborValue: 830
     marketCost: 163640071
     marketValuePerSec: 2490
-    warehouseCost: 0
-    warehouseMaxCapacity: 71712000
-    logisticsCost: 327280142
-    logisticsDiscountRate: 0
+    warehouseCost: 327280142
+    warehouseMaxCapacity: 41.5
+    logisticsCost: 130912057
+    logisticsDiscountRate: 1497518375639
   - level: 167
     laborCost: 7545831
     laborValue: 835
     marketCost: 176731277
     marketValuePerSec: 2505
-    warehouseCost: 0
-    warehouseMaxCapacity: 72144000
-    logisticsCost: 353462554
-    logisticsDiscountRate: 0
+    warehouseCost: 353462554
+    warehouseMaxCapacity: 41.75
+    logisticsCost: 141385021
+    logisticsDiscountRate: 1632295029446
   - level: 168
     laborCost: 8074040
     laborValue: 840
     marketCost: 190869779
     marketValuePerSec: 2520
-    warehouseCost: 0
-    warehouseMaxCapacity: 72576000
-    logisticsCost: 381739558
-    logisticsDiscountRate: 0
+    warehouseCost: 381739558
+    warehouseMaxCapacity: 42
+    logisticsCost: 152695823
+    logisticsDiscountRate: 1779201582096
   - level: 169
     laborCost: 8639222
     laborValue: 845
     marketCost: 206139361
     marketValuePerSec: 2535
-    warehouseCost: 0
-    warehouseMaxCapacity: 73008000
-    logisticsCost: 412278723
-    logisticsDiscountRate: 0
+    warehouseCost: 412278723
+    warehouseMaxCapacity: 42.25
+    logisticsCost: 164911489
+    logisticsDiscountRate: 1939329724485
   - level: 170
     laborCost: 9243968
     laborValue: 850
     marketCost: 222630510
     marketValuePerSec: 2550
-    warehouseCost: 0
-    warehouseMaxCapacity: 73440000
-    logisticsCost: 445261020
-    logisticsDiscountRate: 0
+    warehouseCost: 445261020
+    warehouseMaxCapacity: 42.5
+    logisticsCost: 178104408
+    logisticsDiscountRate: 2113869399689
   - level: 171
     laborCost: 9891046
     laborValue: 855
     marketCost: 240440951
     marketValuePerSec: 2565
-    warehouseCost: 0
-    warehouseMaxCapacity: 73872000
-    logisticsCost: 480881902
-    logisticsDiscountRate: 0
+    warehouseCost: 480881902
+    warehouseMaxCapacity: 42.75
+    logisticsCost: 192352761
+    logisticsDiscountRate: 2304117645660
   - level: 172
     laborCost: 10583419
     laborValue: 860
     marketCost: 259676227
     marketValuePerSec: 2580
-    warehouseCost: 0
-    warehouseMaxCapacity: 74304000
-    logisticsCost: 519352454
-    logisticsDiscountRate: 0
+    warehouseCost: 519352454
+    warehouseMaxCapacity: 43
+    logisticsCost: 207740982
+    logisticsDiscountRate: 2511488233770
   - level: 173
     laborCost: 11324258
     laborValue: 865
     marketCost: 280450325
     marketValuePerSec: 2595
-    warehouseCost: 0
-    warehouseMaxCapacity: 74736000
-    logisticsCost: 560900651
-    logisticsDiscountRate: 0
+    warehouseCost: 560900651
+    warehouseMaxCapacity: 43.25
+    logisticsCost: 224360260
+    logisticsDiscountRate: 2737522174809
   - level: 174
     laborCost: 12116956
     laborValue: 870
     marketCost: 302886351
     marketValuePerSec: 2610
-    warehouseCost: 0
-    warehouseMaxCapacity: 75168000
-    logisticsCost: 605772703
-    logisticsDiscountRate: 0
+    warehouseCost: 605772703
+    warehouseMaxCapacity: 43.5
+    logisticsCost: 242309081
+    logisticsDiscountRate: 2983899170542
   - level: 175
     laborCost: 12965143
     laborValue: 875
     marketCost: 327117259
     marketValuePerSec: 2625
-    warehouseCost: 0
-    warehouseMaxCapacity: 75600000
-    logisticsCost: 654234519
-    logisticsDiscountRate: 0
+    warehouseCost: 654234519
+    warehouseMaxCapacity: 43.75
+    logisticsCost: 261693808
+    logisticsDiscountRate: 3252450095891
   - level: 176
     laborCost: 13872703
     laborValue: 880
     marketCost: 353286640
     marketValuePerSec: 2640
-    warehouseCost: 0
-    warehouseMaxCapacity: 76032000
-    logisticsCost: 706573280
-    logisticsDiscountRate: 0
+    warehouseCost: 706573280
+    warehouseMaxCapacity: 44
+    logisticsCost: 282629312
+    logisticsDiscountRate: 3545170604521
   - level: 177
     laborCost: 14843792
     laborValue: 885
     marketCost: 381549571
     marketValuePerSec: 2655
-    warehouseCost: 0
-    warehouseMaxCapacity: 76464000
-    logisticsCost: 763099143
-    logisticsDiscountRate: 0
+    warehouseCost: 763099143
+    warehouseMaxCapacity: 44.25
+    logisticsCost: 305239657
+    logisticsDiscountRate: 3864235958928
   - level: 178
     laborCost: 15882858
     laborValue: 890
     marketCost: 412073537
     marketValuePerSec: 2670
-    warehouseCost: 0
-    warehouseMaxCapacity: 76896000
-    logisticsCost: 824147074
-    logisticsDiscountRate: 0
+    warehouseCost: 824147074
+    warehouseMaxCapacity: 44.5
+    logisticsCost: 329658830
+    logisticsDiscountRate: 4212017195231
   - level: 179
     laborCost: 16994658
     laborValue: 895
     marketCost: 445039420
     marketValuePerSec: 2685
-    warehouseCost: 0
-    warehouseMaxCapacity: 77328000
-    logisticsCost: 890078840
-    logisticsDiscountRate: 0
+    warehouseCost: 890078840
+    warehouseMaxCapacity: 44.75
+    logisticsCost: 356031536
+    logisticsDiscountRate: 4591098742802
   - level: 180
     laborCost: 18184284
     laborValue: 900
     marketCost: 480642574
     marketValuePerSec: 2700
-    warehouseCost: 0
-    warehouseMaxCapacity: 77760000
-    logisticsCost: 961285147
-    logisticsDiscountRate: 0
+    warehouseCost: 961285147
+    warehouseMaxCapacity: 45
+    logisticsCost: 384514059
+    logisticsDiscountRate: 5004297629654
   - level: 181
     laborCost: 19457184
     laborValue: 905
     marketCost: 519093980
     marketValuePerSec: 2715
-    warehouseCost: 0
-    warehouseMaxCapacity: 78192000
-    logisticsCost: 1038187959
-    logisticsDiscountRate: 0
+    warehouseCost: 1038187959
+    warehouseMaxCapacity: 45.25
+    logisticsCost: 415275184
+    logisticsDiscountRate: 5454684416323
   - level: 182
     laborCost: 20819187
     laborValue: 910
     marketCost: 560621498
     marketValuePerSec: 2730
-    warehouseCost: 0
-    warehouseMaxCapacity: 78624000
-    logisticsCost: 1121242996
-    logisticsDiscountRate: 0
+    warehouseCost: 1121242996
+    warehouseMaxCapacity: 45.5
+    logisticsCost: 448497198
+    logisticsDiscountRate: 5945606013792
   - level: 183
     laborCost: 22276530
     laborValue: 915
     marketCost: 605471218
     marketValuePerSec: 2745
-    warehouseCost: 0
-    warehouseMaxCapacity: 79056000
-    logisticsCost: 1210942436
-    logisticsDiscountRate: 0
+    warehouseCost: 1210942436
+    warehouseMaxCapacity: 45.75
+    logisticsCost: 484376974
+    logisticsDiscountRate: 6480710555034
   - level: 184
     laborCost: 23835887
     laborValue: 920
     marketCost: 653908915
     marketValuePerSec: 2760
-    warehouseCost: 0
-    warehouseMaxCapacity: 79488000
-    logisticsCost: 1307817830
-    logisticsDiscountRate: 0
+    warehouseCost: 1307817830
+    warehouseMaxCapacity: 46
+    logisticsCost: 523127132
+    logisticsDiscountRate: 7063974504987
   - level: 185
     laborCost: 25504399
     laborValue: 925
     marketCost: 706221628
     marketValuePerSec: 2775
-    warehouseCost: 0
-    warehouseMaxCapacity: 79920000
-    logisticsCost: 1412443257
-    logisticsDiscountRate: 0
+    warehouseCost: 1412443257
+    warehouseMaxCapacity: 46.25
+    logisticsCost: 564977303
+    logisticsDiscountRate: 7699732210436
   - level: 186
     laborCost: 27289707
     laborValue: 930
     marketCost: 762719359
     marketValuePerSec: 2790
-    warehouseCost: 0
-    warehouseMaxCapacity: 80352000
-    logisticsCost: 1525438717
-    logisticsDiscountRate: 0
+    warehouseCost: 1525438717
+    warehouseMaxCapacity: 46.5
+    logisticsCost: 610175487
+    logisticsDiscountRate: 8392708109375
   - level: 187
     laborCost: 29199986
     laborValue: 935
     marketCost: 823736907
     marketValuePerSec: 2805
-    warehouseCost: 0
-    warehouseMaxCapacity: 80784000
-    logisticsCost: 1647473815
-    logisticsDiscountRate: 0
+    warehouseCost: 1647473815
+    warehouseMaxCapacity: 46.75
+    logisticsCost: 658989526
+    logisticsDiscountRate: 9148051839219
   - level: 188
     laborCost: 31243985
     laborValue: 940
     marketCost: 889635860
     marketValuePerSec: 2820
-    warehouseCost: 0
-    warehouseMaxCapacity: 81216000
-    logisticsCost: 1779271720
-    logisticsDiscountRate: 0
+    warehouseCost: 1779271720
+    warehouseMaxCapacity: 47
+    logisticsCost: 711708688
+    logisticsDiscountRate: 9971376504748
   - level: 189
     laborCost: 33431064
     laborValue: 945
     marketCost: 960806729
     marketValuePerSec: 2835
-    warehouseCost: 0
-    warehouseMaxCapacity: 81648000
-    logisticsCost: 1921613458
-    logisticsDiscountRate: 0
+    warehouseCost: 1921613458
+    warehouseMaxCapacity: 47.25
+    logisticsCost: 768645383
+    logisticsDiscountRate: 10868800390176
   - level: 190
     laborCost: 35771239
     laborValue: 950
     marketCost: 1037671267
     marketValuePerSec: 2850
-    warehouseCost: 0
-    warehouseMaxCapacity: 82080000
-    logisticsCost: 2075342534
-    logisticsDiscountRate: 0
+    warehouseCost: 2075342534
+    warehouseMaxCapacity: 47.5
+    logisticsCost: 830137014
+    logisticsDiscountRate: 11846992425291
   - level: 191
     laborCost: 38275226
     laborValue: 955
     marketCost: 1120684968
     marketValuePerSec: 2865
-    warehouseCost: 0
-    warehouseMaxCapacity: 82512000
-    logisticsCost: 2241369937
-    logisticsDiscountRate: 0
+    warehouseCost: 2241369937
+    warehouseMaxCapacity: 47.75
+    logisticsCost: 896547975
+    logisticsDiscountRate: 12913221743568
   - level: 192
     laborCost: 40954491
     laborValue: 960
     marketCost: 1210339766
     marketValuePerSec: 2880
-    warehouseCost: 0
-    warehouseMaxCapacity: 82944000
-    logisticsCost: 2420679532
-    logisticsDiscountRate: 0
+    warehouseCost: 2420679532
+    warehouseMaxCapacity: 48
+    logisticsCost: 968271813
+    logisticsDiscountRate: 14075411700489
   - level: 193
     laborCost: 43821306
     laborValue: 965
     marketCost: 1307166947
     marketValuePerSec: 2895
-    warehouseCost: 0
-    warehouseMaxCapacity: 83376000
-    logisticsCost: 2614333894
-    logisticsDiscountRate: 0
+    warehouseCost: 2614333894
+    warehouseMaxCapacity: 48.25
+    logisticsCost: 1045733558
+    logisticsDiscountRate: 15342198753533
   - level: 194
     laborCost: 46888797
     laborValue: 970
     marketCost: 1411740303
     marketValuePerSec: 2910
-    warehouseCost: 0
-    warehouseMaxCapacity: 83808000
-    logisticsCost: 2823480606
-    logisticsDiscountRate: 0
+    warehouseCost: 2823480606
+    warehouseMaxCapacity: 48.5
+    logisticsCost: 1129392242
+    logisticsDiscountRate: 16722996641351
   - level: 195
     laborCost: 50171013
     laborValue: 975
     marketCost: 1524679527
     marketValuePerSec: 2925
-    warehouseCost: 0
-    warehouseMaxCapacity: 84240000
-    logisticsCost: 3049359054
-    logisticsDiscountRate: 0
+    warehouseCost: 3049359054
+    warehouseMaxCapacity: 48.75
+    logisticsCost: 1219743622
+    logisticsDiscountRate: 18228066339072
   - level: 196
     laborCost: 53682984
     laborValue: 980
     marketCost: 1646653889
     marketValuePerSec: 2940
-    warehouseCost: 0
-    warehouseMaxCapacity: 84672000
-    logisticsCost: 3293307779
-    logisticsDiscountRate: 0
+    warehouseCost: 3293307779
+    warehouseMaxCapacity: 49
+    logisticsCost: 1317323112
+    logisticsDiscountRate: 19868592309589
   - level: 197
     laborCost: 57440793
     laborValue: 985
     marketCost: 1778386201
     marketValuePerSec: 2955
-    warehouseCost: 0
-    warehouseMaxCapacity: 85104000
-    logisticsCost: 3556772401
-    logisticsDiscountRate: 0
+    warehouseCost: 3556772401
+    warehouseMaxCapacity: 49.25
+    logisticsCost: 1422708960
+    logisticsDiscountRate: 21656765617452
   - level: 198
     laborCost: 61461648
     laborValue: 990
     marketCost: 1920657097
     marketValuePerSec: 2970
-    warehouseCost: 0
-    warehouseMaxCapacity: 85536000
-    logisticsCost: 3841314193
-    logisticsDiscountRate: 0
+    warehouseCost: 3841314193
+    warehouseMaxCapacity: 49.5
+    logisticsCost: 1536525677
+    logisticsDiscountRate: 23605874523022
   - level: 199
     laborCost: 65763964
     laborValue: 995
     marketCost: 2074309664
     marketValuePerSec: 2985
-    warehouseCost: 0
-    warehouseMaxCapacity: 85968000
-    logisticsCost: 4148619329
-    logisticsDiscountRate: 0
+    warehouseCost: 4148619329
+    warehouseMaxCapacity: 49.75
+    logisticsCost: 1659447731
+    logisticsDiscountRate: 25730403230094
   - level: 200
     laborCost: 70367441
     laborValue: 1000
     marketCost: 2240254437
     marketValuePerSec: 3000
-    warehouseCost: 0
-    warehouseMaxCapacity: 86400000
-    logisticsCost: 4480508875
-    logisticsDiscountRate: 0
+    warehouseCost: 4480508875
+    warehouseMaxCapacity: 50
+    logisticsCost: 1792203550
+    logisticsDiscountRate: 28046139520803

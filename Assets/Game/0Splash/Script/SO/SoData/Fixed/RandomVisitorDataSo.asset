@@ -12,4 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f03c9d8e7b6a5948372615140392abcd, type: 3}
   m_Name: RandomVisitorDataSo
   m_EditorClassIdentifier: Assembly-CSharp::RandomVisitorDataSo
-  list: []
+  list:
+  - id: EV_001
+    visitorType: "\uBC31\uC131"
+    probability: 0.1
+    effectReward: "\uCC0C\uB77C\uC2DC(\uB274\uC2A4) \uC81C\uACF5, \uBBFC\uC2EC \uC815\uBCF4
+      \uD68D\uB4DD"
+  - id: EV_002
+    visitorType: "\uC0C1\uC778"
+    probability: 0.05
+    effectReward: "\uC7AC\uD654 \uAD50\uD658 (\uAE08\uD654 <-> MP / \uBCD1\uC0AC)"
+  - id: EV_003
+    visitorType: "\uC7A5\uC218 (\uC6B0\uD638)"
+    probability: 0.03
+    effectReward: "\uC7A5\uC218 \uC815\uBCF4 \uC81C\uACF5, \uD2B9\uC815 \uC131 \uC8FC\uAC00
+      \uC0C1\uC2B9(\uD638\uC7AC)"
+  - id: EV_004
+    visitorType: "\uC7A5\uC218 (\uC545\uC5F0)"
+    probability: 0.02
+    effectReward: "\uBC31\uC131 \uC774\uD0C8, \uD2B9\uC815 \uC131 \uC8FC\uAC00 \uD558\uB77D(\uC545\uC7AC)"
+  - id: EV_005
+    visitorType: "\uB3C4\uC801"
+    probability: 0.05
+    effectReward: "\uC804\uD22C \uBC1C\uC0DD (\uC2B9\uB9AC \uC2DC \uBCF4\uC0C1 /
+      \uD328\uBC30 \uC2DC \uAE08\uD654 \uC57D\uD0C8)"

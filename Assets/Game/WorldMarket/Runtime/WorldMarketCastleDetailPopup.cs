@@ -48,6 +48,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] Button deployButton;
     [SerializeField] Button recallButton;
     [SerializeField] Button relocateButton;
+    [SerializeField] Button relocateSpendMpButton;
     [SerializeField] TextMeshProUGUI relocateHintText;
     [SerializeField] TextMeshProUGUI deployDisabledHintText;
     [SerializeField] TextMeshProUGUI footprintIcon1;
@@ -122,6 +123,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         {
             relocateButton.onClick.RemoveListener(OnRelocateClicked);
             relocateButton.onClick.AddListener(OnRelocateClicked);
+        }
+
+        if (relocateSpendMpButton != null)
+        {
+            relocateSpendMpButton.onClick.RemoveListener(OnRelocateSpendMpClicked);
+            relocateSpendMpButton.onClick.AddListener(OnRelocateSpendMpClicked);
         }
 
         if (deployConfirmButton != null)
@@ -441,6 +448,18 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
                 rLbl.text = "이주하기";
         }
 
+        if (relocateSpendMpButton != null)
+        {
+            bool active = !isHq;
+            relocateSpendMpButton.gameObject.SetActive(active);
+            int mpNeed = dm.GetTravelMarchPointsCostRounded(_castleId);
+            int have = GameManager.InstanceOrNull?.currentUser != null ? GameManager.InstanceOrNull.currentUser.marchPoints : 0;
+            relocateSpendMpButton.interactable = active && canRelocate && !travelInProgress && mpNeed > 0 && have > 0;
+            var lbl = relocateSpendMpButton.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (lbl != null)
+                lbl.text = "MP 즉시 차감";
+        }
+
         ApplyMarchPointsTravelLine(dm, isHq);
 
         if (relocateHintText != null)
@@ -476,7 +495,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             marchPointsTravelLineText.text =
                 $"<color=#aab4c0>거리 기준 이동 비용</color> <color=#ffd866>{mp:N0} MP</color> · " +
                 $"<color=#aab4c0>보유 행군 MP</color> {have:N0} · " +
-                "<color=#8899aa><size=13>이주 완료는 이동 게이지 충전 후 자동 처리됩니다.</size></color>";
+                "<color=#8899aa><size=13>시간/걸음 충전과 MP 즉시 차감을 함께 사용할 수 있습니다.</size></color>";
     }
 
     /// <summary>이주 게이지·만보기 안내와 발자국 행은, 본영 이주 <b>목적지가 이 성</b>일 때만 표시합니다.</summary>
@@ -747,6 +766,26 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         }
 
         WorldHqTravelHud.InstanceOrNull.TryBeginTravelTo(_castleId);
+        Refresh();
+    }
+
+    void OnRelocateSpendMpClicked()
+    {
+        var dm = DataManager.InstanceOrNull;
+        var gm = GameManager.InstanceOrNull;
+        if (dm == null || gm?.currentUser == null || string.IsNullOrWhiteSpace(_castleId))
+            return;
+
+        if (!dm.HasPendingHqMove || !string.Equals(dm.PendingHqMoveTargetId?.Trim(), _castleId, StringComparison.Ordinal))
+        {
+            WorldHqTravelHud.EnsureUnderWorldMarketRoot(transform.parent);
+            WorldHqTravelHud.InstanceOrNull?.TryBeginTravelTo(_castleId);
+        }
+
+        int have = Mathf.Max(0, gm.currentUser.marchPoints);
+        if (have <= 0) return;
+
+        dm.TrySpendMarchPointsForPendingHqMove(have, out _);
         Refresh();
     }
 
@@ -1113,6 +1152,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             cb.disabledColor = new Color(0.45f, 0.46f, 0.48f, 0.55f);
             relocateButton.colors = cb;
         }
+        relocateSpendMpButton = CreateFooterBtn(btnRow.transform, "MP 즉시 차감", new Color(0.34f, 0.30f, 0.66f));
 
         deployButton = CreateFooterBtn(btnRow.transform, "병사 투입", new Color(0.16f, 0.48f, 0.32f));
         recallButton = CreateFooterBtn(btnRow.transform, "병사 회군", new Color(0.82f, 0.42f, 0.22f));

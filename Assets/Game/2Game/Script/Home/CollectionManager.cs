@@ -46,11 +46,13 @@ public class CollectionManager : MonoBehaviour
     bool _hidePilesWhileFlying;
 
     GameObject _runtimeGoldProto;
+    HomeUIController _homeUi;
 
     void Awake()
     {
         if (homeController == null)
             homeController = GetComponent<HomeController>() ?? GetComponentInParent<HomeController>();
+        _homeUi = GetComponent<HomeUIController>() ?? GetComponentInParent<HomeUIController>();
     }
 
     void Start()
@@ -210,6 +212,57 @@ public class CollectionManager : MonoBehaviour
         goldFlyTarget = gui.AssetsTarget;
     }
 
+    /// <summary>성문 탭 시 금화 아이콘이 상단 자원바로 날아가는 연출(시각효과 전용, 입금은 호출 측에서 처리).</summary>
+    public void PlayGateTapFlyFeedback(RectTransform gateSource)
+    {
+        EnsureFlyRootIfNeeded();
+        TryResolveFlyTargetsFromGlobalUI();
+        WarmFlyPoolsIfPossible();
+        if (flyIconsRoot == null || goldFlyTarget == null) return;
+
+        var canvas = flyIconsRoot.GetComponentInParent<Canvas>();
+        Camera cam = null;
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            cam = canvas.worldCamera;
+
+        Vector2 start = gateSource != null
+            ? WorldToAnchoredOnRoot(gateSource.position, flyIconsRoot, cam)
+            : Vector2.zero;
+
+        RunVisualOnlyFly(start, goldFlyTarget, cam);
+    }
+
+    void RunVisualOnlyFly(Vector2 startAnchored, RectTransform target, Camera cam)
+    {
+        GameObject go = RentFlyIcon();
+        if (go == null) return;
+        var rt = go.GetComponent<RectTransform>();
+        if (rt == null)
+        {
+            ReturnFlyIcon(go);
+            return;
+        }
+
+        ResetPooledRectTransform(rt, startAnchored, new Vector2(18f, 18f));
+        go.SetActive(true);
+        Vector2 endAnchored = target != null
+            ? WorldToAnchoredOnRoot(target.position, flyIconsRoot, cam)
+            : startAnchored + Vector2.up * 360f;
+        Vector2 mid = (startAnchored + endAnchored) * 0.5f + new Vector2(0f, bezierArc * 0.55f);
+
+        Sequence seq = DOTween.Sequence().SetTarget(go).SetUpdate(true);
+        seq.Append(DOTween.To(() => 0f, t =>
+        {
+            rt.anchoredPosition = QuadraticBezier(startAnchored, mid, endAnchored, t);
+        }, 1f, 0.38f).SetEase(Ease.OutCubic).SetTarget(go));
+        seq.OnComplete(() =>
+        {
+            GlobalUIManager.InstanceOrNull?.PunchAssetsText(0.09f, 0.15f, 6);
+            _homeUi?.PunchLocalGoldText(0.09f, 0.15f, 6);
+            ReturnFlyIcon(go);
+        });
+    }
+
     public void UpdatePileVisuals()
     {
         var gm = GameManager.InstanceOrNull;
@@ -223,6 +276,12 @@ public class CollectionManager : MonoBehaviour
 
         long mElapsed = homeController != null ? homeController.GetMarketElapsedSeconds() : 0L;
         int mTier = PileCountFromElapsedTiered(mElapsed);
+
+        // 기획: 시장 창고가 1 Gold 이상 쌓이면 최소 1개 더미는 항상 보이도록 보정.
+        double mAcc = homeController != null ? homeController.CurrentMarketAccumulated : 0d;
+        if (mAcc >= 1d)
+            mTier = Mathf.Max(1, mTier);
+
         SetPileArray(goldPiles, mTier);
     }
 
@@ -502,6 +561,7 @@ public class CollectionManager : MonoBehaviour
             {
                 gm.AddGold(chunk);
                 GlobalUIManager.InstanceOrNull?.PunchAssetsText();
+                _homeUi?.PunchLocalGoldText();
             }
 
             ReturnFlyIcon(go);

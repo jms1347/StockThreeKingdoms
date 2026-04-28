@@ -83,7 +83,8 @@ public class EconomyManager : MonoBehaviour
         if (d == null) return 1d;
         double pct = d.logisticsDiscountRate;
         if (double.IsNaN(pct) || double.IsInfinity(pct)) return 1d;
-        pct = System.Math.Max(0d, System.Math.Min(100d, pct));
+        // 기획: 병참 할인은 레벨 누적으로 최대 50%까지만 허용.
+        pct = System.Math.Max(0d, System.Math.Min(50d, pct));
         return System.Math.Max(0d, 1d - pct / 100d);
     }
 

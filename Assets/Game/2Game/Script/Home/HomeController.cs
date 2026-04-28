@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 /// <summary>
 /// 본영 탭 전용 로직 매니저. 계산·조작만 담당. GameManager를 통해 재화 변경.
@@ -12,6 +14,7 @@ public class HomeController : MonoBehaviour
     public const double UpgradeCostMult = 1.15;
     public const double LaborBaseCost = 50;
     public const double MarketBaseCost = 100;
+    public const double WarehouseBaseCost = 90;
     /// <summary>병참(구 농장 레벨, <see cref="UserData.farmLevel"/>) 업그레이드 비용 기준.</summary>
     public const double LogisticsBaseCost = 80;
 
@@ -20,6 +23,11 @@ public class HomeController : MonoBehaviour
 
     /// <summary>목표별 행군 포인트(MP) 보상</summary>
     public static readonly int[] StepRewardMarchPoints = { 200, 500, 700, 1000 };
+
+    public event Action<string, string> VisitorEventRaised;
+
+    float _lastVisitorRollUnscaledTime = -999f;
+    const float VisitorRollCooldownSec = 0.75f;
 
     static long NowUnixSeconds() => TimeManager.GetUnixNow();
 
@@ -102,13 +110,26 @@ public class HomeController : MonoBehaviour
     {
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return 0;
-        int lv = gm.currentUser.marketLevel;
+        int lv = gm.currentUser.warehouseLevel;
         if (DataManager.Instance != null && DataManager.Instance.IsReady)
         {
             var d = DataManager.Instance.GetLevelData(lv);
             if (d != null && d.warehouseMaxCapacity > 0) return d.warehouseMaxCapacity;
         }
-        return gm.GetAutoIncomeValue(lv) * (gm.balance.vaultHours * 3600);
+        double rate = GetMarketValuePerSec();
+        double baseCap = rate * (gm.balance.vaultHours * 3600);
+        return baseCap * (1d + 0.25d * Math.Max(0, lv));
+    }
+
+    public static double GetWarehouseUpgradeGoldCost(int currentWarehouseLevel)
+    {
+        if (DataManager.Instance != null && DataManager.Instance.IsReady)
+        {
+            var d = DataManager.Instance.GetLevelData(currentWarehouseLevel + 1);
+            if (d != null && d.warehouseCost > 0) return d.warehouseCost;
+        }
+
+        return UpgradeCost(WarehouseBaseCost, currentWarehouseLevel);
     }
 
     /// <summary> 대문 터치 (탭 1회) </summary>
@@ -117,6 +138,7 @@ public class HomeController : MonoBehaviour
         var gm = GameManager.InstanceOrNull;
         if (gm == null) return;
         gm.AddGold(GoldPerClick);
+        TryRaiseRandomVisitorEvent();
     }
 
     /// <summary>
@@ -174,6 +196,17 @@ public class HomeController : MonoBehaviour
         }
     }
 
+    public void UpgradeWarehouse()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return;
+        int lv = gm.currentUser.warehouseLevel;
+        double cost = GetWarehouseUpgradeGoldCost(lv);
+        if (!gm.UseGold((long)cost)) return;
+        gm.currentUser.warehouseLevel++;
+        gm.SaveUserData();
+    }
+
     /// <summary>병참 업그레이드 — <see cref="UserData.farmLevel"/> 증가, 일일 병사 유지비 비율 감소.</summary>
     public void UpgradeLogistics()
     {
@@ -229,24 +262,149 @@ public class HomeController : MonoBehaviour
     /// </summary>
     public bool ClaimStepReward(int milestoneIndex)
     {
-        if (milestoneIndex < 0 || milestoneIndex >= StepMilestones.Length) return false;
+        ReadStepMissionRows(out var missions, out var rewards);
+        if (milestoneIndex < 0 || milestoneIndex >= missions.Length) return false;
 
         var gm = GameManager.InstanceOrNull;
         var u = gm?.currentUser;
         if (gm == null || u == null) return false;
 
-        if (u.stepRewardsClaimed == null || u.stepRewardsClaimed.Length != StepMilestones.Length)
-            u.stepRewardsClaimed = new bool[StepMilestones.Length];
+        if (u.stepRewardsClaimed == null || u.stepRewardsClaimed.Length != missions.Length)
+            u.stepRewardsClaimed = new bool[missions.Length];
 
-        int need = StepMilestones[milestoneIndex];
+        int need = missions[milestoneIndex];
         if (u.stepsToday < need) return false;
         if (u.stepRewardsClaimed[milestoneIndex]) return false;
 
-        int reward = milestoneIndex < StepRewardMarchPoints.Length ? StepRewardMarchPoints[milestoneIndex] : 0;
+        int reward = milestoneIndex < rewards.Length ? rewards[milestoneIndex] : 0;
         gm.AddMarchPoints(reward);
         u.stepRewardsClaimed[milestoneIndex] = true;
         gm.SaveUserData();
         return true;
+    }
+
+    public static void ReadStepMissionRows(out int[] milestones, out int[] rewards)
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm != null && dm.IsReady && dm.stepMissionMap != null && dm.stepMissionMap.Count > 0)
+        {
+            var rows = new List<StepMissionData>(dm.stepMissionMap.Values);
+            rows.Sort((a, b) =>
+            {
+                int sa = a != null ? a.step : 0;
+                int sb = b != null ? b.step : 0;
+                return sa.CompareTo(sb);
+            });
+
+            milestones = new int[rows.Count];
+            rewards = new int[rows.Count];
+            for (int i = 0; i < rows.Count; i++)
+            {
+                var r = rows[i];
+                milestones[i] = Mathf.Max(0, r != null ? r.targetSteps : 0);
+                rewards[i] = Mathf.Max(0, r != null ? r.mpReward : 0);
+            }
+            return;
+        }
+
+        milestones = StepMilestones;
+        rewards = StepRewardMarchPoints;
+    }
+
+    void TryRaiseRandomVisitorEvent()
+    {
+        if (Time.unscaledTime - _lastVisitorRollUnscaledTime < VisitorRollCooldownSec)
+            return;
+        _lastVisitorRollUnscaledTime = Time.unscaledTime;
+
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsReady || dm.randomVisitorMap == null || dm.randomVisitorMap.Count == 0)
+            return;
+
+        float roll = UnityEngine.Random.Range(0f, 100f);
+        float cursor = 0f;
+        RandomVisitorData picked = null;
+        foreach (var kv in dm.randomVisitorMap)
+        {
+            var row = kv.Value;
+            if (row == null) continue;
+            float p = Mathf.Max(0f, row.probability);
+            if (p <= 0f) continue;
+            cursor += p;
+            if (roll <= cursor)
+            {
+                picked = row;
+                break;
+            }
+        }
+
+        if (picked == null) return;
+        string body = ApplyVisitorEffectAndBuildMessage(picked);
+        VisitorEventRaised?.Invoke(ResolveVisitorTitle(picked.visitorType), body);
+    }
+
+    string ApplyVisitorEffectAndBuildMessage(RandomVisitorData row)
+    {
+        string type = (row.visitorType ?? "").Trim();
+        string rewardRaw = (row.effectReward ?? "").Trim();
+        string lower = type.ToLowerInvariant();
+        var gm = GameManager.InstanceOrNull;
+        double value = ExtractFirstNumber(rewardRaw);
+
+        if (lower.Contains("백성"))
+        {
+            string msg = string.IsNullOrWhiteSpace(rewardRaw) ? "민심 소문이 본영에 퍼졌습니다." : rewardRaw;
+            NewsManager.InstanceOrNull?.AddNews(WorldNewsFeedKind.Rumor, "RV_CITIZEN", "", "백성 소문", msg, false);
+            return msg;
+        }
+
+        if (lower.Contains("상인"))
+        {
+            long add = (long)Math.Max(0d, value > 0 ? value : 100d);
+            if (add > 0) gm?.AddGold(add);
+            return $"{(string.IsNullOrWhiteSpace(rewardRaw) ? "상단과 거래가 성사되었습니다." : rewardRaw)}\n보상: +{add:N0} Gold";
+        }
+
+        if (lower.Contains("장수"))
+        {
+            int mp = (int)Math.Max(0d, value > 0 ? value : 100d);
+            if (mp > 0) gm?.AddMarchPoints(mp);
+            NewsManager.InstanceOrNull?.AddNews(WorldNewsFeedKind.Breaking, "RV_GENERAL", "", "장수 방문",
+                "장수가 본영을 방문해 사기를 북돋았습니다.", true);
+            return $"{(string.IsNullOrWhiteSpace(rewardRaw) ? "장수의 방문으로 본영 분위기가 고조되었습니다." : rewardRaw)}\n보상: +{mp:N0} MP";
+        }
+
+        if (lower.Contains("도적"))
+        {
+            long loss = (long)Math.Max(0d, value > 0 ? value : 80d);
+            if (loss > 0) gm?.AddGold(-loss);
+            return $"{(string.IsNullOrWhiteSpace(rewardRaw) ? "도적이 출몰해 일부 재화가 소실되었습니다." : rewardRaw)}\n손실: -{loss:N0} Gold";
+        }
+
+        return string.IsNullOrWhiteSpace(rewardRaw) ? "이방인이 본영을 잠시 스쳐 지나갔습니다." : rewardRaw;
+    }
+
+    static string ResolveVisitorTitle(string visitorType)
+    {
+        string t = (visitorType ?? "").Trim();
+        if (string.IsNullOrEmpty(t)) return "방문객 이벤트";
+        return $"{t} 방문";
+    }
+
+    static double ExtractFirstNumber(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return 0d;
+        string s = raw.Trim();
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (!(char.IsDigit(s[i]) || s[i] == '.' || s[i] == '-')) continue;
+            int j = i + 1;
+            while (j < s.Length && (char.IsDigit(s[j]) || s[j] == '.')) j++;
+            string n = s.Substring(i, j - i);
+            if (double.TryParse(n, NumberStyles.Float, CultureInfo.InvariantCulture, out double v))
+                return v;
+        }
+        return 0d;
     }
 
 #if UNITY_EDITOR

@@ -17,6 +17,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     [SerializeField] TextMeshProUGUI userNameText;
     [Tooltip("중앙: 현재 거점 위치(본영 성 이름 등)")]
     [SerializeField] TextMeshProUGUI locationText;
+    [SerializeField] Image locationNationIcon;
     [SerializeField] TextMeshProUGUI totalAssetsText;
     [SerializeField] TextMeshProUGUI soldiersText;
     [Header("일일 유지비(정오)")]
@@ -68,6 +69,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     protected override void Awake()
     {
         base.Awake();
+        ResolveTopBarRefsIfMissing();
         WireTabs();
     }
 
@@ -163,16 +165,120 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (dm == null || !dm.IsStateReady)
         {
             locationText.text = "—";
+            if (locationNationIcon != null) locationNationIcon.gameObject.SetActive(false);
             return;
         }
         string id = dm.HomeCastleId?.Trim();
         if (string.IsNullOrEmpty(id))
         {
             locationText.text = "본영 미정";
+            if (locationNationIcon != null) locationNationIcon.gameObject.SetActive(false);
             return;
         }
         string name = dm.GetCastleDisplayName(id);
         locationText.text = string.IsNullOrWhiteSpace(name) ? id : name;
+        if (locationNationIcon != null)
+        {
+            if (dm.castleStateDataMap != null && dm.castleStateDataMap.TryGetValue(id, out var st) && st != null)
+            {
+                locationNationIcon.gameObject.SetActive(true);
+                locationNationIcon.color = FactionAccentColor(st.currentLord);
+            }
+            else
+                locationNationIcon.gameObject.SetActive(false);
+        }
+    }
+
+    static Color FactionAccentColor(Faction f)
+    {
+        switch (f)
+        {
+            case Faction.WEI: return new Color(0.24f, 0.42f, 0.86f, 1f);
+            case Faction.SHU: return new Color(0.30f, 0.78f, 0.34f, 1f);
+            case Faction.WU: return new Color(0.90f, 0.36f, 0.28f, 1f);
+            case Faction.OTHERS: return new Color(0.78f, 0.62f, 0.22f, 1f);
+            default: return new Color(0.68f, 0.68f, 0.68f, 1f);
+        }
+    }
+
+    void ResolveTopBarRefsIfMissing()
+    {
+        if (topBarRoot == null)
+        {
+            var t = transform.Find("TopBar");
+            if (t != null) topBarRoot = t as RectTransform;
+        }
+        if (topBarRoot == null) return;
+
+        if (userNameText == null) userNameText = FindTextByName(topBarRoot, "UserNameText", "ProfileNameText");
+        if (locationText == null) locationText = FindTextByName(topBarRoot, "LocationText");
+        if (totalAssetsText == null) totalAssetsText = FindTextByName(topBarRoot, "AssetsText");
+        if (soldiersText == null) soldiersText = FindTextByName(topBarRoot, "SoldiersText");
+        if (marchPointsText == null) marchPointsText = FindTextByName(topBarRoot, "MarchPointsText");
+        if (maintenancePreviewText == null) maintenancePreviewText = FindTextByName(topBarRoot, "MaintenancePreviewText");
+        if (maintenanceCountdownText == null) maintenanceCountdownText = FindTextByName(topBarRoot, "MaintenanceCountdownText");
+        if (locationNationIcon == null) locationNationIcon = FindImageByName(topBarRoot, "LocationNationIcon");
+
+        // 프리팹 구조가 달라 이름 매칭이 안 될 때, 행 이름 기반 폴백을 사용합니다.
+        if (totalAssetsText == null) totalAssetsText = FindValueTextUnderRow(topBarRoot, "AssetsRow");
+        if (soldiersText == null) soldiersText = FindValueTextUnderRow(topBarRoot, "SoldiersRow");
+        if (maintenancePreviewText == null) maintenancePreviewText = FindValueTextUnderRow(topBarRoot, "MaintenancePreviewRow");
+        if (maintenanceCountdownText == null) maintenanceCountdownText = FindValueTextUnderRow(topBarRoot, "MaintenanceCountdownRow");
+    }
+
+    static TextMeshProUGUI FindTextByName(Transform root, params string[] names)
+    {
+        if (root == null || names == null || names.Length == 0) return null;
+        var list = root.GetComponentsInChildren<TextMeshProUGUI>(true);
+        for (int i = 0; i < names.Length; i++)
+        {
+            string n = names[i];
+            for (int j = 0; j < list.Length; j++)
+            {
+                if (list[j] != null && list[j].name == n)
+                    return list[j];
+            }
+        }
+
+        return null;
+    }
+
+    static Image FindImageByName(Transform root, params string[] names)
+    {
+        if (root == null || names == null || names.Length == 0) return null;
+        var list = root.GetComponentsInChildren<Image>(true);
+        for (int i = 0; i < names.Length; i++)
+        {
+            string n = names[i];
+            for (int j = 0; j < list.Length; j++)
+            {
+                if (list[j] != null && list[j].name == n)
+                    return list[j];
+            }
+        }
+
+        return null;
+    }
+
+    static TextMeshProUGUI FindValueTextUnderRow(Transform root, string rowName)
+    {
+        if (root == null || string.IsNullOrEmpty(rowName)) return null;
+        var row = FindChildByName(root, rowName);
+        if (row == null) return null;
+        return FindTextByName(row, "ValueText");
+    }
+
+    static Transform FindChildByName(Transform root, string childName)
+    {
+        if (root == null || string.IsNullOrEmpty(childName)) return null;
+        if (root.name == childName) return root;
+        for (int i = 0; i < root.childCount; i++)
+        {
+            var found = FindChildByName(root.GetChild(i), childName);
+            if (found != null) return found;
+        }
+
+        return null;
     }
 
     public void SetTopBar(string userName, string totalAssets, string soldiersLine)

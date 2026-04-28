@@ -22,6 +22,7 @@ public class UserData
     // [성장 레벨]
     public int laborLevel;          // 노동력 레벨 (클릭당 금화) [cite: 12, 149]
     public int marketLevel;         // 시장 레벨 (자동 수익) [cite: 12, 151]
+    public int warehouseLevel;      // 창고 레벨 (시장 창고 최대 저장량)
     public int farmLevel;           // 병참 레벨 (일일 병사 유지비 할인). JSON 호환용 필드명 유지.
     public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
@@ -55,6 +56,7 @@ public class UserData
         soldierCount = 0;
         laborLevel = 1;
         marketLevel = 0;
+        warehouseLevel = 0;
         farmLevel = 0;
         soldierGradeLevel = 1;
         dailyStepCount = 0;

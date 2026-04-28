@@ -44,6 +44,35 @@ public partial class DataManager
         ApplyHqMoveAfterTravel(tid, c);
     }
 
+    /// <summary>
+    /// 보유 MP를 즉시 소모해 본영 이주 잔여 포인트를 줄입니다. (1 MP = 1 pt)
+    /// 시간/걸음 자동 충전과 병행되며, 충전 후 조건 충족 시 이주가 즉시 완료됩니다.
+    /// </summary>
+    public bool TrySpendMarchPointsForPendingHqMove(int requestedSpendMp, out int consumedMp)
+    {
+        consumedMp = 0;
+        if (!IsStateReady || !HasPendingHqMove || requestedSpendMp <= 0)
+            return false;
+
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return false;
+
+        float remain = Mathf.Max(0f, _pendingHqMoveCost - _travelGaugePoints);
+        if (remain <= 1e-3f) return false;
+
+        int needMp = Mathf.CeilToInt(remain);
+        int have = Mathf.Max(0, gm.currentUser.marchPoints);
+        consumedMp = Mathf.Clamp(requestedSpendMp, 0, Mathf.Min(needMp, have));
+        if (consumedMp <= 0) return false;
+
+        gm.AddMarchPoints(-consumedMp);
+        _travelGaugePoints += consumedMp;
+        _stateDirty = true;
+        OnTravelGaugeChanged?.Invoke();
+        TryCompletePendingHqMoveIfReady();
+        return true;
+    }
+
     /// <summary>지도 좌표(posX,posY) 기준 유클리드 거리. 마스터가 없으면 -1.</summary>
     public float GetDistance(string castleIdA, string castleIdB)
     {
