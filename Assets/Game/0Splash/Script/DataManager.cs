@@ -183,6 +183,9 @@ public partial class DataManager : Singleton<DataManager>
     float travelPointsPerStep = 1f;
     [SerializeField, Tooltip("이동 게이지 바 시각화용 상한(실제 값은 무제한에 가깝게 누적)")]
     float travelGaugeVisualCap = 25000f;
+    [Header("천하 전쟁 변동성")]
+    [SerializeField, Tooltip("전쟁(isWar) 상태 성의 입성료 변동 배수. 1보다 클수록 변동성 확대.")]
+    float worldWarVolatilityMultiplier = 1.65f;
 
     string _homeCastleId = "";
     float _travelGaugePoints;

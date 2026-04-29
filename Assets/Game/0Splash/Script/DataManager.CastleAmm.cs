@@ -371,13 +371,20 @@ public partial class DataManager
         if (CastleAmmCore.IsInitialized(s))
         {
             if (s.currentAiGarrison > 0)
-                return Mathf.Max(0f, CastleAmmCore.GetMarginalBuyOneGoldAsFloat(s));
-            return Mathf.Max(0f, CalculateBasePrice(s));
+                return ApplyWarVolatilityMultiplier(s, Mathf.Max(0f, CastleAmmCore.GetMarginalBuyOneGoldAsFloat(s)));
+            return ApplyWarVolatilityMultiplier(s, Mathf.Max(0f, CalculateBasePrice(s)));
         }
 
         float basePrice = CalculateBasePrice(s);
         float buffMul = 1f + GetGovernorQuoteModifier(s.currentGovernorId);
-        return Mathf.Max(0f, basePrice * buffMul);
+        return ApplyWarVolatilityMultiplier(s, Mathf.Max(0f, basePrice * buffMul));
+    }
+
+    float ApplyWarVolatilityMultiplier(CastleStateData s, float quote)
+    {
+        if (s == null) return Mathf.Max(0f, quote);
+        if (!s.isWar) return Mathf.Max(0f, quote);
+        return Mathf.Max(0f, quote * Mathf.Max(1f, worldWarVolatilityMultiplier));
     }
 
     /// <summary>천하 탭: 해당 성 유저 주둔을 모두 매도(AI 환원).</summary>

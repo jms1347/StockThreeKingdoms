@@ -69,6 +69,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     protected override void Awake()
     {
         base.Awake();
+        FixGlobalUiScaleIfBroken();
         ResolveTopBarRefsIfMissing();
         WireTabs();
     }
@@ -279,6 +280,16 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         }
 
         return null;
+    }
+
+    void FixGlobalUiScaleIfBroken()
+    {
+        var rt = transform as RectTransform;
+        if (rt != null && rt.localScale.sqrMagnitude < 1e-8f)
+            rt.localScale = Vector3.one;
+
+        if (topBarRoot != null && topBarRoot.localScale.sqrMagnitude < 1e-8f)
+            topBarRoot.localScale = Vector3.one;
     }
 
     public void SetTopBar(string userName, string totalAssets, string soldiersLine)

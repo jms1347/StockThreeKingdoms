@@ -6,22 +6,27 @@ using UnityEngine.UI;
 public class WorldMarketViewModeController : MonoBehaviour
 {
     const string PrefsKey = "WorldMarketViewMode";
+    const int ModeList = 0;
+    const int ModeMap = 1;
+    const int ModeWar = 2;
 
     [SerializeField] GameObject mapViewRoot;
     [SerializeField] GameObject listViewRoot;
+    [SerializeField] GameObject warMapViewRoot;
     [SerializeField] Toggle mapToggle;
     [SerializeField] Toggle listToggle;
+    [SerializeField] Toggle warToggle;
 
     void Awake()
     {
-        if (mapViewRoot == null || listViewRoot == null)
+        if (mapViewRoot == null || listViewRoot == null || warMapViewRoot == null)
             AutoResolveRoots();
 
         if (mapToggle != null)
         {
             mapToggle.onValueChanged.AddListener(isOn =>
             {
-                if (isOn) ApplyMode(true, true);
+                if (isOn) ApplyMode(ModeMap, true);
             });
         }
 
@@ -29,16 +34,31 @@ public class WorldMarketViewModeController : MonoBehaviour
         {
             listToggle.onValueChanged.AddListener(isOn =>
             {
-                if (isOn) ApplyMode(false, true);
+                if (isOn) ApplyMode(ModeList, true);
             });
         }
 
-        bool preferMap = PlayerPrefs.GetInt(PrefsKey, 0) == 1;
-        ApplyMode(preferMap, false);
+        if (warToggle != null)
+        {
+            warToggle.onValueChanged.AddListener(isOn =>
+            {
+                if (isOn) ApplyMode(ModeWar, true);
+            });
+        }
+
+        int savedMode = PlayerPrefs.GetInt(PrefsKey, ModeList);
+        if (savedMode < ModeList || savedMode > ModeWar)
+            savedMode = ModeList;
+        if (savedMode == ModeWar && warMapViewRoot == null)
+            savedMode = ModeList;
+
+        ApplyMode(savedMode, false);
         if (mapToggle != null)
-            mapToggle.SetIsOnWithoutNotify(preferMap);
+            mapToggle.SetIsOnWithoutNotify(savedMode == ModeMap);
         if (listToggle != null)
-            listToggle.SetIsOnWithoutNotify(!preferMap);
+            listToggle.SetIsOnWithoutNotify(savedMode == ModeList);
+        if (warToggle != null)
+            warToggle.SetIsOnWithoutNotify(savedMode == ModeWar);
     }
 
     void AutoResolveRoots()
@@ -48,20 +68,47 @@ public class WorldMarketViewModeController : MonoBehaviour
         {
             var mv = t.Find("MapViewRoot");
             var lv = t.Find("ListViewRoot");
+            var wv = t.Find("WarMapViewRoot");
             if (mv != null) mapViewRoot = mv.gameObject;
             if (lv != null) listViewRoot = lv.gameObject;
-            if (mapViewRoot != null && listViewRoot != null)
+            if (wv != null) warMapViewRoot = wv.gameObject;
+            if (mapViewRoot != null && listViewRoot != null && warMapViewRoot != null)
                 return;
         }
+
+        if (mapToggle == null)
+            mapToggle = FindToggleByName("MapToggle");
+        if (listToggle == null)
+            listToggle = FindToggleByName("ListToggle");
+        if (warToggle == null)
+            warToggle = FindToggleByName("WarToggle");
     }
 
-    void ApplyMode(bool mapMode, bool savePrefs)
+    Toggle FindToggleByName(string toggleName)
     {
+        if (string.IsNullOrEmpty(toggleName)) return null;
+        var all = GetComponentsInChildren<Toggle>(true);
+        for (int i = 0; i < all.Length; i++)
+        {
+            if (all[i] != null && all[i].name == toggleName)
+                return all[i];
+        }
+
+        return null;
+    }
+
+    void ApplyMode(int mode, bool savePrefs)
+    {
+        bool mapMode = mode == ModeMap;
+        bool listMode = mode == ModeList;
+        bool warMode = mode == ModeWar;
         if (mapViewRoot != null)
             mapViewRoot.SetActive(mapMode);
         if (listViewRoot != null)
-            listViewRoot.SetActive(!mapMode);
+            listViewRoot.SetActive(listMode);
+        if (warMapViewRoot != null)
+            warMapViewRoot.SetActive(warMode);
         if (savePrefs)
-            PlayerPrefs.SetInt(PrefsKey, mapMode ? 1 : 0);
+            PlayerPrefs.SetInt(PrefsKey, mode);
     }
 }

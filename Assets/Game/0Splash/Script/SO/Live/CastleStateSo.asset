@@ -31,18 +31,18 @@ MonoBehaviour:
     constantK: 2.460375e+18
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 70875
-    - 70875
-    - 70875
-    - 70875
-    - 70875
+    - 13500000
+    - 13500000
+    - 13500000
+    - 13500000
+    - 13500000
     - 13500000
     - 13500000
     historySentiment7Day:
     - 100
-    - 98.09029
     - 100
-    - 98.49506
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -65,18 +65,18 @@ MonoBehaviour:
     constantK: 7.247757312e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 53759.996
-    - 53759.996
-    - 53759.996
-    - 53759.996
-    - 53759.996
+    - 10240000
+    - 10240000
+    - 10240000
+    - 10240000
+    - 10240000
     - 10240000
     - 10240000
     historySentiment7Day:
-    - 95.98471
     - 100
     - 100
-    - 99.240456
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -99,16 +99,16 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
-    - 99.75654
-    - 99.99538
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -133,15 +133,15 @@ MonoBehaviour:
     constantK: 5.59872e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 50399.996
-    - 50399.996
-    - 50399.996
-    - 50399.996
-    - 50399.996
+    - 9600000
+    - 9600000
+    - 9600000
+    - 9600000
+    - 9600000
     - 9600000
     - 9600000
     historySentiment7Day:
-    - 91.997665
+    - 100
     - 100
     - 100
     - 100
@@ -167,11 +167,11 @@ MonoBehaviour:
     constantK: 34013973542560000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 25409.998
-    - 25409.998
-    - 25409.998
-    - 25409.998
-    - 25409.998
+    - 4840000
+    - 4840000
+    - 4840000
+    - 4840000
+    - 4840000
     - 4840000
     - 4840000
     historySentiment7Day:
@@ -201,17 +201,17 @@ MonoBehaviour:
     constantK: 6201780187500000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
     - 3210000
     - 3210000
     historySentiment7Day:
     - 100
-    - 94.14453
-    - 97.88199
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -235,16 +235,16 @@ MonoBehaviour:
     constantK: 1.6142520375e+18
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 63787.496
-    - 63787.496
-    - 63787.496
-    - 63787.496
-    - 63787.496
+    - 12150000
+    - 12150000
+    - 12150000
+    - 12150000
+    - 12150000
     - 12150000
     - 12150000
     historySentiment7Day:
     - 100
-    - 95.86096
+    - 100
     - 100
     - 100
     - 100
@@ -269,18 +269,18 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
     - 100
-    - 95.010414
     - 100
-    - 99.99895
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -303,19 +303,19 @@ MonoBehaviour:
     constantK: 8250348150000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 17955
-    - 17955
-    - 17955
-    - 17955
-    - 17955
+    - 3420000
+    - 3420000
+    - 3420000
+    - 3420000
+    - 3420000
     - 3420000
     - 3420000
     historySentiment7Day:
-    - 99.64102
     - 100
     - 100
     - 100
-    - 99.14571
+    - 100
+    - 100
     - 100
     - 100
     buyPricePrevDayClose: 112873200
@@ -337,16 +337,16 @@ MonoBehaviour:
     constantK: 2.293235712e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 40320
-    - 40320
-    - 40320
-    - 40320
-    - 40320
+    - 7680000
+    - 7680000
+    - 7680000
+    - 7680000
+    - 7680000
     - 7680000
     - 7680000
     historySentiment7Day:
     - 100
-    - 95.20595
+    - 100
     - 100
     - 100
     - 100
@@ -371,11 +371,11 @@ MonoBehaviour:
     constantK: 2.251275612696e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 38981.25
-    - 38981.25
-    - 38981.25
-    - 38981.25
-    - 38981.25
+    - 7425000
+    - 7425000
+    - 7425000
+    - 7425000
+    - 7425000
     - 7425000
     - 7425000
     historySentiment7Day:
@@ -405,16 +405,16 @@ MonoBehaviour:
     constantK: 2990380426875000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 95.75414
-    - 99.30588
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -439,16 +439,16 @@ MonoBehaviour:
     constantK: 1.284286410689814e+18
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 60243.746
-    - 60243.746
-    - 60243.746
-    - 60243.746
-    - 60243.746
+    - 11475000
+    - 11475000
+    - 11475000
+    - 11475000
+    - 11475000
     - 11475000
     - 11475000
     historySentiment7Day:
     - 100
-    - 97.101814
+    - 100
     - 100
     - 100
     - 100
@@ -473,11 +473,11 @@ MonoBehaviour:
     constantK: 3.158618112e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 43679.996
-    - 43679.996
-    - 43679.996
-    - 43679.996
-    - 43679.996
+    - 8320000
+    - 8320000
+    - 8320000
+    - 8320000
+    - 8320000
     - 8320000
     - 8320000
     historySentiment7Day:
@@ -507,17 +507,17 @@ MonoBehaviour:
     constantK: 5.907360375e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 49612.496
-    - 49612.496
-    - 49612.496
-    - 49612.496
-    - 49612.496
+    - 9450000
+    - 9450000
+    - 9450000
+    - 9450000
+    - 9450000
     - 9450000
     - 9450000
     historySentiment7Day:
-    - 92.45897
     - 100
-    - 99.655624
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -541,15 +541,15 @@ MonoBehaviour:
     constantK: 26075174400000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
     - 4560000
     - 4560000
     historySentiment7Day:
-    - 93.57762
+    - 100
     - 100
     - 100
     - 100
@@ -575,17 +575,17 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
-    - 94.597694
-    - 98.88661
-    - 99.371796
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -609,15 +609,15 @@ MonoBehaviour:
     constantK: 1.2157437466650629e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 34938.75
-    - 34938.75
-    - 34938.75
-    - 34938.75
-    - 34938.75
+    - 6655000
+    - 6655000
+    - 6655000
+    - 6655000
+    - 6655000
     - 6655000
     - 6655000
     historySentiment7Day:
-    - 96.9085
+    - 100
     - 100
     - 100
     - 100
@@ -643,11 +643,11 @@ MonoBehaviour:
     constantK: 284765625000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 7874.9995
-    - 7874.9995
-    - 7874.9995
-    - 7874.9995
-    - 7874.9995
+    - 1500000
+    - 1500000
+    - 1500000
+    - 1500000
+    - 1500000
     - 1500000
     - 1500000
     historySentiment7Day:
@@ -677,18 +677,18 @@ MonoBehaviour:
     constantK: 2990380426875000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 92.209206
     - 100
     - 100
-    - 97.63799
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -711,18 +711,18 @@ MonoBehaviour:
     constantK: 41767388825220000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 26932.498
-    - 26932.498
-    - 26932.498
-    - 26932.498
-    - 26932.498
+    - 5130000
+    - 5130000
+    - 5130000
+    - 5130000
+    - 5130000
     - 5130000
     - 5130000
     historySentiment7Day:
     - 100
     - 100
     - 100
-    - 99.70761
+    - 100
     - 100
     - 100
     - 100
@@ -745,16 +745,16 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 96.57833
-    - 96.733604
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -779,18 +779,18 @@ MonoBehaviour:
     constantK: 26075174400000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
     - 4560000
     - 4560000
     historySentiment7Day:
     - 100
-    - 99.66002
     - 100
-    - 99.39748
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -813,18 +813,18 @@ MonoBehaviour:
     constantK: 6201780187500000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
     - 3210000
     - 3210000
     historySentiment7Day:
-    - 92.07832
-    - 99.41938
-    - 95.73702
-    - 97.74246
+    - 100
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -847,11 +847,11 @@ MonoBehaviour:
     constantK: 54479805496904700
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 28586.248
-    - 28586.248
-    - 28586.248
-    - 28586.248
-    - 28586.248
+    - 5445000
+    - 5445000
+    - 5445000
+    - 5445000
+    - 5445000
     - 5445000
     - 5445000
     historySentiment7Day:
@@ -881,17 +881,17 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
-    - 98.27734
     - 100
-    - 97.84382
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -915,18 +915,18 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 97.97343
     - 100
-    - 95.808876
-    - 99.50445
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -949,15 +949,15 @@ MonoBehaviour:
     constantK: 900000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 10500
-    - 10500
-    - 10500
-    - 10500
-    - 10500
+    - 2000000
+    - 2000000
+    - 2000000
+    - 2000000
+    - 2000000
     - 2000000
     - 2000000
     historySentiment7Day:
-    - 91.58606
+    - 100
     - 100
     - 100
     - 100
@@ -983,16 +983,16 @@ MonoBehaviour:
     constantK: 54479805496904700
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 28586.248
-    - 28586.248
-    - 28586.248
-    - 28586.248
-    - 28586.248
+    - 5445000
+    - 5445000
+    - 5445000
+    - 5445000
+    - 5445000
     - 5445000
     - 5445000
     historySentiment7Day:
-    - 92.03022
-    - 98.01112
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1017,17 +1017,17 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 99.58391
     - 100
-    - 97.21707
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1051,17 +1051,17 @@ MonoBehaviour:
     constantK: 2990380426875000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 97.7969
-    - 98.37354
-    - 95.85475
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1085,11 +1085,11 @@ MonoBehaviour:
     constantK: 6201780187500000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
     - 3210000
     - 3210000
     historySentiment7Day:
@@ -1119,16 +1119,16 @@ MonoBehaviour:
     constantK: 6201780187500000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
     - 3210000
     - 3210000
     historySentiment7Day:
-    - 91.64087
-    - 95.63082
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1153,17 +1153,17 @@ MonoBehaviour:
     constantK: 26075174400000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
     - 4560000
     - 4560000
     historySentiment7Day:
     - 100
     - 100
-    - 97.3409
+    - 100
     - 100
     - 100
     - 100
@@ -1187,15 +1187,15 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
-    - 99.93852
+    - 100
     - 100
     - 100
     - 100
@@ -1221,16 +1221,16 @@ MonoBehaviour:
     constantK: 900000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 10500
-    - 10500
-    - 10500
-    - 10500
-    - 10500
+    - 2000000
+    - 2000000
+    - 2000000
+    - 2000000
+    - 2000000
     - 2000000
     - 2000000
     historySentiment7Day:
-    - 98.37429
-    - 99.59177
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1255,16 +1255,16 @@ MonoBehaviour:
     constantK: 2990380426875000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 94.38948
-    - 98.232056
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1289,18 +1289,18 @@ MonoBehaviour:
     constantK: 41767388825220000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 26932.498
-    - 26932.498
-    - 26932.498
-    - 26932.498
-    - 26932.498
+    - 5130000
+    - 5130000
+    - 5130000
+    - 5130000
+    - 5130000
     - 5130000
     - 5130000
     historySentiment7Day:
     - 100
     - 100
     - 100
-    - 99.369415
+    - 100
     - 100
     - 100
     - 100
@@ -1323,18 +1323,18 @@ MonoBehaviour:
     constantK: 6201780187500000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
     - 3210000
     - 3210000
     historySentiment7Day:
-    - 99.714905
     - 100
     - 100
-    - 97.942
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1357,17 +1357,17 @@ MonoBehaviour:
     constantK: 2990380426875000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 97.079155
     - 100
-    - 99.87542
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1391,16 +1391,16 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 98.94646
-    - 98.283554
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1425,18 +1425,18 @@ MonoBehaviour:
     constantK: 900000000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 10500
-    - 10500
-    - 10500
-    - 10500
-    - 10500
+    - 2000000
+    - 2000000
+    - 2000000
+    - 2000000
+    - 2000000
     - 2000000
     - 2000000
     historySentiment7Day:
     - 100
-    - 93.20219
     - 100
-    - 98.23373
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1459,15 +1459,15 @@ MonoBehaviour:
     constantK: 26075174400000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
     - 4560000
     - 4560000
     historySentiment7Day:
-    - 97.483025
+    - 100
     - 100
     - 100
     - 100
@@ -1493,18 +1493,18 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
     - 100
     - 100
     - 100
-    - 99.3023
+    - 100
     - 100
     - 100
     - 100
@@ -1527,18 +1527,18 @@ MonoBehaviour:
     constantK: 5.59872e+17
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 50399.996
-    - 50399.996
-    - 50399.996
-    - 50399.996
-    - 50399.996
+    - 9600000
+    - 9600000
+    - 9600000
+    - 9600000
+    - 9600000
     - 9600000
     - 9600000
     historySentiment7Day:
     - 100
     - 100
     - 100
-    - 99.126465
+    - 100
     - 100
     - 100
     - 100
@@ -1561,17 +1561,17 @@ MonoBehaviour:
     constantK: 26075174400000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
     - 4560000
     - 4560000
     historySentiment7Day:
-    - 95.71759
-    - 94.00525
-    - 98.70169
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1595,16 +1595,16 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
     - 100
-    - 98.80235
+    - 100
     - 100
     - 100
     - 100
@@ -1629,16 +1629,16 @@ MonoBehaviour:
     constantK: 54479805496904700
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 28586.248
-    - 28586.248
-    - 28586.248
-    - 28586.248
-    - 28586.248
+    - 5445000
+    - 5445000
+    - 5445000
+    - 5445000
+    - 5445000
     - 5445000
     - 5445000
     historySentiment7Day:
     - 100
-    - 96.83396
+    - 100
     - 100
     - 100
     - 100
@@ -1663,15 +1663,15 @@ MonoBehaviour:
     constantK: 284765625000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 7874.9995
-    - 7874.9995
-    - 7874.9995
-    - 7874.9995
-    - 7874.9995
+    - 1500000
+    - 1500000
+    - 1500000
+    - 1500000
+    - 1500000
     - 1500000
     - 1500000
     historySentiment7Day:
-    - 93.47445
+    - 100
     - 100
     - 100
     - 100
@@ -1697,17 +1697,17 @@ MonoBehaviour:
     constantK: 26075174400000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
-    - 23939.998
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
+    - 4560000
     - 4560000
     - 4560000
     historySentiment7Day:
-    - 94.7533
     - 100
-    - 98.770065
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1731,17 +1731,17 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
-    - 96.30343
-    - 93.52148
-    - 95.9053
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1765,16 +1765,16 @@ MonoBehaviour:
     constantK: 3978755859375000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14962.499
-    - 14962.499
-    - 14962.499
-    - 14962.499
-    - 14962.499
+    - 2850000
+    - 2850000
+    - 2850000
+    - 2850000
+    - 2850000
     - 2850000
     - 2850000
     historySentiment7Day:
-    - 98.4007
-    - 93.00375
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1799,16 +1799,16 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 94.077126
-    - 93.78791
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1833,16 +1833,16 @@ MonoBehaviour:
     constantK: 8250348150000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 17955
-    - 17955
-    - 17955
-    - 17955
-    - 17955
+    - 3420000
+    - 3420000
+    - 3420000
+    - 3420000
+    - 3420000
     - 3420000
     - 3420000
     historySentiment7Day:
-    - 97.783066
-    - 95.70499
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1867,16 +1867,16 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 97.60799
-    - 93.740746
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1901,11 +1901,11 @@ MonoBehaviour:
     constantK: 83041921875000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
-    - 31762.498
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
+    - 6050000
     - 6050000
     - 6050000
     historySentiment7Day:
@@ -1935,16 +1935,16 @@ MonoBehaviour:
     constantK: 31694537453040000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 25136.998
-    - 25136.998
-    - 25136.998
-    - 25136.998
-    - 25136.998
+    - 4788000
+    - 4788000
+    - 4788000
+    - 4788000
+    - 4788000
     - 4788000
     - 4788000
     historySentiment7Day:
-    - 93.181786
-    - 95.66555
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -1969,16 +1969,16 @@ MonoBehaviour:
     constantK: 17107921923840000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 21545.998
-    - 21545.998
-    - 21545.998
-    - 21545.998
-    - 21545.998
+    - 4104000
+    - 4104000
+    - 4104000
+    - 4104000
+    - 4104000
     - 4104000
     - 4104000
     historySentiment7Day:
-    - 91.007126
-    - 99.33855
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2003,18 +2003,18 @@ MonoBehaviour:
     constantK: 21238392518640000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 22742.998
-    - 22742.998
-    - 22742.998
-    - 22742.998
-    - 22742.998
+    - 4332000
+    - 4332000
+    - 4332000
+    - 4332000
+    - 4332000
     - 4332000
     - 4332000
     historySentiment7Day:
-    - 95.668465
-    - 97.31174
     - 100
-    - 97.19366
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2037,17 +2037,17 @@ MonoBehaviour:
     constantK: 3498845312300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14605.499
-    - 14605.499
-    - 14605.499
-    - 14605.499
-    - 14605.499
+    - 2782000
+    - 2782000
+    - 2782000
+    - 2782000
+    - 2782000
     - 2782000
     - 2782000
     historySentiment7Day:
-    - 96.561104
     - 100
-    - 97.90134
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2071,16 +2071,16 @@ MonoBehaviour:
     constantK: 1793585456300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 12358.499
-    - 12358.499
-    - 12358.499
-    - 12358.499
-    - 12358.499
+    - 2354000
+    - 2354000
+    - 2354000
+    - 2354000
+    - 2354000
     - 2354000
     - 2354000
     historySentiment7Day:
-    - 97.73165
-    - 96.49281
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2105,17 +2105,17 @@ MonoBehaviour:
     constantK: 1225043000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 11234.999
-    - 11234.999
-    - 11234.999
-    - 11234.999
-    - 11234.999
+    - 2140000
+    - 2140000
+    - 2140000
+    - 2140000
+    - 2140000
     - 2140000
     - 2140000
     historySentiment7Day:
     - 100
     - 100
-    - 97.48963
+    - 100
     - 100
     - 100
     - 100
@@ -2139,16 +2139,16 @@ MonoBehaviour:
     constantK: 116640000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
     - 1200000
     - 1200000
     historySentiment7Day:
-    - 96.73929
-    - 98.35683
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2173,15 +2173,15 @@ MonoBehaviour:
     constantK: 56250000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 5250
-    - 5250
-    - 5250
-    - 5250
-    - 5250
+    - 1000000
+    - 1000000
+    - 1000000
+    - 1000000
+    - 1000000
     - 1000000
     - 1000000
     historySentiment7Day:
-    - 96.36479
+    - 100
     - 100
     - 100
     - 100
@@ -2207,17 +2207,17 @@ MonoBehaviour:
     constantK: 3379342602240000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14363.999
-    - 14363.999
-    - 14363.999
-    - 14363.999
-    - 14363.999
+    - 2736000
+    - 2736000
+    - 2736000
+    - 2736000
+    - 2736000
     - 2736000
     - 2736000
     historySentiment7Day:
-    - 91.95713
     - 100
-    - 96.30421
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2241,17 +2241,17 @@ MonoBehaviour:
     constantK: 6260649373440000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16758
-    - 16758
-    - 16758
-    - 16758
-    - 16758
+    - 3192000
+    - 3192000
+    - 3192000
+    - 3192000
+    - 3192000
     - 3192000
     - 3192000
     historySentiment7Day:
-    - 91.18652
-    - 95.021805
-    - 95.81745
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2275,15 +2275,15 @@ MonoBehaviour:
     constantK: 803750712300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 10111.5
-    - 10111.5
-    - 10111.5
-    - 10111.5
-    - 10111.5
+    - 1926000
+    - 1926000
+    - 1926000
+    - 1926000
+    - 1926000
     - 1926000
     - 1926000
     historySentiment7Day:
-    - 97.421364
+    - 100
     - 100
     - 100
     - 100
@@ -2309,17 +2309,17 @@ MonoBehaviour:
     constantK: 803750712300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 10111.5
-    - 10111.5
-    - 10111.5
-    - 10111.5
-    - 10111.5
+    - 1926000
+    - 1926000
+    - 1926000
+    - 1926000
+    - 1926000
     - 1926000
     - 1926000
     historySentiment7Day:
-    - 95.65593
-    - 93.11574
-    - 98.83314
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2343,17 +2343,17 @@ MonoBehaviour:
     constantK: 803750712300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 10111.5
-    - 10111.5
-    - 10111.5
-    - 10111.5
-    - 10111.5
+    - 1926000
+    - 1926000
+    - 1926000
+    - 1926000
+    - 1926000
     - 1926000
     - 1926000
     historySentiment7Day:
-    - 97.45401
     - 100
-    - 97.37455
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2377,17 +2377,17 @@ MonoBehaviour:
     constantK: 1225043000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 11234.999
-    - 11234.999
-    - 11234.999
-    - 11234.999
-    - 11234.999
+    - 2140000
+    - 2140000
+    - 2140000
+    - 2140000
+    - 2140000
     - 2140000
     - 2140000
     historySentiment7Day:
-    - 99.514465
-    - 95.038155
-    - 97.632195
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2411,17 +2411,17 @@ MonoBehaviour:
     constantK: 21238392518640000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 22742.998
-    - 22742.998
-    - 22742.998
-    - 22742.998
-    - 22742.998
+    - 4332000
+    - 4332000
+    - 4332000
+    - 4332000
+    - 4332000
     - 4332000
     - 4332000
     historySentiment7Day:
     - 100
     - 100
-    - 99.15456
+    - 100
     - 100
     - 100
     - 100
@@ -2445,11 +2445,11 @@ MonoBehaviour:
     constantK: 3498845312300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14605.499
-    - 14605.499
-    - 14605.499
-    - 14605.499
-    - 14605.499
+    - 2782000
+    - 2782000
+    - 2782000
+    - 2782000
+    - 2782000
     - 2782000
     - 2782000
     historySentiment7Day:
@@ -2479,19 +2479,19 @@ MonoBehaviour:
     constantK: 116640000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
     - 1200000
     - 1200000
     historySentiment7Day:
     - 100
     - 100
-    - 95.02833
     - 100
-    - 99.66145
+    - 100
+    - 100
     - 100
     - 100
     buyPricePrevDayClose: 12964321
@@ -2513,11 +2513,11 @@ MonoBehaviour:
     constantK: 15284789305380000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
-    - 20947.5
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
+    - 3990000
     - 3990000
     - 3990000
     historySentiment7Day:
@@ -2547,15 +2547,15 @@ MonoBehaviour:
     constantK: 21238392518640000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 22742.998
-    - 22742.998
-    - 22742.998
-    - 22742.998
-    - 22742.998
+    - 4332000
+    - 4332000
+    - 4332000
+    - 4332000
+    - 4332000
     - 4332000
     - 4332000
     historySentiment7Day:
-    - 94.52725
+    - 100
     - 100
     - 100
     - 100
@@ -2581,18 +2581,18 @@ MonoBehaviour:
     constantK: 31694537453040000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 25136.998
-    - 25136.998
-    - 25136.998
-    - 25136.998
-    - 25136.998
+    - 4788000
+    - 4788000
+    - 4788000
+    - 4788000
+    - 4788000
     - 4788000
     - 4788000
     historySentiment7Day:
-    - 96.76857
     - 100
     - 100
-    - 97.424194
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2615,19 +2615,19 @@ MonoBehaviour:
     constantK: 6201780187500000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
-    - 16852.5
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
+    - 3210000
     - 3210000
     - 3210000
     historySentiment7Day:
     - 100
     - 100
     - 100
-    - 98.861595
-    - 99.688545
+    - 100
+    - 100
     - 100
     - 100
     buyPricePrevDayClose: 96312000
@@ -2649,15 +2649,15 @@ MonoBehaviour:
     constantK: 23563820339560800
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 23341.498
-    - 23341.498
-    - 23341.498
-    - 23341.498
-    - 23341.498
+    - 4446000
+    - 4446000
+    - 4446000
+    - 4446000
+    - 4446000
     - 4446000
     - 4446000
     historySentiment7Day:
-    - 98.851654
+    - 100
     - 100
     - 100
     - 100
@@ -2683,11 +2683,11 @@ MonoBehaviour:
     constantK: 368640000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 8400
-    - 8400
-    - 8400
-    - 8400
-    - 8400
+    - 1600000
+    - 1600000
+    - 1600000
+    - 1600000
+    - 1600000
     - 1600000
     - 1600000
     historySentiment7Day:
@@ -2717,18 +2717,18 @@ MonoBehaviour:
     constantK: 2990380426875000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
-    - 14043.749
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
+    - 2675000
     - 2675000
     - 2675000
     historySentiment7Day:
     - 100
     - 100
-    - 96.61092
-    - 97.53329
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2751,19 +2751,19 @@ MonoBehaviour:
     constantK: 1793585456300000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 12358.499
-    - 12358.499
-    - 12358.499
-    - 12358.499
-    - 12358.499
+    - 2354000
+    - 2354000
+    - 2354000
+    - 2354000
+    - 2354000
     - 2354000
     - 2354000
     historySentiment7Day:
-    - 97.92819
-    - 96.50004
-    - 99.197174
     - 100
-    - 99.92335
+    - 100
+    - 100
+    - 100
+    - 100
     - 100
     - 100
     buyPricePrevDayClose: 51796800
@@ -2785,17 +2785,17 @@ MonoBehaviour:
     constantK: 1225043000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 11234.999
-    - 11234.999
-    - 11234.999
-    - 11234.999
-    - 11234.999
+    - 2140000
+    - 2140000
+    - 2140000
+    - 2140000
+    - 2140000
     - 2140000
     - 2140000
     historySentiment7Day:
     - 100
     - 100
-    - 97.71416
+    - 100
     - 100
     - 100
     - 100
@@ -2819,17 +2819,17 @@ MonoBehaviour:
     constantK: 116640000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
     - 1200000
     - 1200000
     historySentiment7Day:
     - 100
-    - 96.621086
-    - 97.21855
+    - 100
+    - 100
     - 100
     - 100
     - 100
@@ -2853,15 +2853,15 @@ MonoBehaviour:
     constantK: 116640000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
     - 1200000
     - 1200000
     historySentiment7Day:
-    - 92.2477
+    - 100
     - 100
     - 100
     - 100
@@ -2887,18 +2887,18 @@ MonoBehaviour:
     constantK: 116640000000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
-    - 6299.9995
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
+    - 1200000
     - 1200000
     - 1200000
     historySentiment7Day:
     - 100
-    - 96.66825
     - 100
-    - 99.69001
+    - 100
+    - 100
     - 100
     - 100
     - 100

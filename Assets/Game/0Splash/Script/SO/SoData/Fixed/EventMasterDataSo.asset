@@ -2804,6 +2804,39 @@ MonoBehaviour:
     - Rumor
     breakingNewsCodes:
     - C0646
+  - id: EV_1000A
+    name: "\uC81C\uAD6D \uC740\uD589 \uC124\uB9BD_\uD655\uC815"
+    scope: 0
+    minDays: 4
+    maxDays: 6
+    buffCodes:
+    - B_EMP_1000
+    - B_LEG_1200
+    - B_GOLD_MAX
+    - B_GOD_LUCK
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Direct
+    breakingNewsCodes:
+    - C0800
+    - C0801
+    - C0802
+  - id: EV_1000B
+    name: "\uC81C\uAD6D \uC740\uD589 \uC124\uB9BD_\uC9D5\uD6C4"
+    scope: 0
+    minDays: 6
+    maxDays: 21
+    buffCodes:
+    - B_PRE_1000
+    - B_PRE_SHOCK
+    affinityTagsRaw: 
+    conditionIds: []
+    rumorNewsCodes:
+    - Rumor
+    breakingNewsCodes:
+    - C0969
+    - C0939
   - id: EV_100A
     name: "\uC11C\uC8FC \uACF5\uBC29\uC804_\uACB0\uB9D0"
     scope: 1
@@ -30130,36 +30163,3 @@ MonoBehaviour:
     breakingNewsCodes:
     - C0886
     - C0802
-  - id: EV_1000A
-    name: "\uC81C\uAD6D \uC740\uD589 \uC124\uB9BD_\uD655\uC815"
-    scope: 0
-    minDays: 4
-    maxDays: 6
-    buffCodes:
-    - B_EMP_1000
-    - B_LEG_1200
-    - B_GOLD_MAX
-    - B_GOD_LUCK
-    affinityTagsRaw: 
-    conditionIds: []
-    rumorNewsCodes:
-    - Direct
-    breakingNewsCodes:
-    - C0800
-    - C0801
-    - C0802
-  - id: EV_1000B
-    name: "\uC81C\uAD6D \uC740\uD589 \uC124\uB9BD_\uC9D5\uD6C4"
-    scope: 0
-    minDays: 6
-    maxDays: 21
-    buffCodes:
-    - B_PRE_1000
-    - B_PRE_SHOCK
-    affinityTagsRaw: 
-    conditionIds: []
-    rumorNewsCodes:
-    - Rumor
-    breakingNewsCodes:
-    - C0969
-    - C0939

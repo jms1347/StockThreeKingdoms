@@ -12,4 +12,4004 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5560938e17a0ac14187604c0e33f03f1, type: 3}
   m_Name: GeneralMasterDataSo
   m_EditorClassIdentifier: Assembly-CSharp::GeneralMasterDataSo
-  list: []
+  list:
+  - id: U_001
+    name: "\uC720\uBE44"
+    grade: 1
+    power: 75
+    intel: 80
+    charm: 99
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_002
+    name: "\uAD00\uC6B0"
+    grade: 1
+    power: 97
+    intel: 82
+    charm: 93
+    infamy: 5
+    initialNationId: SHU
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_003
+    name: "\uC7A5\uBE44"
+    grade: 1
+    power: 98
+    intel: 42
+    charm: 45
+    infamy: 15
+    initialNationId: SHU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_004
+    name: "\uC81C\uAC08\uB7C9"
+    grade: 1
+    power: 38
+    intel: 100
+    charm: 95
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_005
+    name: "\uC870\uC870"
+    grade: 1
+    power: 72
+    intel: 91
+    charm: 96
+    infamy: 60
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_006
+    name: "\uC0AC\uB9C8\uC758"
+    grade: 1
+    power: 63
+    intel: 98
+    charm: 80
+    infamy: 50
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_007
+    name: "\uD558\uD6C4\uB3C8"
+    grade: 2
+    power: 90
+    intel: 70
+    charm: 81
+    infamy: 10
+    initialNationId: WEI
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_008
+    name: "\uC190\uAD8C"
+    grade: 1
+    power: 67
+    intel: 80
+    charm: 88
+    infamy: 5
+    initialNationId: WU
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_009
+    name: "\uC8FC\uC720"
+    grade: 1
+    power: 71
+    intel: 96
+    charm: 93
+    infamy: 0
+    initialNationId: WU
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_010
+    name: "\uC721\uC190"
+    grade: 2
+    power: 69
+    intel: 95
+    charm: 90
+    infamy: 0
+    initialNationId: WU
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_011
+    name: "\uC5EC\uD3EC"
+    grade: 1
+    power: 100
+    intel: 26
+    charm: 30
+    infamy: 90
+    initialNationId: OTHERS
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_012
+    name: "\uB3D9\uD0C1"
+    grade: 1
+    power: 87
+    intel: 69
+    charm: 12
+    infamy: 100
+    initialNationId: OTHERS
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_013
+    name: "\uCD08\uC120"
+    grade: 2
+    power: 40
+    intel: 72
+    charm: 100
+    infamy: 10
+    initialNationId: OTHERS
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_014
+    name: "\uC6D0\uC18C"
+    grade: 2
+    power: 69
+    intel: 70
+    charm: 85
+    infamy: 30
+    initialNationId: OTHERS
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_015
+    name: "\uC870\uC6B4"
+    grade: 1
+    power: 96
+    intel: 76
+    charm: 88
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_016
+    name: "\uB9C8\uCD08"
+    grade: 2
+    power: 97
+    intel: 44
+    charm: 82
+    infamy: 20
+    initialNationId: SHU
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_017
+    name: "\uACFD\uAC00"
+    grade: 2
+    power: 15
+    intel: 98
+    charm: 78
+    infamy: 5
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_018
+    name: "\uC9C4\uB2F9"
+    grade: 4
+    power: 43
+    intel: 37
+    charm: 41
+    infamy: 11
+    initialNationId: OTHERS
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_019
+    name: "\uC11C\uC758"
+    grade: 4
+    power: 41
+    intel: 34
+    charm: 39
+    infamy: 94
+    initialNationId: OTHERS
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_020
+    name: "\uC9C4\uD569"
+    grade: 4
+    power: 33
+    intel: 32
+    charm: 34
+    infamy: 4
+    initialNationId: SHU
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_021
+    name: "\uD669\uC548"
+    grade: 5
+    power: 20
+    intel: 17
+    charm: 18
+    infamy: 51
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_022
+    name: "\uAC10\uB78C"
+    grade: 3
+    power: 53
+    intel: 51
+    charm: 58
+    infamy: 12
+    initialNationId: SHU
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_023
+    name: "\uAD00\uC758"
+    grade: 5
+    power: 25
+    intel: 10
+    charm: 13
+    infamy: 12
+    initialNationId: WEI
+    initialCastleId: C12
+    governorPortrait: {fileID: 0}
+  - id: U_024
+    name: "\uC21C\uD1B5"
+    grade: 2
+    power: 79
+    intel: 76
+    charm: 80
+    infamy: 17
+    initialNationId: OTHERS
+    initialCastleId: C47
+    governorPortrait: {fileID: 0}
+  - id: U_025
+    name: "\uAC10\uC775"
+    grade: 3
+    power: 59
+    intel: 50
+    charm: 65
+    infamy: 6
+    initialNationId: WU
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_026
+    name: "\uC774\uC6B1"
+    grade: 3
+    power: 55
+    intel: 50
+    charm: 50
+    infamy: 11
+    initialNationId: WU
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_027
+    name: "\uC5C4\uD76C"
+    grade: 4
+    power: 36
+    intel: 40
+    charm: 35
+    infamy: 11
+    initialNationId: WU
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_028
+    name: "\uB178\uD6C4"
+    grade: 4
+    power: 35
+    intel: 44
+    charm: 44
+    infamy: 2
+    initialNationId: SHU
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_029
+    name: "\uC81C\uAC08\uB2F9"
+    grade: 4
+    power: 36
+    intel: 32
+    charm: 44
+    infamy: 6
+    initialNationId: WEI
+    initialCastleId: C32
+    governorPortrait: {fileID: 0}
+  - id: U_030
+    name: "\uC655\uB155"
+    grade: 4
+    power: 38
+    intel: 36
+    charm: 42
+    infamy: 7
+    initialNationId: SHU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_031
+    name: "\uC9C4\uC815"
+    grade: 4
+    power: 31
+    intel: 31
+    charm: 43
+    infamy: 54
+    initialNationId: WU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_032
+    name: "\uC704\uC5F0"
+    grade: 3
+    power: 60
+    intel: 65
+    charm: 60
+    infamy: 11
+    initialNationId: WU
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_033
+    name: "\uC21C\uC548"
+    grade: 2
+    power: 77
+    intel: 81
+    charm: 78
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_034
+    name: "\uC9C4\uC6B0"
+    grade: 4
+    power: 43
+    intel: 32
+    charm: 41
+    infamy: 3
+    initialNationId: WEI
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_035
+    name: "\uC721\uC758"
+    grade: 4
+    power: 40
+    intel: 39
+    charm: 39
+    infamy: 76
+    initialNationId: WEI
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_036
+    name: "\uBB38\uD669"
+    grade: 5
+    power: 12
+    intel: 14
+    charm: 12
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_037
+    name: "\uC7A5\uC5F0"
+    grade: 1
+    power: 88
+    intel: 94
+    charm: 85
+    infamy: 18
+    initialNationId: SHU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_038
+    name: "\uC548\uC220"
+    grade: 5
+    power: 20
+    intel: 16
+    charm: 16
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_039
+    name: "\uC5C4\uC6B4"
+    grade: 4
+    power: 34
+    intel: 43
+    charm: 34
+    infamy: 60
+    initialNationId: OTHERS
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_040
+    name: "\uBC29\uC5F0"
+    grade: 2
+    power: 78
+    intel: 81
+    charm: 71
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_041
+    name: "\uC8FC\uD6C4"
+    grade: 3
+    power: 65
+    intel: 56
+    charm: 61
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C47
+    governorPortrait: {fileID: 0}
+  - id: U_042
+    name: "\uAC00\uD76C"
+    grade: 4
+    power: 32
+    intel: 44
+    charm: 43
+    infamy: 7
+    initialNationId: SHU
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_043
+    name: "\uACFD\uD6C4"
+    grade: 4
+    power: 31
+    intel: 33
+    charm: 31
+    infamy: 0
+    initialNationId: OTHERS
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_044
+    name: "\uC81C\uAC08\uD1B5"
+    grade: 2
+    power: 78
+    intel: 70
+    charm: 83
+    infamy: 15
+    initialNationId: WEI
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_045
+    name: "\uC7A5\uC790"
+    grade: 3
+    power: 58
+    intel: 55
+    charm: 52
+    infamy: 37
+    initialNationId: WU
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_046
+    name: "\uC704\uC218"
+    grade: 3
+    power: 56
+    intel: 55
+    charm: 63
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_047
+    name: "\uBC95\uD6C4"
+    grade: 2
+    power: 83
+    intel: 76
+    charm: 70
+    infamy: 96
+    initialNationId: WU
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_048
+    name: "\uD55C\uC219"
+    grade: 2
+    power: 72
+    intel: 71
+    charm: 73
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C22
+    governorPortrait: {fileID: 0}
+  - id: U_049
+    name: "\uC815\uBCF4\uB7C9"
+    grade: 4
+    power: 38
+    intel: 35
+    charm: 45
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_050
+    name: "\uACE0\uD1B5"
+    grade: 3
+    power: 60
+    intel: 63
+    charm: 55
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_051
+    name: "\uC870\uD3C9"
+    grade: 1
+    power: 97
+    intel: 89
+    charm: 90
+    infamy: 15
+    initialNationId: WU
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_052
+    name: "\uAC10\uC190"
+    grade: 5
+    power: 23
+    intel: 21
+    charm: 21
+    infamy: 5
+    initialNationId: SHU
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_053
+    name: "\uBC29\uC18C"
+    grade: 3
+    power: 65
+    intel: 50
+    charm: 62
+    infamy: 10
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_054
+    name: "\uC815\uBCF4\uB3C8"
+    grade: 1
+    power: 94
+    intel: 100
+    charm: 90
+    infamy: 6
+    initialNationId: SHU
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_055
+    name: "\uC9C4\uC790"
+    grade: 3
+    power: 50
+    intel: 51
+    charm: 54
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C42
+    governorPortrait: {fileID: 0}
+  - id: U_056
+    name: "\uACFD\uC220"
+    grade: 4
+    power: 32
+    intel: 30
+    charm: 42
+    infamy: 7
+    initialNationId: SHU
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_057
+    name: "\uBB38\uCDA9"
+    grade: 4
+    power: 44
+    intel: 36
+    charm: 34
+    infamy: 15
+    initialNationId: WEI
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_058
+    name: "\uC9C4\uCDA9"
+    grade: 4
+    power: 36
+    intel: 42
+    charm: 36
+    infamy: 6
+    initialNationId: SHU
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_059
+    name: "\uC774\uAC00"
+    grade: 3
+    power: 50
+    intel: 56
+    charm: 63
+    infamy: 9
+    initialNationId: WU
+    initialCastleId: C23
+    governorPortrait: {fileID: 0}
+  - id: U_060
+    name: "\uC8FC\uD76C"
+    grade: 5
+    power: 13
+    intel: 20
+    charm: 23
+    infamy: 18
+    initialNationId: WEI
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_061
+    name: "\uC815\uBCF4\uB4F1"
+    grade: 3
+    power: 56
+    intel: 53
+    charm: 50
+    infamy: 10
+    initialNationId: WU
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_062
+    name: "\uC11C\uC6B4"
+    grade: 4
+    power: 31
+    intel: 32
+    charm: 41
+    infamy: 3
+    initialNationId: WU
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_063
+    name: "\uC5EC\uC6B4"
+    grade: 5
+    power: 16
+    intel: 20
+    charm: 10
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_064
+    name: "\uB3D9\uC720"
+    grade: 4
+    power: 34
+    intel: 38
+    charm: 38
+    infamy: 31
+    initialNationId: WEI
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_065
+    name: "\uACE0\uC5C4"
+    grade: 5
+    power: 12
+    intel: 11
+    charm: 18
+    infamy: 7
+    initialNationId: WU
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_066
+    name: "\uC815\uBCF4\uC720"
+    grade: 4
+    power: 34
+    intel: 30
+    charm: 32
+    infamy: 5
+    initialNationId: WU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_067
+    name: "\uC9C4\uC5F0"
+    grade: 3
+    power: 59
+    intel: 50
+    charm: 51
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C12
+    governorPortrait: {fileID: 0}
+  - id: U_068
+    name: "\uAC15\uAD81"
+    grade: 4
+    power: 33
+    intel: 37
+    charm: 32
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_069
+    name: "\uBB38\uD1B5"
+    grade: 4
+    power: 45
+    intel: 39
+    charm: 44
+    infamy: 33
+    initialNationId: WEI
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_070
+    name: "\uC6D0\uB7C9"
+    grade: 3
+    power: 52
+    intel: 57
+    charm: 62
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_071
+    name: "\uACE0\uD669"
+    grade: 5
+    power: 13
+    intel: 25
+    charm: 22
+    infamy: 15
+    initialNationId: OTHERS
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_072
+    name: "\uC885\uC790"
+    grade: 3
+    power: 60
+    intel: 58
+    charm: 58
+    infamy: 5
+    initialNationId: SHU
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_073
+    name: "\uC21C\uB4F1"
+    grade: 3
+    power: 54
+    intel: 56
+    charm: 59
+    infamy: 9
+    initialNationId: WEI
+    initialCastleId: C09
+    governorPortrait: {fileID: 0}
+  - id: U_074
+    name: "\uC6D0\uCD94"
+    grade: 3
+    power: 50
+    intel: 50
+    charm: 59
+    infamy: 78
+    initialNationId: WU
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_075
+    name: "\uACFD\uC190"
+    grade: 4
+    power: 35
+    intel: 34
+    charm: 33
+    infamy: 83
+    initialNationId: WU
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_076
+    name: "\uC548\uB7C9"
+    grade: 3
+    power: 61
+    intel: 59
+    charm: 64
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_077
+    name: "\uD0DC\uC0AC\uD3C9"
+    grade: 4
+    power: 30
+    intel: 38
+    charm: 31
+    infamy: 6
+    initialNationId: WEI
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_078
+    name: "\uC655\uCD08"
+    grade: 2
+    power: 85
+    intel: 70
+    charm: 78
+    infamy: 19
+    initialNationId: WU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_079
+    name: "\uBC95\uB78C"
+    grade: 2
+    power: 73
+    intel: 81
+    charm: 77
+    infamy: 9
+    initialNationId: SHU
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_080
+    name: "\uD55C\uD569"
+    grade: 4
+    power: 37
+    intel: 41
+    charm: 31
+    infamy: 13
+    initialNationId: SHU
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_081
+    name: "\uD55C\uC6B0"
+    grade: 3
+    power: 52
+    intel: 65
+    charm: 51
+    infamy: 20
+    initialNationId: WEI
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_082
+    name: "\uACFD\uCDA9"
+    grade: 2
+    power: 70
+    intel: 75
+    charm: 77
+    infamy: 8
+    initialNationId: OTHERS
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_083
+    name: "\uBC29\uC815"
+    grade: 4
+    power: 36
+    intel: 37
+    charm: 44
+    infamy: 2
+    initialNationId: WU
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_084
+    name: "\uC5C4\uC790"
+    grade: 5
+    power: 17
+    intel: 10
+    charm: 24
+    infamy: 88
+    initialNationId: WEI
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_085
+    name: "\uC815\uBCF4\uC815"
+    grade: 4
+    power: 44
+    intel: 45
+    charm: 42
+    infamy: 3
+    initialNationId: WEI
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_086
+    name: "\uC0AC\uB9C8\uC775"
+    grade: 2
+    power: 75
+    intel: 75
+    charm: 85
+    infamy: 15
+    initialNationId: WU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_087
+    name: "\uC655\uC6B4"
+    grade: 3
+    power: 62
+    intel: 60
+    charm: 50
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_088
+    name: "\uC7A5\uC220"
+    grade: 4
+    power: 38
+    intel: 44
+    charm: 36
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_089
+    name: "\uAD00\uCD08"
+    grade: 4
+    power: 38
+    intel: 43
+    charm: 36
+    infamy: 13
+    initialNationId: WU
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_090
+    name: "\uB4F1\uD604"
+    grade: 2
+    power: 82
+    intel: 83
+    charm: 79
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_091
+    name: "\uC5EC\uCDA9"
+    grade: 5
+    power: 20
+    intel: 21
+    charm: 19
+    infamy: 19
+    initialNationId: WU
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_092
+    name: "\uBB38\uD3EC"
+    grade: 3
+    power: 63
+    intel: 53
+    charm: 58
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_093
+    name: "\uC548\uAD81"
+    grade: 3
+    power: 65
+    intel: 60
+    charm: 62
+    infamy: 12
+    initialNationId: OTHERS
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_094
+    name: "\uB178\uD68C"
+    grade: 5
+    power: 17
+    intel: 24
+    charm: 15
+    infamy: 15
+    initialNationId: WU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_095
+    name: "\uC721\uC220"
+    grade: 2
+    power: 85
+    intel: 74
+    charm: 79
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_096
+    name: "\uC8FC\uCD08"
+    grade: 5
+    power: 16
+    intel: 21
+    charm: 22
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_097
+    name: "\uC7A5\uB155"
+    grade: 4
+    power: 37
+    intel: 40
+    charm: 45
+    infamy: 20
+    initialNationId: WU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_098
+    name: "\uAC00\uC790"
+    grade: 3
+    power: 50
+    intel: 60
+    charm: 53
+    infamy: 5
+    initialNationId: WU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_099
+    name: "\uACFD\uC218"
+    grade: 4
+    power: 40
+    intel: 33
+    charm: 38
+    infamy: 4
+    initialNationId: WU
+    initialCastleId: C24
+    governorPortrait: {fileID: 0}
+  - id: U_100
+    name: "\uC885\uB78C"
+    grade: 3
+    power: 61
+    intel: 57
+    charm: 54
+    infamy: 38
+    initialNationId: OTHERS
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_101
+    name: "\uC21C\uC758"
+    grade: 4
+    power: 38
+    intel: 38
+    charm: 40
+    infamy: 5
+    initialNationId: WEI
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_102
+    name: "\uC815\uBCF4\uAC00"
+    grade: 3
+    power: 63
+    intel: 53
+    charm: 52
+    infamy: 4
+    initialNationId: OTHERS
+    initialCastleId: C28
+    governorPortrait: {fileID: 0}
+  - id: U_103
+    name: "\uC7A5\uCDA9"
+    grade: 2
+    power: 81
+    intel: 73
+    charm: 73
+    infamy: 12
+    initialNationId: SHU
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_104
+    name: "\uC190\uAC00"
+    grade: 4
+    power: 37
+    intel: 36
+    charm: 36
+    infamy: 9
+    initialNationId: SHU
+    initialCastleId: C42
+    governorPortrait: {fileID: 0}
+  - id: U_105
+    name: "\uBB38\uC560"
+    grade: 4
+    power: 39
+    intel: 33
+    charm: 33
+    infamy: 19
+    initialNationId: WU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_106
+    name: "\uB178\uC720"
+    grade: 4
+    power: 36
+    intel: 38
+    charm: 34
+    infamy: 31
+    initialNationId: OTHERS
+    initialCastleId: C32
+    governorPortrait: {fileID: 0}
+  - id: U_107
+    name: "\uD0DC\uC0AC\uC548"
+    grade: 3
+    power: 62
+    intel: 58
+    charm: 56
+    infamy: 49
+    initialNationId: SHU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_108
+    name: "\uACFD\uC758"
+    grade: 3
+    power: 50
+    intel: 64
+    charm: 54
+    infamy: 7
+    initialNationId: WU
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_109
+    name: "\uC81C\uAC08\uD68C"
+    grade: 4
+    power: 43
+    intel: 38
+    charm: 38
+    infamy: 13
+    initialNationId: SHU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_110
+    name: "\uBCF4\uC815"
+    grade: 3
+    power: 59
+    intel: 58
+    charm: 56
+    infamy: 5
+    initialNationId: OTHERS
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_111
+    name: "\uC721\uB4F1"
+    grade: 4
+    power: 38
+    intel: 43
+    charm: 45
+    infamy: 10
+    initialNationId: OTHERS
+    initialCastleId: C22
+    governorPortrait: {fileID: 0}
+  - id: U_112
+    name: "\uC721\uCD08"
+    grade: 1
+    power: 97
+    intel: 86
+    charm: 88
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_113
+    name: "\uAD00\uB155"
+    grade: 4
+    power: 32
+    intel: 34
+    charm: 32
+    infamy: 11
+    initialNationId: OTHERS
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_114
+    name: "\uC720\uB7C9"
+    grade: 4
+    power: 45
+    intel: 39
+    charm: 39
+    infamy: 41
+    initialNationId: OTHERS
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_115
+    name: "\uC5EC\uC720"
+    grade: 5
+    power: 25
+    intel: 17
+    charm: 17
+    infamy: 19
+    initialNationId: WEI
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_116
+    name: "\uBB38\uCD94"
+    grade: 3
+    power: 54
+    intel: 53
+    charm: 65
+    infamy: 11
+    initialNationId: WU
+    initialCastleId: C42
+    governorPortrait: {fileID: 0}
+  - id: U_117
+    name: "\uACAC\uD569"
+    grade: 4
+    power: 34
+    intel: 30
+    charm: 45
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_118
+    name: "\uC721\uC790"
+    grade: 3
+    power: 63
+    intel: 60
+    charm: 63
+    infamy: 2
+    initialNationId: OTHERS
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_119
+    name: "\uC11C\uC548"
+    grade: 3
+    power: 63
+    intel: 53
+    charm: 58
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_120
+    name: "\uAC15\uC560"
+    grade: 3
+    power: 61
+    intel: 65
+    charm: 65
+    infamy: 20
+    initialNationId: SHU
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_121
+    name: "\uD669\uC218"
+    grade: 4
+    power: 43
+    intel: 38
+    charm: 36
+    infamy: 11
+    initialNationId: WEI
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_122
+    name: "\uC7A5\uB7C9"
+    grade: 5
+    power: 21
+    intel: 17
+    charm: 23
+    infamy: 51
+    initialNationId: OTHERS
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_123
+    name: "\uC0AC\uB9C8\uCD94"
+    grade: 3
+    power: 56
+    intel: 62
+    charm: 50
+    infamy: 3
+    initialNationId: WEI
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_124
+    name: "\uBB38\uB7C9"
+    grade: 4
+    power: 32
+    intel: 43
+    charm: 40
+    infamy: 2
+    initialNationId: WEI
+    initialCastleId: C45
+    governorPortrait: {fileID: 0}
+  - id: U_125
+    name: "\uC81C\uAC08\uD76C"
+    grade: 3
+    power: 50
+    intel: 56
+    charm: 63
+    infamy: 14
+    initialNationId: SHU
+    initialCastleId: C23
+    governorPortrait: {fileID: 0}
+  - id: U_126
+    name: "\uBCF4\uC548"
+    grade: 4
+    power: 41
+    intel: 36
+    charm: 39
+    infamy: 20
+    initialNationId: WEI
+    initialCastleId: C37
+    governorPortrait: {fileID: 0}
+  - id: U_127
+    name: "\uC5EC\uC790"
+    grade: 3
+    power: 63
+    intel: 64
+    charm: 60
+    infamy: 6
+    initialNationId: SHU
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_128
+    name: "\uC0AC\uB9C8\uC6B4"
+    grade: 4
+    power: 36
+    intel: 40
+    charm: 41
+    infamy: 5
+    initialNationId: WU
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_129
+    name: "\uC815\uBCF4\uC6B4"
+    grade: 2
+    power: 80
+    intel: 84
+    charm: 74
+    infamy: 6
+    initialNationId: WU
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_130
+    name: "\uC655\uC560"
+    grade: 4
+    power: 30
+    intel: 40
+    charm: 44
+    infamy: 5
+    initialNationId: SHU
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_131
+    name: "\uC774\uC220"
+    grade: 3
+    power: 57
+    intel: 63
+    charm: 57
+    infamy: 71
+    initialNationId: WU
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_132
+    name: "\uC7A5\uC6B0"
+    grade: 3
+    power: 51
+    intel: 53
+    charm: 50
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C19
+    governorPortrait: {fileID: 0}
+  - id: U_133
+    name: "\uC7A5\uD1B5"
+    grade: 1
+    power: 85
+    intel: 89
+    charm: 97
+    infamy: 77
+    initialNationId: WEI
+    initialCastleId: C47
+    governorPortrait: {fileID: 0}
+  - id: U_134
+    name: "\uB178\uC190"
+    grade: 4
+    power: 38
+    intel: 45
+    charm: 33
+    infamy: 9
+    initialNationId: OTHERS
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_135
+    name: "\uBC29\uAC00"
+    grade: 3
+    power: 65
+    intel: 52
+    charm: 50
+    infamy: 13
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_136
+    name: "\uB3D9\uCDA9"
+    grade: 4
+    power: 31
+    intel: 32
+    charm: 38
+    infamy: 1
+    initialNationId: WEI
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_137
+    name: "\uC8FC\uCD94"
+    grade: 3
+    power: 59
+    intel: 58
+    charm: 56
+    infamy: 17
+    initialNationId: OTHERS
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_138
+    name: "\uAC15\uB7C9"
+    grade: 3
+    power: 65
+    intel: 64
+    charm: 50
+    infamy: 5
+    initialNationId: WEI
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_139
+    name: "\uC655\uC5F0"
+    grade: 4
+    power: 32
+    intel: 39
+    charm: 32
+    infamy: 0
+    initialNationId: OTHERS
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_140
+    name: "\uC5C4\uB78C"
+    grade: 4
+    power: 33
+    intel: 39
+    charm: 31
+    infamy: 4
+    initialNationId: SHU
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_141
+    name: "\uBB38\uB2F9"
+    grade: 4
+    power: 30
+    intel: 35
+    charm: 30
+    infamy: 4
+    initialNationId: WU
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_142
+    name: "\uB3D9\uC190"
+    grade: 3
+    power: 62
+    intel: 63
+    charm: 57
+    infamy: 0
+    initialNationId: WU
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_143
+    name: "\uC720\uD569"
+    grade: 3
+    power: 54
+    intel: 60
+    charm: 57
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_144
+    name: "\uD55C\uC775"
+    grade: 5
+    power: 13
+    intel: 16
+    charm: 13
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_145
+    name: "\uBB38\uD6C4"
+    grade: 4
+    power: 31
+    intel: 41
+    charm: 31
+    infamy: 18
+    initialNationId: OTHERS
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_146
+    name: "\uB3D9\uAC00"
+    grade: 3
+    power: 57
+    intel: 53
+    charm: 55
+    infamy: 3
+    initialNationId: SHU
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_147
+    name: "\uAC10\uC560"
+    grade: 3
+    power: 52
+    intel: 50
+    charm: 64
+    infamy: 16
+    initialNationId: WEI
+    initialCastleId: C47
+    governorPortrait: {fileID: 0}
+  - id: U_148
+    name: "\uACAC\uB2F9"
+    grade: 3
+    power: 61
+    intel: 63
+    charm: 53
+    infamy: 15
+    initialNationId: WEI
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_149
+    name: "\uC721\uC18C"
+    grade: 5
+    power: 24
+    intel: 17
+    charm: 13
+    infamy: 2
+    initialNationId: SHU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_150
+    name: "\uB4F1\uD76C"
+    grade: 3
+    power: 58
+    intel: 54
+    charm: 51
+    infamy: 1
+    initialNationId: WEI
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_151
+    name: "\uD0DC\uC0AC\uC720"
+    grade: 3
+    power: 62
+    intel: 58
+    charm: 64
+    infamy: 8
+    initialNationId: WEI
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_152
+    name: "\uB3D9\uB4F1"
+    grade: 4
+    power: 37
+    intel: 33
+    charm: 42
+    infamy: 15
+    initialNationId: WEI
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_153
+    name: "\uC0AC\uB9C8\uC5C4"
+    grade: 5
+    power: 20
+    intel: 20
+    charm: 19
+    infamy: 13
+    initialNationId: OTHERS
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_154
+    name: "\uC11C\uD569"
+    grade: 1
+    power: 96
+    intel: 100
+    charm: 98
+    infamy: 50
+    initialNationId: OTHERS
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_155
+    name: "\uC548\uC775"
+    grade: 3
+    power: 54
+    intel: 53
+    charm: 55
+    infamy: 20
+    initialNationId: WEI
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_156
+    name: "\uACE0\uCD08"
+    grade: 3
+    power: 65
+    intel: 54
+    charm: 54
+    infamy: 20
+    initialNationId: WU
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_157
+    name: "\uC7A5\uC6B1"
+    grade: 5
+    power: 25
+    intel: 21
+    charm: 11
+    infamy: 17
+    initialNationId: WU
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_158
+    name: "\uD669\uB4F1"
+    grade: 4
+    power: 36
+    intel: 37
+    charm: 31
+    infamy: 7
+    initialNationId: WU
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_159
+    name: "\uC655\uD0C1"
+    grade: 2
+    power: 73
+    intel: 70
+    charm: 78
+    infamy: 5
+    initialNationId: WEI
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_160
+    name: "\uACAC\uC758"
+    grade: 4
+    power: 39
+    intel: 37
+    charm: 36
+    infamy: 13
+    initialNationId: OTHERS
+    initialCastleId: C37
+    governorPortrait: {fileID: 0}
+  - id: U_161
+    name: "\uB9C8\uD604"
+    grade: 3
+    power: 65
+    intel: 61
+    charm: 56
+    infamy: 17
+    initialNationId: OTHERS
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_162
+    name: "\uC6D0\uC548"
+    grade: 4
+    power: 33
+    intel: 33
+    charm: 37
+    infamy: 19
+    initialNationId: OTHERS
+    initialCastleId: C45
+    governorPortrait: {fileID: 0}
+  - id: U_163
+    name: "\uACAC\uB4F1"
+    grade: 2
+    power: 78
+    intel: 72
+    charm: 74
+    infamy: 19
+    initialNationId: OTHERS
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_164
+    name: "\uBC95\uC219"
+    grade: 1
+    power: 100
+    intel: 99
+    charm: 90
+    infamy: 2
+    initialNationId: OTHERS
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_165
+    name: "\uC5C4\uD68C"
+    grade: 2
+    power: 76
+    intel: 76
+    charm: 84
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_166
+    name: "\uACFD\uD1B5"
+    grade: 3
+    power: 63
+    intel: 64
+    charm: 61
+    infamy: 4
+    initialNationId: WU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_167
+    name: "\uACAC\uC775"
+    grade: 2
+    power: 76
+    intel: 74
+    charm: 85
+    infamy: 7
+    initialNationId: WU
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_168
+    name: "\uBC29\uCDA9"
+    grade: 5
+    power: 22
+    intel: 16
+    charm: 17
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_169
+    name: "\uACAC\uAC00"
+    grade: 5
+    power: 24
+    intel: 16
+    charm: 13
+    infamy: 12
+    initialNationId: OTHERS
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_170
+    name: "\uB9C8\uD76C"
+    grade: 4
+    power: 44
+    intel: 44
+    charm: 38
+    infamy: 17
+    initialNationId: WEI
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_171
+    name: "\uAC15\uC220"
+    grade: 5
+    power: 10
+    intel: 22
+    charm: 18
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C42
+    governorPortrait: {fileID: 0}
+  - id: U_172
+    name: "\uC885\uAD81"
+    grade: 3
+    power: 51
+    intel: 61
+    charm: 62
+    infamy: 9
+    initialNationId: WU
+    initialCastleId: C45
+    governorPortrait: {fileID: 0}
+  - id: U_173
+    name: "\uBC95\uB3C8"
+    grade: 4
+    power: 35
+    intel: 30
+    charm: 40
+    infamy: 11
+    initialNationId: OTHERS
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_174
+    name: "\uB9C8\uB3C8"
+    grade: 3
+    power: 50
+    intel: 65
+    charm: 60
+    infamy: 5
+    initialNationId: SHU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_175
+    name: "\uD669\uD0C1"
+    grade: 2
+    power: 84
+    intel: 80
+    charm: 78
+    infamy: 2
+    initialNationId: WEI
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_176
+    name: "\uC720\uB78C"
+    grade: 4
+    power: 45
+    intel: 31
+    charm: 30
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_177
+    name: "\uC7A5\uB78C"
+    grade: 3
+    power: 62
+    intel: 55
+    charm: 54
+    infamy: 6
+    initialNationId: SHU
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_178
+    name: "\uB3D9\uD3EC"
+    grade: 4
+    power: 45
+    intel: 44
+    charm: 37
+    infamy: 2
+    initialNationId: OTHERS
+    initialCastleId: C45
+    governorPortrait: {fileID: 0}
+  - id: U_179
+    name: "\uC8FC\uD604"
+    grade: 3
+    power: 51
+    intel: 54
+    charm: 62
+    infamy: 13
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_180
+    name: "\uAC00\uB2F9"
+    grade: 4
+    power: 42
+    intel: 31
+    charm: 32
+    infamy: 27
+    initialNationId: WEI
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_181
+    name: "\uC870\uC5F0"
+    grade: 3
+    power: 63
+    intel: 65
+    charm: 62
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_182
+    name: "\uACFD\uC6B4"
+    grade: 5
+    power: 23
+    intel: 16
+    charm: 20
+    infamy: 20
+    initialNationId: WEI
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_183
+    name: "\uD55C\uB155"
+    grade: 3
+    power: 59
+    intel: 52
+    charm: 64
+    infamy: 3
+    initialNationId: WEI
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_184
+    name: "\uBB38\uC790"
+    grade: 2
+    power: 82
+    intel: 71
+    charm: 78
+    infamy: 1
+    initialNationId: WEI
+    initialCastleId: C45
+    governorPortrait: {fileID: 0}
+  - id: U_185
+    name: "\uD0DC\uC0AC\uC6B4"
+    grade: 5
+    power: 10
+    intel: 15
+    charm: 17
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_186
+    name: "\uC8FC\uB7C9"
+    grade: 2
+    power: 70
+    intel: 70
+    charm: 84
+    infamy: 75
+    initialNationId: WU
+    initialCastleId: C23
+    governorPortrait: {fileID: 0}
+  - id: U_187
+    name: "\uBCF4\uC6B0"
+    grade: 4
+    power: 36
+    intel: 36
+    charm: 42
+    infamy: 44
+    initialNationId: SHU
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_188
+    name: "\uC655\uB7C9"
+    grade: 5
+    power: 17
+    intel: 16
+    charm: 18
+    infamy: 33
+    initialNationId: OTHERS
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_189
+    name: "\uBB38\uC218"
+    grade: 1
+    power: 99
+    intel: 93
+    charm: 90
+    infamy: 47
+    initialNationId: OTHERS
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_190
+    name: "\uC0AC\uB9C8\uC560"
+    grade: 5
+    power: 11
+    intel: 13
+    charm: 15
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_191
+    name: "\uC721\uC775"
+    grade: 2
+    power: 83
+    intel: 78
+    charm: 78
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C19
+    governorPortrait: {fileID: 0}
+  - id: U_192
+    name: "\uB3D9\uD604"
+    grade: 5
+    power: 10
+    intel: 25
+    charm: 16
+    infamy: 20
+    initialNationId: SHU
+    initialCastleId: C34
+    governorPortrait: {fileID: 0}
+  - id: U_193
+    name: "\uD558\uD6C4\uC560"
+    grade: 4
+    power: 44
+    intel: 34
+    charm: 31
+    infamy: 34
+    initialNationId: WU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_194
+    name: "\uC81C\uAC08\uC6B0"
+    grade: 3
+    power: 62
+    intel: 54
+    charm: 65
+    infamy: 47
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_195
+    name: "\uC8FC\uC190"
+    grade: 2
+    power: 71
+    intel: 78
+    charm: 78
+    infamy: 19
+    initialNationId: WU
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_196
+    name: "\uD0DC\uC0AC\uD569"
+    grade: 3
+    power: 56
+    intel: 60
+    charm: 51
+    infamy: 12
+    initialNationId: SHU
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_197
+    name: "\uD558\uD6C4\uC6B0"
+    grade: 3
+    power: 51
+    intel: 52
+    charm: 64
+    infamy: 13
+    initialNationId: OTHERS
+    initialCastleId: C37
+    governorPortrait: {fileID: 0}
+  - id: U_198
+    name: "\uB178\uC220"
+    grade: 2
+    power: 80
+    intel: 82
+    charm: 72
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_199
+    name: "\uB178\uC6B1"
+    grade: 5
+    power: 25
+    intel: 10
+    charm: 17
+    infamy: 7
+    initialNationId: WU
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_200
+    name: "\uC655\uD76C"
+    grade: 5
+    power: 20
+    intel: 10
+    charm: 12
+    infamy: 3
+    initialNationId: OTHERS
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_201
+    name: "\uBC95\uC5F0"
+    grade: 5
+    power: 10
+    intel: 25
+    charm: 19
+    infamy: 0
+    initialNationId: OTHERS
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_202
+    name: "\uACAC\uB7C9"
+    grade: 3
+    power: 51
+    intel: 59
+    charm: 52
+    infamy: 9
+    initialNationId: SHU
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_203
+    name: "\uC548\uB4F1"
+    grade: 2
+    power: 85
+    intel: 84
+    charm: 79
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_204
+    name: "\uC8FC\uD669"
+    grade: 3
+    power: 63
+    intel: 52
+    charm: 52
+    infamy: 19
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_205
+    name: "\uC0AC\uB9C8\uB155"
+    grade: 5
+    power: 15
+    intel: 18
+    charm: 15
+    infamy: 43
+    initialNationId: WEI
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_206
+    name: "\uC7A5\uC775"
+    grade: 2
+    power: 78
+    intel: 85
+    charm: 76
+    infamy: 20
+    initialNationId: WU
+    initialCastleId: C24
+    governorPortrait: {fileID: 0}
+  - id: U_207
+    name: "\uC721\uAD81"
+    grade: 2
+    power: 74
+    intel: 83
+    charm: 78
+    infamy: 2
+    initialNationId: OTHERS
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_208
+    name: "\uBC95\uC18C"
+    grade: 1
+    power: 89
+    intel: 100
+    charm: 89
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_209
+    name: "\uC885\uB155"
+    grade: 4
+    power: 39
+    intel: 39
+    charm: 35
+    infamy: 1
+    initialNationId: SHU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_210
+    name: "\uAC00\uD569"
+    grade: 4
+    power: 34
+    intel: 35
+    charm: 39
+    infamy: 0
+    initialNationId: OTHERS
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_211
+    name: "\uAC00\uC18C"
+    grade: 2
+    power: 80
+    intel: 71
+    charm: 76
+    infamy: 65
+    initialNationId: SHU
+    initialCastleId: C12
+    governorPortrait: {fileID: 0}
+  - id: U_212
+    name: "\uC815\uBCF4\uCDA9"
+    grade: 4
+    power: 40
+    intel: 45
+    charm: 30
+    infamy: 10
+    initialNationId: SHU
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_213
+    name: "\uAC15\uCDA9"
+    grade: 3
+    power: 61
+    intel: 51
+    charm: 54
+    infamy: 10
+    initialNationId: WU
+    initialCastleId: C44
+    governorPortrait: {fileID: 0}
+  - id: U_214
+    name: "\uACAC\uAD81"
+    grade: 4
+    power: 41
+    intel: 42
+    charm: 41
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_215
+    name: "\uC720\uC790"
+    grade: 3
+    power: 63
+    intel: 55
+    charm: 53
+    infamy: 5
+    initialNationId: WEI
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_216
+    name: "\uC81C\uAC08\uD669"
+    grade: 3
+    power: 51
+    intel: 61
+    charm: 53
+    infamy: 3
+    initialNationId: WEI
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_217
+    name: "\uC548\uD1B5"
+    grade: 4
+    power: 35
+    intel: 41
+    charm: 32
+    infamy: 10
+    initialNationId: WU
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_218
+    name: "\uC774\uD76C"
+    grade: 5
+    power: 16
+    intel: 22
+    charm: 11
+    infamy: 7
+    initialNationId: OTHERS
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_219
+    name: "\uACAC\uD0C1"
+    grade: 3
+    power: 57
+    intel: 60
+    charm: 61
+    infamy: 14
+    initialNationId: WU
+    initialCastleId: C14
+    governorPortrait: {fileID: 0}
+  - id: U_220
+    name: "\uC6D0\uC6B1"
+    grade: 4
+    power: 36
+    intel: 39
+    charm: 30
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_221
+    name: "\uAC00\uC560"
+    grade: 5
+    power: 21
+    intel: 11
+    charm: 23
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_222
+    name: "\uC870\uC220"
+    grade: 3
+    power: 55
+    intel: 53
+    charm: 57
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_223
+    name: "\uC81C\uAC08\uD3C9"
+    grade: 4
+    power: 34
+    intel: 39
+    charm: 40
+    infamy: 34
+    initialNationId: SHU
+    initialCastleId: C14
+    governorPortrait: {fileID: 0}
+  - id: U_224
+    name: "\uC870\uAC00"
+    grade: 3
+    power: 50
+    intel: 52
+    charm: 60
+    infamy: 32
+    initialNationId: OTHERS
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_225
+    name: "\uC870\uB4F1"
+    grade: 1
+    power: 90
+    intel: 88
+    charm: 87
+    infamy: 17
+    initialNationId: WEI
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_226
+    name: "\uB178\uB78C"
+    grade: 2
+    power: 73
+    intel: 85
+    charm: 71
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_227
+    name: "\uC815\uBCF4\uB78C"
+    grade: 2
+    power: 85
+    intel: 77
+    charm: 83
+    infamy: 69
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_228
+    name: "\uAC00\uD3EC"
+    grade: 4
+    power: 44
+    intel: 38
+    charm: 34
+    infamy: 13
+    initialNationId: OTHERS
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_229
+    name: "\uC81C\uAC08\uC720"
+    grade: 3
+    power: 51
+    intel: 57
+    charm: 65
+    infamy: 14
+    initialNationId: OTHERS
+    initialCastleId: C24
+    governorPortrait: {fileID: 0}
+  - id: U_230
+    name: "\uD558\uD6C4\uC190"
+    grade: 2
+    power: 72
+    intel: 74
+    charm: 83
+    infamy: 14
+    initialNationId: SHU
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_231
+    name: "\uBC95\uC720"
+    grade: 4
+    power: 31
+    intel: 33
+    charm: 35
+    infamy: 11
+    initialNationId: WEI
+    initialCastleId: C22
+    governorPortrait: {fileID: 0}
+  - id: U_232
+    name: "\uAC10\uCDA9"
+    grade: 4
+    power: 34
+    intel: 43
+    charm: 39
+    infamy: 19
+    initialNationId: OTHERS
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_233
+    name: "\uC720\uC18C"
+    grade: 3
+    power: 65
+    intel: 58
+    charm: 53
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_234
+    name: "\uACAC\uD604"
+    grade: 4
+    power: 45
+    intel: 42
+    charm: 40
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_235
+    name: "\uBCF4\uC190"
+    grade: 5
+    power: 20
+    intel: 23
+    charm: 19
+    infamy: 14
+    initialNationId: OTHERS
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_236
+    name: "\uBC29\uD669"
+    grade: 4
+    power: 38
+    intel: 40
+    charm: 39
+    infamy: 16
+    initialNationId: WEI
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_237
+    name: "\uAD00\uD669"
+    grade: 5
+    power: 24
+    intel: 20
+    charm: 19
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C09
+    governorPortrait: {fileID: 0}
+  - id: U_238
+    name: "\uC6D0\uD0C1"
+    grade: 3
+    power: 58
+    intel: 50
+    charm: 59
+    infamy: 2
+    initialNationId: WEI
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_239
+    name: "\uBCF4\uD1B5"
+    grade: 2
+    power: 78
+    intel: 78
+    charm: 74
+    infamy: 4
+    initialNationId: WU
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_240
+    name: "\uC7A5\uC548"
+    grade: 2
+    power: 71
+    intel: 78
+    charm: 82
+    infamy: 6
+    initialNationId: WEI
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_241
+    name: "\uC721\uD76C"
+    grade: 5
+    power: 15
+    intel: 16
+    charm: 19
+    infamy: 27
+    initialNationId: SHU
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_242
+    name: "\uC5EC\uD569"
+    grade: 4
+    power: 41
+    intel: 35
+    charm: 32
+    infamy: 8
+    initialNationId: WEI
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_243
+    name: "\uB9C8\uD3C9"
+    grade: 4
+    power: 32
+    intel: 42
+    charm: 30
+    infamy: 19
+    initialNationId: WEI
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_244
+    name: "\uC885\uC18C"
+    grade: 4
+    power: 31
+    intel: 30
+    charm: 45
+    infamy: 1
+    initialNationId: SHU
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_245
+    name: "\uC21C\uC5F0"
+    grade: 2
+    power: 74
+    intel: 79
+    charm: 72
+    infamy: 1
+    initialNationId: WU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_246
+    name: "\uC7A5\uD3C9"
+    grade: 1
+    power: 100
+    intel: 88
+    charm: 98
+    infamy: 15
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_247
+    name: "\uAC00\uCD94"
+    grade: 4
+    power: 33
+    intel: 37
+    charm: 33
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_248
+    name: "\uD558\uD6C4\uD76C"
+    grade: 2
+    power: 70
+    intel: 78
+    charm: 80
+    infamy: 15
+    initialNationId: OTHERS
+    initialCastleId: C23
+    governorPortrait: {fileID: 0}
+  - id: U_249
+    name: "\uC720\uC5C4"
+    grade: 4
+    power: 40
+    intel: 42
+    charm: 32
+    infamy: 11
+    initialNationId: WEI
+    initialCastleId: C24
+    governorPortrait: {fileID: 0}
+  - id: U_250
+    name: "\uB178\uCD94"
+    grade: 4
+    power: 41
+    intel: 40
+    charm: 37
+    infamy: 52
+    initialNationId: OTHERS
+    initialCastleId: C21
+    governorPortrait: {fileID: 0}
+  - id: U_251
+    name: "\uC655\uC815"
+    grade: 5
+    power: 21
+    intel: 25
+    charm: 19
+    infamy: 2
+    initialNationId: WU
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_252
+    name: "\uACE0\uAD81"
+    grade: 3
+    power: 64
+    intel: 54
+    charm: 50
+    infamy: 32
+    initialNationId: SHU
+    initialCastleId: C23
+    governorPortrait: {fileID: 0}
+  - id: U_253
+    name: "\uBC95\uCDA9"
+    grade: 3
+    power: 60
+    intel: 63
+    charm: 65
+    infamy: 3
+    initialNationId: SHU
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_254
+    name: "\uB9C8\uC6B1"
+    grade: 2
+    power: 82
+    intel: 73
+    charm: 71
+    infamy: 95
+    initialNationId: SHU
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_255
+    name: "\uC6D0\uB3C8"
+    grade: 3
+    power: 52
+    intel: 50
+    charm: 55
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_256
+    name: "\uC774\uB3C8"
+    grade: 4
+    power: 38
+    intel: 32
+    charm: 45
+    infamy: 77
+    initialNationId: OTHERS
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_257
+    name: "\uB3D9\uC758"
+    grade: 2
+    power: 70
+    intel: 71
+    charm: 84
+    infamy: 12
+    initialNationId: WEI
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_258
+    name: "\uC655\uC6B0"
+    grade: 3
+    power: 62
+    intel: 58
+    charm: 50
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_259
+    name: "\uC704\uD6C4"
+    grade: 3
+    power: 61
+    intel: 51
+    charm: 54
+    infamy: 13
+    initialNationId: SHU
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_260
+    name: "\uD0DC\uC0AC\uD6C4"
+    grade: 4
+    power: 31
+    intel: 32
+    charm: 40
+    infamy: 14
+    initialNationId: OTHERS
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_261
+    name: "\uAC00\uAC00"
+    grade: 1
+    power: 85
+    intel: 95
+    charm: 94
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_262
+    name: "\uC870\uB155"
+    grade: 2
+    power: 78
+    intel: 76
+    charm: 77
+    infamy: 98
+    initialNationId: SHU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_263
+    name: "\uBC95\uC815"
+    grade: 3
+    power: 55
+    intel: 64
+    charm: 56
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C28
+    governorPortrait: {fileID: 0}
+  - id: U_264
+    name: "\uC0AC\uB9C8\uB3C8"
+    grade: 4
+    power: 30
+    intel: 44
+    charm: 41
+    infamy: 79
+    initialNationId: OTHERS
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_265
+    name: "\uD669\uD3EC"
+    grade: 3
+    power: 59
+    intel: 56
+    charm: 62
+    infamy: 34
+    initialNationId: OTHERS
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_266
+    name: "\uC5C4\uC720"
+    grade: 5
+    power: 10
+    intel: 15
+    charm: 24
+    infamy: 19
+    initialNationId: SHU
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_267
+    name: "\uACFD\uB7C9"
+    grade: 5
+    power: 13
+    intel: 23
+    charm: 24
+    infamy: 10
+    initialNationId: WEI
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_268
+    name: "\uC655\uC775"
+    grade: 3
+    power: 50
+    intel: 64
+    charm: 63
+    infamy: 5
+    initialNationId: OTHERS
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_269
+    name: "\uBB38\uC815"
+    grade: 2
+    power: 70
+    intel: 73
+    charm: 75
+    infamy: 8
+    initialNationId: WEI
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_270
+    name: "\uC870\uC18C"
+    grade: 4
+    power: 39
+    intel: 31
+    charm: 39
+    infamy: 10
+    initialNationId: OTHERS
+    initialCastleId: C45
+    governorPortrait: {fileID: 0}
+  - id: U_271
+    name: "\uC21C\uC190"
+    grade: 5
+    power: 20
+    intel: 18
+    charm: 12
+    infamy: 15
+    initialNationId: SHU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_272
+    name: "\uC11C\uD3C9"
+    grade: 1
+    power: 86
+    intel: 94
+    charm: 95
+    infamy: 4
+    initialNationId: SHU
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_273
+    name: "\uC815\uBCF4\uD569"
+    grade: 2
+    power: 85
+    intel: 75
+    charm: 83
+    infamy: 59
+    initialNationId: WU
+    initialCastleId: C06
+    governorPortrait: {fileID: 0}
+  - id: U_274
+    name: "\uBCF4\uBE44"
+    grade: 4
+    power: 32
+    intel: 32
+    charm: 39
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_275
+    name: "\uC7A5\uB3C8"
+    grade: 3
+    power: 50
+    intel: 64
+    charm: 56
+    infamy: 12
+    initialNationId: WEI
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_276
+    name: "\uC8FC\uC5F0"
+    grade: 2
+    power: 79
+    intel: 80
+    charm: 85
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_277
+    name: "\uC0AC\uB9C8\uD604"
+    grade: 4
+    power: 35
+    intel: 40
+    charm: 30
+    infamy: 78
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_278
+    name: "\uC721\uC548"
+    grade: 4
+    power: 33
+    intel: 37
+    charm: 33
+    infamy: 26
+    initialNationId: WEI
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_279
+    name: "\uC9C4\uAC00"
+    grade: 5
+    power: 19
+    intel: 13
+    charm: 18
+    infamy: 13
+    initialNationId: WU
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_280
+    name: "\uBC29\uD0C1"
+    grade: 3
+    power: 51
+    intel: 53
+    charm: 51
+    infamy: 17
+    initialNationId: SHU
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_281
+    name: "\uC548\uC720"
+    grade: 3
+    power: 57
+    intel: 52
+    charm: 53
+    infamy: 15
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_282
+    name: "\uD669\uC6B0"
+    grade: 4
+    power: 43
+    intel: 35
+    charm: 45
+    infamy: 4
+    initialNationId: WU
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_283
+    name: "\uAD00\uB7C9"
+    grade: 5
+    power: 17
+    intel: 20
+    charm: 16
+    infamy: 8
+    initialNationId: OTHERS
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_284
+    name: "\uC6D0\uD68C"
+    grade: 3
+    power: 56
+    intel: 62
+    charm: 52
+    infamy: 3
+    initialNationId: SHU
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_285
+    name: "\uBCF4\uCDA9"
+    grade: 1
+    power: 93
+    intel: 87
+    charm: 94
+    infamy: 14
+    initialNationId: OTHERS
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_286
+    name: "\uBB38\uC219"
+    grade: 4
+    power: 44
+    intel: 40
+    charm: 40
+    infamy: 14
+    initialNationId: WU
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_287
+    name: "\uD0DC\uC0AC\uB7C9"
+    grade: 4
+    power: 33
+    intel: 42
+    charm: 41
+    infamy: 17
+    initialNationId: OTHERS
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_288
+    name: "\uC0AC\uB9C8\uC5F0"
+    grade: 2
+    power: 79
+    intel: 74
+    charm: 82
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_289
+    name: "\uAC10\uC18C"
+    grade: 5
+    power: 17
+    intel: 21
+    charm: 23
+    infamy: 6
+    initialNationId: OTHERS
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_290
+    name: "\uBCF4\uC218"
+    grade: 2
+    power: 74
+    intel: 70
+    charm: 78
+    infamy: 19
+    initialNationId: WU
+    initialCastleId: C37
+    governorPortrait: {fileID: 0}
+  - id: U_291
+    name: "\uC885\uC5F0"
+    grade: 3
+    power: 65
+    intel: 54
+    charm: 63
+    infamy: 8
+    initialNationId: WU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_292
+    name: "\uACAC\uD3EC"
+    grade: 3
+    power: 62
+    intel: 51
+    charm: 62
+    infamy: 19
+    initialNationId: OTHERS
+    initialCastleId: C29
+    governorPortrait: {fileID: 0}
+  - id: U_293
+    name: "\uBC29\uD569"
+    grade: 1
+    power: 96
+    intel: 92
+    charm: 87
+    infamy: 13
+    initialNationId: WU
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_294
+    name: "\uB9C8\uD6C4"
+    grade: 3
+    power: 65
+    intel: 50
+    charm: 53
+    infamy: 12
+    initialNationId: WEI
+    initialCastleId: C12
+    governorPortrait: {fileID: 0}
+  - id: U_295
+    name: "\uD669\uD669"
+    grade: 3
+    power: 51
+    intel: 51
+    charm: 55
+    infamy: 89
+    initialNationId: SHU
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_296
+    name: "\uB178\uD669"
+    grade: 4
+    power: 43
+    intel: 39
+    charm: 39
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_297
+    name: "\uC704\uC815"
+    grade: 4
+    power: 40
+    intel: 40
+    charm: 33
+    infamy: 8
+    initialNationId: WU
+    initialCastleId: C34
+    governorPortrait: {fileID: 0}
+  - id: U_298
+    name: "\uD558\uD6C4\uC6B4"
+    grade: 4
+    power: 31
+    intel: 35
+    charm: 33
+    infamy: 87
+    initialNationId: OTHERS
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_299
+    name: "\uC655\uD6C4"
+    grade: 3
+    power: 58
+    intel: 60
+    charm: 54
+    infamy: 5
+    initialNationId: WEI
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_300
+    name: "\uD669\uC5C4"
+    grade: 3
+    power: 57
+    intel: 63
+    charm: 60
+    infamy: 52
+    initialNationId: SHU
+    initialCastleId: C37
+    governorPortrait: {fileID: 0}
+  - id: U_301
+    name: "\uC720\uD3C9"
+    grade: 5
+    power: 17
+    intel: 15
+    charm: 21
+    infamy: 66
+    initialNationId: WU
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_302
+    name: "\uACE0\uB2F9"
+    grade: 4
+    power: 42
+    intel: 42
+    charm: 32
+    infamy: 20
+    initialNationId: SHU
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_303
+    name: "\uBC29\uB7C9"
+    grade: 4
+    power: 38
+    intel: 33
+    charm: 38
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_304
+    name: "\uC81C\uAC08\uC18C"
+    grade: 1
+    power: 100
+    intel: 93
+    charm: 89
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_305
+    name: "\uC21C\uC560"
+    grade: 3
+    power: 51
+    intel: 65
+    charm: 51
+    infamy: 12
+    initialNationId: WEI
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_306
+    name: "\uB178\uC815"
+    grade: 2
+    power: 84
+    intel: 76
+    charm: 83
+    infamy: 8
+    initialNationId: WU
+    initialCastleId: C19
+    governorPortrait: {fileID: 0}
+  - id: U_307
+    name: "\uC7A5\uD569"
+    grade: 5
+    power: 15
+    intel: 10
+    charm: 19
+    infamy: 15
+    initialNationId: WU
+    initialCastleId: C19
+    governorPortrait: {fileID: 0}
+  - id: U_308
+    name: "\uC704\uC190"
+    grade: 3
+    power: 65
+    intel: 52
+    charm: 62
+    infamy: 13
+    initialNationId: WEI
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_309
+    name: "\uC721\uB78C"
+    grade: 4
+    power: 32
+    intel: 32
+    charm: 40
+    infamy: 3
+    initialNationId: SHU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_310
+    name: "\uACFD\uCD08"
+    grade: 5
+    power: 24
+    intel: 11
+    charm: 13
+    infamy: 9
+    initialNationId: WEI
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_311
+    name: "\uD558\uD6C4\uAD81"
+    grade: 3
+    power: 60
+    intel: 64
+    charm: 63
+    infamy: 17
+    initialNationId: WEI
+    initialCastleId: C32
+    governorPortrait: {fileID: 0}
+  - id: U_312
+    name: "\uBCF4\uCD94"
+    grade: 2
+    power: 75
+    intel: 82
+    charm: 78
+    infamy: 16
+    initialNationId: WEI
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_313
+    name: "\uC774\uC815"
+    grade: 4
+    power: 39
+    intel: 37
+    charm: 43
+    infamy: 4
+    initialNationId: WU
+    initialCastleId: C35
+    governorPortrait: {fileID: 0}
+  - id: U_314
+    name: "\uC7A5\uC815"
+    grade: 2
+    power: 85
+    intel: 80
+    charm: 85
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_315
+    name: "\uC81C\uAC08\uCD94"
+    grade: 5
+    power: 17
+    intel: 25
+    charm: 23
+    infamy: 7
+    initialNationId: WEI
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_316
+    name: "\uC190\uD76C"
+    grade: 4
+    power: 31
+    intel: 36
+    charm: 40
+    infamy: 32
+    initialNationId: SHU
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_317
+    name: "\uC721\uC5F0"
+    grade: 3
+    power: 57
+    intel: 61
+    charm: 52
+    infamy: 8
+    initialNationId: WU
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_318
+    name: "\uB9C8\uC6B0"
+    grade: 3
+    power: 55
+    intel: 59
+    charm: 59
+    infamy: 47
+    initialNationId: WU
+    initialCastleId: C19
+    governorPortrait: {fileID: 0}
+  - id: U_319
+    name: "\uC704\uD3EC"
+    grade: 1
+    power: 94
+    intel: 89
+    charm: 92
+    infamy: 3
+    initialNationId: WU
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_320
+    name: "\uC190\uD6C4"
+    grade: 2
+    power: 76
+    intel: 71
+    charm: 72
+    infamy: 19
+    initialNationId: OTHERS
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_321
+    name: "\uBC95\uC758"
+    grade: 4
+    power: 35
+    intel: 45
+    charm: 36
+    infamy: 6
+    initialNationId: WU
+    initialCastleId: C34
+    governorPortrait: {fileID: 0}
+  - id: U_322
+    name: "\uC21C\uCD94"
+    grade: 3
+    power: 63
+    intel: 52
+    charm: 53
+    infamy: 98
+    initialNationId: WU
+    initialCastleId: C32
+    governorPortrait: {fileID: 0}
+  - id: U_323
+    name: "\uACAC\uC5C4"
+    grade: 4
+    power: 36
+    intel: 35
+    charm: 33
+    infamy: 6
+    initialNationId: WEI
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_324
+    name: "\uC5EC\uCD94"
+    grade: 1
+    power: 95
+    intel: 90
+    charm: 99
+    infamy: 2
+    initialNationId: WU
+    initialCastleId: C19
+    governorPortrait: {fileID: 0}
+  - id: U_325
+    name: "\uBB38\uD68C"
+    grade: 2
+    power: 77
+    intel: 76
+    charm: 83
+    infamy: 17
+    initialNationId: WEI
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_326
+    name: "\uBCF4\uC560"
+    grade: 4
+    power: 37
+    intel: 32
+    charm: 39
+    infamy: 8
+    initialNationId: WU
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_327
+    name: "\uC5EC\uC18C"
+    grade: 3
+    power: 57
+    intel: 52
+    charm: 57
+    infamy: 6
+    initialNationId: WU
+    initialCastleId: C24
+    governorPortrait: {fileID: 0}
+  - id: U_328
+    name: "\uC885\uC815"
+    grade: 3
+    power: 62
+    intel: 63
+    charm: 65
+    infamy: 94
+    initialNationId: OTHERS
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_329
+    name: "\uC5C4\uC5C4"
+    grade: 4
+    power: 39
+    intel: 40
+    charm: 31
+    infamy: 99
+    initialNationId: SHU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_330
+    name: "\uB4F1\uD68C"
+    grade: 4
+    power: 33
+    intel: 37
+    charm: 39
+    infamy: 8
+    initialNationId: OTHERS
+    initialCastleId: C28
+    governorPortrait: {fileID: 0}
+  - id: U_331
+    name: "\uD669\uCD08"
+    grade: 4
+    power: 33
+    intel: 42
+    charm: 31
+    infamy: 1
+    initialNationId: OTHERS
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_332
+    name: "\uC815\uBCF4\uC6B0"
+    grade: 3
+    power: 56
+    intel: 50
+    charm: 63
+    infamy: 7
+    initialNationId: WU
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_333
+    name: "\uAC10\uC6B4"
+    grade: 2
+    power: 76
+    intel: 70
+    charm: 83
+    infamy: 7
+    initialNationId: OTHERS
+    initialCastleId: C09
+    governorPortrait: {fileID: 0}
+  - id: U_334
+    name: "\uC21C\uAD81"
+    grade: 1
+    power: 86
+    intel: 94
+    charm: 94
+    infamy: 4
+    initialNationId: SHU
+    initialCastleId: C47
+    governorPortrait: {fileID: 0}
+  - id: U_335
+    name: "\uC5C4\uB3C8"
+    grade: 3
+    power: 61
+    intel: 54
+    charm: 62
+    infamy: 37
+    initialNationId: WU
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_336
+    name: "\uC7A5\uC6B4"
+    grade: 5
+    power: 23
+    intel: 13
+    charm: 14
+    infamy: 13
+    initialNationId: OTHERS
+    initialCastleId: C14
+    governorPortrait: {fileID: 0}
+  - id: U_337
+    name: "\uAC00\uC5F0"
+    grade: 3
+    power: 63
+    intel: 57
+    charm: 52
+    infamy: 13
+    initialNationId: SHU
+    initialCastleId: C25
+    governorPortrait: {fileID: 0}
+  - id: U_338
+    name: "\uD0DC\uC0AC\uD669"
+    grade: 5
+    power: 19
+    intel: 22
+    charm: 16
+    infamy: 0
+    initialNationId: WEI
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_339
+    name: "\uB178\uD3C9"
+    grade: 4
+    power: 42
+    intel: 40
+    charm: 31
+    infamy: 92
+    initialNationId: OTHERS
+    initialCastleId: C31
+    governorPortrait: {fileID: 0}
+  - id: U_340
+    name: "\uBC95\uD76C"
+    grade: 4
+    power: 34
+    intel: 45
+    charm: 42
+    infamy: 17
+    initialNationId: WU
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_341
+    name: "\uAC00\uB7C9"
+    grade: 4
+    power: 30
+    intel: 43
+    charm: 34
+    infamy: 4
+    initialNationId: SHU
+    initialCastleId: C50
+    governorPortrait: {fileID: 0}
+  - id: U_342
+    name: "\uB3D9\uC6B4"
+    grade: 4
+    power: 30
+    intel: 34
+    charm: 39
+    infamy: 21
+    initialNationId: SHU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_343
+    name: "\uC815\uBCF4\uD3EC"
+    grade: 2
+    power: 73
+    intel: 82
+    charm: 82
+    infamy: 9
+    initialNationId: OTHERS
+    initialCastleId: C36
+    governorPortrait: {fileID: 0}
+  - id: U_344
+    name: "\uB9C8\uB7C9"
+    grade: 3
+    power: 64
+    intel: 56
+    charm: 51
+    infamy: 30
+    initialNationId: OTHERS
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_345
+    name: "\uC774\uAD81"
+    grade: 4
+    power: 44
+    intel: 33
+    charm: 43
+    infamy: 1
+    initialNationId: WEI
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_346
+    name: "\uC870\uD0C1"
+    grade: 4
+    power: 35
+    intel: 36
+    charm: 37
+    infamy: 10
+    initialNationId: OTHERS
+    initialCastleId: C16
+    governorPortrait: {fileID: 0}
+  - id: U_347
+    name: "\uACE0\uAC00"
+    grade: 4
+    power: 42
+    intel: 33
+    charm: 39
+    infamy: 7
+    initialNationId: WEI
+    initialCastleId: C32
+    governorPortrait: {fileID: 0}
+  - id: U_348
+    name: "\uC720\uC560"
+    grade: 5
+    power: 23
+    intel: 10
+    charm: 25
+    infamy: 8
+    initialNationId: WEI
+    initialCastleId: C26
+    governorPortrait: {fileID: 0}
+  - id: U_349
+    name: "\uC190\uD3EC"
+    grade: 5
+    power: 12
+    intel: 18
+    charm: 17
+    infamy: 6
+    initialNationId: WEI
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_350
+    name: "\uC9C4\uC548"
+    grade: 5
+    power: 13
+    intel: 21
+    charm: 10
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_351
+    name: "\uC21C\uC6B4"
+    grade: 3
+    power: 56
+    intel: 57
+    charm: 57
+    infamy: 16
+    initialNationId: OTHERS
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_352
+    name: "\uAD00\uC775"
+    grade: 2
+    power: 79
+    intel: 74
+    charm: 74
+    infamy: 18
+    initialNationId: OTHERS
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_353
+    name: "\uACFD\uC5F0"
+    grade: 3
+    power: 55
+    intel: 55
+    charm: 50
+    infamy: 68
+    initialNationId: SHU
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_354
+    name: "\uC704\uD68C"
+    grade: 4
+    power: 30
+    intel: 37
+    charm: 42
+    infamy: 0
+    initialNationId: WU
+    initialCastleId: C41
+    governorPortrait: {fileID: 0}
+  - id: U_355
+    name: "\uC21C\uC219"
+    grade: 2
+    power: 71
+    intel: 75
+    charm: 78
+    infamy: 20
+    initialNationId: OTHERS
+    initialCastleId: C43
+    governorPortrait: {fileID: 0}
+  - id: U_356
+    name: "\uC7A5\uAC00"
+    grade: 4
+    power: 42
+    intel: 36
+    charm: 32
+    infamy: 15
+    initialNationId: OTHERS
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_357
+    name: "\uD669\uC5F0"
+    grade: 5
+    power: 17
+    intel: 20
+    charm: 23
+    infamy: 12
+    initialNationId: SHU
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_358
+    name: "\uC0AC\uB9C8\uCD08"
+    grade: 4
+    power: 41
+    intel: 37
+    charm: 36
+    infamy: 3
+    initialNationId: WU
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_359
+    name: "\uC655\uD604"
+    grade: 4
+    power: 44
+    intel: 41
+    charm: 37
+    infamy: 10
+    initialNationId: WU
+    initialCastleId: C03
+    governorPortrait: {fileID: 0}
+  - id: U_360
+    name: "\uC5EC\uD68C"
+    grade: 4
+    power: 36
+    intel: 32
+    charm: 37
+    infamy: 4
+    initialNationId: OTHERS
+    initialCastleId: C11
+    governorPortrait: {fileID: 0}
+  - id: U_361
+    name: "\uC655\uC790"
+    grade: 2
+    power: 79
+    intel: 80
+    charm: 78
+    infamy: 14
+    initialNationId: SHU
+    initialCastleId: C24
+    governorPortrait: {fileID: 0}
+  - id: U_362
+    name: "\uC190\uB155"
+    grade: 2
+    power: 75
+    intel: 75
+    charm: 74
+    infamy: 11
+    initialNationId: SHU
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_363
+    name: "\uB4F1\uD569"
+    grade: 3
+    power: 55
+    intel: 64
+    charm: 64
+    infamy: 6
+    initialNationId: WU
+    initialCastleId: C32
+    governorPortrait: {fileID: 0}
+  - id: U_364
+    name: "\uBC29\uD604"
+    grade: 5
+    power: 17
+    intel: 24
+    charm: 23
+    infamy: 10
+    initialNationId: WEI
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_365
+    name: "\uC5C4\uC219"
+    grade: 4
+    power: 37
+    intel: 37
+    charm: 34
+    infamy: 11
+    initialNationId: OTHERS
+    initialCastleId: C39
+    governorPortrait: {fileID: 0}
+  - id: U_366
+    name: "\uC720\uD76C"
+    grade: 3
+    power: 61
+    intel: 57
+    charm: 55
+    infamy: 9
+    initialNationId: WU
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_367
+    name: "\uAC00\uAD81"
+    grade: 3
+    power: 62
+    intel: 64
+    charm: 56
+    infamy: 9
+    initialNationId: WU
+    initialCastleId: C47
+    governorPortrait: {fileID: 0}
+  - id: U_368
+    name: "\uAC00\uCDA9"
+    grade: 4
+    power: 34
+    intel: 36
+    charm: 37
+    infamy: 18
+    initialNationId: SHU
+    initialCastleId: C04
+    governorPortrait: {fileID: 0}
+  - id: U_369
+    name: "\uB9C8\uC790"
+    grade: 2
+    power: 84
+    intel: 76
+    charm: 77
+    infamy: 17
+    initialNationId: SHU
+    initialCastleId: C10
+    governorPortrait: {fileID: 0}
+  - id: U_370
+    name: "\uB3D9\uCD94"
+    grade: 1
+    power: 93
+    intel: 96
+    charm: 91
+    infamy: 18
+    initialNationId: WU
+    initialCastleId: C20
+    governorPortrait: {fileID: 0}
+  - id: U_371
+    name: "\uBB38\uC6B0"
+    grade: 4
+    power: 34
+    intel: 43
+    charm: 34
+    infamy: 14
+    initialNationId: WU
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_372
+    name: "\uC870\uAD81"
+    grade: 4
+    power: 37
+    intel: 40
+    charm: 37
+    infamy: 10
+    initialNationId: SHU
+    initialCastleId: C09
+    governorPortrait: {fileID: 0}
+  - id: U_373
+    name: "\uB3D9\uB3C8"
+    grade: 4
+    power: 41
+    intel: 44
+    charm: 36
+    infamy: 10
+    initialNationId: WEI
+    initialCastleId: C17
+    governorPortrait: {fileID: 0}
+  - id: U_374
+    name: "\uACE0\uB78C"
+    grade: 2
+    power: 74
+    intel: 79
+    charm: 71
+    infamy: 16
+    initialNationId: WU
+    initialCastleId: C23
+    governorPortrait: {fileID: 0}
+  - id: U_375
+    name: "\uC6D0\uCD08"
+    grade: 4
+    power: 30
+    intel: 30
+    charm: 31
+    infamy: 4
+    initialNationId: WEI
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_376
+    name: "\uC9C4\uD3EC"
+    grade: 5
+    power: 20
+    intel: 12
+    charm: 17
+    infamy: 84
+    initialNationId: WEI
+    initialCastleId: C33
+    governorPortrait: {fileID: 0}
+  - id: U_377
+    name: "\uBC29\uB155"
+    grade: 1
+    power: 86
+    intel: 90
+    charm: 94
+    infamy: 3
+    initialNationId: OTHERS
+    initialCastleId: C30
+    governorPortrait: {fileID: 0}
+  - id: U_378
+    name: "\uAC15\uC6B0"
+    grade: 1
+    power: 90
+    intel: 97
+    charm: 95
+    infamy: 12
+    initialNationId: SHU
+    initialCastleId: C14
+    governorPortrait: {fileID: 0}
+  - id: U_379
+    name: "\uB3D9\uB7C9"
+    grade: 4
+    power: 36
+    intel: 45
+    charm: 42
+    infamy: 60
+    initialNationId: WU
+    initialCastleId: C42
+    governorPortrait: {fileID: 0}
+  - id: U_380
+    name: "\uC721\uAC00"
+    grade: 2
+    power: 78
+    intel: 81
+    charm: 80
+    infamy: 7
+    initialNationId: SHU
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_381
+    name: "\uACE0\uC720"
+    grade: 5
+    power: 18
+    intel: 11
+    charm: 22
+    infamy: 16
+    initialNationId: SHU
+    initialCastleId: C18
+    governorPortrait: {fileID: 0}
+  - id: U_382
+    name: "\uD55C\uC548"
+    grade: 3
+    power: 60
+    intel: 54
+    charm: 61
+    infamy: 4
+    initialNationId: WEI
+    initialCastleId: C08
+    governorPortrait: {fileID: 0}
+  - id: U_383
+    name: "\uD0DC\uC0AC\uC5C4"
+    grade: 5
+    power: 13
+    intel: 25
+    charm: 17
+    infamy: 2
+    initialNationId: OTHERS
+    initialCastleId: C12
+    governorPortrait: {fileID: 0}
+  - id: U_384
+    name: "\uC7A5\uD0C1"
+    grade: 1
+    power: 100
+    intel: 87
+    charm: 100
+    infamy: 18
+    initialNationId: SHU
+    initialCastleId: C13
+    governorPortrait: {fileID: 0}
+  - id: U_385
+    name: "\uD669\uB3C8"
+    grade: 5
+    power: 23
+    intel: 22
+    charm: 15
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C05
+    governorPortrait: {fileID: 0}
+  - id: U_386
+    name: "\uB4F1\uC5F0"
+    grade: 3
+    power: 51
+    intel: 56
+    charm: 52
+    infamy: 7
+    initialNationId: WEI
+    initialCastleId: C40
+    governorPortrait: {fileID: 0}
+  - id: U_387
+    name: "\uC8FC\uB155"
+    grade: 3
+    power: 51
+    intel: 59
+    charm: 52
+    infamy: 11
+    initialNationId: WEI
+    initialCastleId: C49
+    governorPortrait: {fileID: 0}
+  - id: U_388
+    name: "\uC21C\uB2F9"
+    grade: 3
+    power: 64
+    intel: 58
+    charm: 54
+    infamy: 10
+    initialNationId: WEI
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
+  - id: U_389
+    name: "\uC655\uC190"
+    grade: 4
+    power: 44
+    intel: 40
+    charm: 34
+    infamy: 11
+    initialNationId: WU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_390
+    name: "\uC5EC\uAD81"
+    grade: 4
+    power: 37
+    intel: 32
+    charm: 39
+    infamy: 12
+    initialNationId: SHU
+    initialCastleId: C48
+    governorPortrait: {fileID: 0}
+  - id: U_391
+    name: "\uB3D9\uC5C4"
+    grade: 3
+    power: 55
+    intel: 55
+    charm: 53
+    infamy: 12
+    initialNationId: WU
+    initialCastleId: C22
+    governorPortrait: {fileID: 0}
+  - id: U_392
+    name: "\uC6D0\uCDA9"
+    grade: 4
+    power: 44
+    intel: 32
+    charm: 42
+    infamy: 34
+    initialNationId: WEI
+    initialCastleId: C07
+    governorPortrait: {fileID: 0}
+  - id: U_393
+    name: "\uACAC\uB78C"
+    grade: 4
+    power: 34
+    intel: 43
+    charm: 39
+    infamy: 10
+    initialNationId: OTHERS
+    initialCastleId: C38
+    governorPortrait: {fileID: 0}
+  - id: U_394
+    name: "\uBCF4\uB155"
+    grade: 2
+    power: 78
+    intel: 81
+    charm: 80
+    infamy: 10
+    initialNationId: WU
+    initialCastleId: C14
+    governorPortrait: {fileID: 0}
+  - id: U_395
+    name: "\uC774\uC720"
+    grade: 3
+    power: 57
+    intel: 56
+    charm: 63
+    infamy: 0
+    initialNationId: SHU
+    initialCastleId: C27
+    governorPortrait: {fileID: 0}
+  - id: U_396
+    name: "\uC704\uC6B0"
+    grade: 4
+    power: 45
+    intel: 34
+    charm: 44
+    infamy: 13
+    initialNationId: OTHERS
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_397
+    name: "\uC81C\uAC08\uB4F1"
+    grade: 2
+    power: 83
+    intel: 84
+    charm: 73
+    infamy: 15
+    initialNationId: SHU
+    initialCastleId: C01
+    governorPortrait: {fileID: 0}
+  - id: U_398
+    name: "\uAC00\uC548"
+    grade: 4
+    power: 33
+    intel: 42
+    charm: 45
+    infamy: 10
+    initialNationId: SHU
+    initialCastleId: C46
+    governorPortrait: {fileID: 0}
+  - id: U_399
+    name: "\uC11C\uB155"
+    grade: 3
+    power: 52
+    intel: 56
+    charm: 50
+    infamy: 25
+    initialNationId: SHU
+    initialCastleId: C02
+    governorPortrait: {fileID: 0}
+  - id: U_400
+    name: "\uC11C\uC790"
+    grade: 5
+    power: 18
+    intel: 18
+    charm: 22
+    infamy: 4
+    initialNationId: OTHERS
+    initialCastleId: C15
+    governorPortrait: {fileID: 0}
