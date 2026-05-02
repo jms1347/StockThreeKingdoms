@@ -27,6 +27,10 @@ public class GameHubTabController : MonoBehaviour
     [Header("시작 탭")]
     [SerializeField] string initialTabId = "Home";
 
+    [Header("본영 + 천하 동시 표시")]
+    [Tooltip("켜면 Home 또는 Market 탭일 때 본영·천하 패널을 둘 다 켭니다. TabContent에서 두 Canvas를 반반(좌/우) 배치하세요.")]
+    [SerializeField] bool simultaneousHomeAndWorldPanels;
+
     GlobalUIManager _gui;
 
     void Awake()
@@ -174,6 +178,12 @@ public class GameHubTabController : MonoBehaviour
         SetActiveSafe(newsPanel, showNews);
         SetActiveSafe(ordersPanel, showOrders);
         SetActiveSafe(portfolioPanel, showPortfolio);
+
+        if (simultaneousHomeAndWorldPanels && (tabId == "Home" || tabId == "Market"))
+        {
+            SetActiveSafe(homeTerritoryPanel, true);
+            SetActiveSafe(worldMarketPanel, true);
+        }
 
         bool portfolioTab = tabId == "Portfolio";
         if (portfolioTab && showPortfolio)

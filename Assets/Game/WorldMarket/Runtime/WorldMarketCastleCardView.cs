@@ -32,6 +32,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [SerializeField] TextMeshProUGUI buyPriceText;
     [SerializeField] TextMeshProUGUI sentimentArrowText;
     [SerializeField] TextMeshProUGUI sentimentChangeText;
+    [SerializeField] TextMeshProUGUI priceCauseTagText;
     [SerializeField] UIMiniSparklineGraphic sparklineGraphic;
 
     [Header("3구역 · 내 투자 (비우면 MainRow/Zone3Personal 탐색)")]
@@ -41,6 +42,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [SerializeField] TextMeshProUGUI stakeText;
 
     [Header("4구역 · 액션")]
+    [SerializeField] TextMeshProUGUI distanceHintText;
     [SerializeField] Button deployButton;
     [SerializeField] Button hqMoveButton;
     [SerializeField] Button recallButton;
@@ -90,6 +92,13 @@ public class WorldMarketCastleCardView : MonoBehaviour
         WireCardOpenDetailButton();
     }
 
+    void EnsureDeployInvestGoldStyle()
+    {
+        if (deployButton == null) return;
+        if (deployButton.GetComponent<WorldMarketGoldButtonShimmer>() == null)
+            deployButton.gameObject.AddComponent<WorldMarketGoldButtonShimmer>();
+    }
+
     void WireCardOpenDetailButton()
     {
         var openBtn = GetComponent<Button>();
@@ -101,7 +110,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     void OnCastleCardOpenDetail()
     {
         if (string.IsNullOrWhiteSpace(_boundCastleId)) return;
-        WorldMarketCastleDetailPopup.OpenCastle(_boundCastleId.Trim());
+        WorldMarketCastleSummarySheet.OpenCastle(_boundCastleId.Trim());
     }
 
     void WireActionButtons()
@@ -341,6 +350,48 @@ public class WorldMarketCastleCardView : MonoBehaviour
         }
     }
 
+    void EnsureDistanceLineUi()
+    {
+        if (distanceHintText != null) return;
+        var z4 = transform.Find("MainRow/Zone4Actions");
+        if (z4 == null) return;
+        var go = new GameObject("DistanceHint", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(z4, false);
+        go.transform.SetAsLastSibling();
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.fontSize = 12;
+        tmp.color = new Color(0.52f, 0.55f, 0.60f);
+        tmp.alignment = TextAlignmentOptions.Center;
+        distanceHintText = tmp;
+    }
+
+    void EnsurePriceCauseTagUnderSentRow(string zone2Path)
+    {
+        if (priceCauseTagText != null) return;
+        var sentRow = transform.Find($"{zone2Path}/SentRow")
+                      ?? transform.Find("Left/MidRow/PriceBlock/SentRow");
+        if (sentRow == null) return;
+        var go = new GameObject("CauseTag", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(sentRow, false);
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.fontSize = 15;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = new Color(0.74f, 0.78f, 0.84f, 1f);
+        tmp.alignment = TextAlignmentOptions.Left;
+        tmp.enableWordWrapping = false;
+        tmp.overflowMode = TextOverflowModes.Overflow;
+        var le = go.GetComponent<LayoutElement>();
+        le.flexibleWidth = 0f;
+        le.minWidth = 36f;
+        le.preferredHeight = 26f;
+        priceCauseTagText = tmp;
+        go.SetActive(false);
+    }
+
     void CacheDefaultColors()
     {
         if (!_cachedColors)
@@ -396,8 +447,12 @@ public class WorldMarketCastleCardView : MonoBehaviour
             sentimentArrowText = Tmp($"{z2}/SentRow/Arrow") ?? Tmp("Left/MidRow/PriceBlock/SentRow/Arrow");
         if (sentimentChangeText == null)
             sentimentChangeText = Tmp($"{z2}/SentRow/ChangePct") ?? Tmp("Left/MidRow/PriceBlock/SentRow/ChangePct");
+        if (priceCauseTagText == null)
+            priceCauseTagText = Tmp($"{z2}/SentRow/CauseTag");
         if (sparklineGraphic == null)
             sparklineGraphic = FindComp<UIMiniSparklineGraphic>($"{z2}/SparklineHost/Sparkline");
+
+        EnsurePriceCauseTagUnderSentRow(z2);
 
         if (zone3PersonalRoot == null)
             zone3PersonalRoot = transform.Find(z3) as RectTransform ?? transform.Find("Left/MidRow/PersonalBlock") as RectTransform;
@@ -420,6 +475,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
         if (recallButton == null)
             recallButton = transform.Find($"{z4}/RecallButton")?.GetComponent<Button>();
 
+        if (distanceHintText == null)
+            distanceHintText = Tmp($"{z4}/DistanceHint");
+
         if (stakeGaugeFillImage == null)
             stakeGaugeFillImage = Img("StakeGaugeBar/Fill");
         if (disasterOverlayImage == null)
@@ -441,6 +499,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
     {
         transform.DOKill(false);
         TryAutoWire();
+        EnsurePriceCauseTagUnderSentRow("MainRow/Zone2");
+        EnsureDistanceLineUi();
+        EnsureDeployInvestGoldStyle();
         EnsureHqMoveButtonUi();
         EnsureHqBadgeUi();
         WireActionButtons();
@@ -556,7 +617,16 @@ public class WorldMarketCastleCardView : MonoBehaviour
                 ? new Color(0.65f, 0.68f, 0.74f)
                 : (trendUp ? RiseColor : FallColor);
             bool eventHeavy = isWar || isDisaster || isFavorable;
-            sentimentChangeText.fontSize = eventHeavy ? 22f : 17f;
+            sentimentChangeText.fontSize = eventHeavy ? 26f : 23f;
+            sentimentChangeText.fontStyle = FontStyles.Bold;
+        }
+
+        string causeLbl = dm.GetCastlePriceMovementCauseLabel(castleId);
+        if (priceCauseTagText != null)
+        {
+            bool hasC = !string.IsNullOrEmpty(causeLbl);
+            priceCauseTagText.gameObject.SetActive(hasC);
+            priceCauseTagText.text = hasC ? $"[{causeLbl}]" : "";
         }
 
         if (buyPriceBackground != null)
@@ -587,7 +657,14 @@ public class WorldMarketCastleCardView : MonoBehaviour
             hqMoveButton.gameObject.SetActive(!isHqHome && !hqTravelBusy);
             var hqLbl = hqMoveButton.GetComponentInChildren<TextMeshProUGUI>(true);
             if (hqLbl != null)
-                hqLbl.text = "이주하기";
+            {
+                hqLbl.richText = true;
+                int mpCost = dm.GetTravelMarchPointsCostRounded(castleId);
+                if (mpCost > 0)
+                    hqLbl.text = "<color=#f0f0f0>이주</color>  <color=#ff4444>MP " + mpCost + "</color>";
+                else
+                    hqLbl.text = "이주하기";
+            }
         }
 
         // 지분율: 주둔 상한(maxTroops)이 아니라 성 인구(유통/규모 지표) 대비 내 투입 병력 비율.
@@ -601,12 +678,16 @@ public class WorldMarketCastleCardView : MonoBehaviour
         {
             troopsText.text = hasStock ? $"{troopCount:N0}명" : "";
             troopsText.color = PersonalGold;
+            troopsText.fontStyle = FontStyles.Bold;
+            troopsText.fontSize = 20f;
         }
 
         if (stakeText != null)
         {
             stakeText.text = hasStock ? $"지분 {stakePctStr}%" : "";
             stakeText.color = PersonalGoldDim;
+            stakeText.fontStyle = FontStyles.Bold;
+            stakeText.fontSize = 21f;
         }
 
         Transform stakeBarRoot = stakeGaugeFillImage != null ? stakeGaugeFillImage.transform.parent : null;
@@ -620,6 +701,30 @@ public class WorldMarketCastleCardView : MonoBehaviour
         if (deployButton != null)
             deployButton.interactable = deployMax > 0;
         ApplyDeployDisabledHint(dm, castleId, deployMax);
+
+        if (deployButton != null)
+        {
+            var dLbl = deployButton.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (dLbl != null)
+                dLbl.text = hasStock ? "관리" : "투자";
+        }
+
+        if (distanceHintText != null)
+        {
+            string hid = dm.HomeCastleId?.Trim();
+            if (!string.IsNullOrEmpty(hid))
+            {
+                float d0 = dm.GetDistance(hid, castleId);
+                bool ok = d0 >= 0f && !float.IsNaN(d0);
+                distanceHintText.gameObject.SetActive(ok);
+                distanceHintText.text = ok ? $"{Mathf.RoundToInt(d0)} DIST." : "";
+            }
+            else
+            {
+                distanceHintText.gameObject.SetActive(false);
+                distanceHintText.text = "";
+            }
+        }
 
         if (roiText != null)
         {

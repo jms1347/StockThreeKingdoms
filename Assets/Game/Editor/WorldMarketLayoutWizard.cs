@@ -15,7 +15,7 @@ using TMPro;
 public static class WorldMarketLayoutWizard
 {
     const string MenuPath = "StockThreeKingdoms/Layout/천하 메뉴/천하탭 만들기 (MTS Layout)";
-    const float ContentTopInset = 160f;    // GlobalUI TopBar(140) + 여유
+    const float ContentTopInset = 200f;    // GlobalUI TopBar(180) + 여유
     const float ContentBottomInset = 180f; // GlobalUI BottomTabBar(160) + 여유
 
     [MenuItem(MenuPath, false, 0)]

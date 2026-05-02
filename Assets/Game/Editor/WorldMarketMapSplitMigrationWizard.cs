@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 /// <summary>
 /// 천하(WorldMarketRoot)에 지도/리스트 분할 UI를 붙입니다.
@@ -12,6 +13,86 @@ using TMPro;
 public static class WorldMarketMapSplitMigrationWizard
 {
     const string MenuPath = "StockThreeKingdoms/Layout/천하 메뉴/천하 지도·리스트 분할 (마이그레이션)";
+    const string GameHubWorldPrefabPath = "Assets/Game/0Scene/GameHub/GameHub_WorldCanvas.prefab";
+
+    [MenuItem("StockThreeKingdoms/Layout/천하 메뉴/GameHub_WorldCanvas 프리팹 — 지도·리스트 분할", false, 22)]
+    public static void MigrateGameHubWorldCanvasPrefab()
+    {
+        var root = PrefabUtility.LoadPrefabContents(GameHubWorldPrefabPath);
+        try
+        {
+            var wm = root.GetComponentsInChildren<Transform>(true)
+                .FirstOrDefault(t => t.name == "WorldMarketRoot");
+            if (wm == null)
+            {
+                EditorUtility.DisplayDialog("천하", "GameHub_WorldCanvas에서 WorldMarketRoot를 찾지 못했습니다.", "확인");
+                return;
+            }
+
+            if (!EnsureMapListSplit(wm, out string err))
+            {
+                EditorUtility.DisplayDialog("천하", err ?? "분할을 적용하지 못했습니다.", "확인");
+                return;
+            }
+
+            PrefabUtility.SaveAsPrefabAsset(root, GameHubWorldPrefabPath);
+            Selection.activeObject = AssetDatabase.LoadAssetAtPath<GameObject>(GameHubWorldPrefabPath);
+            EditorUtility.DisplayDialog("천하", "GameHub_WorldCanvas에 지도·리스트 분할을 적용해 저장했습니다. 천하 탭에서 ‘리스트 보기 / 지도 보기’를 확인하세요.", "확인");
+        }
+        finally
+        {
+            PrefabUtility.UnloadPrefabContents(root);
+        }
+
+        AssetDatabase.SaveAssets();
+    }
+
+    /// <summary>
+    /// WorldMarketRoot 아래에 ListViewRoot·ViewModeRow·MapViewRoot가 없으면 생성합니다.
+    /// 씬 편집·프리팹 로드 컨텍스트 모두에서 호출 가능합니다.
+    /// </summary>
+    /// <returns>이미 분할되어 있거나 새로 적용했으면 true. 실패 시 false와 메시지.</returns>
+    public static bool EnsureMapListSplit(Transform worldMarketRoot, out string errorMessage)
+    {
+        errorMessage = null;
+        if (worldMarketRoot == null)
+        {
+            errorMessage = "WorldMarketRoot가 없습니다.";
+            return false;
+        }
+
+        if (worldMarketRoot.Find("ListViewRoot") != null)
+            return true;
+
+        var stocks = worldMarketRoot.Find("CastleStocksPanel");
+        if (stocks == null)
+        {
+            errorMessage = "CastleStocksPanel을 찾을 수 없습니다.";
+            return false;
+        }
+
+        Undo.SetCurrentGroupName("WorldMarket map/list split");
+        int gid = Undo.GetCurrentGroup();
+
+        var listRoot = new GameObject("ListViewRoot", typeof(RectTransform), typeof(LayoutElement), typeof(VerticalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(listRoot, "ListViewRoot");
+        listRoot.transform.SetParent(worldMarketRoot, false);
+        var listLe = listRoot.GetComponent<LayoutElement>();
+        listLe.flexibleHeight = 1f;
+        listLe.minHeight = 280f;
+        var listV = listRoot.GetComponent<VerticalLayoutGroup>();
+        listV.childControlWidth = true;
+        listV.childForceExpandWidth = true;
+        listV.childControlHeight = true;
+        listV.childForceExpandHeight = true;
+
+        Undo.SetTransformParent(stocks, listRoot.transform, "Move CastleStocksPanel");
+
+        SetupSplitUi(worldMarketRoot.gameObject, listRoot);
+
+        Undo.CollapseUndoOperations(gid);
+        return true;
+    }
 
     [MenuItem(MenuPath, false, 21)]
     public static void Migrate()
@@ -30,33 +111,12 @@ public static class WorldMarketMapSplitMigrationWizard
             return;
         }
 
-        var stocks = root.Find("CastleStocksPanel");
-        if (stocks == null)
+        if (!EnsureMapListSplit(root, out string err))
         {
-            EditorUtility.DisplayDialog("천하", "CastleStocksPanel을 찾을 수 없습니다.", "확인");
+            EditorUtility.DisplayDialog("천하", err ?? "분할 실패", "확인");
             return;
         }
 
-        Undo.SetCurrentGroupName("WorldMarket map/list split");
-        int gid = Undo.GetCurrentGroup();
-
-        var listRoot = new GameObject("ListViewRoot", typeof(RectTransform), typeof(LayoutElement), typeof(VerticalLayoutGroup));
-        Undo.RegisterCreatedObjectUndo(listRoot, "ListViewRoot");
-        listRoot.transform.SetParent(root, false);
-        var listLe = listRoot.GetComponent<LayoutElement>();
-        listLe.flexibleHeight = 1f;
-        listLe.minHeight = 280f;
-        var listV = listRoot.GetComponent<VerticalLayoutGroup>();
-        listV.childControlWidth = true;
-        listV.childForceExpandWidth = true;
-        listV.childControlHeight = true;
-        listV.childForceExpandHeight = true;
-
-        Undo.SetTransformParent(stocks, listRoot.transform, "Move CastleStocksPanel");
-
-        SetupSplitUi(rootGo, listRoot);
-
-        Undo.CollapseUndoOperations(gid);
         Selection.activeGameObject = rootGo;
         EditorUtility.DisplayDialog("천하", "지도·리스트 분할을 적용했습니다. 씬을 저장하세요.\nCityDetailPanel에 TMP를 추가해 marchPointsTravelLineText를 연결하면 MP 안내가 표시됩니다.", "확인");
     }
@@ -121,7 +181,17 @@ public static class WorldMarketMapSplitMigrationWizard
         soMode.FindProperty("listToggle").objectReferenceValue = listTog;
         soMode.ApplyModifiedPropertiesWithoutUndo();
 
+        BringCityDetailPanelToFront(tr);
+
         Undo.CollapseUndoOperations(gid);
+    }
+
+    static void BringCityDetailPanelToFront(Transform worldMarketRoot)
+    {
+        if (worldMarketRoot == null) return;
+        var city = worldMarketRoot.Find("CityDetailPanel");
+        if (city != null)
+            city.SetAsLastSibling();
     }
 
     static Toggle CreateToggleChip(Transform parent, string name, string label, bool isOn, ToggleGroup group)

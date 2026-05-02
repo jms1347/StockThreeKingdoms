@@ -267,9 +267,11 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             if (t.name != "WorldMarketRoot") continue;
             WorldHqTravelHud.EnsureUnderWorldMarketRoot(t);
             WorldMarketCastleDetailPopup.EnsureUnderWorldMarketRoot(t);
+            WorldMarketCastleSummarySheet.EnsureUnderWorldMarketRoot(t);
             break;
         }
 
+        EnsureListColumnHeaderRow();
         TrySubscribeDataManager();
         InitPoolIfNeeded();
         RefreshData();
@@ -531,6 +533,56 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         ApplyLayoutAfterOrderChange(dm, preserveScrollNorm: preserveNorm, verticalNorm: scrollNorm);
     }
 
+    /// <summary>
+    /// 지도 핀·외부 UI에서 호출: 현재 필터 기준 목록에서 해당 성이 보이도록 세로 스크롤을 맞춥니다.
+    /// 리스트 패널이 비활성이어도 정규화 위치는 저장되어 리스트로 전환 시 유지됩니다.
+    /// </summary>
+    public bool TryScrollToCastleId(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId) || _orderedIds.Count == 0)
+            return false;
+
+        castleId = castleId.Trim();
+        int idx = -1;
+        for (int i = 0; i < _orderedIds.Count; i++)
+        {
+            var row = _orderedIds[i];
+            if (string.IsNullOrWhiteSpace(row)) continue;
+            if (string.Equals(row.Trim(), castleId, StringComparison.OrdinalIgnoreCase))
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx < 0)
+            return false;
+
+        ResolveScrollReferences();
+        if (scrollRect == null)
+            return false;
+
+        Canvas.ForceUpdateCanvases();
+
+        float stride = GetEffectiveCellStride();
+        float vpH = Mathf.Max(1f, GetViewportHeight());
+        float contentH = _orderedIds.Count * stride + ContentHeightExtra;
+        float scrollable = Mathf.Max(0f, contentH - vpH);
+
+        if (scrollable < 1f)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+            UpdateVisible();
+            return true;
+        }
+
+        float scrolledFromTop = idx * stride;
+        float norm = 1f - scrolledFromTop / scrollable;
+        scrollRect.verticalNormalizedPosition = Mathf.Clamp01(norm);
+        UpdateVisible();
+        return true;
+    }
+
     void ApplyLayoutAfterOrderChange(DataManager dm, bool preserveScrollNorm, float verticalNorm)
     {
         Canvas.ForceUpdateCanvases();
@@ -685,6 +737,49 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             LayoutPoolRowAtIndex(rt, idx, rowW, stride);
             cell.Bind(_orderedIds[idx]);
         }
+    }
+
+    void EnsureListColumnHeaderRow()
+    {
+        ResolveScrollReferences();
+        if (scrollRect == null) return;
+        Transform scrollTr = scrollRect.transform;
+        Transform parent = scrollTr.parent;
+        if (parent == null) return;
+        if (parent.Find("ListColumnHeader") != null) return;
+
+        var row = new GameObject("ListColumnHeader", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        row.transform.SetParent(parent, false);
+        row.transform.SetSiblingIndex(scrollTr.GetSiblingIndex());
+
+        var h = row.GetComponent<HorizontalLayoutGroup>();
+        h.padding = new RectOffset(10, 10, 4, 10);
+        h.spacing = 10;
+        h.childAlignment = TextAnchor.MiddleLeft;
+        h.childControlWidth = true;
+        h.childForceExpandWidth = true;
+        row.GetComponent<LayoutElement>().minHeight = 26f;
+
+        AddColumnHeaderCell(row.transform, "성 명 / 지분", 2f);
+        AddColumnHeaderCell(row.transform, "현재가 / 변동", 2f);
+        AddColumnHeaderCell(row.transform, "상태", 1f);
+    }
+
+    static void AddColumnHeaderCell(Transform parent, string label, float flexible)
+    {
+        var go = new GameObject("HdrCol", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(parent, false);
+        var le = go.GetComponent<LayoutElement>();
+        le.flexibleWidth = flexible;
+        le.minHeight = 22f;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.text = label;
+        tmp.fontSize = 13;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = new Color(0.52f, 0.55f, 0.62f);
+        tmp.alignment = TextAlignmentOptions.Left;
     }
 
 #if UNITY_EDITOR

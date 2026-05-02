@@ -1,51 +1,37 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 
 /// <summary>
-/// 성문 앞 금화 더미 시각화, 흔들기 수거, DOTween 비행 후 지연 입금.
-/// 시장 창고 누적만 금화로 표시됩니다.
+/// 성문 앞 금화 더미(시간 단계) 및 수거 연출. HUD 입금은 <see cref="HomeController.OnWallClicked"/>에서 처리.
 /// </summary>
 public class CollectionManager : MonoBehaviour
 {
-    const float ShakeSqrThreshold = 2.5f;
-    const float ShakeCooldownSec = 0.65f;
-
     [Header("참조")]
     public HomeController homeController;
-    [Tooltip("비행 아이콘을 올릴 캔버스 루트 (보통 Screen Space Canvas)")]
-    public RectTransform flyIconsRoot;
-    [Tooltip("금화 텍스트/아이콘의 RectTransform (도착 지점)")]
-    public RectTransform goldFlyTarget;
-    [Tooltip("더미가 배치된 영역 (비행 시작 위치 월드→스크린 변환 기준)")]
+    [Tooltip("더미가 배치된 영역 — Burst 스케일 타깃")]
+    public RectTransform pileBurstRoot;
+    [Tooltip("금화 더미 부모(비우면 자동 탐색)")]
+    public RectTransform goldPilesParent;
+    [Tooltip("레거시: HomeSceneLayoutWizard 등에서 더미 영역으로 할당. 비우면 goldPilesParent와 동일 취급 가능.")]
     public RectTransform pileArea;
 
-    [Header("더미 아이콘 (각 8개, 인덱스 0부터 순서대로 켜짐)")]
+    [Header("레거시·에디터 마법사 (선택)")]
+    [Tooltip("비행 아이콘 프리팹 — 현재 본영 연출에서는 미사용, 마법사 직렬화 호환용.")]
+    public GameObject flyingGoldPrefab;
+    public RectTransform flyIconsRoot;
+    public RectTransform goldFlyTarget;
+    [Range(10, 32)] public int poolSize = 12;
+
+    [Header("더미 아이콘 (각 8개)")]
     public GameObject[] goldPiles = new GameObject[8];
 
-    [Header("비행 아이콘 풀")]
-    [Tooltip("풀에서 Instantiate할 금화 비행 아이콘 원본 (씬 오브젝트 또는 프리팹)")]
-    public GameObject flyingGoldPrefab;
-    [Range(10, 32)]
-    public int poolSize = 12;
+    [Header("플로팅 텍스트")]
+    public TMP_FontAsset floatingFont;
+    public Color floatingGoldColor = new Color(1f, 0.92f, 0.35f);
 
-    public readonly Queue<GameObject> goldIconPool = new Queue<GameObject>();
-
-    [Header("비행 연출")]
-    public float flyDuration = 0.85f;
-    public float bezierArc = 180f;
-    [Range(0.02f, 0.3f)] public float flyStagger = 0.05f;
-    [Tooltip("풀 인스턴스 기본 크기 (프리팹에 RectTransform이 있으면 생략 가능)")]
-    public Vector2 flyIconSize = new Vector2(48f, 48f);
-
-    float _shakeCooldownUntil;
-    int _pendingFlyTweens;
-    bool _poolsWarmed;
-    bool _hidePilesWhileFlying;
-
-    GameObject _runtimeGoldProto;
     HomeUIController _homeUi;
 
     void Awake()
@@ -53,244 +39,60 @@ public class CollectionManager : MonoBehaviour
         if (homeController == null)
             homeController = GetComponent<HomeController>() ?? GetComponentInParent<HomeController>();
         _homeUi = GetComponent<HomeUIController>() ?? GetComponentInParent<HomeUIController>();
+        EnsurePileReferences();
     }
 
-    void Start()
+    void EnsurePileReferences()
     {
-        WarmFlyPoolsIfPossible();
-        TryResolveFlyTargetsFromGlobalUI();
-    }
-
-    void OnDestroy()
-    {
-        DOTween.Kill(this, true);
-        PurgePoolTweens(goldIconPool);
-    }
-
-    static void PurgePoolTweens(Queue<GameObject> pool)
-    {
-        foreach (var go in pool)
+        if (goldPilesParent == null && pileArea != null)
+            goldPilesParent = pileArea;
+        if (goldPilesParent == null)
         {
-            if (go == null) continue;
-            DOTween.Kill(go.transform, true);
+            var t = transform.Find("GoldPileDock/PilesGrid")
+                    ?? transform.Find("GoldPile_Root")
+                    ?? transform.Find("MarketWarehouse");
+            if (t != null) goldPilesParent = t as RectTransform;
         }
-    }
 
-    public void WarmFlyPoolsIfPossible()
-    {
-        if (_poolsWarmed || flyIconsRoot == null) return;
-
-        EnsureRuntimePrototypeIfNeeded();
-        PrewarmPool();
-        _poolsWarmed = true;
-    }
-
-    void PrewarmPool()
-    {
-        var proto = GetPrototype();
-        if (proto == null) return;
-
-        int need = Mathf.Max(0, poolSize - goldIconPool.Count);
-        for (int i = 0; i < need; i++)
+        if ((goldPiles == null || goldPiles.Length == 0 || CountNonNull(goldPiles) == 0) && goldPilesParent != null)
         {
-            var inst = Instantiate(proto, flyIconsRoot, false);
-            inst.name = $"FlyGold_Pool_{i}";
-            inst.SetActive(false);
-            goldIconPool.Enqueue(inst);
-        }
-    }
-
-    GameObject GetPrototype()
-    {
-        if (flyingGoldPrefab != null) return flyingGoldPrefab;
-        return _runtimeGoldProto;
-    }
-
-    void EnsureRuntimePrototypeIfNeeded()
-    {
-        if (flyingGoldPrefab != null || _runtimeGoldProto != null) return;
-        _runtimeGoldProto = BuildDefaultFlyPrototype();
-    }
-
-    GameObject BuildDefaultFlyPrototype()
-    {
-        var go = new GameObject("FlyGold_RuntimeProto",
-            typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        var rt = go.GetComponent<RectTransform>();
-        rt.SetParent(flyIconsRoot, false);
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = flyIconSize;
-        rt.localScale = Vector3.one;
-        rt.localRotation = Quaternion.identity;
-
-        var img = go.GetComponent<Image>();
-        img.color = new Color(1f, 0.85f, 0.2f);
-        img.raycastTarget = false;
-
-        go.SetActive(false);
-        return go;
-    }
-
-    GameObject RentFlyIcon()
-    {
-        GameObject go = goldIconPool.Count > 0 ? goldIconPool.Dequeue() : null;
-        if (go == null)
-        {
-            var proto = GetPrototype();
-            if (proto == null)
+            var list = new List<GameObject>();
+            for (int i = 0; i < 8; i++)
             {
-                EnsureRuntimePrototypeIfNeeded();
-                proto = GetPrototype();
+                var c = goldPilesParent.Find($"GoldPile_{i}");
+                if (c != null) list.Add(c.gameObject);
             }
-
-            if (proto == null) return null;
-            go = Instantiate(proto, flyIconsRoot, false);
-            go.name = "FlyGold_Expanded";
+            if (list.Count > 0)
+                goldPiles = list.ToArray();
         }
 
-        DOTween.Kill(go.transform, true);
-        go.transform.SetParent(flyIconsRoot, false);
-        return go;
+        if (pileBurstRoot == null)
+            pileBurstRoot = pileArea != null ? pileArea : goldPilesParent;
     }
 
-    void ReturnFlyIcon(GameObject go)
+    static int CountNonNull(GameObject[] a)
     {
-        if (go == null) return;
-        DOTween.Kill(go.transform, true);
-        DOTween.Kill(go, true);
-        go.SetActive(false);
-        go.transform.SetParent(flyIconsRoot, false);
-        goldIconPool.Enqueue(go);
-    }
-
-    static void ResetPooledRectTransform(RectTransform rt, Vector2 anchoredStart, Vector2 iconSize)
-    {
-        rt.localScale = Vector3.one;
-        rt.localRotation = Quaternion.identity;
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = iconSize;
-        rt.anchoredPosition = anchoredStart;
+        if (a == null) return 0;
+        int n = 0;
+        for (int i = 0; i < a.Length; i++)
+            if (a[i] != null) n++;
+        return n;
     }
 
     void Update()
     {
         UpdatePileVisuals();
-        TryResolveFlyTargetsFromGlobalUI();
-
-        if (Time.unscaledTime < _shakeCooldownUntil) return;
-        if (homeController == null) return;
-
-        Vector3 acc = Input.acceleration;
-        if (acc.sqrMagnitude > ShakeSqrThreshold)
-        {
-            if (homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: false))
-                _shakeCooldownUntil = Time.unscaledTime + ShakeCooldownSec;
-        }
-
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F8))
-        {
-            if (Time.unscaledTime < _shakeCooldownUntil) return;
-            if (homeController != null &&
-                homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: false))
-            {
-                _shakeCooldownUntil = Time.unscaledTime + ShakeCooldownSec;
-                Debug.Log("[Editor 흔들기] F8 → 창고 비행 수거 시도 (누적 자원이 있어야 발동)");
-            }
-            else
-                Debug.Log("[Editor 흔들기] F8 — 수거 안 됨: 비행 중이거나 창고 누적 0, 또는 HomeController 없음");
-        }
-#endif
     }
 
-    void TryResolveFlyTargetsFromGlobalUI()
+    void OnDestroy()
     {
-        if (goldFlyTarget != null) return;
-        var gui = GlobalUIManager.InstanceOrNull;
-        if (gui == null) return;
-        goldFlyTarget = gui.AssetsTarget;
-    }
-
-    /// <summary>성문 탭 시 금화 아이콘이 상단 자원바로 날아가는 연출(시각효과 전용, 입금은 호출 측에서 처리).</summary>
-    public void PlayGateTapFlyFeedback(RectTransform gateSource)
-    {
-        EnsureFlyRootIfNeeded();
-        TryResolveFlyTargetsFromGlobalUI();
-        WarmFlyPoolsIfPossible();
-        if (flyIconsRoot == null || goldFlyTarget == null) return;
-
-        var canvas = flyIconsRoot.GetComponentInParent<Canvas>();
-        Camera cam = null;
-        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-            cam = canvas.worldCamera;
-
-        Vector2 start = gateSource != null
-            ? WorldToAnchoredOnRoot(gateSource.position, flyIconsRoot, cam)
-            : Vector2.zero;
-
-        RunVisualOnlyFly(start, goldFlyTarget, cam);
-    }
-
-    void RunVisualOnlyFly(Vector2 startAnchored, RectTransform target, Camera cam)
-    {
-        GameObject go = RentFlyIcon();
-        if (go == null) return;
-        var rt = go.GetComponent<RectTransform>();
-        if (rt == null)
-        {
-            ReturnFlyIcon(go);
-            return;
-        }
-
-        ResetPooledRectTransform(rt, startAnchored, new Vector2(18f, 18f));
-        go.SetActive(true);
-        Vector2 endAnchored = target != null
-            ? WorldToAnchoredOnRoot(target.position, flyIconsRoot, cam)
-            : startAnchored + Vector2.up * 360f;
-        Vector2 mid = (startAnchored + endAnchored) * 0.5f + new Vector2(0f, bezierArc * 0.55f);
-
-        Sequence seq = DOTween.Sequence().SetTarget(go).SetUpdate(true);
-        seq.Append(DOTween.To(() => 0f, t =>
-        {
-            rt.anchoredPosition = QuadraticBezier(startAnchored, mid, endAnchored, t);
-        }, 1f, 0.38f).SetEase(Ease.OutCubic).SetTarget(go));
-        seq.OnComplete(() =>
-        {
-            GlobalUIManager.InstanceOrNull?.PunchAssetsText(0.09f, 0.15f, 6);
-            _homeUi?.PunchLocalGoldText(0.09f, 0.15f, 6);
-            ReturnFlyIcon(go);
-        });
+        DOTween.Kill(this, true);
     }
 
     public void UpdatePileVisuals()
     {
-        var gm = GameManager.InstanceOrNull;
-        if (gm?.currentUser == null) return;
-
-        if (HidePilesWhileFlying)
-        {
-            SetPileArray(goldPiles, 0);
-            return;
-        }
-
-        long mElapsed = homeController != null ? homeController.GetMarketElapsedSeconds() : 0L;
-        int mTier = PileCountFromElapsedTiered(mElapsed);
-
-        // 기획: 시장 창고가 1 Gold 이상 쌓이면 최소 1개 더미는 항상 보이도록 보정.
-        double mAcc = homeController != null ? homeController.CurrentMarketAccumulated : 0d;
-        if (mAcc >= 1d)
-            mTier = Mathf.Max(1, mTier);
-
-        SetPileArray(goldPiles, mTier);
-    }
-
-    public static int PileCountFromElapsedTiered(long elapsedSec)
-    {
-        if (elapsedSec < 60) return 0;
-        if (elapsedSec < 3600) return 1;
-        int extraHours = (int)(elapsedSec / 3600);
-        return Mathf.Clamp(1 + extraHours, 1, 8);
+        int tier = homeController != null ? homeController.GetGoldPileActiveCount() : 0;
+        SetPileArray(goldPiles, tier);
     }
 
     static void SetPileArray(GameObject[] piles, int activeCount)
@@ -303,277 +105,50 @@ public class CollectionManager : MonoBehaviour
         }
     }
 
-    public bool HasActivePileVisual() => CountActive(goldPiles) > 0;
-
-    public int CountActiveGoldPiles() => CountActive(goldPiles);
-
-    static int CountActive(GameObject[] piles)
+    /// <summary>주머니가 있었을 때 더미 튀어 오르는 연출 후 숨김.</summary>
+    public void PlayPocketBurstThenHidePiles()
     {
-        if (piles == null) return 0;
-        int c = 0;
-        for (int i = 0; i < piles.Length; i++)
-            if (piles[i] != null && piles[i].activeSelf) c++;
-        return c;
-    }
-
-    public bool IsFlyBusy => _pendingFlyTweens > 0;
-
-    public bool HidePilesWhileFlying => _hidePilesWhileFlying && IsFlyBusy;
-
-    public void TryCollectFromGate()
-    {
-        if (homeController == null) return;
-        homeController.TryFlyCollectFromWarehouse(this, requireActivePiles: true);
-    }
-
-    /// <summary>시장 창고 금화를 비행 입금합니다. totalFarmGold는 레거시 인자(0 고정).</summary>
-    public void PlayFlyEffect(long totalMarketGold, long totalFarmGold, Action onAllComplete = null)
-    {
-        EnsureFlyRootIfNeeded();
-        TryResolveFlyTargetsFromGlobalUI();
-
-        WarmFlyPoolsIfPossible();
-
-        long totalGold = totalMarketGold + totalFarmGold;
-
-        int gVis = CountActive(goldPiles);
-        int goldFlies = totalGold > 0 && gVis > 0 ? gVis : 0;
-
-        if (goldFlies <= 0 || totalGold <= 0)
+        var rt = pileBurstRoot != null ? pileBurstRoot : goldPilesParent;
+        if (rt != null)
         {
-            onAllComplete?.Invoke();
-            return;
+            rt.DOKill();
+            rt.localScale = Vector3.one;
+            rt.DOPunchScale(Vector3.one * 0.35f, 0.45f, 8, 0.5f).SetUpdate(true)
+                .OnComplete(() => rt.localScale = Vector3.one);
         }
 
-        var canvas = flyIconsRoot != null ? flyIconsRoot.GetComponentInParent<Canvas>() : null;
-        Camera cam = null;
-        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-            cam = canvas.worldCamera;
-
-        Vector2[] goldStarts = goldFlies > 0 ? CaptureStartAnchoredPositions(goldPiles, goldFlies, cam) : null;
-
-        _hidePilesWhileFlying = true;
         SetPileArray(goldPiles, 0);
-
-        int completed = 0;
-        void OnOneFlyDone()
-        {
-            completed++;
-            if (completed < goldFlies) return;
-            _hidePilesWhileFlying = false;
-            onAllComplete?.Invoke();
-        }
-
-        int globalIndex = 0;
-        SpawnFliesForResource(totalGold, goldFlies, goldStarts, goldFlyTarget, ref globalIndex, OnOneFlyDone);
     }
 
-    void EnsureFlyRootIfNeeded()
+    public void PlayFloatingGainText(long totalGain)
     {
-        if (flyIconsRoot != null) return;
+        if (totalGain <= 0) return;
         var canvas = GetComponentInParent<Canvas>();
-        if (canvas == null) canvas = UnityEngine.Object.FindObjectOfType<Canvas>();
         if (canvas == null) return;
 
-        var t = canvas.transform.Find("FlyIconsRoot");
-        if (t != null)
-        {
-            flyIconsRoot = t as RectTransform;
-            EnsureFlyRootOverlayCanvas(flyIconsRoot);
-            return;
-        }
-
-        var go = new GameObject("FlyIconsRoot", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        var rt = go.GetComponent<RectTransform>();
+        var go = new GameObject("FloatingGainText", typeof(RectTransform), typeof(TextMeshProUGUI));
         go.transform.SetParent(canvas.transform, false);
-        rt.anchorMin = Vector2.zero;
-        rt.anchorMax = Vector2.one;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
-        go.transform.SetAsLastSibling();
-        flyIconsRoot = rt;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        tmp.text = $"+{totalGain:N0} Gold";
+        tmp.fontSize = 46;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.color = floatingGoldColor;
+        if (floatingFont != null) tmp.font = floatingFont;
 
-        EnsureFlyRootOverlayCanvas(flyIconsRoot);
+        var r = go.GetComponent<RectTransform>();
+        r.anchorMin = r.anchorMax = new Vector2(0.5f, 0.42f);
+        r.sizeDelta = new Vector2(520f, 100f);
+        r.anchoredPosition = Vector2.zero;
+        r.localScale = Vector3.one * 0.6f;
+
+        var seq = DOTween.Sequence().SetUpdate(true);
+        seq.Append(r.DOAnchorPosY(r.anchoredPosition.y + 140f, 0.85f).SetEase(Ease.OutCubic));
+        seq.Join(r.DOScale(Vector3.one, 0.35f).SetEase(Ease.OutBack));
+        seq.Join(tmp.DOFade(0f, 0.65f).SetDelay(0.35f));
+        seq.OnComplete(() => Destroy(go));
     }
 
-    static void EnsureFlyRootOverlayCanvas(RectTransform root)
-    {
-        if (root == null) return;
-        var c = root.GetComponent<Canvas>();
-        if (c == null) c = root.gameObject.AddComponent<Canvas>();
-        c.renderMode = RenderMode.ScreenSpaceOverlay;
-        c.overrideSorting = true;
-        c.sortingOrder = 32767;
-        var scaler = root.GetComponent<CanvasScaler>();
-        if (scaler == null) scaler = root.gameObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        if (root.GetComponent<GraphicRaycaster>() == null)
-            root.gameObject.AddComponent<GraphicRaycaster>();
-    }
-
-    void SpawnFliesForResource(long total, int flyCount, Vector2[] startAnchoredPositions, RectTransform target,
-        ref int globalFlyIndex, Action onSingleFlyComplete)
-    {
-        if (total <= 0 || flyCount <= 0) return;
-
-        long baseChunk = total / flyCount;
-        long remainder = total % flyCount;
-
-        var canvas = flyIconsRoot != null ? flyIconsRoot.GetComponentInParent<Canvas>() : null;
-        Camera cam = null;
-        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-            cam = canvas.worldCamera;
-
-        for (int i = 0; i < flyCount; i++)
-        {
-            Vector2 startAnchored = (startAnchoredPositions != null && i >= 0 && i < startAnchoredPositions.Length)
-                ? startAnchoredPositions[i]
-                : GetFlyStartAnchoredPosition(null, cam);
-
-            long chunk = baseChunk + (i < remainder ? 1 : 0);
-            if (chunk <= 0) continue;
-
-            float delay = globalFlyIndex * flyStagger;
-            globalFlyIndex++;
-            RunPooledFly(startAnchored, target, cam, chunk, flyDuration, delay, onSingleFlyComplete);
-        }
-    }
-
-    Vector2[] CaptureStartAnchoredPositions(GameObject[] piles, int flyCount, Camera cam)
-    {
-        if (flyCount <= 0) return Array.Empty<Vector2>();
-        int active = CountActive(piles);
-        if (active <= 0) return Array.Empty<Vector2>();
-
-        var result = new Vector2[flyCount];
-        for (int i = 0; i < flyCount; i++)
-        {
-            int pileIndex = Mathf.Min(i, active - 1);
-            GameObject pileGo = GetIthActivePile(piles, pileIndex);
-            RectTransform rt = pileGo != null ? pileGo.GetComponent<RectTransform>() : null;
-            result[i] = GetFlyStartAnchoredPosition(rt, cam);
-        }
-
-        return result;
-    }
-
-    static GameObject GetIthActivePile(GameObject[] piles, int activeIndex)
-    {
-        int seen = -1;
-        for (int i = 0; i < piles.Length; i++)
-        {
-            if (piles[i] == null || !piles[i].activeSelf) continue;
-            seen++;
-            if (seen == activeIndex) return piles[i];
-        }
-
-        return null;
-    }
-
-    Vector2 GetFlyStartAnchoredPosition(RectTransform pileRt, Camera cam)
-    {
-        if (pileRt != null && flyIconsRoot != null)
-        {
-            Vector3 world = pileRt.TransformPoint(pileRt.rect.center);
-            return WorldToAnchoredOnRoot(world, flyIconsRoot, cam);
-        }
-
-        if (pileArea != null)
-            return WorldToAnchoredOnRoot(pileArea.TransformPoint(pileArea.rect.center), flyIconsRoot, cam);
-
-        return Vector2.zero;
-    }
-
-    static Vector2 WorldToAnchoredOnRoot(Vector3 worldPos, RectTransform root, Camera cam)
-    {
-        Vector2 screen = RectTransformUtility.WorldToScreenPoint(cam, worldPos);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(root, screen, cam, out Vector2 local);
-        return local;
-    }
-
-    void RunPooledFly(Vector2 startAnchored, RectTransform target, Camera cam, long chunk, float duration,
-        float delay, Action onFlyComplete)
-    {
-        GameObject go = RentFlyIcon();
-        if (go == null)
-        {
-            Debug.LogError("[CollectionManager] 비행 아이콘 풀에서 인스턴스를 가져올 수 없습니다.");
-            GameManager.InstanceOrNull?.AddGold(chunk);
-            onFlyComplete?.Invoke();
-            return;
-        }
-
-        var rt = go.GetComponent<RectTransform>();
-        if (rt == null)
-        {
-            ReturnFlyIcon(go);
-            onFlyComplete?.Invoke();
-            return;
-        }
-
-        Vector2 size = new Vector2(18f, 18f);
-
-        ResetPooledRectTransform(rt, startAnchored, size);
-        var img = go.GetComponent<UnityEngine.UI.Image>();
-        if (img != null)
-        {
-            var col = img.color;
-            col.a = 1f;
-            img.color = col;
-            img.enabled = true;
-        }
-
-        go.SetActive(true);
-
-        rt.localScale = Vector3.one;
-
-        Vector2 endAnchored = target != null
-            ? WorldToAnchoredOnRoot(target.position, flyIconsRoot, cam)
-            : startAnchored + Vector2.up * 400f;
-
-        if (flyIconsRoot != null)
-        {
-            var r = flyIconsRoot.rect;
-            float pad = 30f;
-            endAnchored.x = Mathf.Clamp(endAnchored.x, r.xMin + pad, r.xMax - pad);
-            endAnchored.y = Mathf.Clamp(endAnchored.y, r.yMin + pad, r.yMax - pad);
-        }
-
-        Vector2 mid = (startAnchored + endAnchored) * 0.5f + new Vector2(0f, bezierArc);
-
-        float dist = Vector2.Distance(startAnchored, endAnchored);
-        float scaledDuration = Mathf.Clamp(duration * (dist / 700f), duration * 0.85f, duration * 1.8f);
-
-        _pendingFlyTweens++;
-        Sequence seq = DOTween.Sequence();
-        seq.SetTarget(go);
-        if (delay > 0) seq.AppendInterval(delay);
-        seq.Append(DOTween.To(() => 0f, t =>
-        {
-            float u = t;
-            Vector2 p = QuadraticBezier(startAnchored, mid, endAnchored, u);
-            rt.anchoredPosition = p;
-        }, 1f, scaledDuration).SetEase(Ease.InOutQuad).SetTarget(go));
-        seq.OnComplete(() =>
-        {
-            var gm = GameManager.InstanceOrNull;
-            if (gm != null)
-            {
-                gm.AddGold(chunk);
-                GlobalUIManager.InstanceOrNull?.PunchAssetsText();
-                _homeUi?.PunchLocalGoldText();
-            }
-
-            ReturnFlyIcon(go);
-            _pendingFlyTweens--;
-            onFlyComplete?.Invoke();
-        });
-        seq.SetUpdate(true);
-    }
-
-    static Vector2 QuadraticBezier(Vector2 a, Vector2 b, Vector2 c, float t)
-    {
-        float u = 1f - t;
-        return u * u * a + 2f * u * t * b + t * t * c;
-    }
+    /// <summary>레거시 호환용 — 비행 입금은 더 이상 사용하지 않음.</summary>
+    public bool IsFlyBusy => false;
 }

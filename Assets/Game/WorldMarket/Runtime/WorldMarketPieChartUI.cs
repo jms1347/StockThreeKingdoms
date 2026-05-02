@@ -23,6 +23,9 @@ public class WorldMarketPieChartUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI textWu;
     [SerializeField] TextMeshProUGUI textOthers;
 
+    [Tooltip("비우면 런타임에 세력 막대 위에 「대륙 경제 지수」 줄을 만듭니다.")]
+    [SerializeField] TextMeshProUGUI continentalEconomicIndexText;
+
     FactionCastleShare _lastShare;
     bool _hasShareSample;
     Coroutine _lateRefreshRoutine;
@@ -38,6 +41,7 @@ public class WorldMarketPieChartUI : MonoBehaviour
         ConfigureBarSegment(segmentOthers, new Color(0.55f, 0.58f, 0.66f));
 
         EnsureInBarPercentLabels();
+        EnsureContinentalIndexLabel();
 
         UpdateStackedBar(new FactionCastleShare
         {
@@ -193,6 +197,8 @@ public class WorldMarketPieChartUI : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         if (dm == null || !dm.IsStateReady) return;
 
+        UpdateContinentalIndexLabel(dm);
+
         var share = dm.GetFactionCastleOwnershipShare();
 
         if (!_hasShareSample)
@@ -208,6 +214,39 @@ public class WorldMarketPieChartUI : MonoBehaviour
 
         _lastShare = share;
         UpdateStackedBar(share);
+    }
+
+    void EnsureContinentalIndexLabel()
+    {
+        if (continentalEconomicIndexText != null) return;
+        var go = new GameObject("ContinentalEconomicIndex", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(transform, false);
+        go.transform.SetAsFirstSibling();
+        var le = go.GetComponent<LayoutElement>();
+        le.minHeight = 26f;
+        le.flexibleWidth = 1f;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.fontSize = 15;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.alignment = TextAlignmentOptions.Right;
+        tmp.color = new Color(1f, 0.82f, 0.38f, 1f);
+        continentalEconomicIndexText = tmp;
+    }
+
+    void UpdateContinentalIndexLabel(DataManager dm = null)
+    {
+        EnsureContinentalIndexLabel();
+        if (continentalEconomicIndexText == null) return;
+        dm ??= DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady)
+        {
+            continentalEconomicIndexText.text = "";
+            return;
+        }
+
+        continentalEconomicIndexText.text = $"대륙 경제 지수: {dm.GetContinentalEconomicIndexPoints():N1} pt";
     }
 
     static bool ApproximatelySame(FactionCastleShare a, FactionCastleShare b)

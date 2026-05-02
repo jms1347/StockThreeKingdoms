@@ -19,6 +19,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] Button closeButton;
     [SerializeField] Button dimCloseButton;
     [SerializeField] TextMeshProUGUI headerTitleText;
+    [SerializeField] TextMeshProUGUI flavorUnderTitleText;
     [SerializeField] TextMeshProUGUI headerSubtitlePrefixText;
     [SerializeField] TextMeshProUGUI headerSubtitleText;
     [SerializeField] Image factionSubtitleSwatchImage;
@@ -55,6 +56,9 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] TextMeshProUGUI footprintIcon2;
     [SerializeField] TextMeshProUGUI footprintIcon3;
     [SerializeField] Button confirmCloseButton;
+    [Tooltip("켜면 차트·인구·민심 게이지 줄을 숨깁니다. 수치는 로직에서만 사용합니다.")]
+    [SerializeField] bool hidePopulationSentimentDetailUi = true;
+
     [SerializeField] RectTransform deployDialogRoot;
     [SerializeField] Slider deploySlider;
     [SerializeField] TextMeshProUGUI deploySliderValueText;
@@ -72,6 +76,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
     string _castleId;
     DataManager _dm;
+    Vector2 _sheetRestAnchoredPos;
+    bool _sheetRestCached;
     int _deployMaxThisOpen;
     int _recallMaxThisOpen;
     bool _playOpenGaugeAnim;
@@ -207,8 +213,25 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             rootCanvasGroup.blocksRaycasts = true;
         }
 
+        PlayBottomSheetEnter();
+
         HookDm();
         Refresh();
+    }
+
+    void PlayBottomSheetEnter()
+    {
+        if (panelRoot == null) return;
+        if (!_sheetRestCached)
+        {
+            _sheetRestAnchoredPos = panelRoot.anchoredPosition;
+            _sheetRestCached = true;
+        }
+
+        panelRoot.DOKill();
+        float drop = Mathf.Max(Screen.height * 0.28f, 520f);
+        panelRoot.anchoredPosition = _sheetRestAnchoredPos + new Vector2(0f, -drop);
+        panelRoot.DOAnchorPos(_sheetRestAnchoredPos, 0.42f).SetEase(Ease.OutCubic).SetUpdate(true);
     }
 
     public void Close()
@@ -219,6 +242,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (recallDialogRoot != null)
             recallDialogRoot.gameObject.SetActive(false);
         UnhookDm();
+        if (panelRoot != null && _sheetRestCached)
+        {
+            panelRoot.DOKill();
+            panelRoot.anchoredPosition = _sheetRestAnchoredPos;
+        }
+
         gameObject.SetActive(false);
         _castleId = null;
     }
@@ -279,6 +308,14 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         if (headerTitleText != null)
             headerTitleText.text = disp;
+        if (flavorUnderTitleText != null)
+        {
+            string flav = master != null ? master.flavorText : null;
+            bool showFlav = !string.IsNullOrWhiteSpace(flav);
+            flavorUnderTitleText.gameObject.SetActive(showFlav);
+            if (showFlav)
+                flavorUnderTitleText.text = flav.Trim();
+        }
         Color subCol = new Color(0.62f, 0.66f, 0.72f, 1f);
         string factionLine = DataManager.GetFactionLordDisplayLabel(lord);
         if (headerSubtitlePrefixText != null && factionSubtitleSwatchImage != null && headerSubtitleText != null)
@@ -326,12 +363,17 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             changePctText.enableWordWrapping = true;
             changePctText.overflowMode = TextOverflowModes.Overflow;
             changePctText.alignment = TextAlignmentOptions.Left;
+            changePctText.richText = true;
             bool up = pct > 0.001f;
             bool flat = Mathf.Abs(pct) < 0.02f;
+            string cause = dm.GetCastlePriceMovementCauseLabel(_castleId);
+            string causeRich = string.IsNullOrEmpty(cause)
+                ? ""
+                : $"  <color=#a8b0bc><size=15>[{cause}]</size></color>";
             // 입성료가 전일 기준가 대비 몇 % 변했는지(세율과 무관)
             changePctText.text = flat
-                ? "전일 대비 0.00%"
-                : $"전일 대비 {(up ? "+" : "")}{pct:F2}%";
+                ? "전일 대비 0.00%" + causeRich
+                : $"전일 대비 {(up ? "+" : "")}{pct:F2}%" + causeRich;
             changePctText.color = flat ? new Color(0.7f, 0.72f, 0.76f) : (up ? RiseColor : FallColor);
         }
 
@@ -445,7 +487,14 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             relocateButton.interactable = canRelocate && !travelInProgress;
             var rLbl = relocateButton.GetComponentInChildren<TextMeshProUGUI>(true);
             if (rLbl != null)
-                rLbl.text = "이주하기";
+            {
+                rLbl.richText = true;
+                int mpNeedBtn = dm.GetTravelMarchPointsCostRounded(_castleId);
+                if (mpNeedBtn > 0)
+                    rLbl.text = "<color=#ffffff>이주 예약</color>  <color=#ff5555>MP " + mpNeedBtn + "</color>";
+                else
+                    rLbl.text = "이주하기";
+            }
         }
 
         if (relocateSpendMpButton != null)
@@ -472,6 +521,29 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
                 relocateHintText.text =
                     $"이주까지 {cost:N0}pt 필요 — 시간·걸음으로 게이지를 채우면 이동 완료 (현재 {gauge:N0} / {cost:N0}) · 만보기 누적 {syncedSteps:N0}보";
         }
+
+        ApplyPopulationSentimentDetailVisibility();
+    }
+
+    void ApplyPopulationSentimentDetailVisibility()
+    {
+        bool hide = hidePopulationSentimentDetailUi;
+
+        if (chart7Dual != null)
+        {
+            var chartHost = chart7Dual.transform.parent;
+            if (chartHost != null)
+                chartHost.gameObject.SetActive(!hide);
+        }
+
+        if (popStatText != null)
+            popStatText.gameObject.SetActive(!hide);
+        if (popGaugeSlider != null)
+            popGaugeSlider.gameObject.SetActive(!hide);
+        if (sentimentStatText != null)
+            sentimentStatText.gameObject.SetActive(!hide);
+        if (sentimentGaugeSlider != null)
+            sentimentGaugeSlider.gameObject.SetActive(!hide);
     }
 
     void ApplyMarchPointsTravelLine(DataManager dm, bool isHq)
@@ -871,6 +943,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         headerTitleText = CreateTmp(titleCol.transform, "Title", "", 24, FontStyles.Bold, TextAlignmentOptions.Left);
         headerTitleText.color = Color.white;
 
+        flavorUnderTitleText = CreateTmp(titleCol.transform, "Flavor", "", 14, FontStyles.Italic, TextAlignmentOptions.Left);
+        flavorUnderTitleText.color = new Color(0.62f, 0.66f, 0.72f, 1f);
+        flavorUnderTitleText.enableWordWrapping = true;
+        flavorUnderTitleText.overflowMode = TextOverflowModes.Ellipsis;
+        flavorUnderTitleText.gameObject.SetActive(false);
+
         const float subFont = 17f;
         var subRow = new GameObject("SubTitleRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         subRow.transform.SetParent(titleCol.transform, false);
@@ -1155,6 +1233,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         relocateSpendMpButton = CreateFooterBtn(btnRow.transform, "MP 즉시 차감", new Color(0.34f, 0.30f, 0.66f));
 
         deployButton = CreateFooterBtn(btnRow.transform, "병사 투입", new Color(0.16f, 0.48f, 0.32f));
+        if (deployButton != null)
+        {
+            if (deployButton.GetComponent<WorldMarketGoldButtonShimmer>() == null)
+                deployButton.gameObject.AddComponent<WorldMarketGoldButtonShimmer>();
+        }
+
         recallButton = CreateFooterBtn(btnRow.transform, "병사 회군", new Color(0.82f, 0.42f, 0.22f));
 
         var okGo = new GameObject("HwagInClose", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));

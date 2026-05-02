@@ -452,6 +452,66 @@ public partial class DataManager
     }
 
     /// <summary>
+    /// 본영 징집 — UI 단가를 <b>현재 주가</b>(<see cref="CastleStateData.currentBuyPrice"/>)만 사용. 인구·정원 한도는 동일 적용.
+    /// </summary>
+    public bool TryRecruitHomeSoldiersAtStockPrice(string castleId, int recruitCount, out long totalGoldCost, out string reason)
+    {
+        totalGoldCost = 0;
+        reason = "";
+        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || recruitCount <= 0)
+        {
+            reason = "입력값이 유효하지 않습니다.";
+            return false;
+        }
+
+        if (!RecruitController.TryBuildStockPriceQuote(castleId, out var q))
+        {
+            reason = "성 데이터를 불러오지 못했습니다.";
+            return false;
+        }
+
+        recruitCount = Mathf.Min(recruitCount, q.MaxRecruitable);
+        if (recruitCount <= 0)
+        {
+            reason = q.MaxByPopulation <= 0 ? "징집할 수 있는 백성이 부족합니다." :
+                q.MaxByCapacity <= 0 ? "수용 가능한 병력 한도를 초과했습니다." :
+                "금화가 부족합니다.";
+            return false;
+        }
+
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null)
+        {
+            reason = "유저 데이터가 준비되지 않았습니다.";
+            return false;
+        }
+
+        totalGoldCost = (long)Math.Ceiling(q.UnitPrice * recruitCount);
+        if (!gm.UseGold(totalGoldCost))
+        {
+            reason = "금화가 부족합니다.";
+            return false;
+        }
+
+        castleId = castleId.Trim();
+        var s = castleStateDataMap[castleId];
+        s.userDeployedTroops = Mathf.Max(0, s.userDeployedTroops + recruitCount);
+        s.currentPopulation = Mathf.Max(0, s.currentPopulation - recruitCount);
+
+        int popRef = Mathf.Max(1, s.currentPopulation + recruitCount);
+        float sentimentDrop = RecruitController.ComputeSentimentDrop(recruitCount, popRef);
+        float priceDropPct = RecruitController.ComputePriceDropPercent(recruitCount, popRef);
+        s.currentSentiment = Mathf.Clamp(s.currentSentiment - sentimentDrop, 0f, 200f);
+        s.currentBuyPrice = Mathf.Max(0.01f, s.currentBuyPrice * (1f - priceDropPct));
+
+        _stateDirty = true;
+        FlushLiveScriptableObjects();
+        RefreshGlobalTopBarIfPossible();
+        OnStateTicked?.Invoke();
+        return true;
+    }
+
+    /// <summary>
     /// 본영 해산(매도): 보유 병사를 줄이고 금화를 환급합니다.
     /// </summary>
     public bool TryDischargeHomeSoldiers(string castleId, int dischargeCount, out long gainedGold, out string reason)
@@ -486,6 +546,56 @@ public partial class DataManager
         }
 
         gainedGold = (long)Math.Floor(q.UnitPrice * dischargeCount);
+        var gm = GameManager.InstanceOrNull;
+        if (gm == null)
+        {
+            reason = "유저 데이터가 준비되지 않았습니다.";
+            return false;
+        }
+
+        s.userDeployedTroops = have - dischargeCount;
+        if (gainedGold > 0)
+            gm.AddGold(gainedGold);
+
+        _stateDirty = true;
+        FlushLiveScriptableObjects();
+        RefreshGlobalTopBarIfPossible();
+        OnStateTicked?.Invoke();
+        return true;
+    }
+
+    /// <summary>
+    /// 본영 해산 — 단가는 <see cref="CastleStateData.currentBuyPrice"/>만 사용하고, 환급액은 시세의 <b>95%</b>(수수료 5%).
+    /// </summary>
+    public bool TryDischargeHomeSoldiersAtStockPrice(string castleId, int dischargeCount, out long gainedGold, out string reason)
+    {
+        gainedGold = 0;
+        reason = "";
+        if (!IsStateReady || string.IsNullOrWhiteSpace(castleId) || dischargeCount <= 0)
+        {
+            reason = "입력값이 유효하지 않습니다.";
+            return false;
+        }
+
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.TryGetValue(castleId, out var s) || s == null)
+        {
+            reason = "성 데이터를 찾을 수 없습니다.";
+            return false;
+        }
+
+        int have = Mathf.Max(0, s.userDeployedTroops);
+        if (have <= 0)
+        {
+            reason = "해산할 병사가 없습니다.";
+            return false;
+        }
+
+        dischargeCount = Mathf.Min(dischargeCount, have);
+        float unit = Mathf.Max(0.01f, s.currentBuyPrice);
+        double gross = unit * dischargeCount;
+        gainedGold = (long)Math.Floor(gross * 0.95d);
+
         var gm = GameManager.InstanceOrNull;
         if (gm == null)
         {

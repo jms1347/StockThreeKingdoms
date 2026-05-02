@@ -15,13 +15,14 @@ using TMPro;
 public static class HomeSceneLayoutWizard
 {
     const string MenuPath = "StockThreeKingdoms/Layout/Home/HomeScene 레이아웃 자동 생성(전체)";
+    const string MenuPathV2 = "StockThreeKingdoms/Layout/Home/본영 레이아웃 v2 (3탭·수거형) 생성·교체";
 
-    const float ContentTopInset = 160f;    // GlobalUI TopBar(140) + 여유
+    const float ContentTopInset = 200f;    // GlobalUI TopBar(180) + 여유
     const float ContentBottomInset = 180f; // GlobalUI BottomTabBar(160) + 여유
 
-    const float TmpScale = 1.65f;
-    const int TmpMin = 36;
-    const int TmpMax = 96;
+    const float TmpScale = 1.4f;
+    const int TmpMin = 28;
+    const int TmpMax = 84;
     const float ButtonMinHeight = 120f;
 
     [MenuItem(MenuPath, false, 0)]
@@ -68,6 +69,404 @@ public static class HomeSceneLayoutWizard
         EditorSceneManager.MarkSceneDirty(hp.scene);
         Selection.activeGameObject = hp;
         Debug.Log("[HomeSceneLayoutWizard] 완료. 저장(Ctrl+S)하세요.");
+    }
+
+    /// <summary>기존 HomePanels를 제거하고 본영 v2(주머니·성벽·3서브탭) 레이아웃을 새로 만듭니다.</summary>
+    [MenuItem(MenuPathV2, false, 11)]
+    static void RunBenYeomLayoutV2()
+    {
+        Canvas canvas = Object.FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            EditorUtility.DisplayDialog("본영 v2", "씬에 Canvas가 없습니다.", "확인");
+            return;
+        }
+
+        if (Object.FindObjectOfType<EventSystem>() == null)
+        {
+            GameObject es = new GameObject("EventSystem");
+            Undo.RegisterCreatedObjectUndo(es, "Create EventSystem");
+            es.AddComponent<EventSystem>();
+            es.AddComponent<StandaloneInputModule>();
+        }
+
+        RectTransform contentRoot = EnsureContentRoot(canvas);
+        EnsureHomeSceneBootstrapper(canvas);
+
+        Transform existingHp = contentRoot.Find("HomePanels");
+        if (existingHp != null)
+        {
+            if (!EditorUtility.DisplayDialog("본영 레이아웃 v2",
+                    "ContentRoot 아래의 기존 HomePanels를 삭제하고 새 레이아웃을 생성합니다. 계속할까요?",
+                    "삭제 후 생성", "취소"))
+                return;
+            Undo.DestroyObjectImmediate(existingHp.gameObject);
+        }
+
+        GameObject hp = CreateHomePanelsV2(contentRoot);
+        SetupHomePanelsV2(hp);
+
+        EditorSceneManager.MarkSceneDirty(hp.scene);
+        Selection.activeGameObject = hp;
+        Debug.Log("[HomeSceneLayoutWizard] 본영 v2 생성 완료. 저장(Ctrl+S)하세요.");
+    }
+
+    static GameObject CreateHomePanelsV2(RectTransform parent)
+    {
+        GameObject root = new GameObject("HomePanels", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(root, "Create HomePanels v2");
+        root.transform.SetParent(parent, false);
+        root.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+
+        var rootRect = root.GetComponent<RectTransform>();
+        rootRect.anchorMin = Vector2.zero;
+        rootRect.anchorMax = Vector2.one;
+        rootRect.offsetMin = Vector2.zero;
+        rootRect.offsetMax = Vector2.zero;
+
+        var rootLayout = root.GetComponent<VerticalLayoutGroup>();
+        rootLayout.spacing = 14;
+        rootLayout.padding = new RectOffset(10, 10, 8, 8);
+        rootLayout.childControlHeight = true;
+        rootLayout.childControlWidth = true;
+        rootLayout.childForceExpandHeight = false;
+        rootLayout.childForceExpandWidth = true;
+
+        CreateLocalResourceMirrorRow(root.transform);
+        CreatePocketBannerRow(root.transform);
+        CreateGoldPileDockRow(root.transform);
+        CreateMainWallButton(root.transform);
+        CreateFunctionTabsBlock(root.transform);
+
+        var upgradeGrid = root.transform.Find("FunctionTabs/PanelsRoot/BuildingPanel/UpgradeGrid");
+        if (upgradeGrid != null)
+        {
+            CreateLaborPanel(upgradeGrid);
+            CreateMarketPanel(upgradeGrid);
+            CreateLogisticsPanel(upgradeGrid);
+            CreateWarehouseUpgradePanel(upgradeGrid);
+        }
+
+        AddScriptsAndWireReferencesV2(root);
+        EnsureManagersExist();
+
+        return root;
+    }
+
+    static void CreateLocalResourceMirrorRow(Transform parent)
+    {
+        var row = new GameObject("ResourceBar", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(row, "ResourceBar");
+        row.transform.SetParent(parent, false);
+        var h = row.GetComponent<HorizontalLayoutGroup>();
+        h.spacing = 12f;
+        h.childAlignment = TextAnchor.MiddleCenter;
+        h.childControlWidth = true;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = true;
+        row.GetComponent<LayoutElement>().minHeight = 52f;
+
+        var gold = CreateTmp("GoldText", row.transform, "금화: 0", 32, FontStyles.Bold);
+        gold.alignment = TextAlignmentOptions.Left;
+        var leG = gold.gameObject.GetComponent<LayoutElement>() ?? gold.gameObject.AddComponent<LayoutElement>();
+        leG.flexibleWidth = 2f;
+
+        var troops = CreateTmp("FarmWorkersText", row.transform, "병력: 0", 28, FontStyles.Normal);
+        troops.alignment = TextAlignmentOptions.Right;
+        var leT = troops.gameObject.GetComponent<LayoutElement>() ?? troops.gameObject.AddComponent<LayoutElement>();
+        leT.flexibleWidth = 1f;
+    }
+
+    /// <summary>시장 창고 UI 없이 금화 더미(8개)만 배치 — 수거는 GateButton.</summary>
+    static void CreateGoldPileDockRow(Transform parent)
+    {
+        var row = new GameObject("GoldPileDock", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(row, "GoldPileDock");
+        row.transform.SetParent(parent, false);
+        var h = row.GetComponent<HorizontalLayoutGroup>();
+        h.spacing = 6f;
+        h.childAlignment = TextAnchor.MiddleCenter;
+        h.childControlWidth = true;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = true;
+        h.childForceExpandHeight = true;
+        var le = row.GetComponent<LayoutElement>();
+        le.minHeight = 40f;
+        le.preferredHeight = 44f;
+        EnsurePilesGrid(row.transform, "PilesGrid");
+    }
+
+    static void CreatePocketBannerRow(Transform parent)
+    {
+        var row = new GameObject("PocketBannerRow", typeof(RectTransform), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(row, "PocketBannerRow");
+        row.transform.SetParent(parent, false);
+        row.GetComponent<LayoutElement>().minHeight = 44f;
+        var tmp = CreateTmp("PocketBannerText", row.transform, "", 26, FontStyles.Italic);
+        tmp.color = new Color(1f, 0.92f, 0.45f);
+        tmp.alignment = TextAlignmentOptions.Center;
+    }
+
+    static void CreateMainWallButton(Transform parent)
+    {
+        var btn = CreateButton(parent, "GateButton", "성벽 터치 · 수거");
+        var le = btn.GetComponent<LayoutElement>() ?? btn.gameObject.AddComponent<LayoutElement>();
+        le.minHeight = 160f;
+        le.preferredHeight = 180f;
+    }
+
+    static void CreateFunctionTabsBlock(Transform parent)
+    {
+        var ft = new GameObject("FunctionTabs", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(ft, "FunctionTabs");
+        ft.transform.SetParent(parent, false);
+        var ftLe = ft.GetComponent<LayoutElement>();
+        ftLe.flexibleHeight = 3f;
+        ftLe.minHeight = 420f;
+        var ftV = ft.GetComponent<VerticalLayoutGroup>();
+        ftV.spacing = 10f;
+        ftV.childControlWidth = true;
+        ftV.childControlHeight = true;
+        ftV.childForceExpandWidth = true;
+        ftV.childForceExpandHeight = false;
+
+        var tabBar = new GameObject("TabBar", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(tabBar, "TabBar");
+        tabBar.transform.SetParent(ft.transform, false);
+        var h = tabBar.GetComponent<HorizontalLayoutGroup>();
+        h.spacing = 8f;
+        h.childControlWidth = true;
+        h.childControlHeight = true;
+        h.childForceExpandWidth = true;
+        tabBar.GetComponent<LayoutElement>().minHeight = 110f;
+
+        CreateButton(tabBar.transform, "TabBuildingButton", "내정 강화");
+        CreateButton(tabBar.transform, "TabMilitaryButton", "군사 모집");
+        CreateButton(tabBar.transform, "TabMarchingButton", "행군 준비");
+
+        var panelsRoot = new GameObject("PanelsRoot", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(panelsRoot, "PanelsRoot");
+        panelsRoot.transform.SetParent(ft.transform, false);
+        var prLe = panelsRoot.GetComponent<LayoutElement>();
+        prLe.flexibleHeight = 2f;
+        prLe.minHeight = 300f;
+        var prV = panelsRoot.GetComponent<VerticalLayoutGroup>();
+        prV.spacing = 0f;
+        prV.childAlignment = TextAnchor.UpperCenter;
+        prV.childControlWidth = true;
+        prV.childControlHeight = true;
+        prV.childForceExpandWidth = true;
+        prV.childForceExpandHeight = true;
+
+        var building = new GameObject("BuildingPanel", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(building, "BuildingPanel");
+        building.transform.SetParent(panelsRoot.transform, false);
+        building.GetComponent<Image>().color = new Color(0.14f, 0.16f, 0.22f, 0.95f);
+        var bv = building.GetComponent<VerticalLayoutGroup>();
+        bv.spacing = 0f;
+        bv.padding = new RectOffset(8, 8, 8, 8);
+        bv.childAlignment = TextAnchor.UpperCenter;
+        bv.childControlWidth = true;
+        bv.childControlHeight = true;
+        bv.childForceExpandWidth = true;
+        bv.childForceExpandHeight = true;
+        var bLe = building.GetComponent<LayoutElement>();
+        bLe.minHeight = 280f;
+        bLe.flexibleHeight = 1f;
+        building.SetActive(true);
+
+        var grid = new GameObject("UpgradeGrid", typeof(RectTransform), typeof(GridLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(grid, "UpgradeGrid");
+        grid.transform.SetParent(building.transform, false);
+        var gridComp = grid.GetComponent<GridLayoutGroup>();
+        gridComp.cellSize = new Vector2(320f, 200f);
+        gridComp.spacing = new Vector2(10f, 10f);
+        gridComp.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridComp.constraintCount = 2;
+        gridComp.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        gridComp.childAlignment = TextAnchor.UpperCenter;
+        var gLe = grid.GetComponent<LayoutElement>();
+        gLe.flexibleHeight = 1f;
+        gLe.flexibleWidth = 1f;
+        gLe.minHeight = 420f;
+
+        var military = new GameObject("MilitaryPanel", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(military, "MilitaryPanel");
+        military.transform.SetParent(panelsRoot.transform, false);
+        military.GetComponent<Image>().color = new Color(0.14f, 0.18f, 0.22f, 0.96f);
+        var mv = military.GetComponent<VerticalLayoutGroup>();
+        mv.spacing = 10f;
+        mv.padding = new RectOffset(14, 14, 12, 12);
+        mv.childControlWidth = true;
+        mv.childControlHeight = true;
+        var mLe = military.GetComponent<LayoutElement>();
+        mLe.minHeight = 320f;
+        mLe.flexibleHeight = 1f;
+        military.SetActive(false);
+        mv.childForceExpandWidth = true;
+
+        CreateTmp("MilitaryStockPriceText", military.transform, "현재 도시 병사 시세: — G", 28, FontStyles.Bold);
+        CreateSlider(military.transform, "RecruitSlider");
+        CreateTmp("RecruitCostText", military.transform, "예상 비용: —", 26, FontStyles.Normal);
+        CreateTmp("RecruitUpkeepPreviewText", military.transform, "징집 후 유지비 변화: —", 26, FontStyles.Normal);
+        CreateTmp("DischargeExpectGoldText", military.transform, "예상 환급: —", 26, FontStyles.Normal);
+
+        var quickRow = new GameObject("QuickRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(quickRow, "QuickRow");
+        quickRow.transform.SetParent(military.transform, false);
+        var qh = quickRow.GetComponent<HorizontalLayoutGroup>();
+        qh.spacing = 8f;
+        qh.childForceExpandWidth = true;
+        qh.childControlWidth = true;
+        CreateButton(quickRow.transform, "RecruitPlus1KButton", "+1K");
+        CreateButton(quickRow.transform, "RecruitPlus10KButton", "+10K");
+        CreateButton(quickRow.transform, "RecruitMaxButton", "MAX");
+
+        var actionRow = new GameObject("RecruitActionRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        Undo.RegisterCreatedObjectUndo(actionRow, "RecruitActionRow");
+        actionRow.transform.SetParent(military.transform, false);
+        var ah = actionRow.GetComponent<HorizontalLayoutGroup>();
+        ah.spacing = 12f;
+        ah.childForceExpandWidth = true;
+        ah.childControlWidth = true;
+        CreateButton(actionRow.transform, "RecruitConfirmButton", "징집하기");
+        CreateButton(actionRow.transform, "DischargeConfirmButton", "해산하기");
+
+        var marching = new GameObject("MarchingPanel", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(marching, "MarchingPanel");
+        marching.transform.SetParent(panelsRoot.transform, false);
+        marching.GetComponent<Image>().color = new Color(0.12f, 0.16f, 0.2f, 0.94f);
+        var marchV = marching.GetComponent<VerticalLayoutGroup>();
+        marchV.spacing = 10f;
+        marchV.padding = new RectOffset(12, 12, 10, 12);
+        marchV.childAlignment = TextAnchor.UpperCenter;
+        marchV.childControlWidth = true;
+        marchV.childControlHeight = true;
+        marchV.childForceExpandWidth = true;
+        marchV.childForceExpandHeight = false;
+        var marchLe = marching.GetComponent<LayoutElement>();
+        marchLe.minHeight = 280f;
+        marchLe.flexibleHeight = 1f;
+        marching.SetActive(false);
+    }
+
+    static void SetupHomePanelsV2(GameObject hp)
+    {
+        if (hp == null) return;
+        Undo.RegisterFullObjectHierarchyUndo(hp, "HomePanels v2 Setup");
+
+        var ui = hp.GetComponent<HomeUIController>();
+        var hc = hp.GetComponent<HomeController>();
+
+        ScaleAllTmpUnder(hp.transform);
+        EnsureLayoutElementsOnButtons(hp.transform);
+
+        EnsureWarehouseRowPlacement(hp.transform);
+
+        Transform marchingPanel = hp.transform.Find("FunctionTabs/PanelsRoot/MarchingPanel");
+        var ped = marchingPanel != null ? EnsurePedometerPanel(marchingPanel) : EnsurePedometerPanel(hp.transform);
+
+        var flyRoot = EnsureFlyIconsRoot(hp.transform);
+        var cm = hp.GetComponent<CollectionManager>() ?? hp.gameObject.AddComponent<CollectionManager>();
+        cm.homeController = hc;
+        cm.flyIconsRoot = flyRoot;
+        EnsureFlyIconTemplates(cm, flyRoot);
+        if (cm.poolSize < 10) cm.poolSize = 12;
+
+        var gui = GlobalUIManager.InstanceOrNull;
+        cm.goldFlyTarget = gui != null ? gui.AssetsTarget : null;
+
+        AssignPilesNearWarehouseLabels(cm, hp.transform);
+        cm.pileBurstRoot = hp.transform.Find("GateButton")?.GetComponent<RectTransform>()
+            ?? hp.transform.Find("GoldPileDock") as RectTransform;
+        EditorUtility.SetDirty(cm);
+
+        if (ui != null)
+        {
+            var so = new SerializedObject(ui);
+            so.FindProperty("collectionManager").objectReferenceValue = cm;
+            WireHomeUiSerializedV2(so, hp.transform, ped);
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        EditorUtility.SetDirty(ui);
+        EditorUtility.SetDirty(hp);
+    }
+
+    static void WireHomeUiSerializedV2(SerializedObject so, Transform root, PedometerRefs ped)
+    {
+        void SetObj(string prop, Object o)
+        {
+            var p = so.FindProperty(prop);
+            if (p != null) p.objectReferenceValue = o;
+        }
+
+        SetObj("goldText", root.Find("ResourceBar/GoldText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("farmWorkersText", root.Find("ResourceBar/FarmWorkersText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("goldFillSlider", null);
+        SetObj("pocketBannerText", root.Find("PocketBannerRow/PocketBannerText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("marketAccumulateText", null);
+        SetObj("marketAccumulateSlider", null);
+        SetObj("gateButton", root.Find("GateButton")?.GetComponent<Button>());
+
+        SetObj("buildingTabButton", root.Find("FunctionTabs/TabBar/TabBuildingButton")?.GetComponent<Button>());
+        SetObj("militaryTabButton", root.Find("FunctionTabs/TabBar/TabMilitaryButton")?.GetComponent<Button>());
+        SetObj("marchingTabButton", root.Find("FunctionTabs/TabBar/TabMarchingButton")?.GetComponent<Button>());
+        SetObj("buildingPanel", root.Find("FunctionTabs/PanelsRoot/BuildingPanel")?.gameObject);
+        SetObj("militaryPanel", root.Find("FunctionTabs/PanelsRoot/MilitaryPanel")?.gameObject);
+        SetObj("marchingPanel", root.Find("FunctionTabs/PanelsRoot/MarchingPanel")?.gameObject);
+
+        var bg = root.Find("FunctionTabs/PanelsRoot/BuildingPanel/UpgradeGrid");
+        SetObj("laborLabelText", bg?.Find("LaborPanel/LaborLabelText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("laborUpgradeButton", bg?.Find("LaborPanel/LaborUpgradeButton")?.GetComponent<Button>());
+        SetObj("marketLabelText", bg?.Find("MarketPanel/MarketLabelText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("marketUpgradeButton", bg?.Find("MarketPanel/MarketButtons/MarketUpgradeButton")?.GetComponent<Button>());
+        SetObj("logisticsLabelText", bg?.Find("LogisticsPanel/LogisticsLabelText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("logisticsUpgradeButton", bg?.Find("LogisticsPanel/LogisticsButtons/LogisticsUpgradeButton")?.GetComponent<Button>());
+        SetObj("warehouseLabelText", bg?.Find("WarehouseUpgradePanel/WarehouseLabelText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("warehouseUpgradeButton", bg?.Find("WarehouseUpgradePanel/WarehouseButtons/WarehouseUpgradeButton")?.GetComponent<Button>());
+
+        var mp = root.Find("FunctionTabs/PanelsRoot/MilitaryPanel");
+        SetObj("militaryStockPriceText", mp?.Find("MilitaryStockPriceText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("recruitSlider", mp?.Find("RecruitSlider")?.GetComponent<Slider>());
+        SetObj("recruitCostText", mp?.Find("RecruitCostText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("recruitUpkeepPreviewText", mp?.Find("RecruitUpkeepPreviewText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("dischargeExpectGoldText", mp?.Find("DischargeExpectGoldText")?.GetComponent<TextMeshProUGUI>());
+        SetObj("recruitPlus1KButton", mp?.Find("QuickRow/RecruitPlus1KButton")?.GetComponent<Button>());
+        SetObj("recruitPlus10KButton", mp?.Find("QuickRow/RecruitPlus10KButton")?.GetComponent<Button>());
+        SetObj("recruitMaxButton", mp?.Find("QuickRow/RecruitMaxButton")?.GetComponent<Button>());
+        SetObj("recruitConfirmButton", mp?.Find("RecruitActionRow/RecruitConfirmButton")?.GetComponent<Button>());
+        SetObj("dischargeConfirmButton", mp?.Find("RecruitActionRow/DischargeConfirmButton")?.GetComponent<Button>());
+
+        if (ped.gaugeFill != null)
+            SetObj("pedometerGaugeFill", ped.gaugeFill);
+        if (ped.stepsText != null)
+            SetObj("pedometerStepsText", ped.stepsText);
+        var arr = so.FindProperty("stepRewardButtons");
+        if (arr != null && ped.buttons != null)
+        {
+            arr.arraySize = 4;
+            for (int i = 0; i < 4; i++)
+                arr.GetArrayElementAtIndex(i).objectReferenceValue = ped.buttons[i];
+        }
+        var labels = so.FindProperty("stepRewardLabels");
+        if (labels != null && ped.labels != null)
+        {
+            labels.arraySize = 4;
+            for (int i = 0; i < 4; i++)
+                labels.GetArrayElementAtIndex(i).objectReferenceValue = ped.labels[i];
+        }
+    }
+
+    static void AddScriptsAndWireReferencesV2(GameObject root)
+    {
+        if (root.GetComponent<HomeController>() == null)
+            root.AddComponent<HomeController>();
+        if (root.GetComponent<HomeUIController>() == null)
+            root.AddComponent<HomeUIController>();
+        if (root.GetComponent<CollectionManager>() == null)
+            root.AddComponent<CollectionManager>();
+        EditorUtility.SetDirty(root);
     }
 
     static void EnsureHomeSceneBootstrapper(Canvas canvas)
@@ -521,7 +920,8 @@ public static class HomeSceneLayoutWizard
 
     static GameObject CreateText(Transform parent, string name, string content, int fontSize, FontStyles style = FontStyles.Normal)
     {
-        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement), typeof(ContentSizeFitter));
+        // ContentSizeFitter horizontal Unconstrained 는 부모 폭이 0일 때 TMP가 한 글자씩 세로로 쌓이는 원인이 됨.
+        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
         Undo.RegisterCreatedObjectUndo(obj, name);
         obj.transform.SetParent(parent, false);
         var tmp = obj.GetComponent<TextMeshProUGUI>();
@@ -533,14 +933,17 @@ public static class HomeSceneLayoutWizard
         tmp.overflowMode = TextOverflowModes.Overflow;
         tmp.raycastTarget = false;
 
-        var csf = obj.GetComponent<ContentSizeFitter>();
-        csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        var rt = obj.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(0.5f, 1f);
+        rt.sizeDelta = new Vector2(0f, Mathf.Max(72f, fontSize * 4f));
 
         var le = obj.GetComponent<LayoutElement>();
-        le.minHeight = fontSize + 10;
-        le.preferredHeight = -1;
-        le.flexibleHeight = 0;
+        le.flexibleWidth = 1f;
+        le.minWidth = 200f;
+        le.minHeight = Mathf.Max(fontSize * 2 + 24, 56f);
+        le.preferredHeight = le.minHeight;
         return obj;
     }
 
@@ -572,12 +975,74 @@ public static class HomeSceneLayoutWizard
 
     static Slider CreateSlider(Transform parent, string name)
     {
-        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Slider), typeof(LayoutElement));
-        Undo.RegisterCreatedObjectUndo(obj, name);
-        obj.transform.SetParent(parent, false);
-        obj.GetComponent<Image>().color = new Color(0.2f, 0.2f, 0.2f);
-        obj.GetComponent<LayoutElement>().preferredHeight = 24;
-        return obj.GetComponent<Slider>();
+        GameObject root = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Slider), typeof(LayoutElement));
+        Undo.RegisterCreatedObjectUndo(root, name);
+        root.transform.SetParent(parent, false);
+
+        var bg = root.GetComponent<Image>();
+        bg.color = new Color(0.22f, 0.24f, 0.28f, 1f);
+
+        var slider = root.GetComponent<Slider>();
+        slider.transition = Selectable.Transition.ColorTint;
+        slider.navigation = Navigation.defaultNavigation;
+        slider.direction = Slider.Direction.LeftToRight;
+
+        var fillArea = new GameObject("Fill Area", typeof(RectTransform));
+        Undo.RegisterCreatedObjectUndo(fillArea, "Fill Area");
+        fillArea.transform.SetParent(root.transform, false);
+        var fillAreaRt = fillArea.GetComponent<RectTransform>();
+        fillAreaRt.anchorMin = new Vector2(0f, 0.2f);
+        fillAreaRt.anchorMax = new Vector2(1f, 0.8f);
+        fillAreaRt.offsetMin = new Vector2(10f, 0f);
+        fillAreaRt.offsetMax = new Vector2(-10f, 0f);
+
+        var fillGo = new GameObject("Fill", typeof(RectTransform), typeof(Image));
+        Undo.RegisterCreatedObjectUndo(fillGo, "Fill");
+        fillGo.transform.SetParent(fillArea.transform, false);
+        var fillRt = fillGo.GetComponent<RectTransform>();
+        fillRt.anchorMin = Vector2.zero;
+        fillRt.anchorMax = Vector2.one;
+        fillRt.offsetMin = Vector2.zero;
+        fillRt.offsetMax = Vector2.zero;
+        var fillImg = fillGo.GetComponent<Image>();
+        fillImg.color = new Color(0.35f, 0.65f, 1f, 1f);
+
+        var handleArea = new GameObject("Handle Slide Area", typeof(RectTransform));
+        Undo.RegisterCreatedObjectUndo(handleArea, "Handle Slide Area");
+        handleArea.transform.SetParent(root.transform, false);
+        var haRt = handleArea.GetComponent<RectTransform>();
+        haRt.anchorMin = Vector2.zero;
+        haRt.anchorMax = Vector2.one;
+        haRt.offsetMin = new Vector2(10f, 0f);
+        haRt.offsetMax = new Vector2(-10f, 0f);
+
+        var handleGo = new GameObject("Handle", typeof(RectTransform), typeof(Image));
+        Undo.RegisterCreatedObjectUndo(handleGo, "Handle");
+        handleGo.transform.SetParent(handleArea.transform, false);
+        var handleRt = handleGo.GetComponent<RectTransform>();
+        handleRt.anchorMin = new Vector2(0f, 0.5f);
+        handleRt.anchorMax = new Vector2(0f, 0.5f);
+        handleRt.pivot = new Vector2(0.5f, 0.5f);
+        handleRt.sizeDelta = new Vector2(28f, 28f);
+        var handleImg = handleGo.GetComponent<Image>();
+        handleImg.color = new Color(1f, 0.92f, 0.45f, 1f);
+
+        slider.fillRect = fillRt;
+        slider.handleRect = handleRt;
+        slider.targetGraphic = handleImg;
+
+        var le = root.GetComponent<LayoutElement>();
+        le.minHeight = 40f;
+        le.preferredHeight = 44f;
+        le.flexibleWidth = 1f;
+
+        var rootRt = root.GetComponent<RectTransform>();
+        rootRt.anchorMin = new Vector2(0f, 1f);
+        rootRt.anchorMax = new Vector2(1f, 1f);
+        rootRt.pivot = new Vector2(0.5f, 1f);
+        rootRt.sizeDelta = new Vector2(0f, 44f);
+
+        return slider;
     }
 
     // ---- 아래는 기존 HomeTestSceneLayoutWizard의 나머지 유틸(센터행/만보기/더미/비행/더미아이콘) ----
@@ -673,6 +1138,7 @@ public static class HomeSceneLayoutWizard
             var le = go.AddComponent<LayoutElement>();
             le.minHeight = 220f;
             le.flexibleWidth = 1f;
+            le.flexibleHeight = 1f;
             var v = go.AddComponent<VerticalLayoutGroup>();
             v.padding = new RectOffset(16, 16, 12, 12);
             v.spacing = 12f;
@@ -720,6 +1186,7 @@ public static class HomeSceneLayoutWizard
             h.childControlWidth = true;
             h.childControlHeight = true;
             h.childForceExpandWidth = true;
+            h.childForceExpandHeight = true;
 
             int[] miles = { 2000, 5000, 7000, 10000 };
             for (int i = 0; i < 4; i++)
@@ -728,7 +1195,9 @@ public static class HomeSceneLayoutWizard
                 Undo.RegisterCreatedObjectUndo(btnGo, "StepReward");
                 btnGo.transform.SetParent(row.transform, false);
                 btnGo.GetComponent<Image>().color = new Color(0.25f, 0.35f, 0.5f, 1f);
-                btnGo.GetComponent<LayoutElement>().minHeight = 120f;
+                var btnLe = btnGo.GetComponent<LayoutElement>();
+                btnLe.minHeight = 120f;
+                btnLe.flexibleWidth = 1f;
                 var lbl = CreateTmp("Label", btnGo.transform, $"{miles[i]:N0}보\n보상", 28, FontStyles.Normal);
                 lbl.alignment = TextAlignmentOptions.Center;
                 refs.buttons[i] = btnGo.GetComponent<Button>();
@@ -765,7 +1234,18 @@ public static class HomeSceneLayoutWizard
         tmp.fontStyle = style;
         tmp.color = Color.white;
         tmp.alignment = TextAlignmentOptions.Center;
-        go.GetComponent<LayoutElement>().minHeight = 44f;
+        tmp.enableWordWrapping = true;
+
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(0.5f, 1f);
+        rt.sizeDelta = new Vector2(0f, 48f);
+
+        var le = go.GetComponent<LayoutElement>();
+        le.flexibleWidth = 1f;
+        le.minWidth = 120f;
+        le.minHeight = 44f;
         return tmp;
     }
 
@@ -853,8 +1333,15 @@ public static class HomeSceneLayoutWizard
     {
         if (cm == null || homeRoot == null) return;
 
+        var dockGrid = homeRoot.Find("GoldPileDock/PilesGrid") as RectTransform;
+        if (dockGrid != null)
+        {
+            cm.goldPiles = EnsurePileIcons(dockGrid, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
+            cm.pileArea = dockGrid;
+        }
+
         var marketGrid = homeRoot.Find("WarehouseRow/WarehousePanelsRow/MarketWarehouse/HeaderRow/PilesGrid") as RectTransform;
-        if (marketGrid != null)
+        if (marketGrid != null && (cm.goldPiles == null || cm.goldPiles.Length == 0))
         {
             cm.goldPiles = EnsurePileIcons(marketGrid, "GoldPile", new Color(1f, 0.85f, 0.15f, 1f));
             cm.pileArea = marketGrid;

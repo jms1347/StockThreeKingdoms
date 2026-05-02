@@ -109,6 +109,32 @@ public static class RecruitController
         return true;
     }
 
+    /// <summary>본영 UI: 징집 단가를 현재 주가(<see cref="CastleStateData.currentBuyPrice"/>)만 사용.</summary>
+    public static bool TryBuildStockPriceQuote(string castleId, out RecruitQuote quote)
+    {
+        quote = default;
+        var dm = DataManager.InstanceOrNull;
+        var gm = GameManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady || gm?.currentUser == null || string.IsNullOrWhiteSpace(castleId))
+            return false;
+        castleId = castleId.Trim();
+        if (!dm.castleStateDataMap.TryGetValue(castleId, out var s) || s == null)
+            return false;
+
+        float stock = Mathf.Max(0.01f, s.currentBuyPrice);
+        int totalSoldiers = Mathf.Max(0, dm.EstimateCastleTotalGarrisonTroops(castleId));
+        int population = Mathf.Max(0, s.currentPopulation);
+        int maxByPopulation = Mathf.Max(0, population);
+        int maxByCapacity = Mathf.Max(0, s.maxGarrison - Mathf.Max(0, s.userDeployedTroops) - Mathf.Max(0, s.currentAiGarrison));
+        int maxByGold = Mathf.Max(0, (int)Math.Floor(gm.currentGold / stock));
+
+        quote = new RecruitQuote(
+            castleId, stock, 1f, 1f, stock,
+            population, s.currentSentiment, totalSoldiers,
+            maxByPopulation, maxByCapacity, maxByGold);
+        return true;
+    }
+
     public static RecruitImpactPreview BuildImpactPreview(string castleId, int recruitCount)
     {
         var dm = DataManager.InstanceOrNull;

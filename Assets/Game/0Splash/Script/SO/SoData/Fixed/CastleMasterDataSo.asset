@@ -15,6 +15,7 @@ MonoBehaviour:
   list:
   - id: C01
     name: R01
+    flavorText: 
     regionId: "\uB099\uC591"
     grade: 0
     initialNationId: WEI
@@ -27,6 +28,7 @@ MonoBehaviour:
     adjacentIdsRaw: C21,C22,C04,C07,C10,C51,C72,C82
   - id: C02
     name: R02
+    flavorText: 
     regionId: "\uD5C8\uCC3D"
     grade: 1
     initialNationId: WEI
@@ -39,6 +41,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C22,C23,C26
   - id: C03
     name: R02
+    flavorText: 
     regionId: "\uC9C4\uB958"
     grade: 2
     initialNationId: WEI
@@ -51,6 +54,7 @@ MonoBehaviour:
     adjacentIdsRaw: C02,C24,C30,C49
   - id: C04
     name: R03
+    flavorText: 
     regionId: "\uC5C5\uC131"
     grade: 1
     initialNationId: WEI
@@ -63,6 +67,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C27,C30,C28
   - id: C05
     name: R04
+    flavorText: 
     regionId: "\uBD81\uD3C9"
     grade: 2
     initialNationId: OTH
@@ -75,6 +80,7 @@ MonoBehaviour:
     adjacentIdsRaw: C28,C06,C27
   - id: C06
     name: R04
+    flavorText: 
     regionId: "\uC591\uD3C9"
     grade: 4
     initialNationId: OTH
@@ -87,6 +93,7 @@ MonoBehaviour:
     adjacentIdsRaw: C05,C29,C74
   - id: C07
     name: R05
+    flavorText: 
     regionId: "\uC7A5\uC548"
     grade: 0
     initialNationId: WEI
@@ -99,6 +106,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C08,C10,C31,C34,C55,C67,C81
   - id: C08
     name: R05
+    flavorText: 
     regionId: "\uC11C\uB7C9"
     grade: 3
     initialNationId: OTH
@@ -111,6 +119,7 @@ MonoBehaviour:
     adjacentIdsRaw: C07,C09,C32
   - id: C09
     name: R05
+    flavorText: 
     regionId: "\uCC9C\uC218"
     grade: 3
     initialNationId: OTH
@@ -123,6 +132,7 @@ MonoBehaviour:
     adjacentIdsRaw: C08,C31,C34
   - id: C10
     name: R06
+    flavorText: 
     regionId: "\uC591\uC591"
     grade: 1
     initialNationId: OTH
@@ -135,6 +145,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C07,C11,C25,C35,C52,C57,C76,C83
   - id: C11
     name: R07
+    flavorText: 
     regionId: "\uAC15\uB989"
     grade: 0
     initialNationId: SHU
@@ -147,6 +158,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C12,C35,C44,C62,C75,C86
   - id: C12
     name: R07
+    flavorText: 
     regionId: "\uBB34\uB989"
     grade: 4
     initialNationId: SHU
@@ -159,6 +171,7 @@ MonoBehaviour:
     adjacentIdsRaw: C11,C37,C38
   - id: C13
     name: R08
+    flavorText: 
     regionId: "\uAC74\uC5C5"
     grade: 0
     initialNationId: WU
@@ -171,6 +184,7 @@ MonoBehaviour:
     adjacentIdsRaw: C14,C35,C39,C41,C49,C54,C60,C70,C71,C77
   - id: C14
     name: R08
+    flavorText: 
     regionId: "\uC624\uAD70"
     grade: 1
     initialNationId: WU
@@ -183,6 +197,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C15,C39,C71
   - id: C16
     name: R10
+    flavorText: 
     regionId: "\uC131\uB3C4"
     grade: 0
     initialNationId: SHU
@@ -195,6 +210,7 @@ MonoBehaviour:
     adjacentIdsRaw: C17,C42,C43,C44,C53,C79
   - id: C17
     name: R10
+    flavorText: 
     regionId: "\uAC15\uC8FC"
     grade: 3
     initialNationId: SHU
@@ -207,6 +223,7 @@ MonoBehaviour:
     adjacentIdsRaw: C16,C42,C44,C53,C62,C79
   - id: C18
     name: R11
+    flavorText: 
     regionId: "\uAC74\uB155"
     grade: 2
     initialNationId: OTH
@@ -219,6 +236,7 @@ MonoBehaviour:
     adjacentIdsRaw: C43,C45,C64,C79
   - id: C19
     name: R12
+    flavorText: 
     regionId: "\uC11C\uC8FC"
     grade: 2
     initialNationId: OTH
@@ -231,6 +249,7 @@ MonoBehaviour:
     adjacentIdsRaw: C20,C46,C47,C48,C30
   - id: C20
     name: R12
+    flavorText: 
     regionId: "\uC18C\uD328"
     grade: 5
     initialNationId: OTH
@@ -243,6 +262,7 @@ MonoBehaviour:
     adjacentIdsRaw: C19,C24,C46,C58
   - id: C21
     name: R01
+    flavorText: 
     regionId: "\uD638\uB85C\uAD00"
     grade: 4
     initialNationId: WEI
@@ -255,6 +275,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C24
   - id: C22
     name: R02
+    flavorText: 
     regionId: "\uC644"
     grade: 3
     initialNationId: WEI
@@ -267,6 +288,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C02,C23,C25,C57
   - id: C23
     name: R02
+    flavorText: 
     regionId: "\uC5EC\uB0A8"
     grade: 3
     initialNationId: WEI
@@ -279,6 +301,7 @@ MonoBehaviour:
     adjacentIdsRaw: C02,C22,C26,C57
   - id: C24
     name: R02
+    flavorText: 
     regionId: "\uBCF5\uC591"
     grade: 3
     initialNationId: WEI
@@ -291,6 +314,7 @@ MonoBehaviour:
     adjacentIdsRaw: C03,C21,C27,C30,C20
   - id: C25
     name: R02
+    flavorText: 
     regionId: "\uC2E0\uC57C"
     grade: 4
     initialNationId: WEI
@@ -303,6 +327,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C22,C57,C67
   - id: C26
     name: R09
+    flavorText: 
     regionId: "\uC218\uCD98"
     grade: 2
     initialNationId: WEI
@@ -315,6 +340,7 @@ MonoBehaviour:
     adjacentIdsRaw: C02,C23,C35,C49,C60,C78
   - id: C27
     name: R03
+    flavorText: 
     regionId: "\uB0A8\uD53C"
     grade: 2
     initialNationId: WEI
@@ -327,6 +353,7 @@ MonoBehaviour:
     adjacentIdsRaw: C04,C05,C24,C30,C59
   - id: C28
     name: R03
+    flavorText: 
     regionId: "\uACC4"
     grade: 3
     initialNationId: WEI
@@ -339,6 +366,7 @@ MonoBehaviour:
     adjacentIdsRaw: C04,C05,C30
   - id: C29
     name: R04
+    flavorText: 
     regionId: "\uB099\uB791"
     grade: 5
     initialNationId: OTH
@@ -351,6 +379,7 @@ MonoBehaviour:
     adjacentIdsRaw: C06,C74
   - id: C30
     name: R03
+    flavorText: 
     regionId: "\uD3C9\uC6D0"
     grade: 2
     initialNationId: WEI
@@ -363,6 +392,7 @@ MonoBehaviour:
     adjacentIdsRaw: C03,C04,C19,C24,C27,C28,C59
   - id: C31
     name: R05
+    flavorText: 
     regionId: "\uC548\uC815"
     grade: 3
     initialNationId: WEI
@@ -375,6 +405,7 @@ MonoBehaviour:
     adjacentIdsRaw: C07,C09,C32,C55,C56,C73
   - id: C32
     name: R05
+    flavorText: 
     regionId: "\uBB34\uC704"
     grade: 4
     initialNationId: OTH
@@ -387,6 +418,7 @@ MonoBehaviour:
     adjacentIdsRaw: C08,C31,C33,C80
   - id: C33
     name: R05
+    flavorText: 
     regionId: "\uB3C8\uD669"
     grade: 4
     initialNationId: OTH
@@ -399,6 +431,7 @@ MonoBehaviour:
     adjacentIdsRaw: C32,C80
   - id: C34
     name: R05
+    flavorText: 
     regionId: "\uBB34\uB3C4"
     grade: 4
     initialNationId: SHU
@@ -411,6 +444,7 @@ MonoBehaviour:
     adjacentIdsRaw: C07,C09,C42,C52,C63,C66
   - id: C35
     name: R09
+    flavorText: 
     regionId: "\uAC15\uD558"
     grade: 3
     initialNationId: WEI
@@ -423,6 +457,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C11,C13,C15,C26,C54,C60,C68,C70,C75
   - id: C36
     name: R07
+    flavorText: 
     regionId: "\uC7A5\uC0AC"
     grade: 2
     initialNationId: WU
@@ -435,6 +470,7 @@ MonoBehaviour:
     adjacentIdsRaw: C15,C37,C38,C41
   - id: C37
     name: R07
+    flavorText: 
     regionId: "\uC601\uB989"
     grade: 5
     initialNationId: OTH
@@ -447,6 +483,7 @@ MonoBehaviour:
     adjacentIdsRaw: C12,C36,C38
   - id: C38
     name: R07
+    flavorText: 
     regionId: "\uACC4\uC591"
     grade: 4
     initialNationId: OTH
@@ -459,6 +496,7 @@ MonoBehaviour:
     adjacentIdsRaw: C12,C36,C37
   - id: C39
     name: R08
+    flavorText: 
     regionId: "\uD68C\uACC4"
     grade: 3
     initialNationId: WU
@@ -471,6 +509,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C14,C40
   - id: C40
     name: R08
+    flavorText: 
     regionId: "\uAC74\uC548"
     grade: 4
     initialNationId: WU
@@ -483,6 +522,7 @@ MonoBehaviour:
     adjacentIdsRaw: C39,C41
   - id: C41
     name: R08
+    flavorText: 
     regionId: "\uC608\uC7A5"
     grade: 4
     initialNationId: WU
@@ -495,6 +535,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C15,C36,C40,C54,C68,C69,C77,C78
   - id: C42
     name: R10
+    flavorText: 
     regionId: "\uC790\uB3D9"
     grade: 3
     initialNationId: SHU
@@ -507,6 +548,7 @@ MonoBehaviour:
     adjacentIdsRaw: C16,C17,C34
   - id: C43
     name: R10
+    flavorText: 
     regionId: "\uAC15\uC591"
     grade: 5
     initialNationId: SHU
@@ -519,6 +561,7 @@ MonoBehaviour:
     adjacentIdsRaw: C16,C18
   - id: C44
     name: R10
+    flavorText: 
     regionId: "\uC601\uC548"
     grade: 3
     initialNationId: SHU
@@ -531,6 +574,7 @@ MonoBehaviour:
     adjacentIdsRaw: C11,C16,C17,C62
   - id: C45
     name: R11
+    flavorText: 
     regionId: "\uC6B4\uB0A8"
     grade: 2
     initialNationId: OTH
@@ -543,6 +587,7 @@ MonoBehaviour:
     adjacentIdsRaw: C18,C64
   - id: C46
     name: R12
+    flavorText: 
     regionId: "\uD558\uBE44"
     grade: 1
     initialNationId: OTH
@@ -555,6 +600,7 @@ MonoBehaviour:
     adjacentIdsRaw: C19,C20,C48,C58,C61
   - id: C47
     name: R12
+    flavorText: 
     regionId: "\uBD81\uD574"
     grade: 3
     initialNationId: OTH
@@ -567,6 +613,7 @@ MonoBehaviour:
     adjacentIdsRaw: C19,C50,C59
   - id: C48
     name: R12
+    flavorText: 
     regionId: "\uAD11\uB989"
     grade: 3
     initialNationId: OTH
@@ -579,6 +626,7 @@ MonoBehaviour:
     adjacentIdsRaw: C19,C46,C49,C58,C61
   - id: C49
     name: R09
+    flavorText: 
     regionId: "\uD569\uBE44"
     grade: 2
     initialNationId: WEI
@@ -591,6 +639,7 @@ MonoBehaviour:
     adjacentIdsRaw: C03,C13,C26,C48,C58,C60,C78
   - id: C50
     name: R12
+    flavorText: 
     regionId: "\uB0AD\uC57C"
     grade: 5
     initialNationId: OTH
@@ -603,6 +652,7 @@ MonoBehaviour:
     adjacentIdsRaw: C47,C61
   - id: C51
     name: R01
+    flavorText: 
     regionId: "\uD64D\uB18D"
     grade: 3
     initialNationId: WEI
@@ -615,6 +665,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C55,C56,C72,C82
   - id: C52
     name: R06
+    flavorText: 
     regionId: "\uD55C\uC911"
     grade: 2
     initialNationId: OTH
@@ -627,6 +678,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C34,C53,C63,C66,C76,C83
   - id: C53
     name: R10
+    flavorText: 
     regionId: "\uAC80\uAC01"
     grade: 3
     initialNationId: SHU
@@ -639,6 +691,7 @@ MonoBehaviour:
     adjacentIdsRaw: C16,C17,C52,C63,C79
   - id: C54
     name: R08
+    flavorText: 
     regionId: "\uD30C\uC591"
     grade: 3
     initialNationId: WU
@@ -651,6 +704,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C35,C41,C69,C75,C77
   - id: C55
     name: R05
+    flavorText: 
     regionId: "\uB3D9\uAD00"
     grade: 3
     initialNationId: WEI
@@ -663,6 +717,7 @@ MonoBehaviour:
     adjacentIdsRaw: C07,C31,C51,C56,C81
   - id: C56
     name: R01
+    flavorText: 
     regionId: "\uD558\uB3D9"
     grade: 3
     initialNationId: WEI
@@ -675,6 +730,7 @@ MonoBehaviour:
     adjacentIdsRaw: C31,C51,C55,C72,C73
   - id: C57
     name: R06
+    flavorText: 
     regionId: "\uB0A8\uC591"
     grade: 2
     initialNationId: WEI
@@ -687,6 +743,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C22,C23,C25,C67
   - id: C58
     name: R12
+    flavorText: 
     regionId: "\uD33D\uC131"
     grade: 3
     initialNationId: OTH
@@ -699,6 +756,7 @@ MonoBehaviour:
     adjacentIdsRaw: C20,C46,C48,C49,C60,C61
   - id: C59
     name: R03
+    flavorText: 
     regionId: "\uC784\uCE58"
     grade: 3
     initialNationId: OTH
@@ -711,6 +769,7 @@ MonoBehaviour:
     adjacentIdsRaw: C27,C30,C47
   - id: C60
     name: R09
+    flavorText: 
     regionId: "\uD68C\uB0A8"
     grade: 3
     initialNationId: WEI
@@ -723,6 +782,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C26,C35,C49,C58,C70,C78
   - id: C61
     name: R12
+    flavorText: 
     regionId: "\uB3D9\uD574"
     grade: 4
     initialNationId: OTH
@@ -735,6 +795,7 @@ MonoBehaviour:
     adjacentIdsRaw: C46,C48,C50,C58
   - id: C62
     name: R10
+    flavorText: 
     regionId: "\uAC74\uD3C9"
     grade: 4
     initialNationId: SHU
@@ -747,6 +808,7 @@ MonoBehaviour:
     adjacentIdsRaw: C11,C17,C44,C76
   - id: C63
     name: R10
+    flavorText: 
     regionId: "\uC74C\uD3C9"
     grade: 4
     initialNationId: SHU
@@ -759,6 +821,7 @@ MonoBehaviour:
     adjacentIdsRaw: C34,C52,C53,C66
   - id: C64
     name: R11
+    flavorText: 
     regionId: "\uC7A5\uAC00"
     grade: 5
     initialNationId: OTH
@@ -771,6 +834,7 @@ MonoBehaviour:
     adjacentIdsRaw: C18,C45,C65
   - id: C65
     name: R11
+    flavorText: 
     regionId: "\uC77C\uB0A8"
     grade: 5
     initialNationId: OTH
@@ -783,6 +847,7 @@ MonoBehaviour:
     adjacentIdsRaw: C64
   - id: C66
     name: R06
+    flavorText: 
     regionId: "\uC591\uD3C9\uAD00"
     grade: 3
     initialNationId: SHU
@@ -795,6 +860,7 @@ MonoBehaviour:
     adjacentIdsRaw: C34,C52,C63
   - id: C67
     name: R06
+    flavorText: 
     regionId: "\uBB34\uAD00"
     grade: 3
     initialNationId: WEI
@@ -807,6 +873,7 @@ MonoBehaviour:
     adjacentIdsRaw: C07,C25,C57,C83
   - id: C68
     name: R09
+    flavorText: 
     regionId: "\uD558\uAD6C\uD56D"
     grade: 4
     initialNationId: WU
@@ -819,6 +886,7 @@ MonoBehaviour:
     adjacentIdsRaw: C35,C41,C70,C86
   - id: C69
     name: R08
+    flavorText: 
     regionId: "\uD30C\uC591\uD56D"
     grade: 4
     initialNationId: WU
@@ -831,6 +899,7 @@ MonoBehaviour:
     adjacentIdsRaw: C41,C54,C71,C84
   - id: C70
     name: R09
+    flavorText: 
     regionId: "\uAC15\uD558\uD56D"
     grade: 4
     initialNationId: WU
@@ -843,6 +912,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C35,C60,C68,C85
   - id: C71
     name: R08
+    flavorText: 
     regionId: "\uAC74\uC5C5\uD56D"
     grade: 4
     initialNationId: WU
@@ -855,6 +925,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C14,C69,C85
   - id: C72
     name: R01
+    flavorText: 
     regionId: "\uD558\uB0B4"
     grade: 3
     initialNationId: WEI
@@ -867,6 +938,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C51,C56,C81,C82
   - id: C73
     name: R05
+    flavorText: 
     regionId: "\uC9C4\uC591"
     grade: 4
     initialNationId: WEI
@@ -879,6 +951,7 @@ MonoBehaviour:
     adjacentIdsRaw: C56,C31,C80
   - id: C74
     name: R03
+    flavorText: 
     regionId: "\uD3C9\uC591"
     grade: 5
     initialNationId: OTH
@@ -891,6 +964,7 @@ MonoBehaviour:
     adjacentIdsRaw: C06,C29
   - id: C75
     name: R06
+    flavorText: 
     regionId: "\uACF5\uC548"
     grade: 3
     initialNationId: SHU
@@ -903,6 +977,7 @@ MonoBehaviour:
     adjacentIdsRaw: C11,C35,C54,C86
   - id: C76
     name: R07
+    flavorText: 
     regionId: "\uC0C1\uC6A9"
     grade: 3
     initialNationId: SHU
@@ -915,6 +990,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C52,C62,C83
   - id: C77
     name: R08
+    flavorText: 
     regionId: "\uC2DC\uC0C1"
     grade: 3
     initialNationId: WU
@@ -927,6 +1003,7 @@ MonoBehaviour:
     adjacentIdsRaw: C13,C41,C54,C84,C85
   - id: C78
     name: R09
+    flavorText: 
     regionId: "\uC5EC\uAC15"
     grade: 4
     initialNationId: WU
@@ -939,6 +1016,7 @@ MonoBehaviour:
     adjacentIdsRaw: C26,C41,C49,C60,C85
   - id: C79
     name: R10
+    flavorText: 
     regionId: "\uD30C\uC11C"
     grade: 3
     initialNationId: SHU
@@ -951,6 +1029,7 @@ MonoBehaviour:
     adjacentIdsRaw: C16,C17,C18,C53
   - id: C80
     name: R05
+    flavorText: 
     regionId: "\uC7A5\uC561"
     grade: 5
     initialNationId: OTH
@@ -963,6 +1042,7 @@ MonoBehaviour:
     adjacentIdsRaw: C32,C33,C73
   - id: C81
     name: R01
+    flavorText: 
     regionId: "\uC18C\uAD00"
     grade: 4
     initialNationId: WEI
@@ -975,6 +1055,7 @@ MonoBehaviour:
     adjacentIdsRaw: C07,C55,C72,C82
   - id: C82
     name: R01
+    flavorText: 
     regionId: "\uD55C\uACE1\uAD00"
     grade: 4
     initialNationId: WEI
@@ -987,6 +1068,7 @@ MonoBehaviour:
     adjacentIdsRaw: C01,C51,C81,C72
   - id: C83
     name: R07
+    flavorText: 
     regionId: "\uB300\uC0B0\uAD00"
     grade: 4
     initialNationId: SHU
@@ -999,6 +1081,7 @@ MonoBehaviour:
     adjacentIdsRaw: C10,C52,C67,C76
   - id: C84
     name: R08
+    flavorText: 
     regionId: "\uC2DC\uC0C1\uD56D"
     grade: 5
     initialNationId: WU
@@ -1011,6 +1094,7 @@ MonoBehaviour:
     adjacentIdsRaw: C69,C77,C85
   - id: C85
     name: R09
+    flavorText: 
     regionId: "\uC5EC\uAC15\uD56D"
     grade: 5
     initialNationId: WU
@@ -1023,6 +1107,7 @@ MonoBehaviour:
     adjacentIdsRaw: C70,C71,C77,C78,C84
   - id: C86
     name: R06
+    flavorText: 
     regionId: "\uAC15\uB989\uD56D"
     grade: 5
     initialNationId: SHU

@@ -30,6 +30,9 @@ public class UserData
     public long lastMarketCollectTime;
     public long lastFarmCollectTime;
 
+    /// <summary>본영 시장 주머니: 마지막 성벽 수거 이후 누적 시간(초). 최대 28,800(8시간). HUD 금화와 별도.</summary>
+    public float homeMarketAccumulatedSec;
+
     // [M2E 데이터]
     public int dailyStepCount;      // 레거시 호환 (구 세이브)
     public int stepsToday;          // 오늘 걸음 수 (만보기 UI/보상)
@@ -64,5 +67,6 @@ public class UserData
         stepRewardsClaimed = new bool[4];
         lastMarketCollectTime = 0;
         lastFarmCollectTime = 0;
+        homeMarketAccumulatedSec = 0f;
     }
 }

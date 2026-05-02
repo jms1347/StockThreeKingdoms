@@ -70,8 +70,27 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     {
         base.Awake();
         FixGlobalUiScaleIfBroken();
+        EnsureGlobalCanvasFillsScreen();
+        EnsureTopBarAndScalerLayout();
         ResolveTopBarRefsIfMissing();
         WireTabs();
+        ApplyBottomTabLabelAutoSizing();
+        if (topBarRoot != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(topBarRoot);
+    }
+
+    void ApplyBottomTabLabelAutoSizing()
+    {
+        if (bottomTabRoot == null) return;
+        foreach (var btn in bottomTabRoot.GetComponentsInChildren<Button>(true))
+        {
+            var tmp = btn.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (tmp == null) continue;
+            tmp.enableAutoSizing = true;
+            tmp.fontSizeMin = 14;
+            tmp.fontSizeMax = 26;
+            tmp.overflowMode = TextOverflowModes.Overflow;
+        }
     }
 
     void Start()
@@ -147,12 +166,21 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (ordersButton == null) ordersButton = bottomTabRoot.Find("OrdersTabButton")?.GetComponent<Button>();
     }
 
-    /// <summary>다음 정산 예정액·카운트다운 (병참 할인 반영은 <see cref="EconomyManager.ComputeNextSettlementGold"/>).</summary>
+    /// <summary>유지비 표시: 실시간 차감 모드 또는 레거시 정오 정산.</summary>
     public void RefreshMaintenanceHudFromEconomy()
     {
-        double amt = EconomyManager.InstanceOrNull != null
-            ? EconomyManager.InstanceOrNull.ComputeNextSettlementGold()
-            : 0d;
+        var econ = EconomyManager.InstanceOrNull;
+        if (econ != null && !econ.UsesLegacyNoonMaintenance)
+        {
+            double perSec = EconomyManager.ComputeRealtimeUpkeepGoldPerSecond();
+            if (maintenancePreviewText != null)
+                maintenancePreviewText.text = $"유지비: -{perSec:F2} G/s";
+            if (maintenanceCountdownText != null)
+                maintenanceCountdownText.text = "실시간 차감";
+            return;
+        }
+
+        double amt = econ != null ? econ.ComputeNextSettlementGold() : 0d;
         if (maintenancePreviewText != null)
             maintenancePreviewText.text = $"다음 정산 예정: {Utils.AbbreviateScore(amt)} G";
         if (maintenanceCountdownText != null)
@@ -165,19 +193,20 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         var dm = DataManager.InstanceOrNull;
         if (dm == null || !dm.IsStateReady)
         {
-            locationText.text = "—";
+            locationText.text = "현재 위치: —";
             if (locationNationIcon != null) locationNationIcon.gameObject.SetActive(false);
             return;
         }
         string id = dm.HomeCastleId?.Trim();
         if (string.IsNullOrEmpty(id))
         {
-            locationText.text = "본영 미정";
+            locationText.text = "현재 위치: 본영 미정";
             if (locationNationIcon != null) locationNationIcon.gameObject.SetActive(false);
             return;
         }
         string name = dm.GetCastleDisplayName(id);
-        locationText.text = string.IsNullOrWhiteSpace(name) ? id : name;
+        string place = string.IsNullOrWhiteSpace(name) ? id : name;
+        locationText.text = $"현재 위치: {place}";
         if (locationNationIcon != null)
         {
             if (dm.castleStateDataMap != null && dm.castleStateDataMap.TryGetValue(id, out var st) && st != null)
@@ -290,6 +319,50 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
         if (topBarRoot != null && topBarRoot.localScale.sqrMagnitude < 1e-8f)
             topBarRoot.localScale = Vector3.one;
+    }
+
+    /// <summary>
+    /// 루트가 (0,0) 고정 앵커로 들어가 있으면 레이아웃 그룹·스케일이 기대와 다르게 보일 수 있어,
+    /// Screen Space Overlay 표준인 전체 스트레치로 맞춥니다.
+    /// </summary>
+    void EnsureGlobalCanvasFillsScreen()
+    {
+        var rt = transform as RectTransform;
+        if (rt == null) return;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta = Vector2.zero;
+    }
+
+    /// <summary>
+    /// 프리팹 시리얼라이즈만으로는 체감이 어렵거나 에셋이 덮어씌워진 경우를 대비해,
+    /// 실행 시점에 스케일러·탑바 높이를 고정합니다.
+    /// </summary>
+    void EnsureTopBarAndScalerLayout()
+    {
+        var scaler = GetComponent<CanvasScaler>();
+        if (scaler != null)
+        {
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1080f, 1920f);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 0.5f;
+        }
+
+        if (topBarRoot == null)
+        {
+            var t = transform.Find("TopBar");
+            if (t != null) topBarRoot = t as RectTransform;
+        }
+
+        if (topBarRoot != null)
+        {
+            const float topBarHeight = 180f;
+            var sd = topBarRoot.sizeDelta;
+            topBarRoot.sizeDelta = new Vector2(sd.x, topBarHeight);
+        }
     }
 
     public void SetTopBar(string userName, string totalAssets, string soldiersLine)

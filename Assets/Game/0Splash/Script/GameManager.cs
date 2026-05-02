@@ -211,6 +211,15 @@ public class GameManager : Singleton<GameManager>
             currentUser.stepsToday = currentUser.dailyStepCount;
 
         long now = TimeManager.GetUnixNow();
+        // 레거시 세이브 → 본영 주머니 누적 시간 복원 (성벽 수거형 경제)
+        if (currentUser.marketLevel > 0 && currentUser.homeMarketAccumulatedSec <= 0f &&
+            currentUser.lastMarketCollectTime > 0)
+        {
+            long elapsed = now - currentUser.lastMarketCollectTime;
+            if (elapsed > 0)
+                currentUser.homeMarketAccumulatedSec = Mathf.Min(28800f, elapsed);
+        }
+
         // 생산 중인 창고만 기준 시각이 없을 때 현재 시각으로 초기화 (레벨 0이면 두지 않음 → 경과/주머니 0)
         if (currentUser.marketLevel > 0 && currentUser.lastMarketCollectTime <= 0)
             currentUser.lastMarketCollectTime = now;

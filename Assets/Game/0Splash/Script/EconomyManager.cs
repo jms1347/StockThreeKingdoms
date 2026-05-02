@@ -14,6 +14,11 @@ public class EconomyManager : MonoBehaviour
     [SerializeField]
     double maintenanceGoldPerSoldierPerDay = 1d;
 
+    [Header("본영 개편: 실시간 유지비")]
+    [Tooltip("끄면(기본): 병사 유지비가 초당 HUD 금화에서 차감됩니다. 켜면 예전처럼 낮 12시 정산만 사용합니다.")]
+    [SerializeField]
+    bool useLegacyNoonMaintenance;
+
     static EconomyManager _instanceOrNull;
 
     float _nextMaintenancePollUnscaled;
@@ -35,7 +40,8 @@ public class EconomyManager : MonoBehaviour
 
     void Start()
     {
-        ProcessMaintenanceCatchUp(triggerSave: true);
+        if (useLegacyNoonMaintenance)
+            ProcessMaintenanceCatchUp(triggerSave: true);
         GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
     }
 
@@ -43,20 +49,73 @@ public class EconomyManager : MonoBehaviour
     {
         if (!pauseStatus)
         {
-            ProcessMaintenanceCatchUp(triggerSave: true);
+            if (useLegacyNoonMaintenance)
+                ProcessMaintenanceCatchUp(triggerSave: true);
             GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
         }
     }
 
     void Update()
     {
+        if (!useLegacyNoonMaintenance)
+            ApplyRealtimeSoldierUpkeep(Time.unscaledDeltaTime);
+
         if (Time.unscaledTime < _nextMaintenancePollUnscaled)
             return;
         _nextMaintenancePollUnscaled = Time.unscaledTime + 1f;
 
-        ProcessMaintenanceCatchUp(triggerSave: false);
+        if (useLegacyNoonMaintenance)
+            ProcessMaintenanceCatchUp(triggerSave: false);
         GlobalUIManager.InstanceOrNull?.RefreshMaintenanceHudFromEconomy();
     }
+
+    /// <summary>기획식: upkeep = (troops × 0.1) × (1 − min(farmLevel×0.0025, 0.5)) × dt 초당 금화 차감(0 미만 금지).</summary>
+    void ApplyRealtimeSoldierUpkeep(float dt)
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null || dt <= 0f)
+            return;
+
+        int logisticsLevel = Mathf.Max(0, gm.currentUser.farmLevel);
+        float discount = Mathf.Min(logisticsLevel * 0.0025f, 0.5f);
+        long troops = ResolveSoldierHeadcountForMaintenance();
+        double upkeep = troops * 0.1 * (1.0 - discount) * dt;
+        if (upkeep <= 0d || double.IsNaN(upkeep) || double.IsInfinity(upkeep))
+            return;
+
+        double g = gm.currentUser.gold;
+        double next = g - upkeep;
+        if (next < 0d)
+            next = 0d;
+        if (next >= g)
+            return;
+        gm.currentGold = next;
+    }
+
+    /// <summary>상단 유지비 미리보기(HUD)용 초당 차감 예상치.</summary>
+    public static double ComputeRealtimeUpkeepGoldPerSecond()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null)
+            return 0d;
+        int logisticsLevel = Mathf.Max(0, gm.currentUser.farmLevel);
+        float discount = Mathf.Min(logisticsLevel * 0.0025f, 0.5f);
+        long troops = ResolveSoldierHeadcountForMaintenance();
+        return troops * 0.1 * (1.0 - discount);
+    }
+
+    /// <summary>징집 미리보기: 추가 병사 delta명에 대한 초당 유지비 증가(주가 단순 모집 UI).</summary>
+    public static double ComputeRealtimeUpkeepDeltaPerSecondForSoldiers(int deltaSoldiers)
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null || deltaSoldiers <= 0)
+            return 0d;
+        int logisticsLevel = Mathf.Max(0, gm.currentUser.farmLevel);
+        float discount = Mathf.Min(logisticsLevel * 0.0025f, 0.5f);
+        return deltaSoldiers * 0.1 * (1.0 - discount);
+    }
+
+    public bool UsesLegacyNoonMaintenance => useLegacyNoonMaintenance;
 
     /// <summary>다음 낮 12시까지 남은 시간 문자열.</summary>
     public static string FormatCountdownUntilNextLocalNoon()

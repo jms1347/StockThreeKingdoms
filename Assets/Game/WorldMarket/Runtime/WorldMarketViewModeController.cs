@@ -16,10 +16,12 @@ public class WorldMarketViewModeController : MonoBehaviour
     [SerializeField] Toggle mapToggle;
     [SerializeField] Toggle listToggle;
     [SerializeField] Toggle warToggle;
+    [Tooltip("리스트 모드에서만 표시(예: 필터 탭 바 부모). 비우면 이름으로 탐색합니다.")]
+    [SerializeField] GameObject listOnlyControlsRoot;
 
     void Awake()
     {
-        if (mapViewRoot == null || listViewRoot == null || warMapViewRoot == null)
+        if (mapViewRoot == null || listViewRoot == null)
             AutoResolveRoots();
 
         if (mapToggle != null)
@@ -49,7 +51,7 @@ public class WorldMarketViewModeController : MonoBehaviour
         int savedMode = PlayerPrefs.GetInt(PrefsKey, ModeList);
         if (savedMode < ModeList || savedMode > ModeWar)
             savedMode = ModeList;
-        if (savedMode == ModeWar && warMapViewRoot == null)
+        if (warMapViewRoot == null && savedMode == ModeWar)
             savedMode = ModeList;
 
         ApplyMode(savedMode, false);
@@ -59,6 +61,35 @@ public class WorldMarketViewModeController : MonoBehaviour
             listToggle.SetIsOnWithoutNotify(savedMode == ModeList);
         if (warToggle != null)
             warToggle.SetIsOnWithoutNotify(savedMode == ModeWar);
+
+        TryResolveListOnlyControlsRoot();
+        ApplyListOnlyControlsVisibility(savedMode == ModeList);
+    }
+
+    void TryResolveListOnlyControlsRoot()
+    {
+        if (listOnlyControlsRoot != null)
+            return;
+        var trs = GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < trs.Length; i++)
+        {
+            if (trs[i].name != "FilterTabBar") continue;
+            listOnlyControlsRoot = trs[i].parent != null ? trs[i].parent.gameObject : trs[i].gameObject;
+            return;
+        }
+
+        for (int i = 0; i < trs.Length; i++)
+        {
+            if (trs[i].name != "WorldMarketCastleFilterChips") continue;
+            listOnlyControlsRoot = trs[i].gameObject;
+            return;
+        }
+    }
+
+    void ApplyListOnlyControlsVisibility(bool listMode)
+    {
+        if (listOnlyControlsRoot != null)
+            listOnlyControlsRoot.SetActive(listMode);
     }
 
     void AutoResolveRoots()
@@ -72,7 +103,7 @@ public class WorldMarketViewModeController : MonoBehaviour
             if (mv != null) mapViewRoot = mv.gameObject;
             if (lv != null) listViewRoot = lv.gameObject;
             if (wv != null) warMapViewRoot = wv.gameObject;
-            if (mapViewRoot != null && listViewRoot != null && warMapViewRoot != null)
+            if (mapViewRoot != null && listViewRoot != null)
                 return;
         }
 
@@ -108,6 +139,7 @@ public class WorldMarketViewModeController : MonoBehaviour
             listViewRoot.SetActive(listMode);
         if (warMapViewRoot != null)
             warMapViewRoot.SetActive(warMode);
+        ApplyListOnlyControlsVisibility(listMode);
         if (savePrefs)
             PlayerPrefs.SetInt(PrefsKey, mode);
     }

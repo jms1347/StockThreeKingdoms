@@ -1126,6 +1126,48 @@ public partial class DataManager : Singleton<DataManager>
         return null;
     }
 
+    /// <summary>천하 UI — 등락률 옆 원인 태그(라이브 SO 플래그 우선). 없으면 null.</summary>
+    public string GetCastlePriceMovementCauseLabel(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId) || !IsStateReady) return null;
+        castleId = castleId.Trim();
+        if (TryGetLiveCastleState(castleId, out var live) && live != null)
+        {
+            if (live.isWar) return "격전지";
+            if (live.isDisaster) return "역병";
+            if (live.isFavorableEvent) return "풍년";
+        }
+
+        if (castleStateDataMap != null && castleStateDataMap.TryGetValue(castleId, out var st) && st != null)
+        {
+            if (st.isWar) return "격전지";
+            if (st.isDisaster) return "역병";
+            if (st.isFavorableEvent) return "풍년";
+        }
+
+        return null;
+    }
+
+    /// <summary>천하 요약 바 — 전 성 평균 등락률을 반영한 스타일 지수(pt). UI 전용.</summary>
+    public float GetContinentalEconomicIndexPoints()
+    {
+        if (castleStateDataMap == null || castleStateDataMap.Count == 0)
+            return 1420f;
+
+        float sum = 0f;
+        int n = 0;
+        foreach (var kv in castleStateDataMap)
+        {
+            var st = kv.Value;
+            if (st == null) continue;
+            sum += CalculateChangeRate24h(st);
+            n++;
+        }
+
+        float avg = n > 0 ? sum / n : 0f;
+        return 1420f + avg * 18f;
+    }
+
     public void ClearNewsTemplateSheetRows() => FixedSo?.ClearNewsTemplateSheetRows();
 
     public void SetNewsTemplateSheetRow(string eventId, NewsTemplateSheetRow row) =>

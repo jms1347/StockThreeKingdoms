@@ -19,6 +19,9 @@ public class CastleMasterData
     [Header("�⺻ ����")]
     public string id;                // �� ���� ID (C01, C02...)
     public string name;              // �� �̸� (����, ��â...)
+    /// <summary>천하 요약 카드·상세용 한 줄 배경 설명(비우면 미표시).</summary>
+    [TextArea(1, 3)]
+    public string flavorText;
     public string regionId;          // ���� �ڵ� (R01~R12)
     public Grade grade;              // �� ��� (SS, S, A, B, C, D)
     public string initialNationId;   // �ʱ� ���� ���� (WEI, SHU, WU...)

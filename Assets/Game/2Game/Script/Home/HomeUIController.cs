@@ -1,97 +1,88 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using System.Globalization;
 
-/// <summary>
-/// 본영 화면 담당. GameManager.OnGoldChanged 구독, 코루틴으로 창고 UI 갱신.
-/// </summary>
+/// <summary>본영 탭 UI — 성벽 수거형 경제, 하단 3서브탭(내정·군사·행군).</summary>
 [RequireComponent(typeof(HomeController))]
 public class HomeUIController : MonoBehaviour
 {
     static readonly Color LocalGoldDebtColor = new Color(1f, 0f, 0f);
     static readonly Color LocalGoldPositiveColor = Color.white;
 
-    [Header("자원 표시")]
+    [Header("자원 (로컬 미러)")]
     public TextMeshProUGUI goldText;
-
-    [Tooltip("천하 거점에 배치한 병력 합계(본영 표시).")]
+    [Tooltip("주머니~만축 슬라이더 (선택)")]
+    public Slider goldFillSlider;
     public TextMeshProUGUI farmWorkersText;
 
-    [Header("업그레이드 UI - 노동력")]
+    [Header("주머니 배너")]
+    public TextMeshProUGUI pocketBannerText;
+
+    [Header("레거시·에디터 마법사 (HomeSceneLayoutWizard)")]
+    [Tooltip("구 레이아웃 창고 수치 텍스트. 비우면 pocketBannerText만 사용.")]
+    public TextMeshProUGUI marketAccumulateText;
+    [Tooltip("구 레이아웃 창고 슬라이더. 비우면 goldFillSlider만 사용.")]
+    public Slider marketAccumulateSlider;
+    [Tooltip("구 수동 수거 버튼 — 신규 경제에서는 미사용(성벽 수거). 직렬화 호환용.")]
+    public Button collectMarketButton;
+    public TextMeshProUGUI supplyLabelText;
+    [Tooltip("구 징집 진입 버튼. 비우면 서브탭·직접 패널만 사용.")]
+    public Button recruitSoldierButton;
+
+    [Header("내정 강화 (Tab 1 — Building)")]
     public TextMeshProUGUI laborLabelText;
     public Button laborUpgradeButton;
-
-    [Header("업그레이드 UI - 시장")]
     public TextMeshProUGUI marketLabelText;
-    public TextMeshProUGUI marketAccumulateText;
-    public Slider marketAccumulateSlider;
     public Button marketUpgradeButton;
-    public Button collectMarketButton;
-
-    [Header("업그레이드 UI - 창고")]
+    public TextMeshProUGUI logisticsLabelText;
+    public Button logisticsUpgradeButton;
     public TextMeshProUGUI warehouseLabelText;
     public Button warehouseUpgradeButton;
 
-    [Header("업그레이드 UI - 병참 (유지비 할인)")]
-    [FormerlySerializedAs("farmLabelText")]
-    public TextMeshProUGUI logisticsLabelText;
-    [FormerlySerializedAs("farmUpgradeButton")]
-    public Button logisticsUpgradeButton;
-
-    [Header("보급 UI")]
-    public TextMeshProUGUI supplyLabelText;
-    public Button recruitSoldierButton;
-
-    [Header("대문 터치")]
+    [Header("성벽")]
     public Button gateButton;
+
+    [Header("서브탭 (하단 3분할)")]
+    [Tooltip("내정 강화 탭")]
+    public Button buildingTabButton;
+    [Tooltip("군사 모집 탭")]
+    public Button militaryTabButton;
+    [Tooltip("행군 준비 탭")]
+    public Button marchingTabButton;
+    public GameObject buildingPanel;
+    public GameObject militaryPanel;
+    public GameObject marchingPanel;
+
+    [Header("군사 모집 (Tab 2 — 주가 단일)")]
+    public TextMeshProUGUI militaryStockPriceText;
+    public Slider recruitSlider;
+    public TextMeshProUGUI recruitCostText;
+    public TextMeshProUGUI recruitUpkeepPreviewText;
+    public TextMeshProUGUI dischargeExpectGoldText;
+    public Button recruitPlus1KButton;
+    public Button recruitPlus10KButton;
+    public Button recruitMaxButton;
+    public Button recruitConfirmButton;
+    public Button dischargeConfirmButton;
 
     [Header("만보기")]
     public Image pedometerGaugeFill;
     public TextMeshProUGUI pedometerStepsText;
-
-    [Tooltip("2k, 5k, 7k, 10k 순서")]
     public Button[] stepRewardButtons = new Button[4];
-
     public TextMeshProUGUI[] stepRewardLabels = new TextMeshProUGUI[4];
 
     [Header("창고 연출")]
     public CollectionManager collectionManager;
 
-    [Header("방문객 이벤트 팝업 (옵션)")]
+    [Header("방문객 팝업 (옵션)")]
     public RectTransform visitorPopupRoot;
     public TextMeshProUGUI visitorPopupTitleText;
     public TextMeshProUGUI visitorPopupBodyText;
     public Button visitorPopupCloseButton;
-
-    [Header("징집 팝업 (옵션)")]
-    public RectTransform recruitPopupRoot;
-    public TMP_InputField recruitCountInput;
-    public TextMeshProUGUI recruitPricePerUnitText;
-    public TextMeshProUGUI recruitExpectedCostText;
-    public TextMeshProUGUI recruitMaintenanceDeltaText;
-    public Button recruitPlus100Button;
-    public Button recruitPlus1KButton;
-    public Button recruitPlus10KButton;
-    public Button recruitMaxButton;
-    public Button recruitConfirmButton;
-    public Button recruitCancelButton;
-    public TextMeshProUGUI recruitHeaderTitleText;
-    public TextMeshProUGUI recruitHeaderAssetText;
-    public TextMeshProUGUI recruitPostPopulationText;
-    public TextMeshProUGUI recruitEconomicShockText;
-    public TextMeshProUGUI recruitWarningText;
-    public Button discharge10PctButton;
-    public Button discharge50PctButton;
-    public Button discharge100PctButton;
-    public TextMeshProUGUI dischargeExpectedGoldText;
-    public TextMeshProUGUI dischargeMaintenanceReliefText;
-    public Button dischargeConfirmButton;
 
     [Header("숫자 롤링")]
     public float resourceRollDuration = 0.42f;
@@ -99,8 +90,8 @@ public class HomeUIController : MonoBehaviour
     HomeController _controller;
     double _displayGold;
     Tweener _goldRollTween;
-    int _recruitCount;
-    int _dischargeCount;
+    /// <summary>0=내정, 1=군사, 2=행군</summary>
+    int _activeSubTabIndex;
 
     void Awake()
     {
@@ -112,32 +103,33 @@ public class HomeUIController : MonoBehaviour
     void OnEnable()
     {
         SubscribeEvents();
-        SubscribeStepEvents();
         SubscribeVisitorEvents();
+        SubscribeStepEvents();
         PushGlobalTopBar();
     }
 
     void Start()
     {
         if (_controller == null) return;
-
         if (gateButton == null)
-            gateButton = transform.Find("GateButton")?.GetComponent<Button>();
-        ResolveHomeUpgradeReferencesIfMissing();
-
+            gateButton = transform.Find("MainWallButton")?.GetComponent<Button>() ??
+                       transform.Find("GateButton")?.GetComponent<Button>();
+        ResolveMissingRefs();
+        ResolveSubTabRefsIfLegacy();
+        ResolveMilitaryUiRefs();
         FixHomeCanvasScaleIfBroken();
+        FixLegacyVerticalTmpFromContentSizeFitter();
         EnsureUiInputInfrastructure();
-
         SubscribeEvents();
-        SubscribeStepEvents();
         SubscribeVisitorEvents();
-
+        SubscribeStepEvents();
         RefreshAllUI();
         BindButtons();
+        BindSubTabs();
+        BindMilitary();
         EnsureVisitorPopupIfNeeded();
-        EnsureRecruitPopupIfNeeded();
-
-        StartCoroutine(UpdateAccumulateUICoroutine());
+        StartCoroutine(UpdatePocketUiCoroutine());
+        StartCoroutine(CoRefreshMilitaryWhenDataReady());
     }
 
     void OnDestroy()
@@ -147,9 +139,91 @@ public class HomeUIController : MonoBehaviour
 
     void OnDisable()
     {
-        UnsubscribeStepEvents();
         UnsubscribeEvents();
         UnsubscribeVisitorEvents();
+        UnsubscribeStepEvents();
+    }
+
+    void ResolveMissingRefs()
+    {
+        if (warehouseLabelText == null)
+            warehouseLabelText =
+                transform.Find("FunctionTabs/PanelsRoot/BuildingPanel/UpgradeGrid/WarehouseUpgradePanel/WarehouseLabelText")
+                    ?.GetComponent<TextMeshProUGUI>()
+                ?? transform.Find("WarehousePanelsRow/WarehouseRow/WarehouseLabelText")
+                    ?.GetComponent<TextMeshProUGUI>();
+        if (warehouseUpgradeButton == null)
+            warehouseUpgradeButton =
+                transform.Find("FunctionTabs/PanelsRoot/BuildingPanel/UpgradeGrid/WarehouseUpgradePanel/WarehouseButtons/WarehouseUpgradeButton")
+                    ?.GetComponent<Button>()
+                ?? transform.Find("WarehousePanelsRow/WarehouseRow/WarehouseUpgradeButton")
+                    ?.GetComponent<Button>();
+    }
+
+    /// <summary>옛 2탭 프리팹: FunctionTabs/TabButtons 등에서 3번째 탭 참조 보강.</summary>
+    void ResolveSubTabRefsIfLegacy()
+    {
+        if (buildingTabButton == null)
+            buildingTabButton = transform.Find("FunctionTabs/TabBuildingButton")?.GetComponent<Button>()
+                ?? transform.Find("FunctionTabs/BuildingTabButton")?.GetComponent<Button>();
+        if (buildingPanel == null)
+            buildingPanel = transform.Find("FunctionTabs/PanelsRoot/BuildingPanel")?.gameObject
+                ?? transform.Find("FunctionTabs/Panels/BuildingPanel")?.gameObject
+                ?? transform.Find("FunctionTabs/BuildingPanel")?.gameObject;
+        if (militaryTabButton == null)
+            militaryTabButton = transform.Find("FunctionTabs/TabMilitaryButton")?.GetComponent<Button>();
+        if (marchingTabButton == null)
+            marchingTabButton = transform.Find("FunctionTabs/TabMarchingButton")?.GetComponent<Button>();
+        if (militaryPanel == null)
+            militaryPanel = transform.Find("FunctionTabs/PanelsRoot/MilitaryPanel")?.gameObject
+                ?? transform.Find("FunctionTabs/Panels/MilitaryPanel")?.gameObject
+                ?? transform.Find("FunctionTabs/MilitaryPanel")?.gameObject;
+        if (marchingPanel == null)
+            marchingPanel = transform.Find("FunctionTabs/PanelsRoot/MarchingPanel")?.gameObject
+                ?? transform.Find("FunctionTabs/Panels/MarchingPanel")?.gameObject
+                ?? transform.Find("FunctionTabs/MarchingPanel")?.gameObject;
+        if (militaryStockPriceText == null)
+            militaryStockPriceText = militaryPanel != null
+                ? militaryPanel.transform.Find("MilitaryStockPriceText")?.GetComponent<TextMeshProUGUI>()
+                : null;
+    }
+
+    void ResolveMilitaryUiRefs()
+    {
+        if (militaryPanel == null) return;
+        Transform mp = militaryPanel.transform;
+        if (recruitSlider == null)
+            recruitSlider = mp.Find("RecruitSlider")?.GetComponent<Slider>();
+        if (militaryStockPriceText == null)
+            militaryStockPriceText = mp.Find("MilitaryStockPriceText")?.GetComponent<TextMeshProUGUI>();
+        if (recruitCostText == null)
+            recruitCostText = mp.Find("RecruitCostText")?.GetComponent<TextMeshProUGUI>();
+        if (recruitUpkeepPreviewText == null)
+            recruitUpkeepPreviewText = mp.Find("RecruitUpkeepPreviewText")?.GetComponent<TextMeshProUGUI>();
+        if (dischargeExpectGoldText == null)
+            dischargeExpectGoldText = mp.Find("DischargeExpectGoldText")?.GetComponent<TextMeshProUGUI>();
+        if (recruitPlus1KButton == null)
+            recruitPlus1KButton = mp.Find("QuickRow/RecruitPlus1KButton")?.GetComponent<Button>();
+        if (recruitPlus10KButton == null)
+            recruitPlus10KButton = mp.Find("QuickRow/RecruitPlus10KButton")?.GetComponent<Button>();
+        if (recruitMaxButton == null)
+            recruitMaxButton = mp.Find("QuickRow/RecruitMaxButton")?.GetComponent<Button>();
+        if (recruitConfirmButton == null)
+            recruitConfirmButton = mp.Find("RecruitActionRow/RecruitConfirmButton")?.GetComponent<Button>();
+        if (dischargeConfirmButton == null)
+            dischargeConfirmButton = mp.Find("RecruitActionRow/DischargeConfirmButton")?.GetComponent<Button>();
+    }
+
+    IEnumerator CoRefreshMilitaryWhenDataReady()
+    {
+        for (int i = 0; i < 240; i++)
+        {
+            var dm = DataManager.InstanceOrNull;
+            if (dm != null && dm.IsStateReady)
+                break;
+            yield return null;
+        }
+        RefreshMilitaryPreview();
     }
 
     void SubscribeEvents()
@@ -195,94 +269,59 @@ public class HomeUIController : MonoBehaviour
         gm.OnStepsChanged -= OnStepsTodayChangedHandler;
     }
 
-    void OnGateButtonClickFallback()
-    {
-        if (gateButton == null) return;
-        gateButton.GetComponent<GateButtonHold>()?.OnGateTapFromButton();
-    }
-
-    void EnsureUiInputInfrastructure()
-    {
-        if (EventSystem.current == null)
-        {
-            var esGo = new GameObject("EventSystem");
-            esGo.AddComponent<EventSystem>();
-            esGo.AddComponent<StandaloneInputModule>();
-        }
-
-        var canvas = GetComponentInParent<Canvas>();
-        if (canvas != null && canvas.gameObject.GetComponent<GraphicRaycaster>() == null)
-            canvas.gameObject.AddComponent<GraphicRaycaster>();
-    }
-
-    void FixHomeCanvasScaleIfBroken()
-    {
-        var canvas = GetComponentInParent<Canvas>();
-        if (canvas == null) return;
-        var rt = canvas.transform as RectTransform;
-        if (rt == null) return;
-        if (rt.localScale.sqrMagnitude < 1e-8f)
-            rt.localScale = Vector3.one;
-    }
-
-    void OnStepsTodayChangedHandler(int _) => RefreshPedometerNow();
+    void OnStepsTodayChangedHandler(int _) => RefreshPedometerUI();
 
     void OnGoldChangedHandler(double gold)
     {
         RollGoldDisplay(gold);
-        UpdateSupplyUI();
-        RefreshStrategicUpgradeButtons();
+        RefreshMilitaryPreview();
+        RefreshStrategicUpgradeLocks();
     }
 
-    IEnumerator UpdateAccumulateUICoroutine()
+    IEnumerator UpdatePocketUiCoroutine()
     {
+        var wait = new WaitForSeconds(0.15f);
         while (true)
         {
-            yield return new WaitForSeconds(0.2f);
-            if (_controller == null || GameManager.InstanceOrNull == null) continue;
-
-            double mAcc = _controller.CurrentMarketAccumulated;
-            double mMax = _controller.GetMarketMaxCapacity();
-            if (collectionManager != null && collectionManager.IsFlyBusy) mAcc = 0;
-            if (marketAccumulateText != null)
+            yield return wait;
+            if (_controller == null) continue;
+            double pending = _controller.ComputePendingMarketGold();
+            double maxP = _controller.GetMarketMaxCapacity();
+            var bannerTmp = pocketBannerText != null ? pocketBannerText : marketAccumulateText;
+            if (bannerTmp != null)
             {
-                marketAccumulateText.text = mMax > 0 ? $"{mAcc:F0} / {mMax:F0}" : "0 / 0";
-                marketAccumulateText.color = (mMax > 0 && mAcc >= mMax) ? Color.red : Color.white;
+                if (pending >= 1d)
+                    bannerTmp.text = $"💰 {pending:N0} Gold 수거 가능";
+                else
+                    bannerTmp.text = "";
             }
 
-            if (marketAccumulateSlider != null && mMax > 0)
-                marketAccumulateSlider.value = (float)Math.Min(1.0, mAcc / mMax);
-
-            RefreshPedometerUI();
+            var fillSlider = goldFillSlider != null ? goldFillSlider : marketAccumulateSlider;
+            if (fillSlider != null && maxP > 0)
+                fillSlider.value = Mathf.Clamp01((float)(pending / maxP));
         }
     }
 
     void BindButtons()
     {
-        if (gateButton == null)
-            Debug.LogWarning("[HomeUIController] gateButton이 연결되지 않았습니다. Inspector에서 GateButton을 할당하세요.");
-        else
+        if (gateButton != null)
         {
-            var hold = gateButton.GetComponent<GateButtonHold>();
-            if (hold == null) hold = gateButton.gameObject.AddComponent<GateButtonHold>();
+            gateButton.onClick.RemoveAllListeners();
+            var hold = gateButton.GetComponent<GateButtonHold>() ?? gateButton.gameObject.AddComponent<GateButtonHold>();
             hold.controller = _controller;
             hold.collectionManager = collectionManager;
-            gateButton.onClick.RemoveListener(OnGateButtonClickFallback);
-            gateButton.onClick.AddListener(OnGateButtonClickFallback);
         }
 
         WireHoldRepeat(laborUpgradeButton, () =>
         {
             _controller?.UpgradeLabor();
             UpdateLaborUI();
-            UpdateSupplyUI();
         });
         WireHoldRepeat(marketUpgradeButton, () =>
         {
             _controller?.UpgradeMarket();
             DataManager.InstanceOrNull?.RefreshHomeCastleMaxGarrisonFromUserBuildings();
             UpdateMarketUI();
-            UpdateSupplyUI();
         });
         WireHoldRepeat(warehouseUpgradeButton, () =>
         {
@@ -293,16 +332,7 @@ public class HomeUIController : MonoBehaviour
         {
             _controller?.UpgradeLogistics();
             UpdateLogisticsUI();
-            UpdateSupplyUI();
         });
-
-        void CollectWarehouse()
-        {
-            _controller?.TryFlyCollectFromWarehouse(collectionManager, requireActivePiles: false);
-        }
-
-        if (collectMarketButton != null)
-            collectMarketButton.onClick.AddListener(CollectWarehouse);
 
         if (stepRewardButtons != null && _controller != null)
         {
@@ -320,12 +350,223 @@ public class HomeUIController : MonoBehaviour
                 });
             }
         }
+    }
 
-        if (recruitSoldierButton != null)
+    void BindSubTabs()
+    {
+        if (buildingTabButton != null)
         {
-            recruitSoldierButton.onClick.RemoveAllListeners();
-            recruitSoldierButton.onClick.AddListener(OpenRecruitPopup);
+            buildingTabButton.onClick.RemoveAllListeners();
+            buildingTabButton.onClick.AddListener(() => SetFunctionSubTab(0));
         }
+        if (militaryTabButton != null)
+        {
+            militaryTabButton.onClick.RemoveAllListeners();
+            militaryTabButton.onClick.AddListener(() => SetFunctionSubTab(1));
+        }
+        if (marchingTabButton != null)
+        {
+            marchingTabButton.onClick.RemoveAllListeners();
+            marchingTabButton.onClick.AddListener(() => SetFunctionSubTab(2));
+        }
+        SetFunctionSubTab(_activeSubTabIndex);
+    }
+
+    /// <param name="tabIndex">0=내정 강화, 1=군사 모집, 2=행군 준비</param>
+    void SetFunctionSubTab(int tabIndex)
+    {
+        _activeSubTabIndex = Mathf.Clamp(tabIndex, 0, 2);
+        bool b0 = _activeSubTabIndex == 0;
+        bool b1 = _activeSubTabIndex == 1;
+        bool b2 = _activeSubTabIndex == 2;
+
+        if (buildingPanel != null) buildingPanel.SetActive(b0);
+        if (militaryPanel != null) militaryPanel.SetActive(b1);
+        if (marchingPanel != null) marchingPanel.SetActive(b2);
+        if (b1)
+            RefreshMilitaryPreview();
+    }
+
+    void BindMilitary()
+    {
+        if (recruitSlider != null)
+        {
+            recruitSlider.wholeNumbers = true;
+            recruitSlider.minValue = 0;
+            recruitSlider.onValueChanged.RemoveListener(OnRecruitSliderValueChanged);
+            recruitSlider.onValueChanged.AddListener(OnRecruitSliderValueChanged);
+        }
+        if (recruitPlus1KButton != null)
+        {
+            recruitPlus1KButton.onClick.RemoveAllListeners();
+            recruitPlus1KButton.onClick.AddListener(() => AddRecruitSlider(1000));
+        }
+        if (recruitPlus10KButton != null)
+        {
+            recruitPlus10KButton.onClick.RemoveAllListeners();
+            recruitPlus10KButton.onClick.AddListener(() => AddRecruitSlider(10000));
+        }
+        if (recruitMaxButton != null)
+        {
+            recruitMaxButton.onClick.RemoveAllListeners();
+            recruitMaxButton.onClick.AddListener(SetRecruitSliderMax);
+        }
+        if (recruitConfirmButton != null)
+        {
+            recruitConfirmButton.onClick.RemoveAllListeners();
+            recruitConfirmButton.onClick.AddListener(ConfirmRecruitStockPrice);
+        }
+        if (dischargeConfirmButton != null)
+        {
+            dischargeConfirmButton.onClick.RemoveAllListeners();
+            dischargeConfirmButton.onClick.AddListener(ConfirmDischargeStockPrice);
+        }
+
+        RefreshMilitaryPreview();
+    }
+
+    void OnRecruitSliderValueChanged(float _) => SnapRecruitSlider();
+
+    void SnapRecruitSlider()
+    {
+        if (recruitSlider == null) return;
+        float max = recruitSlider.maxValue;
+        int step = max >= 100f ? 100 : 1;
+        int vmin = Mathf.RoundToInt(recruitSlider.minValue);
+        int vmax = Mathf.RoundToInt(max);
+        int v = Mathf.RoundToInt(recruitSlider.value / step) * step;
+        v = Mathf.Clamp(v, vmin, vmax);
+        recruitSlider.SetValueWithoutNotify(v);
+        RefreshMilitaryPreview();
+    }
+
+    void AddRecruitSlider(int delta)
+    {
+        if (recruitSlider == null) return;
+        int v = Mathf.RoundToInt(recruitSlider.value) + delta;
+        recruitSlider.value = v;
+        SnapRecruitSlider();
+    }
+
+    void SetRecruitSliderMax()
+    {
+        var dm = DataManager.InstanceOrNull;
+        string hid = dm?.HomeCastleId?.Trim();
+        if (string.IsNullOrEmpty(hid) || !RecruitController.TryBuildStockPriceQuote(hid, out var q)) return;
+        recruitSlider.maxValue = q.MaxRecruitable;
+        recruitSlider.value = q.MaxRecruitable;
+        SnapRecruitSlider();
+    }
+
+    void RefreshMilitaryPreview()
+    {
+        var dm = DataManager.InstanceOrNull;
+        var gm = GameManager.InstanceOrNull;
+        string hid = dm?.HomeCastleId?.Trim();
+
+        float unit = 0f;
+        int maxRec = 0;
+        var qInit = default(RecruitController.RecruitQuote);
+        bool quoteOk = !string.IsNullOrEmpty(hid) && dm != null && dm.IsStateReady &&
+                       RecruitController.TryBuildStockPriceQuote(hid, out qInit);
+        if (quoteOk)
+        {
+            unit = qInit.UnitPrice;
+            maxRec = qInit.MaxRecruitable;
+        }
+
+        if (militaryStockPriceText != null)
+        {
+            if (!quoteOk)
+                militaryStockPriceText.text = dm != null && !dm.IsStateReady
+                    ? "도시 데이터 로딩 중…"
+                    : "본영 성 시세: — (거점 확인)";
+            else
+                militaryStockPriceText.text = $"현재 도시 병사 시세: {unit:N2} G";
+        }
+
+        if (recruitSlider != null && dm != null && !string.IsNullOrEmpty(hid))
+        {
+            recruitSlider.minValue = maxRec >= 100 ? 100f : 0f;
+            float maxVal = Mathf.Max((float)maxRec, recruitSlider.minValue);
+            if (maxVal <= recruitSlider.minValue)
+                maxVal = recruitSlider.minValue + 100f;
+            recruitSlider.maxValue = maxVal;
+            if (recruitSlider.value > recruitSlider.maxValue)
+                recruitSlider.value = recruitSlider.maxValue;
+            if (recruitSlider.value < recruitSlider.minValue)
+                recruitSlider.value = recruitSlider.minValue;
+        }
+
+        int amount = recruitSlider != null ? Mathf.RoundToInt(recruitSlider.value) : 0;
+        amount = Mathf.RoundToInt(amount / 100f) * 100;
+
+        if (!string.IsNullOrEmpty(hid) && RecruitController.TryBuildStockPriceQuote(hid, out var qq))
+            unit = qq.UnitPrice;
+
+        double cost = unit * amount;
+        if (recruitCostText != null)
+            recruitCostText.text = $"예상 비용: {cost:N0} G";
+
+        double deltaPerSec = EconomyManager.ComputeRealtimeUpkeepDeltaPerSecondForSoldiers(amount);
+        if (recruitUpkeepPreviewText != null)
+        {
+            recruitUpkeepPreviewText.richText = true;
+            recruitUpkeepPreviewText.text =
+                $"징집 후 유지비 변화: <color=#FF4444>-{deltaPerSec:F4} G/s</color>";
+        }
+
+        long expectDischarge = (long)Math.Floor(unit * amount * 0.95d);
+        if (dischargeExpectGoldText != null)
+            dischargeExpectGoldText.text =
+                amount > 0 ? $"예상 환급: {expectDischarge:N0} G (시세의 95%, 수수료 5%)" : "예상 환급: —";
+
+        bool canRecruit = false;
+        if (gm != null && amount >= 100 && dm != null && dm.IsStateReady && !string.IsNullOrEmpty(hid) &&
+            RecruitController.TryBuildStockPriceQuote(hid, out var qx))
+            canRecruit = gm.currentGold >= cost && amount <= qx.MaxRecruitable && gm.CanSpendStrategicPurchases;
+
+        if (recruitConfirmButton != null)
+            recruitConfirmButton.interactable = canRecruit;
+
+        int have = 0;
+        if (dm != null && dm.IsStateReady && !string.IsNullOrEmpty(hid) &&
+            dm.castleStateDataMap.TryGetValue(hid, out var st) && st != null)
+            have = Mathf.Max(0, st.userDeployedTroops);
+
+        bool canDischarge = amount >= 100 && amount <= have && dm != null && dm.IsStateReady;
+        if (dischargeConfirmButton != null)
+            dischargeConfirmButton.interactable = canDischarge;
+    }
+
+    void ConfirmRecruitStockPrice()
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady || recruitSlider == null) return;
+        string hid = dm.HomeCastleId?.Trim();
+        if (string.IsNullOrEmpty(hid)) return;
+        int amount = Mathf.RoundToInt(recruitSlider.value);
+        amount = Mathf.RoundToInt(amount / 100f) * 100;
+        if (amount < 100) return;
+        dm.TryRecruitHomeSoldiersAtStockPrice(hid, amount, out _, out _);
+        UpdateFarmWorkersUI();
+        PushGlobalTopBar();
+        RefreshMilitaryPreview();
+    }
+
+    void ConfirmDischargeStockPrice()
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady || recruitSlider == null) return;
+        string hid = dm.HomeCastleId?.Trim();
+        if (string.IsNullOrEmpty(hid)) return;
+        int amount = Mathf.RoundToInt(recruitSlider.value);
+        amount = Mathf.RoundToInt(amount / 100f) * 100;
+        if (amount < 100) return;
+        dm.TryDischargeHomeSoldiersAtStockPrice(hid, amount, out _, out _);
+        UpdateFarmWorkersUI();
+        PushGlobalTopBar();
+        RefreshMilitaryPreview();
     }
 
     void WireHoldRepeat(Button btn, Action tick)
@@ -347,10 +588,19 @@ public class HomeUIController : MonoBehaviour
         UpdateMarketUI();
         UpdateWarehouseUI();
         UpdateLogisticsUI();
-        UpdateSupplyUI();
-        RefreshStrategicUpgradeButtons();
         RefreshPedometerUI();
-        RefreshRecruitButtonCaption();
+        RefreshMilitaryPreview();
+        RefreshStrategicUpgradeLocks();
+    }
+
+    void RefreshStrategicUpgradeLocks()
+    {
+        var gm = GameManager.InstanceOrNull;
+        bool allow = gm != null && gm.CanSpendStrategicPurchases;
+        if (laborUpgradeButton != null) laborUpgradeButton.interactable = allow;
+        if (marketUpgradeButton != null) marketUpgradeButton.interactable = allow;
+        if (warehouseUpgradeButton != null) warehouseUpgradeButton.interactable = allow;
+        if (logisticsUpgradeButton != null) logisticsUpgradeButton.interactable = allow;
     }
 
     void RollGoldDisplay(double target)
@@ -393,25 +643,10 @@ public class HomeUIController : MonoBehaviour
             RollGoldDisplay(gold);
     }
 
-    public void RefreshPedometerNow() => RefreshPedometerUI();
-
-    /// <summary>
-    /// 창고 비행 입금 도착 타이밍에 본영 금화 텍스트를 짧게 강조합니다.
-    /// </summary>
-    public void PunchLocalGoldText(float strength = 0.12f, float duration = 0.2f, int vibrato = 7)
-    {
-        if (goldText == null) return;
-        var rt = goldText.rectTransform;
-        rt.DOKill();
-        rt.localScale = Vector3.one;
-        rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
-    }
-
     void RefreshPedometerUI()
     {
         var u = GameManager.InstanceOrNull?.currentUser;
         if (u == null) return;
-
         int steps = u.stepsToday;
         if (pedometerGaugeFill != null)
             pedometerGaugeFill.fillAmount = Mathf.Clamp01(steps / 10000f);
@@ -429,7 +664,6 @@ public class HomeUIController : MonoBehaviour
             bool claimed = u.stepRewardsClaimed[i];
             bool canClaim = steps >= milestones[i] && !claimed;
             btn.interactable = canClaim;
-
             if (i < stepRewardLabels.Length && stepRewardLabels[i] != null)
             {
                 int rw = i < rewards.Length ? rewards[i] : 0;
@@ -447,7 +681,6 @@ public class HomeUIController : MonoBehaviour
         var dm = DataManager.InstanceOrNull;
         long n = dm != null && dm.IsStateReady ? UserPortfolioManager.GetTotalOwnedSoldiers(dm) : 0L;
         farmWorkersText.text = n.ToString("N0");
-        RefreshRecruitButtonCaption();
     }
 
     void PushGlobalTopBar()
@@ -455,100 +688,47 @@ public class HomeUIController : MonoBehaviour
         var gm = GameManager.InstanceOrNull;
         var gui = GlobalUIManager.InstanceOrNull;
         if (gm?.currentUser == null || gui == null) return;
-
         long soldiers = DataManager.InstanceOrNull != null && DataManager.InstanceOrNull.IsStateReady
             ? UserPortfolioManager.GetTotalOwnedSoldiers(DataManager.InstanceOrNull)
             : gm.currentUser.soldierCount;
         gui.SetTopBarNumbers(gm.currentGold, soldiers);
     }
 
-    void RefreshStrategicUpgradeButtons()
-    {
-        var gm = GameManager.InstanceOrNull;
-        bool allow = gm != null && gm.CanSpendStrategicPurchases;
-        if (laborUpgradeButton != null) laborUpgradeButton.interactable = allow;
-        if (marketUpgradeButton != null) marketUpgradeButton.interactable = allow;
-        if (warehouseUpgradeButton != null) warehouseUpgradeButton.interactable = allow;
-        if (logisticsUpgradeButton != null) logisticsUpgradeButton.interactable = allow;
-        if (recruitSoldierButton != null) recruitSoldierButton.interactable = allow;
-    }
-
     void UpdateLaborUI()
     {
         var gm = GameManager.InstanceOrNull;
-        if (laborLabelText == null || _controller == null || gm == null) return;
-
-        int lv = gm.clickPowerLevel;
-        double current = _controller.GoldPerClick;
-        double next = HomeController.BaseGoldPerClick + ((lv + 1) * HomeController.ExtraValuePerLaborLevel);
-        double cost = HomeController.UpgradeCost(HomeController.LaborBaseCost, lv);
-
+        if (laborLabelText == null || gm?.currentUser == null) return;
+        int lv = Mathf.Max(1, gm.currentUser.laborLevel);
+        double tap = lv * 5d;
+        double cost = HomeController.UpgradeCost(HomeEconomyConfig.LaborBaseCost, lv);
         laborLabelText.text =
-            $"클릭당 금화 획득량 상승\n(Level {lv})\n" +
-            $"현재: +{current:F0} Gold/Tap -> 다음: +{next:F0} Gold/Tap\n" +
-            $"비용: {cost:F0} Gold";
+            $"노동력 Lv.{lv}\n성벽 탭 시 +{tap:F0} Gold (노동)\n업그레이드 {cost:F0} G";
     }
 
     void UpdateMarketUI()
     {
         var gm = GameManager.InstanceOrNull;
-        if (marketLabelText == null || _controller == null || gm == null) return;
-
-        int lv = gm.autoIncomeLevel;
-        double current = lv <= 0 ? 0 : gm.GetAutoIncomeValue(lv);
-        double next = lv <= 0 ? 1 : gm.GetAutoIncomeValue(lv + 1);
-        double cost = HomeController.UpgradeCost(HomeController.MarketBaseCost, lv);
-
+        if (marketLabelText == null || gm?.currentUser == null) return;
+        int lv = gm.currentUser.marketLevel;
+        double rate = lv * HomeController.MarketGoldPerLevelPerSec;
+        double cost = HomeController.UpgradeCost(HomeEconomyConfig.MarketBaseCost, lv);
         marketLabelText.text =
-            $"초당 금화 자동 생산량 상승\n(Level {lv})\n" +
-            $"현재: +{current:F0} Gold/Sec -> 다음: +{next:F0} Gold/Sec\n" +
-            $"비용: {cost:F0} Gold";
+            $"시장 Lv.{lv}\n주머니 초당 누적: +{rate:F0} × 시간\n업그레이드 {cost:F0} G";
     }
 
     void UpdateLogisticsUI()
     {
         var gm = GameManager.InstanceOrNull;
-        if (logisticsLabelText == null || _controller == null || gm == null) return;
-
-        int lv = gm.currentUser?.farmLevel ?? 0;
-        double discNow = 0d;
-        double discNext = 0d;
-        if (DataManager.Instance != null && DataManager.Instance.IsReady)
-        {
-            var nowRule = DataManager.Instance.GetLevelData(lv);
-            var nextRule = DataManager.Instance.GetLevelData(lv + 1);
-            if (nowRule != null) discNow = nowRule.logisticsDiscountRate;
-            if (nextRule != null) discNext = nextRule.logisticsDiscountRate;
-        }
-
-        double cost = HomeController.GetLogisticsUpgradeGoldCost(lv);
-
-        logisticsLabelText.text =
-            $"병참 — 보유 병사 일일 유지비 감소\n(Level {lv})\n" +
-            $"현재 할인: {discNow:F0}% -> 다음: {discNext:F0}%\n" +
-            $"비용: {cost:F0} Gold";
+        if (logisticsLabelText == null || gm?.currentUser == null) return;
+        int lv = gm.currentUser.farmLevel;
+        double c = HomeController.GetLogisticsUpgradeGoldCost(lv);
+        logisticsLabelText.text = $"병참 Lv.{lv}\n유지비 할인 계열\n업그레이드 {c:F0} G";
     }
 
     void UpdateWarehouseUI()
     {
-        var gm = GameManager.InstanceOrNull;
-        if (warehouseLabelText == null || _controller == null || gm?.currentUser == null) return;
-
-        int lv = gm.currentUser.warehouseLevel;
-        double current = _controller.GetMarketMaxCapacity();
-        int nextLv = lv + 1;
-        double next = current;
-        if (DataManager.Instance != null && DataManager.Instance.IsReady)
-        {
-            var nd = DataManager.Instance.GetLevelData(nextLv);
-            if (nd != null && nd.warehouseMaxCapacity > 0) next = nd.warehouseMaxCapacity;
-        }
-        double cost = HomeController.GetWarehouseUpgradeGoldCost(lv);
-
-        warehouseLabelText.text =
-            $"시장 창고 최대 저장량 상승\n(Level {lv})\n" +
-            $"현재: {current:F0} Gold -> 다음: {next:F0} Gold\n" +
-            $"비용: {cost:F0} Gold";
+        if (warehouseLabelText == null) return;
+        warehouseLabelText.text = "창고\n(레거시 한도 UI — 추후 정리)";
     }
 
     void OnVisitorEventRaised(string title, string body)
@@ -556,12 +736,13 @@ public class HomeUIController : MonoBehaviour
         EnsureVisitorPopupIfNeeded();
         if (visitorPopupRoot == null)
         {
-            Debug.Log($"[방문객 이벤트] {title}: {body}");
+            Debug.Log($"[방문객] {title}: {body}");
             return;
         }
-
-        if (visitorPopupTitleText != null) visitorPopupTitleText.text = string.IsNullOrWhiteSpace(title) ? "방문객 이벤트" : title;
-        if (visitorPopupBodyText != null) visitorPopupBodyText.text = string.IsNullOrWhiteSpace(body) ? "방문객이 다녀갔습니다." : body;
+        if (visitorPopupTitleText != null)
+            visitorPopupTitleText.text = string.IsNullOrWhiteSpace(title) ? "방문" : title;
+        if (visitorPopupBodyText != null)
+            visitorPopupBodyText.text = string.IsNullOrWhiteSpace(body) ? "" : body;
         visitorPopupRoot.gameObject.SetActive(true);
     }
 
@@ -570,362 +751,93 @@ public class HomeUIController : MonoBehaviour
         if (visitorPopupRoot != null) return;
         var canvas = GetComponentInParent<Canvas>();
         if (canvas == null) return;
-
         var rootGo = new GameObject("VisitorEventPopup", typeof(RectTransform), typeof(Image));
         visitorPopupRoot = rootGo.GetComponent<RectTransform>();
         visitorPopupRoot.SetParent(canvas.transform, false);
-        visitorPopupRoot.anchorMin = new Vector2(0.5f, 0.5f);
-        visitorPopupRoot.anchorMax = new Vector2(0.5f, 0.5f);
-        visitorPopupRoot.pivot = new Vector2(0.5f, 0.5f);
+        visitorPopupRoot.anchorMin = visitorPopupRoot.anchorMax = new Vector2(0.5f, 0.5f);
         visitorPopupRoot.sizeDelta = new Vector2(520f, 280f);
-        var bg = rootGo.GetComponent<Image>();
-        bg.color = new Color(0.08f, 0.1f, 0.14f, 0.94f);
-
-        visitorPopupTitleText = CreatePopupText("Title", 26, FontStyles.Bold, new Vector2(0f, 96f));
-        visitorPopupBodyText = CreatePopupText("Body", 20, FontStyles.Normal, new Vector2(0f, 16f));
-        if (visitorPopupBodyText != null)
-        {
-            visitorPopupBodyText.enableWordWrapping = true;
-            visitorPopupBodyText.alignment = TextAlignmentOptions.Top;
-            var rt = visitorPopupBodyText.rectTransform;
-            rt.sizeDelta = new Vector2(460f, 140f);
-        }
-
-        var closeGo = new GameObject("CloseButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        rootGo.GetComponent<Image>().color = new Color(0.08f, 0.1f, 0.14f, 0.94f);
+        visitorPopupTitleText = CreateTmp(visitorPopupRoot, "Title", 26, new Vector2(0f, 96f));
+        visitorPopupBodyText = CreateTmp(visitorPopupRoot, "Body", 20, new Vector2(0f, 16f));
+        visitorPopupBodyText.enableWordWrapping = true;
+        visitorPopupBodyText.rectTransform.sizeDelta = new Vector2(460f, 140f);
+        var closeGo = new GameObject("Close", typeof(RectTransform), typeof(Image), typeof(Button));
         closeGo.transform.SetParent(visitorPopupRoot, false);
-        var closeRt = closeGo.GetComponent<RectTransform>();
-        closeRt.anchorMin = closeRt.anchorMax = new Vector2(0.5f, 0.5f);
-        closeRt.anchoredPosition = new Vector2(0f, -104f);
-        closeRt.sizeDelta = new Vector2(140f, 44f);
-        closeGo.GetComponent<Image>().color = new Color(0.24f, 0.36f, 0.58f, 1f);
+        var crt = closeGo.GetComponent<RectTransform>();
+        crt.sizeDelta = new Vector2(140f, 44f);
+        crt.anchoredPosition = new Vector2(0f, -104f);
         visitorPopupCloseButton = closeGo.GetComponent<Button>();
-        visitorPopupCloseButton.onClick.RemoveAllListeners();
-        visitorPopupCloseButton.onClick.AddListener(() =>
-        {
-            if (visitorPopupRoot != null) visitorPopupRoot.gameObject.SetActive(false);
-        });
-        var closeText = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI)).GetComponent<TextMeshProUGUI>();
-        closeText.transform.SetParent(closeGo.transform, false);
-        closeText.text = "닫기";
-        closeText.fontSize = 20;
-        closeText.alignment = TextAlignmentOptions.Center;
-        closeText.color = Color.white;
-        var crt = closeText.rectTransform;
-        crt.anchorMin = Vector2.zero;
-        crt.anchorMax = Vector2.one;
-        crt.offsetMin = Vector2.zero;
-        crt.offsetMax = Vector2.zero;
-
+        visitorPopupCloseButton.onClick.AddListener(() => visitorPopupRoot.gameObject.SetActive(false));
         visitorPopupRoot.gameObject.SetActive(false);
     }
 
-    TextMeshProUGUI CreatePopupText(string name, float fontSize, FontStyles style, Vector2 anchoredPos)
+    static TextMeshProUGUI CreateTmp(RectTransform parent, string name, float size, Vector2 pos)
     {
-        if (visitorPopupRoot == null) return null;
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI));
-        go.transform.SetParent(visitorPopupRoot, false);
+        go.transform.SetParent(parent, false);
         var tmp = go.GetComponent<TextMeshProUGUI>();
-        tmp.fontSize = fontSize;
-        tmp.fontStyle = style;
+        tmp.fontSize = size;
         tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = new Color(0.95f, 0.95f, 0.95f, 1f);
+        tmp.color = Color.white;
         var rt = tmp.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = anchoredPos;
+        rt.anchoredPosition = pos;
         rt.sizeDelta = new Vector2(460f, 48f);
         return tmp;
     }
 
-    void ResolveHomeUpgradeReferencesIfMissing()
+    void EnsureUiInputInfrastructure()
     {
-        if (warehouseLabelText == null)
-            warehouseLabelText = transform.Find("WarehousePanelsRow/WarehouseRow/WarehouseLabelText")
-                ?.GetComponent<TextMeshProUGUI>();
-        if (warehouseUpgradeButton == null)
-            warehouseUpgradeButton = transform.Find("WarehousePanelsRow/WarehouseRow/WarehouseUpgradeButton")
-                ?.GetComponent<Button>();
-        if (recruitSoldierButton == null)
-            recruitSoldierButton = transform.Find("RecruitSoldierButton")?.GetComponent<Button>();
+        if (UnityEngine.EventSystems.EventSystem.current == null)
+        {
+            var esGo = new GameObject("EventSystem");
+            esGo.AddComponent<UnityEngine.EventSystems.EventSystem>();
+            esGo.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+        }
+        var canvas = GetComponentInParent<Canvas>();
+        if (canvas != null && canvas.gameObject.GetComponent<GraphicRaycaster>() == null)
+            canvas.gameObject.AddComponent<GraphicRaycaster>();
     }
 
-    void RefreshRecruitButtonCaption()
+    void FixHomeCanvasScaleIfBroken()
     {
-        if (recruitSoldierButton == null) return;
-        var tmp = recruitSoldierButton.GetComponentInChildren<TextMeshProUGUI>(true);
-        if (tmp == null) return;
-        var q = GetHomeRecruitQuote();
-        double unit = q?.UnitPrice ?? 0d;
-        tmp.text = unit > 0d ? $"징집 (1명 {unit:N0} G)" : "징집";
-    }
-
-    RecruitController.RecruitQuote? GetHomeRecruitQuote()
-    {
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null || !dm.IsStateReady) return null;
-        string id = dm.HomeCastleId?.Trim();
-        if (string.IsNullOrEmpty(id)) return null;
-        return RecruitController.TryBuildQuote(id, out var q) ? q : null;
-    }
-
-    void OpenRecruitPopup()
-    {
-        EnsureRecruitPopupIfNeeded();
-        if (recruitPopupRoot == null) return;
-        _recruitCount = 0;
-        _dischargeCount = 0;
-        UpdateRecruitPopupText();
-        recruitPopupRoot.gameObject.SetActive(true);
-    }
-
-    void EnsureRecruitPopupIfNeeded()
-    {
-        if (recruitPopupRoot != null) return;
         var canvas = GetComponentInParent<Canvas>();
         if (canvas == null) return;
-
-        var rootGo = new GameObject("RecruitSoldierPopup", typeof(RectTransform), typeof(Image));
-        recruitPopupRoot = rootGo.GetComponent<RectTransform>();
-        recruitPopupRoot.SetParent(canvas.transform, false);
-        recruitPopupRoot.anchorMin = recruitPopupRoot.anchorMax = new Vector2(0.5f, 0.5f);
-        recruitPopupRoot.pivot = new Vector2(0.5f, 0.5f);
-        recruitPopupRoot.sizeDelta = new Vector2(680f, 420f);
-        rootGo.GetComponent<Image>().color = new Color(0.09f, 0.11f, 0.16f, 0.96f);
-
-        recruitHeaderTitleText = CreatePopupLabel(recruitPopupRoot, "본영 모병소", new Vector2(0f, 182f), 28, FontStyles.Bold,
-            TextAlignmentOptions.Center);
-        recruitHeaderTitleText.color = new Color(0.98f, 0.96f, 0.9f, 1f);
-        recruitHeaderAssetText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(0f, 150f), 18, FontStyles.Normal,
-            TextAlignmentOptions.Center);
-        recruitHeaderAssetText.color = new Color(0.84f, 0.88f, 0.94f, 1f);
-        recruitPricePerUnitText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, 118f), 20, FontStyles.Normal, TextAlignmentOptions.Left);
-        recruitExpectedCostText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, 86f), 20, FontStyles.Normal, TextAlignmentOptions.Left);
-        recruitMaintenanceDeltaText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, 54f), 20, FontStyles.Bold, TextAlignmentOptions.Left);
-        recruitMaintenanceDeltaText.color = new Color(1f, 0.35f, 0.35f, 1f);
-        recruitPostPopulationText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, 22f), 19, FontStyles.Normal, TextAlignmentOptions.Left);
-        recruitEconomicShockText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, -10f), 19, FontStyles.Normal,
-            TextAlignmentOptions.Left);
-        recruitWarningText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(0f, -40f), 18, FontStyles.Bold, TextAlignmentOptions.Center);
-        recruitWarningText.color = new Color(1f, 0.42f, 0.38f, 1f);
-
-        var inputGo = new GameObject("CountInput", typeof(RectTransform), typeof(Image), typeof(TMP_InputField));
-        inputGo.transform.SetParent(recruitPopupRoot, false);
-        var inputRt = inputGo.GetComponent<RectTransform>();
-        inputRt.anchorMin = inputRt.anchorMax = new Vector2(0.5f, 0.5f);
-        inputRt.anchoredPosition = new Vector2(0f, -6f);
-        inputRt.sizeDelta = new Vector2(250f, 44f);
-        inputGo.GetComponent<Image>().color = new Color(0.16f, 0.18f, 0.24f, 1f);
-        recruitCountInput = inputGo.GetComponent<TMP_InputField>();
-        recruitCountInput.contentType = TMP_InputField.ContentType.IntegerNumber;
-        var ph = CreatePopupLabel(inputRt, "수량 입력", Vector2.zero, 20, FontStyles.Normal, TextAlignmentOptions.Center);
-        ph.color = new Color(0.7f, 0.74f, 0.8f, 0.9f);
-        var txt = CreatePopupLabel(inputRt, "0", Vector2.zero, 20, FontStyles.Bold, TextAlignmentOptions.Center);
-        txt.color = Color.white;
-        recruitCountInput.placeholder = ph;
-        recruitCountInput.textComponent = txt;
-        recruitCountInput.onValueChanged.AddListener(_ => SyncRecruitCountFromInput());
-
-        recruitPlus100Button = CreatePopupButton(recruitPopupRoot, "+100", new Vector2(-240f, -74f));
-        recruitPlus1KButton = CreatePopupButton(recruitPopupRoot, "+1K", new Vector2(-80f, -74f));
-        recruitPlus10KButton = CreatePopupButton(recruitPopupRoot, "+10K", new Vector2(80f, -74f));
-        recruitMaxButton = CreatePopupButton(recruitPopupRoot, "MAX", new Vector2(240f, -74f));
-        recruitConfirmButton = CreatePopupButton(recruitPopupRoot, "징집 확정", new Vector2(220f, -160f), new Color(0.2f, 0.5f, 0.3f, 1f));
-        recruitCancelButton = CreatePopupButton(recruitPopupRoot, "닫기", new Vector2(-220f, -160f), new Color(0.35f, 0.38f, 0.45f, 1f));
-        dischargeConfirmButton = CreatePopupButton(recruitPopupRoot, "해산 확정", new Vector2(0f, -160f), new Color(0.62f, 0.36f, 0.22f, 1f));
-
-        var dischargeTitle = CreatePopupLabel(recruitPopupRoot, "해산(매도)", new Vector2(0f, -108f), 20, FontStyles.Bold, TextAlignmentOptions.Center);
-        dischargeExpectedGoldText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, -132f), 18, FontStyles.Normal,
-            TextAlignmentOptions.Left);
-        dischargeMaintenanceReliefText = CreatePopupLabel(recruitPopupRoot, "", new Vector2(-300f, -154f), 18, FontStyles.Normal,
-            TextAlignmentOptions.Left);
-        dischargeMaintenanceReliefText.color = new Color(0.56f, 0.92f, 0.64f, 1f);
-        discharge10PctButton = CreatePopupButton(recruitPopupRoot, "10%", new Vector2(80f, -120f), new Color(0.40f, 0.30f, 0.20f, 1f));
-        discharge50PctButton = CreatePopupButton(recruitPopupRoot, "50%", new Vector2(200f, -120f), new Color(0.40f, 0.30f, 0.20f, 1f));
-        discharge100PctButton = CreatePopupButton(recruitPopupRoot, "100%", new Vector2(320f, -120f), new Color(0.40f, 0.30f, 0.20f, 1f));
-
-        recruitPlus100Button.onClick.AddListener(() => ChangeRecruitCount(100));
-        recruitPlus1KButton.onClick.AddListener(() => ChangeRecruitCount(1000));
-        recruitPlus10KButton.onClick.AddListener(() => ChangeRecruitCount(10000));
-        recruitMaxButton.onClick.AddListener(SetRecruitCountToMaxAffordable);
-        recruitConfirmButton.onClick.AddListener(ConfirmRecruitPurchase);
-        discharge10PctButton.onClick.AddListener(() => SetDischargeRatio(0.1f));
-        discharge50PctButton.onClick.AddListener(() => SetDischargeRatio(0.5f));
-        discharge100PctButton.onClick.AddListener(() => SetDischargeRatio(1f));
-        dischargeConfirmButton.onClick.AddListener(ConfirmDischarge);
-        recruitCancelButton.onClick.AddListener(() => recruitPopupRoot.gameObject.SetActive(false));
-
-        recruitPopupRoot.gameObject.SetActive(false);
+        var rt = canvas.transform as RectTransform;
+        if (rt != null && rt.localScale.sqrMagnitude < 1e-8f)
+            rt.localScale = Vector3.one;
     }
 
-    TextMeshProUGUI CreatePopupLabel(Transform parent, string text, Vector2 pos, float size, FontStyles style, TextAlignmentOptions align)
+    /// <summary>
+    /// 에디터 마법사 구버전: TMP에 horizontal Unconstrained CSF 가 있으면 레이아웃에서 폭이 0에 가까워져 한 글자씩 세로로 쌓입니다.
+    /// </summary>
+    void FixLegacyVerticalTmpFromContentSizeFitter()
     {
-        var go = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
-        go.transform.SetParent(parent, false);
-        var tmp = go.GetComponent<TextMeshProUGUI>();
-        tmp.text = text;
-        tmp.fontSize = size;
-        tmp.fontStyle = style;
-        tmp.alignment = align;
-        tmp.color = new Color(0.92f, 0.94f, 0.98f, 1f);
-        var rt = tmp.rectTransform;
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = pos;
-        rt.sizeDelta = new Vector2(600f, 36f);
-        return tmp;
-    }
-
-    Button CreatePopupButton(Transform parent, string label, Vector2 pos, Color? bg = null)
-    {
-        var go = new GameObject(label + "Btn", typeof(RectTransform), typeof(Image), typeof(Button));
-        go.transform.SetParent(parent, false);
-        var rt = go.GetComponent<RectTransform>();
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = pos;
-        rt.sizeDelta = new Vector2(130f, 42f);
-        go.GetComponent<Image>().color = bg ?? new Color(0.24f, 0.35f, 0.56f, 1f);
-        var btn = go.GetComponent<Button>();
-        var lbl = CreatePopupLabel(go.transform, label, Vector2.zero, 18f, FontStyles.Bold, TextAlignmentOptions.Center);
-        lbl.rectTransform.sizeDelta = rt.sizeDelta;
-        return btn;
-    }
-
-    void SyncRecruitCountFromInput()
-    {
-        int.TryParse(recruitCountInput != null ? recruitCountInput.text : "0", NumberStyles.Integer, CultureInfo.InvariantCulture,
-            out _recruitCount);
-        _recruitCount = Mathf.Max(0, _recruitCount);
-        UpdateRecruitPopupText();
-    }
-
-    void ChangeRecruitCount(int delta)
-    {
-        _recruitCount = Mathf.Max(0, _recruitCount + delta);
-        if (recruitCountInput != null) recruitCountInput.SetTextWithoutNotify(_recruitCount.ToString());
-        UpdateRecruitPopupText();
-    }
-
-    void SetRecruitCountToMaxAffordable()
-    {
-        var q = GetHomeRecruitQuote();
-        if (!q.HasValue) return;
-        _recruitCount = q.Value.MaxRecruitable;
-        if (recruitCountInput != null) recruitCountInput.SetTextWithoutNotify(_recruitCount.ToString());
-        UpdateRecruitPopupText();
-    }
-
-    void UpdateRecruitPopupText()
-    {
-        var q = GetHomeRecruitQuote();
-        var gm = GameManager.InstanceOrNull;
-        var dm = DataManager.InstanceOrNull;
-        string homeId = dm?.HomeCastleId?.Trim() ?? "";
-        long totalSoldiers = dm != null && dm.IsStateReady ? UserPortfolioManager.GetTotalOwnedSoldiers(dm) : (gm?.currentUser?.soldierCount ?? 0L);
-        if (recruitHeaderTitleText != null)
+        var list = GetComponentsInChildren<ContentSizeFitter>(true);
+        foreach (var csf in list)
         {
-            string cityName = !string.IsNullOrEmpty(homeId) && dm != null ? dm.GetCastleDisplayName(homeId) : "본영";
-            recruitHeaderTitleText.text = $"{cityName} 병사 모집/해산";
+            if (csf == null || csf.horizontalFit != ContentSizeFitter.FitMode.Unconstrained) continue;
+            var rt = csf.transform as RectTransform;
+            Destroy(csf);
+            if (rt == null) continue;
+            float ay = rt.anchorMin.y, by = rt.anchorMax.y;
+            rt.anchorMin = new Vector2(0f, ay);
+            rt.anchorMax = new Vector2(1f, by);
+            var le = rt.GetComponent<LayoutElement>();
+            if (le != null)
+            {
+                if (le.flexibleWidth < 0.01f) le.flexibleWidth = 1f;
+                le.minWidth = Mathf.Max(le.minWidth, 120f);
+            }
         }
-        if (recruitHeaderAssetText != null)
-            recruitHeaderAssetText.text = $"보유 자산: {(gm?.currentGold ?? 0d):N0} Gold | 총 병사: {totalSoldiers:N0}";
-
-        float unit = q?.UnitPrice ?? 0f;
-        if (recruitPricePerUnitText != null)
-        {
-            string coef = q.HasValue
-                ? $"(민심x{q.Value.SentimentCoeff:0.00}, 희소x{q.Value.ScarcityCoeff:0.00})"
-                : "";
-            recruitPricePerUnitText.text = $"예상 1인당 가격: {unit:N0} Gold {coef}";
-        }
-        double expected = unit * _recruitCount;
-        if (recruitExpectedCostText != null)
-            recruitExpectedCostText.text = $"예상 비용: {expected:N0} Gold";
-
-        double mult = EconomyManager.ResolveLogisticsMaintenanceMultiplier();
-        double perSoldierPerSec = (EconomyManager.InstanceOrNull != null ? EconomyManager.InstanceOrNull.MaintenanceGoldPerSoldierPerDay : 1d) * mult /
-                                  86400d;
-        double deltaPerSec = perSoldierPerSec * _recruitCount;
-        if (recruitMaintenanceDeltaText != null)
-            recruitMaintenanceDeltaText.text = $"징집 후 예상 유지비: -{deltaPerSec:F4} G/초";
-
-        var impact = (!string.IsNullOrEmpty(homeId) && _recruitCount > 0)
-            ? RecruitController.BuildImpactPreview(homeId, _recruitCount)
-            : default;
-        if (recruitPostPopulationText != null)
-            recruitPostPopulationText.text = $"징집 후 인구: {impact.PostPopulation:N0}";
-        if (recruitEconomicShockText != null)
-            recruitEconomicShockText.text = $"경제적 충격: 민심 -{impact.SentimentDrop:0.#}, 주가 -{impact.PriceDropPercent * 100f:0.##}% 예상";
-
-        string warn = "";
-        bool canRecruit = gm != null && _recruitCount > 0 && q.HasValue;
-        if (canRecruit)
-        {
-            if (_recruitCount > q.Value.MaxByPopulation)
-                warn = "징집할 수 있는 백성이 부족합니다.";
-            else if (_recruitCount > q.Value.MaxByCapacity)
-                warn = "성의 병력 수용 한도를 초과합니다.";
-            else if (gm.currentGold < expected)
-                warn = "금화가 부족합니다.";
-        }
-        if (recruitWarningText != null) recruitWarningText.text = warn;
-        if (recruitConfirmButton != null)
-            recruitConfirmButton.interactable = canRecruit && string.IsNullOrEmpty(warn);
-
-        int have = 0;
-        if (dm != null && dm.IsStateReady && !string.IsNullOrEmpty(homeId) && dm.castleStateDataMap.TryGetValue(homeId, out var st) && st != null)
-            have = Mathf.Max(0, st.userDeployedTroops);
-        if (_dischargeCount > have) _dischargeCount = have;
-        long gain = (long)Math.Floor(unit * _dischargeCount);
-        if (dischargeExpectedGoldText != null)
-            dischargeExpectedGoldText.text = $"회수 금화(예상): +{gain:N0} Gold ({_dischargeCount:N0}명)";
-        double relief = perSoldierPerSec * _dischargeCount;
-        if (dischargeMaintenanceReliefText != null)
-            dischargeMaintenanceReliefText.text = $"해산 시 초당 유지비 +{relief:F4} G 절감";
-        if (dischargeConfirmButton != null)
-            dischargeConfirmButton.interactable = _dischargeCount > 0;
     }
 
-    void ConfirmRecruitPurchase()
+    public void PunchLocalGoldText(float strength = 0.12f, float duration = 0.2f, int vibrato = 7)
     {
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null || !dm.IsStateReady || _recruitCount <= 0) return;
-        string homeId = dm.HomeCastleId?.Trim();
-        if (string.IsNullOrEmpty(homeId)) return;
-
-        dm.TryRecruitHomeSoldiers(homeId, _recruitCount, out _, out _);
-        UpdateFarmWorkersUI();
-        PushGlobalTopBar();
-        UpdateRecruitPopupText();
-        if (recruitPopupRoot != null) recruitPopupRoot.gameObject.SetActive(false);
-    }
-
-    void SetDischargeRatio(float ratio)
-    {
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null || !dm.IsStateReady) return;
-        string homeId = dm.HomeCastleId?.Trim();
-        if (string.IsNullOrEmpty(homeId) || !dm.castleStateDataMap.TryGetValue(homeId, out var st) || st == null) return;
-        int have = Mathf.Max(0, st.userDeployedTroops);
-        _dischargeCount = Mathf.Clamp(Mathf.RoundToInt(have * Mathf.Clamp01(ratio)), 0, have);
-        UpdateRecruitPopupText();
-    }
-
-    void ConfirmDischarge()
-    {
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null || !dm.IsStateReady || _dischargeCount <= 0) return;
-        string homeId = dm.HomeCastleId?.Trim();
-        if (string.IsNullOrEmpty(homeId)) return;
-        dm.TryDischargeHomeSoldiers(homeId, _dischargeCount, out _, out _);
-        UpdateFarmWorkersUI();
-        PushGlobalTopBar();
-        UpdateRecruitPopupText();
-    }
-
-    void UpdateSupplyUI()
-    {
-        if (supplyLabelText == null) return;
-
-        supplyLabelText.text =
-            "병사는 <b>징집</b> 버튼 또는 <b>천하</b> 탭에서 매수할 수 있습니다.\n" +
-            "재화는 <b>금화</b>만 사용합니다.";
+        if (goldText == null) return;
+        var rt = goldText.rectTransform;
+        rt.DOKill();
+        rt.localScale = Vector3.one;
+        rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
     }
 }
