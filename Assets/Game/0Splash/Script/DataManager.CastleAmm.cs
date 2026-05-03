@@ -4,6 +4,34 @@ using UnityEngine;
 
 public partial class DataManager
 {
+    /// <summary>
+    /// 구버전(인구 선형·고배율)으로 불린 거대 금고를 감지하면, 현재 병력 G와 새 내재가로 R≈G·bp, K=R·G를 재설정합니다.
+    /// (실제 R이 이론 R의 배수 이상이고 최소 절대치를 넘을 때만 동작 — 정상 세이브는 건드리지 않음)
+    /// </summary>
+    const float AmmGoldInflationRatioTrigger = 20f;
+    const long AmmGoldInflationAbsoluteMinGold = 1_000_000L;
+
+    internal bool TryResyncInflatedAmmReserves(CastleStateData s)
+    {
+        if (s == null || !CastleAmmCore.IsInitialized(s)) return false;
+        int g = s.currentAiGarrison;
+        if (g <= 0) return false;
+
+        float bp = Mathf.Max(1f, CalculateBasePrice(s));
+        double expectedR = g * (double)bp;
+        if (expectedR < 1.0) expectedR = 1.0;
+
+        long actualR = s.goldReserve;
+        if (actualR < AmmGoldInflationAbsoluteMinGold) return false;
+        if (actualR <= expectedR * AmmGoldInflationRatioTrigger) return false;
+
+        double r = expectedR;
+        double k = r * g;
+        s.constantK = k;
+        s.goldReserve = (long)Math.Round(r);
+        return true;
+    }
+
     /// <summary>로드·신규 생성 직후 모든 성에 AMM 필드를 채우거나 K 기준으로 R을 정렬합니다.</summary>
     public void EnsureAllCastlesAmmInitialized()
     {
@@ -28,7 +56,12 @@ public partial class DataManager
 
         if (CastleAmmCore.IsInitialized(s))
         {
+            bool resynced = TryResyncInflatedAmmReserves(s);
+            if (resynced)
+                _stateDirty = true;
             CastleAmmCore.ResyncGoldReserveFromK(s);
+            if (resynced)
+                s.currentBuyPrice = CalculateCastleQuote(s);
             return;
         }
 

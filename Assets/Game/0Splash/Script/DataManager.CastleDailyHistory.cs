@@ -114,7 +114,7 @@ public partial class DataManager
 
             float intrinsic = CalculateBasePrice(s);
             if (intrinsic < 0f) intrinsic = 0f;
-            float baseVal = Mathf.Max(1f, m.baseValue);
+            float baseVal = Mathf.Max(1e-6f, GetEconomyBaseValuePerTroop(m));
             float r = intrinsic / baseVal;
 
             count++;

@@ -1089,30 +1089,45 @@ public partial class DataManager : Singleton<DataManager>
         return Mathf.Max(0f, s.castleTaxRatePercent);
     }
 
+    /// <summary>이전 로직의 시트→병당 환산(<c>×0.001</c>) 뒤에 곱하는 부스트. (<c>baseValue × 0.001 × 이 값</c> = 경제 병당 단가)</summary>
+    public const float EconomyLegacyParPerTroopBoost = 10000f;
+
+    /// <summary>
+    /// 예전처럼 시트 <see cref="CastleMasterData.baseValue"/>를 <c>×0.001</c> 병당 단가로 만든 뒤 <see cref="EconomyLegacyParPerTroopBoost"/>를 곱합니다.
+    /// (SO 인구·정원 추정은 <see cref="CastleMasterData.EnsureDerivedDefaults"/>의 스케일 없는 <c>baseValue</c>를 그대로 씁니다.)
+    /// </summary>
+    public static float GetEconomyBaseValuePerTroop(CastleMasterData master)
+    {
+        if (master == null) return 0f;
+        return master.baseValue * 0.001f * EconomyLegacyParPerTroopBoost;
+    }
+
     float CalculateBasePrice(CastleStateData s)
     {
         if (s == null || string.IsNullOrWhiteSpace(s.id)) return 0f;
         if (!castleMasterDataMap.TryGetValue(s.id.Trim(), out var master) || master == null) return 0f;
+
+        float face = GetEconomyBaseValuePerTroop(master);
+        if (face <= 0f) return 0f;
 
         Grade g = ResolveCastleGradeForCalc(s, master);
         float gradeW = GradeWeight(g);
         // 민심 0~200, 100=기존 1.0 배율에 해당
         float sentimentMul = Mathf.Clamp(s.currentSentiment / 100f, 0f, 2f);
         float popMul = EvaluatePopulationEconomyMultiplier(s.currentPopulation);
-        return master.baseValue * sentimentMul * popMul * gradeW;
+        return face * sentimentMul * popMul * gradeW;
     }
 
     /// <summary>
     /// 인구 기반 경제 배율(주가·배당 공용).
-    /// - 1,000명 이하는 선형(기존 감각 유지)
-    /// - 1,000명 초과는 로그형 소프트캡(대규모 인구 인플레 방어)
+    /// 로그 인자에 <b>명 단위 인구</b>를 넣어, 예전 <c>인구/1000</c> 대비 보정이 약 1000배 강해집니다.
+    /// 대도시는 여전히 <c>log10</c>으로 완만하게만 커져 수천만·억 단위 폭주는 막습니다.
+    /// (예: 1천명 ≈4.0배, 10만명 ≈6.0배, 342만명 ≈7.5배, 1천만명 ≈8.0배)
     /// </summary>
     internal static float EvaluatePopulationEconomyMultiplier(int population)
     {
-        float p = Mathf.Max(1, population) / 1000f;
-        if (p <= 1f) return p;
-        // p=10 -> 약 2.91, p=100 -> 약 3.95
-        return 1f + Mathf.Log10(1f + (p - 1f) * 9f);
+        float pop = Mathf.Max(0f, population);
+        return 1f + Mathf.Log10(1f + pop);
     }
 
     static float GradeWeight(Grade g)

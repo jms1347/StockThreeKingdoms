@@ -30,7 +30,7 @@ public static class WorldMapRowFactory
                 army = Mathf.Max(1, m.maxTroops / 2),
                 population = Mathf.Max(0, m.initPopulation),
                 publicSentiment = 55,
-                castleValue = Mathf.Max(0, Mathf.RoundToInt(m.baseValue)),
+                castleValue = Mathf.Max(0, Mathf.RoundToInt(DataManager.GetEconomyBaseValuePerTroop(m))),
                 mapPosition = WorldMapLayout.SheetMapToWorld(m.posX, m.posY),
                 masterId = id,
                 adjacentIdsRaw = m.adjacentIdsRaw ?? string.Empty,

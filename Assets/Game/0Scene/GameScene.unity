@@ -119,6 +119,147 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &15544363 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5850215331179414405, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+  m_PrefabInstance: {fileID: 989627564}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ccf053bcf4e4054bb15f28573693377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldMarketCastleVirtualList
+--- !u!1 &100887572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 100887573}
+  - component: {fileID: 100887575}
+  - component: {fileID: 100887574}
+  m_Layer: 0
+  m_Name: CastleDetailPopup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &100887573
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100887572}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 165237515}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &100887574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100887572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ed225a288d74340b6d33f5815b0b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldMarketCastleDetailPopup
+  rootCanvasGroup: {fileID: 0}
+  panelRoot: {fileID: 0}
+  closeButton: {fileID: 0}
+  dimCloseButton: {fileID: 0}
+  headerTitleText: {fileID: 0}
+  flavorUnderTitleText: {fileID: 0}
+  headerSubtitlePrefixText: {fileID: 0}
+  headerSubtitleText: {fileID: 0}
+  factionSubtitleSwatchImage: {fileID: 0}
+  buyCaptionText: {fileID: 0}
+  buyPriceBigText: {fileID: 0}
+  sellCaptionText: {fileID: 0}
+  sellPriceText: {fileID: 0}
+  taxRateHintText: {fileID: 0}
+  changePctText: {fileID: 0}
+  gradeExpectationText: {fileID: 0}
+  chart7Dual: {fileID: 0}
+  popStatText: {fileID: 0}
+  popGaugeSlider: {fileID: 0}
+  sentimentStatText: {fileID: 0}
+  sentimentGaugeSlider: {fileID: 0}
+  militaryStatText: {fileID: 0}
+  militaryGaugeSlider: {fileID: 0}
+  assetStatText: {fileID: 0}
+  assetGaugeSlider: {fileID: 0}
+  factionBandImage: {fileID: 0}
+  governorPortraitFrameImage: {fileID: 0}
+  governorPortraitImage: {fileID: 0}
+  governorInitialText: {fileID: 0}
+  governorNameText: {fileID: 0}
+  governorFactionText: {fileID: 0}
+  portfolioBox: {fileID: 0}
+  portfolioText: {fileID: 0}
+  deployButton: {fileID: 0}
+  recallButton: {fileID: 0}
+  relocateButton: {fileID: 0}
+  relocateSpendMpButton: {fileID: 0}
+  relocateHintText: {fileID: 0}
+  deployDisabledHintText: {fileID: 0}
+  footprintIcon1: {fileID: 0}
+  footprintIcon2: {fileID: 0}
+  footprintIcon3: {fileID: 0}
+  confirmCloseButton: {fileID: 0}
+  hidePopulationSentimentDetailUi: 1
+  deployDialogRoot: {fileID: 0}
+  deploySlider: {fileID: 0}
+  deploySliderValueText: {fileID: 0}
+  deployCapHintText: {fileID: 0}
+  deployConfirmButton: {fileID: 0}
+  deployCancelButton: {fileID: 0}
+  recallDialogRoot: {fileID: 0}
+  recallSlider: {fileID: 0}
+  recallSliderValueText: {fileID: 0}
+  recallConfirmButton: {fileID: 0}
+  recallCancelButton: {fileID: 0}
+  marchPointsTravelLineText: {fileID: 0}
+--- !u!114 &100887575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100887572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!224 &165237515 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1564803890483519810, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+  m_PrefabInstance: {fileID: 989627564}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &321910277
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +670,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 658432262}
     m_Modifications:
+    - target: {fileID: 147190335577260902, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: textWu
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 147190335577260902, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: textShu
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 147190335577260902, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: textWei
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 147190335577260902, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: textOthers
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 651388065105390911, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
       propertyPath: m_Name
       value: WorldMarketCanvas
@@ -536,6 +693,38 @@ PrefabInstance:
     - target: {fileID: 651388065105390911, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880173626279648083, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: listSyncTarget
+      value: 
+      objectReference: {fileID: 15544363}
+    - target: {fileID: 3471339991825158919, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: listOnlyControlsRoot
+      value: 
+      objectReference: {fileID: 1119048559}
+    - target: {fileID: 4408051826263894189, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: m_Spacing
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408051826263894189, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408051826263894189, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408051826263894189, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408051826263894189, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408051826263894189, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7645773439800116970, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
       propertyPath: m_Pivot.x
@@ -619,7 +808,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1564803890483519810, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 100887573}
+    - targetCorrespondingSourceObject: {fileID: 1564803890483519810, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2039709678}
+    - targetCorrespondingSourceObject: {fileID: 1564803890483519810, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1144202973}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
 --- !u!224 &989627565 stripped
@@ -632,6 +830,87 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 651388065105390911, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
   m_PrefabInstance: {fileID: 989627564}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1119048559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8914644749189459279, guid: 23054d88d4dda9946ac59c88dad37e53, type: 3}
+  m_PrefabInstance: {fileID: 989627564}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1144202972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1144202973}
+  - component: {fileID: 1144202975}
+  - component: {fileID: 1144202974}
+  m_Layer: 0
+  m_Name: WorldHqTravelHud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1144202973
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144202972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 165237515}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &1144202974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144202972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81073113891c0d3479fca0449c4e3794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldHqTravelHud
+  hudRoot: {fileID: 0}
+  gaugeBackground: {fileID: 0}
+  gaugeFill: {fileID: 0}
+  gaugeValueText: {fileID: 0}
+  routeStatusText: {fileID: 0}
+  debugAddStepsButton: {fileID: 0}
+  overlayBottomInset: 168
+--- !u!114 &1144202975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144202972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: 0
+  m_PreferredWidth: -1
+  m_PreferredHeight: 0
+  m_FlexibleWidth: 1
+  m_FlexibleHeight: 0
+  m_LayoutPriority: 1
 --- !u!1001 &1198097277
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1620,6 +1899,75 @@ Transform:
   - {fileID: 658432262}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2039709677
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2039709678}
+  - component: {fileID: 2039709680}
+  - component: {fileID: 2039709679}
+  m_Layer: 0
+  m_Name: CastleSummarySheet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2039709678
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039709677}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 165237515}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2039709679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039709677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc975d03d8420243b28265543ea2ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldMarketCastleSummarySheet
+--- !u!114 &2039709680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039709677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

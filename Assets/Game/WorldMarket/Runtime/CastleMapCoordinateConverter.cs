@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 에디터 <see cref="CastleWorldMapEditorWindow"/>와 동일한 0~1000 정규화 좌표를
+/// 천하 지도 UI와 동일한 0~1000 정규화 좌표를
 /// 런타임 맵 콘텐츠(RectTransform, pivot·앵커 하단-좌 기준)의 앵커드 위치로 변환합니다.
 /// </summary>
 public static class CastleMapCoordinateConverter

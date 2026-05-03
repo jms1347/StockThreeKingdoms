@@ -140,7 +140,7 @@ public partial class DataManager
         float gradeW = GradeWeight(g);
         float sentimentMul = Mathf.Clamp(s.currentSentiment / 100f, 0f, 2f);
         float popMul = EvaluatePopulationEconomyMultiplier(s.currentPopulation);
-        float baseProd = master.baseValue * gradeW * sentimentMul * popMul * internalStat;
+        float baseProd = GetEconomyBaseValuePerTroop(master) * gradeW * sentimentMul * popMul * internalStat;
 
         int totalTroops = Mathf.Max(0, s.userDeployedTroops) + Mathf.Max(0, s.currentAiGarrison);
         int population = Mathf.Max(1, s.currentPopulation);
