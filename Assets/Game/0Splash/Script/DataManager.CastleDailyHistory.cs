@@ -137,7 +137,7 @@ public partial class DataManager
         return true;
     }
 
-    /// <summary>AMM 시 <see cref="CastleStateData.currentAiGarrison"/> + <see cref="CastleStateData.userDeployedTroops"/> (상한 <see cref="CastleStateData.maxGarrison"/>).</summary>
+    /// <summary>AMM 시 <see cref="CastleStateData.currentAiGarrison"/> + <see cref="CastleStateData.userDeployedTroops"/> (과부하 계산을 위해 상한 미절단).</summary>
     public int EstimateCastleTotalGarrisonTroops(string castleId)
     {
         if (string.IsNullOrWhiteSpace(castleId) || !castleStateDataMap.TryGetValue(castleId.Trim(), out var s) || s == null)
@@ -145,7 +145,7 @@ public partial class DataManager
         castleMasterDataMap.TryGetValue(s.id, out var m);
         EnsureCastleAmmForState(s, m);
         if (CastleAmmCore.IsInitialized(s))
-            return Mathf.Min(s.maxGarrison, Mathf.Max(0, s.userDeployedTroops) + Mathf.Max(0, s.currentAiGarrison));
+            return Mathf.Max(0, s.userDeployedTroops) + Mathf.Max(0, s.currentAiGarrison);
 
         int cap = m != null ? Mathf.Max(1, m.maxTroops) : 5000;
         float popRatio = Mathf.Clamp01(s.currentPopulation / (float)cap);

@@ -29,6 +29,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] TextMeshProUGUI sellPriceText;
     [SerializeField] TextMeshProUGUI taxRateHintText;
     [SerializeField] TextMeshProUGUI changePctText;
+    [SerializeField] TextMeshProUGUI gradeExpectationText;
     [SerializeField] UIPopSentiment7DayChart chart7Dual;
     [SerializeField] TextMeshProUGUI popStatText;
     [SerializeField] Slider popGaugeSlider;
@@ -71,6 +72,13 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     [SerializeField] Button recallConfirmButton;
     [SerializeField] Button recallCancelButton;
     [SerializeField] TextMeshProUGUI marchPointsTravelLineText;
+
+    UIPriceLine7DayGraphic _priceChart7Day;
+    TextMeshProUGUI governorFourStatsText;
+    TextMeshProUGUI deployExpectedYieldText;
+    Button deployMinus1kBtn;
+    Button deployPlus1kBtn;
+    Button deployMaxBtn;
 
     const string GaugeTweenId = "CastleDetailGauges";
 
@@ -304,7 +312,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             disp = master.name;
         if (string.IsNullOrWhiteSpace(disp))
             disp = _castleId;
-        Grade g = master?.grade ?? Grade.D;
+        Grade g = dm.GetCastleRuntimeGrade(_castleId);
 
         if (headerTitleText != null)
             headerTitleText.text = disp;
@@ -377,6 +385,57 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             changePctText.color = flat ? new Color(0.7f, 0.72f, 0.76f) : (up ? RiseColor : FallColor);
         }
 
+        dm.TryGetGradeSpeculation(_castleId, out var gradeSignal, out float gradeSpecFactor);
+        if (gradeExpectationText != null)
+        {
+            if (gradeSignal == GradeSpeculationSignal.PromotionAlert)
+            {
+                float pulse = 0.75f + Mathf.PingPong(Time.unscaledTime * 0.9f, 0.25f);
+                gradeExpectationText.gameObject.SetActive(true);
+                gradeExpectationText.text = $"[✨ 승격 유망] 기대감 {Mathf.Abs(gradeSpecFactor) * 100f:0.#}% 선반영";
+                gradeExpectationText.color = new Color(1f, 0.84f, 0.32f, pulse);
+            }
+            else if (gradeSignal == GradeSpeculationSignal.DemotionRisk)
+            {
+                float pulse = 0.74f + Mathf.PingPong(Time.unscaledTime * 1.1f, 0.26f);
+                gradeExpectationText.gameObject.SetActive(true);
+                gradeExpectationText.text = $"[⚠ 강등 주의] 공포 {Mathf.Abs(gradeSpecFactor) * 100f:0.#}% 선반영";
+                gradeExpectationText.color = new Color(1f, 0.43f, 0.43f, pulse);
+            }
+            else
+            {
+                gradeExpectationText.gameObject.SetActive(false);
+            }
+        }
+
+        bool isWarUi = st.isWar;
+        if (TryGetChartHostImage(chart7Dual, out var chartBg))
+        {
+            if (gradeSignal == GradeSpeculationSignal.PromotionAlert)
+                chartBg.color = new Color(0.10f, 0.08f, 0.03f, isWarUi ? 0.98f : 0.95f);
+            else if (gradeSignal == GradeSpeculationSignal.DemotionRisk)
+                chartBg.color = new Color(0.14f, 0.05f, 0.05f, isWarUi ? 0.98f : 0.95f);
+            else
+                chartBg.color = isWarUi
+                    ? new Color(0.14f, 0.06f, 0.06f, 0.96f)
+                    : new Color(0.05f, 0.06f, 0.09f, 0.92f);
+        }
+
+        if (_priceChart7Day != null)
+        {
+            var series = dm.GetCastlePriceSeries7DayForUi(_castleId);
+            DataManager.GetMinMaxFromPriceSeries(series, out float loPx, out float hiPx);
+            _priceChart7Day.lineColor = series.Count >= 2 && series[^1] >= series[0]
+                ? new Color(0.35f, 0.92f, 0.55f, 1f)
+                : new Color(0.95f, 0.38f, 0.38f, 1f);
+            _priceChart7Day.fillTopColor = new Color(0.2f, 0.55f, 0.38f, isWarUi ? 0.5f : 0.35f);
+            _priceChart7Day.fillBottomColor = new Color(0.05f, 0.07f, 0.1f, 0.18f);
+            _priceChart7Day.SetPrices(series);
+            float wallSup = loPx * 0.9985f;
+            float wallRes = hiPx * 1.0015f;
+            _priceChart7Day.SetPsychologicalWallPrices(wallSup, wallRes);
+        }
+
         if (chart7Dual != null)
             chart7Dual.SetSeries(st.historyPopulation7Day, st.historySentiment7Day);
 
@@ -386,37 +445,48 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
                 $"인구 {pop:N0}  (막대 100% 기준치 약 {Mathf.RoundToInt(popAxis):N0})";
 
         if (sentimentStatText != null)
-            sentimentStatText.text = $"민심 {Mathf.RoundToInt(sentiment)} (기준 100, 범위 0-200)";
+            sentimentStatText.text =
+                $"민심 {Mathf.RoundToInt(sentiment)} / 200  ·  게이지는 100을 중립으로 표시";
 
-        int troopCap = Mathf.Max(1, master?.maxTroops ?? 1);
         int totalMil = dm.EstimateCastleTotalGarrisonTroops(_castleId);
+        var divPreview = dm.CalculateFinalDividend(st);
+        bool overloaded = divPreview.IsOverloaded;
         if (militaryStatText != null)
-            militaryStatText.text = $"군사력 {totalMil:N0} / {troopCap:N0}";
+        {
+            militaryStatText.text = overloaded
+                ? $"군사력 {totalMil:N0}   <color=#ff6666>⚠ 과부하 위기 · 배당 효율 급감</color>"
+                : $"군사력 {totalMil:N0}";
+        }
 
-        float intrinsic = dm.EvaluateBasePriceForCastle(_castleId);
-        float baseVal = Mathf.Max(1f, master?.baseValue ?? 1f);
-        float assetRatio = intrinsic / baseVal;
-        float assetBarN = NormalizeAssetBar(assetRatio, dm, out var worldAssetHint);
+        float effPct = divPreview.FinalEfficiencyPercent;
+        float divGauge01 = Mathf.Clamp01(effPct / 100f);
         if (assetStatText != null)
         {
-            int assetBarPct = Mathf.RoundToInt(Mathf.Clamp01(assetBarN) * 100f);
-            assetStatText.text = worldAssetHint.Length > 0
-                ? $"자산: 기준가 대비 내재가 {assetRatio:0.#}배입니다. {worldAssetHint} 초록 막대는 천하 분포에서의 상대 위치({assetBarPct}%)입니다."
-                : $"자산: 기준가 대비 내재가 {assetRatio:0.#}배입니다. 초록 막대는 고정 눈금(2.5배=100%) 기준 {assetBarPct}%입니다.";
+            assetStatText.text = overloaded
+                ? $"<color=#ff8888>과부하: 배당금 급감 중</color>  ·  배당 효율 약 {effPct:F0}% (정원 초과 시 페널티)"
+                : $"<color=#88ffaa>배당 최적 상태</color>  ·  배당 효율 약 {effPct:F0}%";
+        }
+
+        if (assetGaugeSlider != null)
+        {
+            var fill = assetGaugeSlider.fillRect != null
+                ? assetGaugeSlider.fillRect.GetComponent<Image>()
+                : null;
+            if (fill != null)
+                fill.color = overloaded ? new Color(0.92f, 0.28f, 0.28f, 0.98f) : new Color(0.28f, 0.72f, 0.42f, 0.98f);
         }
 
         float popN = popAxis > 1e-4f ? Mathf.Clamp01(pop / popAxis) : 0f;
-        float sentN = Mathf.Clamp01(0.5f + 0.5f * ((sentiment - 100f) / 100f));
-        float milN = Mathf.Clamp01(totalMil / (float)troopCap);
-        float assetN = Mathf.Clamp01(assetBarN);
+        float sentN = Mathf.Clamp01(sentiment / 200f);
+        float divBarN = divGauge01;
 
         if (_playOpenGaugeAnim)
         {
             _playOpenGaugeAnim = false;
-            PlayGaugesIntro(popN, sentN, milN, assetN);
+            PlayGaugesIntro(popN, sentN, divBarN);
         }
         else
-            SetSliderGaugesImmediate(popN, sentN, milN, assetN);
+            SetSliderGaugesImmediate(popN, sentN, divBarN);
 
         Color facCol = FactionAccentColor(lord);
         if (factionBandImage != null)
@@ -431,6 +501,18 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
             govName = gen.name.Trim();
         if (governorNameText != null)
             governorNameText.text = $"태수 {govName}";
+
+        if (governorFourStatsText != null)
+        {
+            if (gen != null)
+            {
+                governorFourStatsText.gameObject.SetActive(true);
+                governorFourStatsText.text =
+                    $"무력 {gen.power}   지력 {gen.intel}   매력 {gen.charm}   악명 {gen.infamy}";
+            }
+            else
+                governorFourStatsText.gameObject.SetActive(false);
+        }
 
         dm.TryGetUserCastleStock(_castleId, out var stock);
         int troops = stock != null && stock.troopCount > 0 ? stock.troopCount : st.userDeployedTroops;
@@ -530,10 +612,23 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         bool hide = hidePopulationSentimentDetailUi;
 
         if (chart7Dual != null)
+            chart7Dual.gameObject.SetActive(!hide);
+
+        if (chart7Dual != null && chart7Dual.transform.parent != null)
         {
-            var chartHost = chart7Dual.transform.parent;
-            if (chartHost != null)
-                chartHost.gameObject.SetActive(!hide);
+            Transform p = chart7Dual.transform.parent;
+            var capDual = p.Find("CapDual");
+            if (capDual != null)
+                capDual.gameObject.SetActive(!hide);
+        }
+
+        if (_priceChart7Day != null)
+            _priceChart7Day.gameObject.SetActive(true);
+        if (chart7Dual != null && chart7Dual.transform.parent != null)
+        {
+            var capPrice = chart7Dual.transform.parent.Find("CapPrice");
+            if (capPrice != null)
+                capPrice.gameObject.SetActive(true);
         }
 
         if (popStatText != null)
@@ -560,14 +655,21 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         int mp = dm.GetTravelMarchPointsCostRounded(_castleId);
         var gm = GameManager.InstanceOrNull;
         int have = gm?.currentUser != null ? gm.currentUser.marchPoints : 0;
+        float mapDist = -1f;
+        string hid = dm.HomeCastleId;
+        if (!string.IsNullOrWhiteSpace(hid) && !string.IsNullOrWhiteSpace(_castleId))
+            mapDist = dm.GetDistance(hid.Trim(), _castleId.Trim());
+        string distBit = mapDist >= 0f && !float.IsNaN(mapDist)
+            ? $" · <color=#aab4c0>지도 거리</color> <color=#c8e0ff>{mapDist:F0}</color>"
+            : "";
         if (mp < 0)
             marchPointsTravelLineText.text =
-                "<color=#aab4c0>거리 기준 필요 MP를 계산할 수 없습니다.</color>";
+                "<color=#aab4c0>거리 기준 필요 MP를 계산할 수 없습니다.</color>" + distBit;
         else
             marchPointsTravelLineText.text =
-                $"<color=#aab4c0>거리 기준 이동 비용</color> <color=#ffd866>{mp:N0} MP</color> · " +
-                $"<color=#aab4c0>보유 행군 MP</color> {have:N0} · " +
-                "<color=#8899aa><size=13>시간/걸음 충전과 MP 즉시 차감을 함께 사용할 수 있습니다.</size></color>";
+                $"<color=#aab4c0>이주 예상 MP</color> <color=#ffd866>{mp:N0}</color>{distBit} · " +
+                $"<color=#aab4c0>보유 MP</color> {have:N0} · " +
+                "<color=#8899aa><size=13>시간/걸음·즉시 차감 병행 가능</size></color>";
     }
 
     /// <summary>이주 게이지·만보기 안내와 발자국 행은, 본영 이주 <b>목적지가 이 성</b>일 때만 표시합니다.</summary>
@@ -610,18 +712,18 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (footprintIcon3 != null) footprintIcon3.gameObject.SetActive(tier >= 3);
     }
 
-    void SetSliderGaugesImmediate(float popN, float sentN, float milN, float assetN)
+    void SetSliderGaugesImmediate(float popN, float sentN, float dividendEffN)
     {
         if (popGaugeSlider != null) popGaugeSlider.SetValueWithoutNotify(popN);
         if (sentimentGaugeSlider != null) sentimentGaugeSlider.SetValueWithoutNotify(sentN);
-        if (militaryGaugeSlider != null) militaryGaugeSlider.SetValueWithoutNotify(milN);
-        if (assetGaugeSlider != null) assetGaugeSlider.SetValueWithoutNotify(assetN);
+        if (militaryGaugeSlider != null) militaryGaugeSlider.gameObject.SetActive(false);
+        if (assetGaugeSlider != null) assetGaugeSlider.SetValueWithoutNotify(dividendEffN);
     }
 
-    void PlayGaugesIntro(float popN, float sentN, float milN, float assetN)
+    void PlayGaugesIntro(float popN, float sentN, float dividendEffN)
     {
         DOTween.Kill(GaugeTweenId);
-        SetSliderGaugesImmediate(0f, 0f, 0f, 0f);
+        SetSliderGaugesImmediate(0f, 0f, 0f);
         var seq = DOTween.Sequence().SetId(GaugeTweenId);
         if (popGaugeSlider != null)
             seq.Join(DOTween.To(() => popGaugeSlider.value, x => popGaugeSlider.SetValueWithoutNotify(x), popN, 0.52f)
@@ -629,12 +731,19 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (sentimentGaugeSlider != null)
             seq.Join(DOTween.To(() => sentimentGaugeSlider.value, x => sentimentGaugeSlider.SetValueWithoutNotify(x), sentN, 0.52f)
                 .SetEase(Ease.OutCubic).SetId(GaugeTweenId));
-        if (militaryGaugeSlider != null)
-            seq.Join(DOTween.To(() => militaryGaugeSlider.value, x => militaryGaugeSlider.SetValueWithoutNotify(x), milN, 0.52f)
-                .SetEase(Ease.OutCubic).SetId(GaugeTweenId));
         if (assetGaugeSlider != null)
-            seq.Join(DOTween.To(() => assetGaugeSlider.value, x => assetGaugeSlider.SetValueWithoutNotify(x), assetN, 0.52f)
+            seq.Join(DOTween.To(() => assetGaugeSlider.value, x => assetGaugeSlider.SetValueWithoutNotify(x), dividendEffN, 0.52f)
                 .SetEase(Ease.OutCubic).SetId(GaugeTweenId));
+    }
+
+    static bool TryGetChartHostImage(Component chartChild, out Image img)
+    {
+        img = null;
+        if (chartChild == null) return false;
+        Transform p = chartChild.transform.parent;
+        if (p == null) return false;
+        img = p.GetComponent<Image>();
+        return img != null;
     }
 
     static Color FactionAccentColor(Faction f)
@@ -709,6 +818,7 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
     void OnDeploySlider(float v)
     {
+        RefreshDeployYieldHint();
         if (deploySliderValueText == null) return;
         int n = Mathf.RoundToInt(v);
         var dm = DataManager.InstanceOrNull;
@@ -809,35 +919,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
     void OnRelocateClicked()
     {
-        var dm = DataManager.InstanceOrNull;
-        if (dm == null || string.IsNullOrWhiteSpace(_castleId)) return;
-        if (!dm.TryValidateHqMove(_castleId, out _, out var relocateErr))
-        {
-            Debug.LogWarning("[CastleDetailPopup] 본영 이주 불가: " + relocateErr);
-            return;
-        }
-
-        bool ensuredHud = false;
-        Transform wm = transform;
-        for (int i = 0; i < 10 && wm != null; i++, wm = wm.parent)
-        {
-            if (wm.name != "WorldMarketRoot")
-                continue;
-            WorldHqTravelHud.EnsureUnderWorldMarketRoot(wm);
-            ensuredHud = true;
-            break;
-        }
-
-        if (!ensuredHud)
-            Debug.LogWarning("[CastleDetailPopup] WorldMarketRoot를 찾지 못했습니다.");
-
-        if (WorldHqTravelHud.InstanceOrNull == null)
-        {
-            Debug.LogWarning("[CastleDetailPopup] WorldHqTravelHud가 없습니다.");
-            return;
-        }
-
-        WorldHqTravelHud.InstanceOrNull.TryBeginTravelTo(_castleId);
+        if (string.IsNullOrWhiteSpace(_castleId)) return;
+        WorldMarketMigration.StartMigration(_castleId.Trim(), transform);
         Refresh();
     }
 
@@ -1021,6 +1104,11 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         governorNameText = CreateTmp(govBg.transform, "GovName", "태수 —", 19, FontStyles.Bold, TextAlignmentOptions.Left);
         governorNameText.color = Color.white;
 
+        governorFourStatsText = CreateTmp(govBg.transform, "GovFourStats", "", 15, FontStyles.Normal, TextAlignmentOptions.Left);
+        governorFourStatsText.color = new Color(0.72f, 0.76f, 0.82f, 1f);
+        governorFourStatsText.enableWordWrapping = true;
+        governorFourStatsText.gameObject.SetActive(false);
+
         closeButton = null;
 
         var priceRow = new GameObject("PriceRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
@@ -1057,6 +1145,14 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         chgLe.flexibleWidth = 1f;
         chgLe.minHeight = 24f;
         chgLe.preferredHeight = 28f;
+
+        gradeExpectationText = CreateTmp(buyStack.transform, "GradeExpectation", "", 15, FontStyles.Bold, TextAlignmentOptions.Left);
+        gradeExpectationText.enableWordWrapping = true;
+        gradeExpectationText.richText = true;
+        gradeExpectationText.gameObject.SetActive(false);
+        var expLe = gradeExpectationText.GetComponent<LayoutElement>();
+        expLe.minHeight = 18f;
+        expLe.preferredHeight = 24f;
 
         var taxStack = new GameObject("TaxStack", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(LayoutElement));
         taxStack.transform.SetParent(priceRow.transform, false);
@@ -1114,15 +1210,37 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         scroll.vertical = true;
         scroll.horizontal = false;
 
-        var chartHost = new GameObject("ChartHost", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        var chartHost = new GameObject("ChartHost", typeof(RectTransform), typeof(Image), typeof(LayoutElement), typeof(VerticalLayoutGroup));
         chartHost.transform.SetParent(content.transform, false);
         chartHost.GetComponent<Image>().color = new Color(0.05f, 0.06f, 0.09f, 0.92f);
         var chartLe = chartHost.GetComponent<LayoutElement>();
-        chartLe.minHeight = 248f;
-        chartLe.preferredHeight = 264f;
+        chartLe.minHeight = 360f;
+        chartLe.preferredHeight = 380f;
         chartLe.flexibleHeight = 0f;
-        var chartGo = new GameObject("PopSentChart", typeof(RectTransform), typeof(UIPopSentiment7DayChart));
+        var chartV = chartHost.GetComponent<VerticalLayoutGroup>();
+        chartV.padding = new RectOffset(10, 10, 10, 10);
+        chartV.spacing = 8;
+        chartV.childAlignment = TextAnchor.UpperLeft;
+        chartV.childControlWidth = true;
+        chartV.childForceExpandWidth = true;
+
+        var capPrice = CreateTmp(chartHost.transform, "CapPrice", "7일 시세", 17, FontStyles.Bold, TextAlignmentOptions.Left);
+        capPrice.color = new Color(0.72f, 0.76f, 0.82f, 1f);
+
+        var priceGo = new GameObject("PriceLine7d", typeof(RectTransform), typeof(UIPriceLine7DayGraphic), typeof(LayoutElement));
+        priceGo.transform.SetParent(chartHost.transform, false);
+        _priceChart7Day = priceGo.GetComponent<UIPriceLine7DayGraphic>();
+        priceGo.GetComponent<LayoutElement>().minHeight = 128f;
+        priceGo.GetComponent<LayoutElement>().preferredHeight = 136f;
+        priceGo.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 134f);
+
+        var capDual = CreateTmp(chartHost.transform, "CapDual", "내정 추이 (인구·민심)", 17, FontStyles.Bold, TextAlignmentOptions.Left);
+        capDual.color = new Color(0.72f, 0.76f, 0.82f, 1f);
+
+        var chartGo = new GameObject("PopSentChart", typeof(RectTransform), typeof(UIPopSentiment7DayChart), typeof(LayoutElement));
         chartGo.transform.SetParent(chartHost.transform, false);
+        chartGo.GetComponent<LayoutElement>().minHeight = 148f;
+        chartGo.GetComponent<LayoutElement>().preferredHeight = 156f;
         StretchFull(chartGo.GetComponent<RectTransform>());
         chart7Dual = chartGo.GetComponent<UIPopSentiment7DayChart>();
 
@@ -1138,13 +1256,14 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         militaryStatText = CreateTmp(content.transform, "MilLine", "군사력", 25, FontStyles.Normal, TextAlignmentOptions.Left);
         militaryStatText.color = new Color(0.78f, 0.8f, 0.84f);
-        militaryGaugeSlider = CreateReadOnlySliderGauge(content.transform, "MilGauge",
-            new Color(0.32f, 0.52f, 0.88f, 0.95f));
+        militaryStatText.richText = true;
+        militaryGaugeSlider = null;
 
-        assetStatText = CreateTmp(content.transform, "AssetLine", "자산", 25, FontStyles.Normal, TextAlignmentOptions.Left);
+        assetStatText = CreateTmp(content.transform, "DivEffLine", "배당 효율", 25, FontStyles.Normal, TextAlignmentOptions.Left);
         assetStatText.color = new Color(0.78f, 0.8f, 0.84f);
-        assetGaugeSlider = CreateReadOnlySliderGauge(content.transform, "AssetGauge",
-            new Color(0.28f, 0.62f, 0.42f, 0.95f));
+        assetStatText.richText = true;
+        assetGaugeSlider = CreateReadOnlySliderGauge(content.transform, "DivEffGauge",
+            new Color(0.28f, 0.72f, 0.42f, 0.95f));
 
         var pfGo = new GameObject("PortfolioBox", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
         pfGo.transform.SetParent(content.transform, false);
@@ -1294,6 +1413,16 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         hintLe.minHeight = 40f;
         hintLe.preferredHeight = 46f;
 
+        deployExpectedYieldText = CreateTmp(box.transform, "DeployYieldHint", "", 21f, FontStyles.Normal, TextAlignmentOptions.Center);
+        deployExpectedYieldText.color = new Color(0.82f, 0.88f, 0.95f, 1f);
+        deployExpectedYieldText.enableWordWrapping = true;
+        deployExpectedYieldText.richText = true;
+        deployExpectedYieldText.lineSpacing = 4f;
+        deployExpectedYieldText.fontStyle = FontStyles.Bold;
+        var yieldLe = deployExpectedYieldText.gameObject.GetComponent<LayoutElement>();
+        yieldLe.minHeight = 52f;
+        yieldLe.preferredHeight = 56f;
+
         deploySliderValueText = CreateTmp(box.transform, "SliderLabel", "0명 투입", 26f, FontStyles.Normal, TextAlignmentOptions.Center);
         deploySliderValueText.color = new Color(0.93f, 0.95f, 0.98f, 1f);
         deploySliderValueText.enableWordWrapping = true;
@@ -1346,6 +1475,22 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         deploySlider.handleRect = hRt;
         deploySlider.targetGraphic = hImg;
 
+        var quickRow = new GameObject("DeployQuickRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        quickRow.transform.SetParent(box.transform, false);
+        quickRow.GetComponent<LayoutElement>().minHeight = 52f;
+        quickRow.GetComponent<LayoutElement>().preferredHeight = 56f;
+        var qh = quickRow.GetComponent<HorizontalLayoutGroup>();
+        qh.spacing = 10;
+        qh.childAlignment = TextAnchor.MiddleCenter;
+        qh.childControlWidth = true;
+        qh.childForceExpandWidth = true;
+        deployMinus1kBtn = CreateFooterBtn(quickRow.transform, "−1k", new Color(0.32f, 0.34f, 0.40f), 48f, 19f);
+        deployPlus1kBtn = CreateFooterBtn(quickRow.transform, "+1k", new Color(0.32f, 0.34f, 0.40f), 48f, 19f);
+        deployMaxBtn = CreateFooterBtn(quickRow.transform, "MAX", new Color(0.42f, 0.30f, 0.18f), 48f, 19f);
+        deployMinus1kBtn.onClick.AddListener(() => OnDeployQuickDelta(-1000));
+        deployPlus1kBtn.onClick.AddListener(() => OnDeployQuickDelta(1000));
+        deployMaxBtn.onClick.AddListener(OnDeployQuickMax);
+
         var hBtn = new GameObject("BtnRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         hBtn.transform.SetParent(box.transform, false);
         hBtn.GetComponent<LayoutElement>().minHeight = 60f;
@@ -1357,9 +1502,39 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         hhg.childControlHeight = true;
         hhg.childForceExpandHeight = true;
         deployCancelButton = CreateFooterBtn(hBtn.transform, "취소", new Color(0.38f, 0.39f, 0.44f), 58f, 24f);
-        deployConfirmButton = CreateFooterBtn(hBtn.transform, "확인", new Color(0.20f, 0.48f, 0.68f), 58f, 24f);
+        deployConfirmButton = CreateFooterBtn(hBtn.transform, "투입 확정", new Color(0.20f, 0.48f, 0.68f), 58f, 24f);
 
         BuildRecallDialog(transform);
+    }
+
+    void RefreshDeployYieldHint()
+    {
+        if (deployExpectedYieldText == null || string.IsNullOrWhiteSpace(_castleId)) return;
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.castleStateDataMap.TryGetValue(_castleId.Trim(), out var st) || st == null)
+            return;
+        float y = dm.CalculateExpectedDividendYieldPercent(st);
+        deployExpectedYieldText.text =
+            $"<color=#c8d8ec>예상 주간 수익률(현재 호가)</color>  <size=26><b>{y:F2}%</b></size>\n" +
+            "<size=17><color=#8899aa>정원·과부하는 비공개 · 투입 후 과부하면 수익률이 변합니다.</color></size>";
+    }
+
+    void OnDeployQuickDelta(int delta)
+    {
+        if (deploySlider == null || string.IsNullOrWhiteSpace(_castleId)) return;
+        int max = Mathf.Max(1, _deployMaxThisOpen);
+        int cur = Mathf.RoundToInt(deploySlider.value);
+        int next = Mathf.Clamp(cur + delta, 1, max);
+        deploySlider.SetValueWithoutNotify(next);
+        OnDeploySlider(next);
+    }
+
+    void OnDeployQuickMax()
+    {
+        if (deploySlider == null || string.IsNullOrWhiteSpace(_castleId)) return;
+        int max = Mathf.Max(1, _deployMaxThisOpen);
+        deploySlider.SetValueWithoutNotify(max);
+        OnDeploySlider(max);
     }
 
     void BuildRecallDialog(Transform root)

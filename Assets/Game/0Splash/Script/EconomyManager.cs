@@ -2,22 +2,18 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// 매일 현지 시각 낮 12시 병사 유지비 정산 및 오프라인 소급 적용.
+/// 매일 현지 시각 자정(00:00) 병사 유지비 일일 정산, 미납 시 탈영, 오프라인 소급 적용.
 /// <see cref="GameManager"/>와 동일한 오브젝트에 붙습니다.
 /// </summary>
 [DisallowMultipleComponent]
 public class EconomyManager : MonoBehaviour
 {
-    const string PrefsLastSettledNoonTicks = "Economy.LastSettledMaintenanceNoonTicks";
+    const string PrefsLastSettlementTicks = "Economy.LastDailyMaintenanceSettlementTicks";
+    const string PrefsLegacyNoonTicks = "Economy.LastSettledMaintenanceNoonTicks";
 
-    /// <summary>유저 보유 병사 1명당 일일 유지비 (금화).</summary>
+    /// <summary>유저 보유 병사 1명당 일일 유지비 (금화). 최종 = 병사×단가×(1−병참할인).</summary>
     [SerializeField]
     double maintenanceGoldPerSoldierPerDay = 1d;
-
-    [Header("본영 개편: 실시간 유지비")]
-    [Tooltip("끄면(기본): 병사 유지비가 초당 HUD 금화에서 차감됩니다. 켜면 예전처럼 낮 12시 정산만 사용합니다.")]
-    [SerializeField]
-    bool useLegacyNoonMaintenance;
 
     static EconomyManager _instanceOrNull;
 
@@ -26,6 +22,9 @@ public class EconomyManager : MonoBehaviour
     public static EconomyManager InstanceOrNull => _instanceOrNull;
 
     public double MaintenanceGoldPerSoldierPerDay => Math.Max(0d, maintenanceGoldPerSoldierPerDay);
+
+    /// <summary>일일 정산이 1회 이상 처리되었을 때 (팝업·연출용).</summary>
+    public event Action<DailySettlementReport> DailySettlementCompleted;
 
     void Awake()
     {
@@ -40,8 +39,7 @@ public class EconomyManager : MonoBehaviour
 
     void Start()
     {
-        if (useLegacyNoonMaintenance)
-            ProcessMaintenanceCatchUp(triggerSave: true);
+        ProcessMaintenanceCatchUp();
         GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
     }
 
@@ -49,86 +47,28 @@ public class EconomyManager : MonoBehaviour
     {
         if (!pauseStatus)
         {
-            if (useLegacyNoonMaintenance)
-                ProcessMaintenanceCatchUp(triggerSave: true);
+            ProcessMaintenanceCatchUp();
             GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
         }
     }
 
     void Update()
     {
-        if (!useLegacyNoonMaintenance)
-            ApplyRealtimeSoldierUpkeep(Time.unscaledDeltaTime);
-
         if (Time.unscaledTime < _nextMaintenancePollUnscaled)
             return;
         _nextMaintenancePollUnscaled = Time.unscaledTime + 1f;
 
-        if (useLegacyNoonMaintenance)
-            ProcessMaintenanceCatchUp(triggerSave: false);
+        ProcessMaintenanceCatchUp();
         GlobalUIManager.InstanceOrNull?.RefreshMaintenanceHudFromEconomy();
     }
 
-    /// <summary>기획식: upkeep = (troops × 0.1) × (1 − min(farmLevel×0.0025, 0.5)) × dt 초당 금화 차감(0 미만 금지).</summary>
-    void ApplyRealtimeSoldierUpkeep(float dt)
+    /// <summary>징집 미리보기: 추가 병사 delta명에 대한 일일 유지비 증가액.</summary>
+    public static double ComputeDailyUpkeepGoldForAdditionalSoldiers(int deltaSoldiers)
     {
-        var gm = GameManager.InstanceOrNull;
-        if (gm?.currentUser == null || dt <= 0f)
-            return;
-
-        int logisticsLevel = Mathf.Max(0, gm.currentUser.farmLevel);
-        float discount = Mathf.Min(logisticsLevel * 0.0025f, 0.5f);
-        long troops = ResolveSoldierHeadcountForMaintenance();
-        double upkeep = troops * 0.1 * (1.0 - discount) * dt;
-        if (upkeep <= 0d || double.IsNaN(upkeep) || double.IsInfinity(upkeep))
-            return;
-
-        double g = gm.currentUser.gold;
-        double next = g - upkeep;
-        if (next < 0d)
-            next = 0d;
-        if (next >= g)
-            return;
-        gm.currentGold = next;
-    }
-
-    /// <summary>상단 유지비 미리보기(HUD)용 초당 차감 예상치.</summary>
-    public static double ComputeRealtimeUpkeepGoldPerSecond()
-    {
-        var gm = GameManager.InstanceOrNull;
-        if (gm?.currentUser == null)
-            return 0d;
-        int logisticsLevel = Mathf.Max(0, gm.currentUser.farmLevel);
-        float discount = Mathf.Min(logisticsLevel * 0.0025f, 0.5f);
-        long troops = ResolveSoldierHeadcountForMaintenance();
-        return troops * 0.1 * (1.0 - discount);
-    }
-
-    /// <summary>징집 미리보기: 추가 병사 delta명에 대한 초당 유지비 증가(주가 단순 모집 UI).</summary>
-    public static double ComputeRealtimeUpkeepDeltaPerSecondForSoldiers(int deltaSoldiers)
-    {
-        var gm = GameManager.InstanceOrNull;
-        if (gm?.currentUser == null || deltaSoldiers <= 0)
-            return 0d;
-        int logisticsLevel = Mathf.Max(0, gm.currentUser.farmLevel);
-        float discount = Mathf.Min(logisticsLevel * 0.0025f, 0.5f);
-        return deltaSoldiers * 0.1 * (1.0 - discount);
-    }
-
-    public bool UsesLegacyNoonMaintenance => useLegacyNoonMaintenance;
-
-    /// <summary>다음 낮 12시까지 남은 시간 문자열.</summary>
-    public static string FormatCountdownUntilNextLocalNoon()
-    {
-        var next = NextLocalNoonAfter(DateTime.Now);
-        var span = next - DateTime.Now;
-        if (span.TotalSeconds < 0)
-            span = TimeSpan.Zero;
-        if (span.TotalDays >= 1d)
-            return $"{(int)span.TotalHours}시간 {span.Minutes}분";
-        if (span.TotalHours >= 1d)
-            return $"{span.Hours}시간 {span.Minutes}분";
-        return $"{Mathf.Max(0, span.Minutes)}분 {Mathf.Max(0, span.Seconds)}초";
+        if (deltaSoldiers <= 0) return 0d;
+        var inst = InstanceOrNull;
+        double rate = inst != null ? inst.MaintenanceGoldPerSoldierPerDay : 1d;
+        return deltaSoldiers * rate * ResolveLogisticsMaintenanceMultiplier();
     }
 
     /// <summary>기본 유지비에 곱할 계수. <see cref="LevelRuleData.logisticsDiscountRate"/>% 만큼 감면.</summary>
@@ -142,60 +82,115 @@ public class EconomyManager : MonoBehaviour
         if (d == null) return 1d;
         double pct = d.logisticsDiscountRate;
         if (double.IsNaN(pct) || double.IsInfinity(pct)) return 1d;
-        // 기획: 병참 할인은 레벨 누적으로 최대 50%까지만 허용.
-        pct = System.Math.Max(0d, System.Math.Min(50d, pct));
-        return System.Math.Max(0d, 1d - pct / 100d);
+        pct = Math.Max(0d, Math.Min(50d, pct));
+        return Math.Max(0d, 1d - pct / 100d);
     }
 
-    /// <summary>현재 시점 다음 정산 예정 금화 (보유 병사 × 일일 단가 × 병참 유지비 할인).</summary>
+    /// <summary>다음 정산 시점에 차감될 총 유지비(현재 병력·병참 기준).</summary>
     public double ComputeNextSettlementGold()
     {
         long soldiers = ResolveSoldierHeadcountForMaintenance();
         var inst = InstanceOrNull;
         double rate = inst != null ? inst.MaintenanceGoldPerSoldierPerDay : 1d;
-        double raw = soldiers * rate;
-        return raw * ResolveLogisticsMaintenanceMultiplier();
+        return soldiers * rate * ResolveLogisticsMaintenanceMultiplier();
     }
 
-    static DateTime NextLocalNoonAfter(DateTime instant)
+    /// <summary>병사 1명당 일일 유지비(할인 적용 후).</summary>
+    public static double ComputePerSoldierDailyUpkeepGold()
     {
-        var noonToday = new DateTime(instant.Year, instant.Month, instant.Day, 12, 0, 0, DateTimeKind.Local);
-        if (instant < noonToday)
-            return noonToday;
-        return noonToday.AddDays(1);
+        var inst = InstanceOrNull;
+        double rate = inst != null ? inst.MaintenanceGoldPerSoldierPerDay : 1d;
+        return rate * ResolveLogisticsMaintenanceMultiplier();
     }
 
-    /// <summary>첫 실행 시 PlayerPrefs 미설정이면 어제 정오를 마지막 정산 시점으로 간주합니다.</summary>
-    static DateTime LoadOrCreateLastSettledNoon()
+    /// <summary>다음 현지 자정까지 남은 시간.</summary>
+    public static TimeSpan TimeUntilNextLocalMidnight()
     {
-        if (PlayerPrefs.HasKey(PrefsLastSettledNoonTicks) &&
-            long.TryParse(PlayerPrefs.GetString(PrefsLastSettledNoonTicks), out long ticks))
-        {
-            try
-            {
-                var dt = DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Local);
-                return new DateTime(dt.Year, dt.Month, dt.Day, 12, 0, 0, DateTimeKind.Local);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                /* fallthrough */
-            }
-        }
+        var next = NextLocalMidnightAfter(DateTime.Now);
+        var span = next - DateTime.Now;
+        return span.TotalSeconds < 0 ? TimeSpan.Zero : span;
+    }
+
+    /// <summary>다음 현지 자정까지 HH:MM:SS.</summary>
+    public static string FormatCountdownUntilNextDailySettlementHms()
+    {
+        var span = TimeUntilNextLocalMidnight();
+        int total = (int)Math.Floor(Math.Max(0d, span.TotalSeconds));
+        int h = total / 3600;
+        int m = (total % 3600) / 60;
+        int s2 = total % 60;
+        return $"{h:00}:{m:00}:{s2:00}";
+    }
+
+    static DateTime NextLocalMidnightAfter(DateTime instant)
+    {
+        return instant.Date.AddDays(1);
+    }
+
+    static DateTime LoadOrCreateLastSettlementInstant()
+    {
+        if (TryReadSettlementTicks(out DateTime dt))
+            return dt;
+
+        MigrateLegacyNoonPrefsIfNeeded();
+
+        if (TryReadSettlementTicks(out dt))
+            return dt;
 
         var yesterday = DateTime.Today.AddDays(-1);
-        return new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 12, 0, 0, DateTimeKind.Local);
+        return new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 0, 0, 0, DateTimeKind.Local);
     }
 
-    static void SaveLastSettledNoon(DateTime noonInstant)
+    static bool TryReadSettlementTicks(out DateTime instant)
     {
-        var normalized = new DateTime(noonInstant.Year, noonInstant.Month, noonInstant.Day, 12, 0, 0,
-            DateTimeKind.Local);
-        PlayerPrefs.SetString(PrefsLastSettledNoonTicks, normalized.Ticks.ToString());
+        instant = default;
+        if (!PlayerPrefs.HasKey(PrefsLastSettlementTicks))
+            return false;
+        if (!long.TryParse(PlayerPrefs.GetString(PrefsLastSettlementTicks), out long ticks))
+            return false;
+        try
+        {
+            instant = DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Local);
+            return true;
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>레거시 정오 정산 키를 자정 기준으로 1회 이관합니다.</summary>
+    static void MigrateLegacyNoonPrefsIfNeeded()
+    {
+        if (!PlayerPrefs.HasKey(PrefsLegacyNoonTicks))
+            return;
+        if (PlayerPrefs.HasKey(PrefsLastSettlementTicks))
+            return;
+
+        if (!long.TryParse(PlayerPrefs.GetString(PrefsLegacyNoonTicks), out long ticks))
+            return;
+        try
+        {
+            var noon = DateTime.SpecifyKind(new DateTime(ticks), DateTimeKind.Local);
+            var migrated = new DateTime(noon.Year, noon.Month, noon.Day, 0, 0, 0, DateTimeKind.Local);
+            PlayerPrefs.SetString(PrefsLastSettlementTicks, migrated.Ticks.ToString());
+            PlayerPrefs.Save();
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            /* ignore */
+        }
+    }
+
+    static void SaveLastSettlementInstant(DateTime instant)
+    {
+        var normalized = new DateTime(instant.Year, instant.Month, instant.Day, 0, 0, 0, DateTimeKind.Local);
+        PlayerPrefs.SetString(PrefsLastSettlementTicks, normalized.Ticks.ToString());
         PlayerPrefs.Save();
     }
 
-    /// <summary>마지막 정산 처리일 이후 경과한 모든 낮 12시 시각마다 유지비를 차감합니다.</summary>
-    public void ProcessMaintenanceCatchUp(bool triggerSave)
+    /// <summary>마지막 정산 이후 지난 모든 자정마다 유지비를 차감합니다. 미납분은 병사 탈영으로 처리합니다.</summary>
+    public void ProcessMaintenanceCatchUp()
     {
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
@@ -204,29 +199,92 @@ public class EconomyManager : MonoBehaviour
         if (double.IsNaN(rate) || double.IsInfinity(rate))
             return;
 
-        DateTime lastSettled = LoadOrCreateLastSettledNoon();
-        DateTime due = lastSettled.AddDays(1);
+        double perSoldier = rate * ResolveLogisticsMaintenanceMultiplier();
+        if (double.IsNaN(perSoldier) || double.IsInfinity(perSoldier))
+            return;
+
+        DateTime lastSettled = LoadOrCreateLastSettlementInstant();
+        DateTime due = lastSettled.Date.AddDays(1);
         var now = DateTime.Now;
-        bool any = false;
+
+        int totalDays = 0;
+        double totalGoldDeducted = 0d;
+        int totalDeserted = 0;
 
         while (due <= now)
         {
-            long soldiers = ResolveSoldierHeadcountForMaintenance();
-            double cost = rate > 0d ? soldiers * rate : 0d;
-            cost *= ResolveLogisticsMaintenanceMultiplier();
-            if (cost != 0d && !double.IsNaN(cost) && !double.IsInfinity(cost))
-            {
-                gm.AddGold(-cost);
-                any = true;
-            }
+            int desertedThisDay;
+            double deductedThisDay;
+            RunSingleDailySettlement(perSoldier, out deductedThisDay, out desertedThisDay);
 
-            lastSettled = new DateTime(due.Year, due.Month, due.Day, 12, 0, 0, DateTimeKind.Local);
-            SaveLastSettledNoon(lastSettled);
-            due = lastSettled.AddDays(1);
+            totalDays++;
+            totalGoldDeducted += deductedThisDay;
+            totalDeserted += desertedThisDay;
+
+            lastSettled = new DateTime(due.Year, due.Month, due.Day, 0, 0, 0, DateTimeKind.Local);
+            SaveLastSettlementInstant(lastSettled);
+            due = lastSettled.Date.AddDays(1);
         }
 
-        if (any && triggerSave)
+        if (totalDays > 0)
+        {
             gm.SaveUserData();
+
+            var report = new DailySettlementReport
+            {
+                DaysSettled = totalDays,
+                TotalGoldDeducted = totalGoldDeducted,
+                TotalTroopsDeserted = totalDeserted,
+                ResultingGold = gm.currentGold,
+                ResultingSoldiers = ResolveSoldierHeadcountForMaintenance()
+            };
+            DailySettlementCompleted?.Invoke(report);
+        }
+    }
+
+    void RunSingleDailySettlement(double perSoldierCost, out double goldDeducted, out int troopsDeserted)
+    {
+        goldDeducted = 0d;
+        troopsDeserted = 0;
+
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return;
+
+        if (perSoldierCost <= 0d)
+            return;
+
+        long soldiers = ResolveSoldierHeadcountForMaintenance();
+        double cost = soldiers * perSoldierCost;
+        if (cost <= 0d || double.IsNaN(cost) || double.IsInfinity(cost))
+            return;
+
+        double gold = gm.currentUser.gold;
+        if (gold >= cost)
+        {
+            gm.AddGold(-cost);
+            goldDeducted = cost;
+            return;
+        }
+
+        long maxAffordable = (long)Math.Floor((gold + 1e-9) / perSoldierCost);
+        if (maxAffordable < 0) maxAffordable = 0;
+        long toRemove = soldiers - maxAffordable;
+        if (toRemove > 0)
+        {
+            int remove = toRemove > int.MaxValue ? int.MaxValue : (int)toRemove;
+            var dm = DataManager.InstanceOrNull;
+            int removed = dm != null ? dm.RemoveUserTroopsForUpkeepDesertion(remove) : 0;
+            troopsDeserted = removed;
+
+            soldiers = ResolveSoldierHeadcountForMaintenance();
+            cost = soldiers * perSoldierCost;
+        }
+
+        gold = gm.currentUser.gold;
+        double pay = Math.Min(cost, gold);
+        if (pay > 0d)
+            gm.AddGold(-pay);
+        goldDeducted = pay;
     }
 
     static long ResolveSoldierHeadcountForMaintenance()
@@ -245,4 +303,14 @@ public class EconomyManager : MonoBehaviour
     {
         maintenanceGoldPerSoldierPerDay = Math.Max(0d, maintenanceGoldPerSoldierPerDay);
     }
+}
+
+/// <summary>연속 정산(오프라인)을 묶어 보고할 때 사용합니다.</summary>
+public struct DailySettlementReport
+{
+    public int DaysSettled;
+    public double TotalGoldDeducted;
+    public int TotalTroopsDeserted;
+    public double ResultingGold;
+    public long ResultingSoldiers;
 }

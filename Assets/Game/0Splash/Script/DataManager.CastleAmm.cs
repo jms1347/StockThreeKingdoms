@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public partial class DataManager
@@ -33,13 +34,7 @@ public partial class DataManager
 
         int mCap = s.maxGarrison;
         int u = Mathf.Max(0, s.userDeployedTroops);
-        int room = mCap - u;
-        if (room < 1)
-        {
-            s.userDeployedTroops = Mathf.Max(0, mCap - 1);
-            u = s.userDeployedTroops;
-            room = mCap - u;
-        }
+        int room = Mathf.Max(1, mCap - u);
 
         int targetHalf = Mathf.Max(1, mCap / 2);
         int g = Mathf.Min(targetHalf, room);
@@ -364,7 +359,7 @@ public partial class DataManager
         return true;
     }
 
-    float CalculateCastleQuote(CastleStateData s)
+    float CalculateCastleQuoteWithoutSpeculation(CastleStateData s)
     {
         if (s == null || string.IsNullOrWhiteSpace(s.id)) return 0f;
         EnsureCastleAmmForState(s, castleMasterDataMap.TryGetValue(s.id.Trim(), out var m) ? m : null);
@@ -378,6 +373,16 @@ public partial class DataManager
         float basePrice = CalculateBasePrice(s);
         float buffMul = 1f + GetGovernorQuoteModifier(s.currentGovernorId);
         return ApplyWarVolatilityMultiplier(s, Mathf.Max(0f, basePrice * buffMul));
+    }
+
+    float CalculateCastleQuote(CastleStateData s)
+    {
+        float quote = CalculateCastleQuoteWithoutSpeculation(s);
+        if (s == null || string.IsNullOrWhiteSpace(s.id))
+            return quote;
+        float trans = GetCastleGradeTransitionFactor(s.id.Trim());
+        float mul = Mathf.Clamp(1f + trans, 0.2f, 2.5f);
+        return Mathf.Max(0f, quote * mul);
     }
 
     float ApplyWarVolatilityMultiplier(CastleStateData s, float quote)
@@ -612,5 +617,80 @@ public partial class DataManager
         RefreshGlobalTopBarIfPossible();
         OnStateTicked?.Invoke();
         return true;
+    }
+
+    /// <summary>유지비 미납 탈영: 환급 없이 주둔병만 제거합니다.</summary>
+    public int RemoveUserTroopsForUpkeepDesertion(int totalToRemove)
+    {
+        if (totalToRemove <= 0) return 0;
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return 0;
+
+        if (!IsStateReady || castleStateDataMap == null)
+        {
+            long have = Math.Max(0L, gm.currentUser.soldierCount);
+            int take = (int)Math.Min(have, totalToRemove);
+            if (take > 0)
+                gm.currentUser.soldierCount = have - take;
+            return take;
+        }
+
+        var list = new List<(string id, int troops)>();
+        foreach (var kv in castleStateDataMap)
+        {
+            var s = kv.Value;
+            if (s == null) continue;
+            int t = Mathf.Max(0, s.userDeployedTroops);
+            if (t > 0) list.Add((kv.Key, t));
+        }
+
+        list.Sort((a, b) => b.troops.CompareTo(a.troops));
+
+        int removed = 0;
+        for (int i = 0; i < list.Count && removed < totalToRemove; i++)
+        {
+            string cid = list[i].id;
+            int need = totalToRemove - removed;
+            if (need <= 0) break;
+            if (!castleStateDataMap.TryGetValue(cid, out var st) || st == null) continue;
+            int haveHere = Mathf.Max(0, st.userDeployedTroops);
+            int take = Mathf.Min(haveHere, need);
+            if (take <= 0) continue;
+            ApplyUpkeepDesertionAtCastle(st, cid, take);
+            removed += take;
+        }
+
+        if (removed > 0)
+        {
+            _stateDirty = true;
+            FlushLiveScriptableObjects();
+            RefreshGlobalTopBarIfPossible();
+            OnStateTicked?.Invoke();
+        }
+
+        return removed;
+    }
+
+    void ApplyUpkeepDesertionAtCastle(CastleStateData s, string castleId, int count)
+    {
+        if (s == null || count <= 0) return;
+        castleId = castleId.Trim();
+        castleMasterDataMap.TryGetValue(castleId, out var master);
+        EnsureCastleAmmForState(s, master);
+        int have = Mathf.Max(0, s.userDeployedTroops);
+        int take = Mathf.Min(count, have);
+        if (take <= 0) return;
+
+        if (CastleAmmCore.IsInitialized(s))
+            CastleAmmCore.ApplySellFill(s, take);
+
+        s.userDeployedTroops = have - take;
+        if (s.userDeployedTroops <= 0)
+        {
+            s.userDeployedTroops = 0;
+            s.averagePurchasePrice = 0f;
+        }
+
+        s.currentBuyPrice = CalculateCastleQuote(s);
     }
 }

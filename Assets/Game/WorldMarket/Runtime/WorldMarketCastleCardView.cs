@@ -26,6 +26,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [SerializeField] GameObject statusIconWar;
     [SerializeField] GameObject statusIconDisaster;
     [SerializeField] GameObject statusIconFavorable;
+    [SerializeField] GameObject statusIconOverload;
 
     [Header("2구역 · 시세")]
     [SerializeField] TextMeshProUGUI buyLabelText;
@@ -40,6 +41,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [SerializeField] TextMeshProUGUI roiText;
     [SerializeField] TextMeshProUGUI troopsText;
     [SerializeField] TextMeshProUGUI stakeText;
+    [SerializeField] TextMeshProUGUI expectedYieldText;
+    [SerializeField] TextMeshProUGUI overloadEfficiencyText;
 
     [Header("4구역 · 액션")]
     [SerializeField] TextMeshProUGUI distanceHintText;
@@ -86,6 +89,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
         TryAutoWire();
         EnsureHqMoveButtonUi();
         EnsureHqBadgeUi();
+        EnsureOverloadBadgeUi();
+        EnsureYieldTextsUi();
         EnsureDeployDisabledHintUi();
         CacheDefaultColors();
         WireActionButtons();
@@ -257,6 +262,82 @@ public class WorldMarketCastleCardView : MonoBehaviour
         tmp.richText = false;
         go.SetActive(false);
         _deployDisabledHintTmp = tmp;
+    }
+
+    void EnsureOverloadBadgeUi()
+    {
+        if (statusIconOverload != null) return;
+        var icons = transform.Find("MainRow/Zone1/Z1Row/NameColumn/NameRow/StatusIcons")
+                    ?? transform.Find("Left/NameRow/StatusIcons");
+        if (icons == null) return;
+        var existing = icons.Find("IconOverload");
+        if (existing != null)
+        {
+            statusIconOverload = existing.gameObject;
+            return;
+        }
+
+        var go = new GameObject("IconOverload", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(icons, false);
+        var le = go.GetComponent<LayoutElement>();
+        le.minWidth = 68f;
+        le.preferredWidth = 72f;
+        le.preferredHeight = 24f;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null) tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.text = "[과부하]";
+        tmp.fontSize = 13;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color = new Color(1f, 0.42f, 0.42f, 1f);
+        tmp.alignment = TextAlignmentOptions.Center;
+        go.SetActive(false);
+        statusIconOverload = go;
+    }
+
+    void EnsureYieldTextsUi()
+    {
+        if (zone3PersonalRoot == null)
+            zone3PersonalRoot = transform.Find("MainRow/Zone3Personal") as RectTransform
+                                ?? transform.Find("Left/MidRow/PersonalBlock") as RectTransform;
+        if (zone3PersonalRoot == null) return;
+
+        if (expectedYieldText == null)
+        {
+            var y = zone3PersonalRoot.Find("ExpectedYieldText");
+            if (y != null) expectedYieldText = y.GetComponent<TextMeshProUGUI>();
+            if (expectedYieldText == null)
+            {
+                var go = new GameObject("ExpectedYieldText", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+                go.transform.SetParent(zone3PersonalRoot, false);
+                go.transform.SetAsLastSibling();
+                var tmp = go.GetComponent<TextMeshProUGUI>();
+                if (TMP_Settings.defaultFontAsset != null) tmp.font = TMP_Settings.defaultFontAsset;
+                tmp.fontSize = 18;
+                tmp.fontStyle = FontStyles.Bold;
+                tmp.color = new Color(0.82f, 0.9f, 1f, 1f);
+                tmp.alignment = TextAlignmentOptions.Left;
+                expectedYieldText = tmp;
+            }
+        }
+
+        if (overloadEfficiencyText == null)
+        {
+            var e = zone3PersonalRoot.Find("OverloadEfficiencyText");
+            if (e != null) overloadEfficiencyText = e.GetComponent<TextMeshProUGUI>();
+            if (overloadEfficiencyText == null)
+            {
+                var go = new GameObject("OverloadEfficiencyText", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+                go.transform.SetParent(zone3PersonalRoot, false);
+                go.transform.SetAsLastSibling();
+                var tmp = go.GetComponent<TextMeshProUGUI>();
+                if (TMP_Settings.defaultFontAsset != null) tmp.font = TMP_Settings.defaultFontAsset;
+                tmp.fontSize = 16;
+                tmp.fontStyle = FontStyles.Bold;
+                tmp.color = new Color(1f, 0.45f, 0.45f, 1f);
+                tmp.alignment = TextAlignmentOptions.Left;
+                overloadEfficiencyText = tmp;
+            }
+        }
     }
 
     void ClearDeployDisabledHint()
@@ -504,6 +585,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
         EnsureDeployInvestGoldStyle();
         EnsureHqMoveButtonUi();
         EnsureHqBadgeUi();
+        EnsureOverloadBadgeUi();
+        EnsureYieldTextsUi();
         WireActionButtons();
         CacheDefaultColors();
 
@@ -555,7 +638,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         string occLine = lord == Faction.NONE ? "중립" : $"{DataManager.GetFactionLordShortLabel(lord)} 점령";
         bool isHqHome = !string.IsNullOrWhiteSpace(dm.HomeCastleId)
                         && string.Equals(dm.HomeCastleId.Trim(), castleId, StringComparison.Ordinal);
-        Grade g = master?.grade ?? Grade.D;
+        Grade g = dm.GetCastleRuntimeGrade(castleId);
 
         if (castleNameText != null)
         {
@@ -566,7 +649,15 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (castleIdText != null)
         {
-            castleIdText.text = string.IsNullOrEmpty(regionLine) ? occLine : $"{regionLine} · {occLine}";
+            string sub = string.IsNullOrEmpty(regionLine) ? occLine : $"{regionLine} · {occLine}";
+            if (st != null)
+            {
+                var ast = dm.CalculateCastleActiveStats(st);
+                string trait = DataManager.DescribeCastlePersonalityBrief(ast);
+                sub = $"{sub} · 성향 {trait}";
+            }
+
+            castleIdText.text = sub;
             castleIdText.color = new Color(0.55f, 0.58f, 0.64f, 1f);
         }
 
@@ -576,6 +667,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
             statusIconDisaster.SetActive(isDisaster);
         if (statusIconFavorable != null)
             statusIconFavorable.SetActive(isFavorable);
+        if (statusIconOverload != null)
+            statusIconOverload.SetActive(false);
 
         if (gradeBadgeText != null)
         {
@@ -688,6 +781,26 @@ public class WorldMarketCastleCardView : MonoBehaviour
             stakeText.color = PersonalGoldDim;
             stakeText.fontStyle = FontStyles.Bold;
             stakeText.fontSize = 21f;
+        }
+
+        if (st != null)
+        {
+            var dv = dm.CalculateFinalDividend(st);
+            float yieldPct = dm.CalculateExpectedDividendYieldPercent(st);
+            bool overloaded = dv.IsOverloaded;
+            if (statusIconOverload != null)
+                statusIconOverload.SetActive(overloaded);
+            if (expectedYieldText != null)
+            {
+                expectedYieldText.gameObject.SetActive(true);
+                expectedYieldText.text = $"예상 배당률 {yieldPct:F2}%";
+            }
+
+            if (overloadEfficiencyText != null)
+            {
+                overloadEfficiencyText.gameObject.SetActive(overloaded);
+                overloadEfficiencyText.text = overloaded ? $"배당 효율 {dv.FinalEfficiencyPercent:F1}%" : "";
+            }
         }
 
         Transform stakeBarRoot = stakeGaugeFillImage != null ? stakeGaugeFillImage.transform.parent : null;

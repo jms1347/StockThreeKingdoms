@@ -245,7 +245,7 @@ public partial class DataManager : Singleton<DataManager>
 
         TickTravelGaugeIdle(Time.unscaledDeltaTime);
         TickCastleDailyHistoryRollover();
-        DividendManager.Tick(this, Time.unscaledTime);
+        SettlementManager.Tick(this, Time.unscaledTime);
 
         float now = Time.unscaledTime;
         if (_stateDirty && now >= _nextSaveAt)
@@ -364,7 +364,7 @@ public partial class DataManager : Singleton<DataManager>
         _stateDirty = true; // 첫 저장 보장
         FlushLiveScriptableObjects();
 
-        DividendManager.TryProcessWeeklyDividend(this);
+        SettlementManager.TrySyncWeeklyDividendPayout(this);
     }
 
     /// <summary>
@@ -419,6 +419,9 @@ public partial class DataManager : Singleton<DataManager>
             s.buyPricePrevDayClose = 0f;
             s.castleTaxRatePercent = master.initialTaxRatePercent;
             s.worldEventCooldowns = new List<WorldEventCooldownEntry>();
+            s.runtimeGrade = master.grade;
+            s.gradeLockRemainingSettlements = 0;
+            s.lastGradeChange = 0;
             castleStateDataMap[s.id] = s;
         }
 
@@ -717,6 +720,9 @@ public partial class DataManager : Singleton<DataManager>
                 if (s.historyPopulation7Day == null) s.historyPopulation7Day = new List<float>();
                 if (s.historySentiment7Day == null) s.historySentiment7Day = new List<float>();
                 if (s.worldEventCooldowns == null) s.worldEventCooldowns = new List<WorldEventCooldownEntry>();
+                if (s.residentGeneralIds == null) s.residentGeneralIds = new List<string>();
+                if (castleMasterDataMap.TryGetValue(s.id, out var m0) && m0 != null)
+                    EnsureRuntimeGradeDefaults(s, m0);
                 s.NormalizeStabilityIfUnset();
                 castleStateDataMap[s.id] = s;
             }
@@ -755,7 +761,11 @@ public partial class DataManager : Singleton<DataManager>
                         buyPricePrevDayClose = 0f,
                         castleTaxRatePercent = master.initialTaxRatePercent,
                         worldEventCooldowns = new List<WorldEventCooldownEntry>(),
-                        stabilityScore = 100f
+                        residentGeneralIds = new List<string>(),
+                        stabilityScore = 100f,
+                        runtimeGrade = master.grade,
+                        gradeLockRemainingSettlements = 0,
+                        lastGradeChange = 0
                     };
                     castleStateDataMap[id] = s;
                 }
@@ -1084,11 +1094,25 @@ public partial class DataManager : Singleton<DataManager>
         if (s == null || string.IsNullOrWhiteSpace(s.id)) return 0f;
         if (!castleMasterDataMap.TryGetValue(s.id.Trim(), out var master) || master == null) return 0f;
 
-        float gradeW = GradeWeight(master.grade);
+        Grade g = ResolveCastleGradeForCalc(s, master);
+        float gradeW = GradeWeight(g);
         // 민심 0~200, 100=기존 1.0 배율에 해당
         float sentimentMul = Mathf.Clamp(s.currentSentiment / 100f, 0f, 2f);
-        float popMul = Mathf.Max(0f, s.currentPopulation / 1000f);
+        float popMul = EvaluatePopulationEconomyMultiplier(s.currentPopulation);
         return master.baseValue * sentimentMul * popMul * gradeW;
+    }
+
+    /// <summary>
+    /// 인구 기반 경제 배율(주가·배당 공용).
+    /// - 1,000명 이하는 선형(기존 감각 유지)
+    /// - 1,000명 초과는 로그형 소프트캡(대규모 인구 인플레 방어)
+    /// </summary>
+    internal static float EvaluatePopulationEconomyMultiplier(int population)
+    {
+        float p = Mathf.Max(1, population) / 1000f;
+        if (p <= 1f) return p;
+        // p=10 -> 약 2.91, p=100 -> 약 3.95
+        return 1f + Mathf.Log10(1f + (p - 1f) * 9f);
     }
 
     static float GradeWeight(Grade g)

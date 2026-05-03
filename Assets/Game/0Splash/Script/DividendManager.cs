@@ -57,6 +57,22 @@ public static class DividendManager
             var s = kv.Value;
             if (s == null || string.IsNullOrWhiteSpace(s.id)) continue;
 
+            var preview = dm.CalculateFinalDividend(s);
+            long produced = 0L;
+            if (preview.FinalDividend > 0f && float.IsFinite(preview.FinalDividend))
+                produced = (long)Math.Floor(preview.FinalDividend);
+
+            if (produced > 0L)
+            {
+                double sum = (double)s.accumulatedDividendPool + produced;
+                s.accumulatedDividendPool = sum >= long.MaxValue ? long.MaxValue : (long)sum;
+            }
+
+            s.dividendEfficiencyPercent = preview.FinalEfficiencyPercent;
+            s.expectedWeeklyYieldPercent = dm.CalculateExpectedDividendYieldPercent(s);
+
+            dm.ApplyAiCastleWeeklyDividendPolicy(s, preview);
+
             long beforePool = s.accumulatedDividendPool;
             long payout = s.DistributeUserDividendShare();
             if (payout > 0L)
@@ -64,12 +80,22 @@ public static class DividendManager
                 total += payout;
                 string name = dm.GetCastleDisplayName(s.id);
                 if (string.IsNullOrWhiteSpace(name)) name = s.id.Trim();
-                lines.Add(new DividendPayoutLine(s.id.Trim(), name, payout, beforePool));
+                lines.Add(new DividendPayoutLine(
+                    s.id.Trim(),
+                    name,
+                    payout,
+                    beforePool,
+                    produced,
+                    s.expectedWeeklyYieldPercent,
+                    s.dividendEfficiencyPercent,
+                    preview.IsOverloaded));
             }
         }
 
         if (total > 0L)
             gm.AddGold(total);
+
+        dm.ReevaluateCastleGradesWeekly();
 
         dm.SetLastWeeklyDividendPaidAnchorUnix(dueAnchorUnix);
         dm.MarkCastleStateDirty();
@@ -136,12 +162,21 @@ public readonly struct DividendPayoutLine
     public readonly string castleDisplayName;
     public readonly long gold;
     public readonly long poolBefore;
+    public readonly long producedThisWeek;
+    public readonly float expectedYieldPercent;
+    public readonly float dividendEfficiencyPercent;
+    public readonly bool isOverloaded;
 
-    public DividendPayoutLine(string castleId, string castleDisplayName, long gold, long poolBefore)
+    public DividendPayoutLine(string castleId, string castleDisplayName, long gold, long poolBefore, long producedThisWeek,
+        float expectedYieldPercent, float dividendEfficiencyPercent, bool isOverloaded)
     {
         this.castleId = castleId;
         this.castleDisplayName = castleDisplayName;
         this.gold = gold;
         this.poolBefore = poolBefore;
+        this.producedThisWeek = producedThisWeek;
+        this.expectedYieldPercent = expectedYieldPercent;
+        this.dividendEfficiencyPercent = dividendEfficiencyPercent;
+        this.isOverloaded = isOverloaded;
     }
 }

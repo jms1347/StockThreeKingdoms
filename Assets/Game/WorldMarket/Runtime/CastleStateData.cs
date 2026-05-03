@@ -20,6 +20,19 @@ public struct FactionCastleShare
     public float others;
 }
 
+/// <summary>
+/// 태수·주둔 장수 기준 성의 합산 4능 (태수 100%, 소속 장수 10%, 방랑 장수 제외).
+/// AI 성향·전략 틱에서 사용합니다.
+/// </summary>
+[Serializable]
+public struct CastleActiveStats
+{
+    public float Power;
+    public float Intel;
+    public float Charm;
+    public float Infamy;
+}
+
 [Serializable]
 public partial class CastleStateData
 {
@@ -32,6 +45,8 @@ public partial class CastleStateData
     // 점령/인사 상태
     public Faction currentLord;
     public string currentGovernorId;
+    /// <summary>성 소속 장수 목록(태수 포함 가능). 비어 있으면 장수 마스터 initialCastleId 기준으로 추론.</summary>
+    public List<string> residentGeneralIds = new List<string>();
     /// <summary>태수 일일 버프 마지막 적용 시각(Unix 초). <see cref="TimeManager.GetUnixNow"/> 기준.</summary>
     public long lastDailyBuffTime;
     /// <summary>일일 버프 쿨다운이 묶인 태수 id. <see cref="currentGovernorId"/>와 다르면 쿨다운을 새 태수 기준으로 리셋.</summary>
@@ -39,6 +54,16 @@ public partial class CastleStateData
 
     // 상태/히스토리
     public bool isWar;
+    /// <summary>AI 전략 틱에서 설정한 교전 상대 성 ID. 비어 있으면 단독 플래그만 유지.</summary>
+    public string aiWarOpponentCastleId;
+    /// <summary>교전 시작 Unix 시각. 자동 종료 판단용.</summary>
+    public long aiWarStartUnix;
+    /// <summary>AI 폭정 뉴스 스팸 방지용.</summary>
+    public long lastAiTyrannyNewsUnix;
+    /// <summary>AI 행사 뉴스 스팸 방지용.</summary>
+    public long lastAiFestivalNewsUnix;
+    /// <summary>AI 배당 삭감(탐욕) 뉴스 스팸 방지용.</summary>
+    public long lastAiDividendCutNewsUnix;
     /// <summary>재해·특수 이벤트 등 (리스트 정렬 상단용 플래그).</summary>
     public bool isDisaster;
     /// <summary>호재(풍년 등) — 이벤트 탭 필터용. 데이터·연출 붙이면 갱신.</summary>
@@ -75,6 +100,18 @@ public partial class CastleStateData
 
     /// <summary>거래세 등 성에 쌓인 주간 배당 재원. 월요일 정산 시 유저 지분만큼 지급 후 0으로 초기화.</summary>
     public long accumulatedDividendPool;
+    /// <summary>최근 주간 정산 기준 예상 배당률(%, 1주 단위).</summary>
+    public float expectedWeeklyYieldPercent;
+    /// <summary>과부하 시 최종 배당 효율(0~100). 비과부하는 100.</summary>
+    public float dividendEfficiencyPercent = 100f;
+    /// <summary>주간 상대평가로 재산정되는 런타임 등급(미설정 시 마스터 등급 사용).</summary>
+    public Grade runtimeGrade = Grade.D;
+    /// <summary>등급 락 남은 주기 수(0이면 다음 정산에서 변경 가능).</summary>
+    public int gradeLockRemainingSettlements;
+    /// <summary>직전 등급 변동 방향(-1:하락, 0:없음, +1:상승).</summary>
+    public int lastGradeChange;
+    /// <summary>마지막 등급 변경 시각(Unix 초).</summary>
+    public long lastGradeChangeUnix;
 
     public bool IsUserInvested => userDeployedTroops > 0;
 

@@ -508,12 +508,12 @@ public class HomeUIController : MonoBehaviour
         if (recruitCostText != null)
             recruitCostText.text = $"예상 비용: {cost:N0} G";
 
-        double deltaPerSec = EconomyManager.ComputeRealtimeUpkeepDeltaPerSecondForSoldiers(amount);
+        double deltaDaily = EconomyManager.ComputeDailyUpkeepGoldForAdditionalSoldiers(amount);
         if (recruitUpkeepPreviewText != null)
         {
             recruitUpkeepPreviewText.richText = true;
             recruitUpkeepPreviewText.text =
-                $"징집 후 유지비 변화: <color=#FF4444>-{deltaPerSec:F4} G/s</color>";
+                $"징집 후 일일 유지비 증가: <color=#FF4444>-{Utils.AbbreviateScore(deltaDaily)} / Day</color>";
         }
 
         long expectDischarge = (long)Math.Floor(unit * amount * 0.95d);

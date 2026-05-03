@@ -1829,6 +1829,8 @@ MonoBehaviour:
   mapContentMinSize: 2200
   roadLineThickness: 2.8
   roadLineColor: {r: 0.58, g: 0.62, b: 0.68, a: 0.45}
+  focusHomeCastleWhenMapOpens: 1
+  invertVerticalFocusScroll: 0
   listSyncTarget: {fileID: 0}
 --- !u!1 &1374746246041885244
 GameObject:
@@ -9595,6 +9597,7 @@ MonoBehaviour:
   statusIconWar: {fileID: 0}
   statusIconDisaster: {fileID: 0}
   statusIconFavorable: {fileID: 0}
+  statusIconOverload: {fileID: 0}
   buyLabelText: {fileID: 0}
   buyPriceText: {fileID: 0}
   sentimentArrowText: {fileID: 0}
@@ -9605,6 +9608,8 @@ MonoBehaviour:
   roiText: {fileID: 0}
   troopsText: {fileID: 0}
   stakeText: {fileID: 0}
+  expectedYieldText: {fileID: 0}
+  overloadEfficiencyText: {fileID: 0}
   distanceHintText: {fileID: 0}
   deployButton: {fileID: 0}
   hqMoveButton: {fileID: 0}

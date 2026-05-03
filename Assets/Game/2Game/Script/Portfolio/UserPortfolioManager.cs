@@ -272,7 +272,7 @@ public class UserPortfolioManager : MonoBehaviour
                 : 0d;
             headerMaintenanceText.richText = true;
             headerMaintenanceText.text =
-                $"12시 예상 유지비 <b>{Utils.AbbreviateScore(amt)}</b> G · 정산까지 {EconomyManager.FormatCountdownUntilNextLocalNoon()}";
+                $"자정 일일 유지비 <b>{Utils.AbbreviateScore(amt)}</b> G · 남은 시간 {EconomyManager.FormatCountdownUntilNextDailySettlementHms()}";
         }
 
         if (headerSummaryText != null && headerTotalSoldiersText == null && headerUnrealizedPnLText == null)

@@ -20,9 +20,19 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     [SerializeField] Image locationNationIcon;
     [SerializeField] TextMeshProUGUI totalAssetsText;
     [SerializeField] TextMeshProUGUI soldiersText;
-    [Header("일일 유지비(정오)")]
+    [Header("일일 정산 HUD")]
     [SerializeField] TextMeshProUGUI maintenancePreviewText;
     [SerializeField] TextMeshProUGUI maintenanceCountdownText;
+    [Tooltip("타이머 아래: 다음 일일 정산 및 전황 보고")]
+    [SerializeField] TextMeshProUGUI settlementSubtitleText;
+    [SerializeField] Image settlementUrgencyGlow;
+    [SerializeField] Image goldResourceIcon;
+    [SerializeField] Color settlementGlowTint = new Color(0.45f, 0.05f, 0.05f, 0.22f);
+
+    [Header("일일 전황 보고 팝업 (비우면 런타임 생성)")]
+    [SerializeField] RectTransform settlementReportPanel;
+    [SerializeField] TextMeshProUGUI settlementReportBodyText;
+    [SerializeField] Button settlementReportCloseButton;
 
     [Header("프로필 (좌측)")]
     [Tooltip("장착 캐릭터 초상.")]
@@ -53,6 +63,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     [SerializeField] Color soldiersTextColor = new Color(0.7f, 1f, 0.75f);
     [SerializeField] Color assetsPositiveColor = new Color(0.96f, 0.88f, 0.35f);
     static readonly Color AssetsDebtColor = new Color(1f, 0f, 0f);
+    static readonly Color MaintenanceDeltaRed = new Color(1f, 0.32f, 0.32f, 1f);
 
     [Header("탑바 자원 숫자 롤링")]
     [Tooltip("금화·병사·MP가 변할 때 숫자 보간 시간(초). 0이면 즉시.")]
@@ -62,9 +73,14 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     Tweener _assetsTween;
     Tweener _soldiersTween;
     Tweener _mpTween;
+    Tweener _goldIconWarnTween;
     double _displayAssets;
     double _displaySoldiers;
     int _displayMp;
+    bool _economySubscribed;
+    bool _dataStateSubscribed;
+    bool _goldBankruptcyHudActive;
+    double _lastDailyCostHud = -1d;
 
     protected override void Awake()
     {
@@ -77,6 +93,9 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         ApplyBottomTabLabelAutoSizing();
         if (topBarRoot != null)
             LayoutRebuilder.ForceRebuildLayoutImmediate(topBarRoot);
+        EnsureSettlementTimerSubtitle();
+        EnsureSettlementUrgencyGlow();
+        EnsureSettlementReportPanel();
     }
 
     void ApplyBottomTabLabelAutoSizing()
@@ -96,6 +115,12 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     void Start()
     {
         StartCoroutine(BindGameManagerTopBarSync());
+        StartCoroutine(BindEconomySettlementSync());
+    }
+
+    void LateUpdate()
+    {
+        TickSettlementTimerVisuals();
     }
 
     void OnDestroy()
@@ -109,6 +134,22 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
             gm.OnGoldChanged -= OnGameManagerGoldChanged;
             gm.OnMarchPointsChanged -= OnMarchPointsChangedHandler;
         }
+
+        var econ = EconomyManager.InstanceOrNull;
+        if (econ != null && _economySubscribed)
+        {
+            econ.DailySettlementCompleted -= OnDailySettlementCompletedHandler;
+            _economySubscribed = false;
+        }
+
+        var dm = DataManager.InstanceOrNull;
+        if (dm != null && _dataStateSubscribed)
+        {
+            dm.OnStateTicked -= OnDataManagerStateTicked;
+            _dataStateSubscribed = false;
+        }
+
+        _goldIconWarnTween?.Kill();
     }
 
     IEnumerator BindGameManagerTopBarSync()
@@ -123,6 +164,53 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         gm.OnMarchPointsChanged += OnMarchPointsChangedHandler;
         RefreshTopBarFromGameManager();
         InitMarchPointsDisplayFromSave();
+        TrySubscribeDataManagerForMaintenanceHud();
+    }
+
+    IEnumerator BindEconomySettlementSync()
+    {
+        while (EconomyManager.InstanceOrNull == null)
+            yield return null;
+
+        var econ = EconomyManager.InstanceOrNull;
+        if (!_economySubscribed)
+        {
+            econ.DailySettlementCompleted -= OnDailySettlementCompletedHandler;
+            econ.DailySettlementCompleted += OnDailySettlementCompletedHandler;
+            _economySubscribed = true;
+        }
+    }
+
+    void TrySubscribeDataManagerForMaintenanceHud()
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || _dataStateSubscribed) return;
+        dm.OnStateTicked -= OnDataManagerStateTicked;
+        dm.OnStateTicked += OnDataManagerStateTicked;
+        _dataStateSubscribed = true;
+    }
+
+    void OnDataManagerStateTicked() => RefreshMaintenanceHudFromEconomy();
+
+    void OnDailySettlementCompletedHandler(DailySettlementReport report)
+    {
+        RefreshTopBarFromGameManager();
+        PlaySettlementGoldPulse();
+        ShowDailySettlementReport(report);
+    }
+
+    void PlaySettlementGoldPulse()
+    {
+        if (totalAssetsText == null) return;
+        var rt = totalAssetsText.rectTransform;
+        rt.DOKill();
+        rt.localScale = Vector3.one;
+        rt.DOPunchScale(Vector3.one * 0.35f, 0.55f, 10, 0.35f).SetUpdate(true);
+        if (goldResourceIcon != null)
+        {
+            goldResourceIcon.rectTransform.DOKill();
+            goldResourceIcon.rectTransform.DOPunchScale(Vector3.one * 0.2f, 0.45f, 10, 0.35f).SetUpdate(true);
+        }
     }
 
     void OnGameManagerGoldChanged(double _) => RefreshTopBarFromGameManager();
@@ -132,6 +220,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
     /// <summary>GameManager 현재 값으로 상단바를 맞춥니다.</summary>
     public void RefreshTopBarFromGameManager()
     {
+        TrySubscribeDataManagerForMaintenanceHud();
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return;
         var dm = DataManager.InstanceOrNull;
@@ -166,25 +255,78 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (ordersButton == null) ordersButton = bottomTabRoot.Find("OrdersTabButton")?.GetComponent<Button>();
     }
 
-    /// <summary>유지비 표시: 실시간 차감 모드 또는 레거시 정오 정산.</summary>
+    /// <summary>일일 정산 타이머·유지비 Δ·금화/창고 한도 표시.</summary>
     public void RefreshMaintenanceHudFromEconomy()
     {
         var econ = EconomyManager.InstanceOrNull;
-        if (econ != null && !econ.UsesLegacyNoonMaintenance)
+        double dailyCost = econ != null ? econ.ComputeNextSettlementGold() : 0d;
+        if (maintenancePreviewText != null)
         {
-            double perSec = EconomyManager.ComputeRealtimeUpkeepGoldPerSecond();
-            if (maintenancePreviewText != null)
-                maintenancePreviewText.text = $"유지비: -{perSec:F2} G/s";
-            if (maintenanceCountdownText != null)
-                maintenanceCountdownText.text = "실시간 차감";
+            maintenancePreviewText.richText = true;
+            string abb = FormatCompact(Math.Abs(dailyCost));
+            maintenancePreviewText.text =
+                $"<color=#{ColorUtility.ToHtmlStringRGB(MaintenanceDeltaRed)}>-{abb} / Day</color>";
+        }
+
+        if (settlementSubtitleText != null)
+            settlementSubtitleText.text = "다음 일일 정산 및 전황 보고";
+
+        RefreshGoldBankruptcyWarningVisual(dailyCost);
+    }
+
+    void TickSettlementTimerVisuals()
+    {
+        if (maintenanceCountdownText != null)
+            maintenanceCountdownText.text = EconomyManager.FormatCountdownUntilNextDailySettlementHms();
+
+        var span = EconomyManager.TimeUntilNextLocalMidnight();
+        bool urgent = span.TotalHours < 1d && span.TotalSeconds > 0d;
+        if (settlementUrgencyGlow != null)
+        {
+            settlementUrgencyGlow.gameObject.SetActive(urgent);
+            var c = settlementGlowTint;
+            c.a = urgent ? Mathf.Lerp(0.12f, 0.28f, (float)(Math.Sin(Time.unscaledTime * 3.2f) * 0.5 + 0.5)) : 0f;
+            settlementUrgencyGlow.color = c;
+        }
+    }
+
+    void RefreshGoldBankruptcyWarningVisual(double dailyCost)
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null || goldResourceIcon == null) return;
+
+        bool brokeSoon = gm.currentGold < dailyCost && dailyCost > 0.01d;
+        if (brokeSoon == _goldBankruptcyHudActive && Math.Abs(dailyCost - _lastDailyCostHud) < 0.01d)
+            return;
+        _goldBankruptcyHudActive = brokeSoon;
+        _lastDailyCostHud = dailyCost;
+
+        _goldIconWarnTween?.Kill();
+        _goldIconWarnTween = null;
+        if (!brokeSoon)
+        {
+            goldResourceIcon.color = Color.white;
             return;
         }
 
-        double amt = econ != null ? econ.ComputeNextSettlementGold() : 0d;
-        if (maintenancePreviewText != null)
-            maintenancePreviewText.text = $"다음 정산 예정: {Utils.AbbreviateScore(amt)} G";
-        if (maintenanceCountdownText != null)
-            maintenanceCountdownText.text = $"정산까지: {EconomyManager.FormatCountdownUntilNextLocalNoon()}";
+        goldResourceIcon.color = Color.white;
+        _goldIconWarnTween = goldResourceIcon.DOColor(new Color(1f, 0.35f, 0.35f, 1f), 0.38f)
+            .SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
+    }
+
+    static double ResolveWarehouseGoldCap()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return 0d;
+        int w = Mathf.Max(0, gm.currentUser.warehouseLevel);
+        var d = DataManager.InstanceOrNull?.GetLevelData(w);
+        if (d != null && d.warehouseMaxCapacity > 0d)
+            return d.warehouseMaxCapacity;
+        int m = gm.currentUser.marketLevel;
+        var md = DataManager.InstanceOrNull?.GetLevelData(m);
+        if (md != null && md.marketValuePerSec > 0d)
+            return md.marketValuePerSec * 28800d;
+        return 0d;
     }
 
     void RefreshLocationHud()
@@ -247,6 +389,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (marchPointsText == null) marchPointsText = FindTextByName(topBarRoot, "MarchPointsText");
         if (maintenancePreviewText == null) maintenancePreviewText = FindTextByName(topBarRoot, "MaintenancePreviewText");
         if (maintenanceCountdownText == null) maintenanceCountdownText = FindTextByName(topBarRoot, "MaintenanceCountdownText");
+        if (settlementSubtitleText == null) settlementSubtitleText = FindTextByName(topBarRoot, "SettlementSubtitleText");
         if (locationNationIcon == null) locationNationIcon = FindImageByName(topBarRoot, "LocationNationIcon");
 
         // 프리팹 구조가 달라 이름 매칭이 안 될 때, 행 이름 기반 폴백을 사용합니다.
@@ -254,6 +397,16 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         if (soldiersText == null) soldiersText = FindValueTextUnderRow(topBarRoot, "SoldiersRow");
         if (maintenancePreviewText == null) maintenancePreviewText = FindValueTextUnderRow(topBarRoot, "MaintenancePreviewRow");
         if (maintenanceCountdownText == null) maintenanceCountdownText = FindValueTextUnderRow(topBarRoot, "MaintenanceCountdownRow");
+
+        if (goldResourceIcon == null)
+        {
+            var assetsRow = FindChildByName(topBarRoot, "AssetsRow");
+            if (assetsRow != null)
+                goldResourceIcon = assetsRow.Find("Icon")?.GetComponent<Image>();
+        }
+
+        if (settlementUrgencyGlow == null)
+            settlementUrgencyGlow = FindImageByName(topBarRoot, "SettlementUrgencyGlow");
     }
 
     static TextMeshProUGUI FindTextByName(Transform root, params string[] names)
@@ -437,11 +590,16 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
 
     void ApplyTopBarResourceNumbers(double totalAssets, long soldiers)
     {
+        double cap = ResolveWarehouseGoldCap();
         ApplyTopBarField(ref _assetsTween, () => _displayAssets, v => _displayAssets = v, totalAssets, v =>
         {
             if (totalAssetsText != null)
             {
-                totalAssetsText.text = FormatCompact(v);
+                string core = FormatCompact(v);
+                if (cap > 0d)
+                    totalAssetsText.text = $"{core} / {FormatCompact(cap)}";
+                else
+                    totalAssetsText.text = core;
                 totalAssetsText.color = v < 0d ? AssetsDebtColor : assetsPositiveColor;
             }
         });
@@ -573,5 +731,183 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         rt.DOKill();
         rt.localScale = Vector3.one;
         rt.DOPunchScale(Vector3.one * strength, duration, vibrato, 0.5f).SetUpdate(true);
+    }
+
+    void EnsureSettlementTimerSubtitle()
+    {
+        if (settlementSubtitleText != null || maintenanceCountdownText == null) return;
+        var row = maintenanceCountdownText.transform.parent as RectTransform;
+        if (row?.parent == null) return;
+        var center = row.parent as RectTransform;
+        if (center == null) return;
+
+        var go = new GameObject("SettlementSubtitleText", typeof(RectTransform));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(center, false);
+        rt.SetSiblingIndex(row.GetSiblingIndex() + 1);
+
+        var tmp = go.AddComponent<TextMeshProUGUI>();
+        var sample = maintenanceCountdownText;
+        if (sample.font != null) tmp.font = sample.font;
+        if (sample.fontSharedMaterial != null) tmp.fontSharedMaterial = sample.fontSharedMaterial;
+        tmp.fontSize = 20f;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.color = new Color(0.72f, 0.78f, 0.86f, 0.92f);
+        tmp.text = "다음 일일 정산 및 전황 보고";
+
+        var le = go.AddComponent<LayoutElement>();
+        le.minHeight = 32f;
+        le.preferredHeight = 32f;
+        le.flexibleWidth = 1f;
+        settlementSubtitleText = tmp;
+    }
+
+    void EnsureSettlementUrgencyGlow()
+    {
+        if (settlementUrgencyGlow != null || maintenanceCountdownText == null) return;
+        var row = maintenanceCountdownText.transform.parent as RectTransform;
+        if (row == null) return;
+
+        var go = new GameObject("SettlementUrgencyGlow", typeof(RectTransform));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(row, false);
+        rt.SetAsFirstSibling();
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+
+        var img = go.AddComponent<Image>();
+        img.color = new Color(settlementGlowTint.r, settlementGlowTint.g, settlementGlowTint.b, 0f);
+        img.raycastTarget = false;
+        settlementUrgencyGlow = img;
+
+        var le = go.AddComponent<LayoutElement>();
+        le.ignoreLayout = true;
+    }
+
+    void EnsureSettlementReportPanel()
+    {
+        if (settlementReportPanel != null)
+        {
+            if (settlementReportCloseButton != null)
+            {
+                settlementReportCloseButton.onClick.RemoveListener(HideSettlementReport);
+                settlementReportCloseButton.onClick.AddListener(HideSettlementReport);
+            }
+
+            settlementReportPanel.gameObject.SetActive(false);
+            return;
+        }
+
+        var root = transform as RectTransform;
+        if (root == null) return;
+
+        var overlay = new GameObject("DailySettlementReportOverlay", typeof(RectTransform), typeof(Image));
+        var ort = overlay.GetComponent<RectTransform>();
+        ort.SetParent(root, false);
+        ort.SetAsLastSibling();
+        ort.anchorMin = Vector2.zero;
+        ort.anchorMax = Vector2.one;
+        ort.offsetMin = Vector2.zero;
+        ort.offsetMax = Vector2.zero;
+        var dim = overlay.GetComponent<Image>();
+        dim.color = new Color(0f, 0f, 0f, 0.55f);
+        dim.raycastTarget = true;
+
+        var panel = new GameObject("Panel", typeof(RectTransform), typeof(Image));
+        var prt = panel.GetComponent<RectTransform>();
+        prt.SetParent(ort, false);
+        prt.sizeDelta = new Vector2(920f, 620f);
+        prt.anchorMin = new Vector2(0.5f, 0.5f);
+        prt.anchorMax = new Vector2(0.5f, 0.5f);
+        prt.anchoredPosition = Vector2.zero;
+        panel.GetComponent<Image>().color = new Color(0.08f, 0.1f, 0.14f, 0.98f);
+
+        var titleGo = new GameObject("Title", typeof(RectTransform));
+        titleGo.transform.SetParent(prt, false);
+        var titleTmp = titleGo.AddComponent<TextMeshProUGUI>();
+        titleTmp.fontSize = 36f;
+        titleTmp.fontStyle = FontStyles.Bold;
+        titleTmp.alignment = TextAlignmentOptions.Center;
+        titleTmp.text = "일일 전황 보고서";
+        titleTmp.color = Color.white;
+        var titleRt = titleGo.GetComponent<RectTransform>();
+        titleRt.anchorMin = new Vector2(0f, 1f);
+        titleRt.anchorMax = new Vector2(1f, 1f);
+        titleRt.pivot = new Vector2(0.5f, 1f);
+        titleRt.anchoredPosition = new Vector2(0f, -40f);
+        titleRt.sizeDelta = new Vector2(-80f, 60f);
+
+        var bodyGo = new GameObject("Body", typeof(RectTransform));
+        bodyGo.transform.SetParent(prt, false);
+        var bodyTmp = bodyGo.AddComponent<TextMeshProUGUI>();
+        bodyTmp.fontSize = 28f;
+        bodyTmp.alignment = TextAlignmentOptions.TopLeft;
+        bodyTmp.color = new Color(0.9f, 0.92f, 0.95f);
+        var bodyRt = bodyGo.GetComponent<RectTransform>();
+        bodyRt.anchorMin = new Vector2(0f, 0f);
+        bodyRt.anchorMax = new Vector2(1f, 1f);
+        bodyRt.offsetMin = new Vector2(48f, 120f);
+        bodyRt.offsetMax = new Vector2(-48f, -120f);
+
+        var btnGo = new GameObject("CloseButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        btnGo.transform.SetParent(prt, false);
+        var btnRt = btnGo.GetComponent<RectTransform>();
+        btnRt.anchorMin = new Vector2(0.5f, 0f);
+        btnRt.anchorMax = new Vector2(0.5f, 0f);
+        btnRt.anchoredPosition = new Vector2(0f, 48f);
+        btnRt.sizeDelta = new Vector2(280f, 72f);
+        btnGo.GetComponent<Image>().color = new Color(0.2f, 0.45f, 0.85f, 1f);
+        var btn = btnGo.GetComponent<Button>();
+        var btnLabelGo = new GameObject("Label", typeof(RectTransform));
+        btnLabelGo.transform.SetParent(btnGo.transform, false);
+        var btnTmp = btnLabelGo.AddComponent<TextMeshProUGUI>();
+        btnTmp.text = "확인";
+        btnTmp.fontSize = 30f;
+        btnTmp.alignment = TextAlignmentOptions.Center;
+        btnTmp.color = Color.white;
+        var btnLabelRt = btnLabelGo.GetComponent<RectTransform>();
+        btnLabelRt.anchorMin = Vector2.zero;
+        btnLabelRt.anchorMax = Vector2.one;
+        btnLabelRt.offsetMin = Vector2.zero;
+        btnLabelRt.offsetMax = Vector2.zero;
+
+        settlementReportBodyText = bodyTmp;
+        settlementReportCloseButton = btn;
+        settlementReportPanel = ort;
+        btn.onClick.AddListener(HideSettlementReport);
+        ort.gameObject.SetActive(false);
+
+        TMP_FontAsset fontRef = totalAssetsText != null ? totalAssetsText.font : maintenanceCountdownText?.font;
+        if (fontRef != null)
+        {
+            titleTmp.font = fontRef;
+            bodyTmp.font = fontRef;
+            btnTmp.font = fontRef;
+        }
+    }
+
+    void ShowDailySettlementReport(DailySettlementReport r)
+    {
+        EnsureSettlementReportPanel();
+        if (settlementReportBodyText == null) return;
+
+        settlementReportBodyText.richText = true;
+        settlementReportBodyText.text =
+            $"정산 일수: <b>{r.DaysSettled}</b>일\n" +
+            $"차감 금화: <b>-{FormatCompact(r.TotalGoldDeducted)}</b>\n" +
+            $"탈영 병사: <b>{FormatCompact(r.TotalTroopsDeserted)}</b>명\n\n" +
+            $"잔여 금화: <b>{FormatCompact(r.ResultingGold)}</b>\n" +
+            $"현재 병력: <b>{FormatCompact(r.ResultingSoldiers)}</b>명";
+
+        if (settlementReportPanel != null)
+            settlementReportPanel.gameObject.SetActive(true);
+    }
+
+    void HideSettlementReport()
+    {
+        if (settlementReportPanel != null)
+            settlementReportPanel.gameObject.SetActive(false);
     }
 }

@@ -18,12 +18,18 @@ public class WorldMarketMapViewController : MonoBehaviour
     [SerializeField] float roadLineThickness = 4.2f;
     [SerializeField] Color roadLineColor = new Color(0.72f, 0.76f, 0.82f, 0.78f);
 
-    [Tooltip("비우면 WorldMarketRoot 아래에서 WorldMarketCastleVirtualList를 찾습니다. 리스트와 필터·스크롤을 동기화합니다.")]
+    [Header("지도 오픈 시 본영 포커스")]
+    [SerializeField] bool focusHomeCastleWhenMapOpens = true;
+    [Tooltip("일부 ScrollRect·앵커 조합에서 세로 스크롤 방향이 반대일 때만 켭니다.")]
+    [SerializeField] bool invertVerticalFocusScroll;
+
+    [Tooltip("비우면 WorldMarketRoot에서 찾습니다. 핀 클릭 시 리스트만 해당 항목으로 스크롤(지도는 항상 전체 성).")]
     [SerializeField] WorldMarketCastleVirtualList listSyncTarget;
 
     readonly List<WorldMarketMapCastlePin> _pinPool = new List<WorldMarketMapCastlePin>();
     readonly List<Image> _roadEdgePool = new List<Image>();
     RectTransform _roadLayer;
+    bool _pendingFocusHomeCastle;
 
     void Awake()
     {
@@ -62,9 +68,9 @@ public class WorldMarketMapViewController : MonoBehaviour
 
     void OnEnable()
     {
+        _pendingFocusHomeCastle = focusHomeCastleWhenMapOpens;
         TrySubscribe();
         ResolveListSyncTarget();
-        SubscribeListFilterChanged();
         WorldMarketMapCastlePin.OnCastlePinClicked += OnCastlePinClickedForListScroll;
         StartCoroutine(CoRebuildAfterLayout());
     }
@@ -74,18 +80,19 @@ public class WorldMarketMapViewController : MonoBehaviour
         yield return null;
         Canvas.ForceUpdateCanvases();
         RebuildPins();
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        if (_pendingFocusHomeCastle)
+        {
+            ScrollMapToHomeCastle();
+            _pendingFocusHomeCastle = false;
+        }
     }
 
     void OnDisable()
     {
         WorldMarketMapCastlePin.OnCastlePinClicked -= OnCastlePinClickedForListScroll;
         Unsubscribe();
-        UnsubscribeListFilterChanged();
-    }
-
-    void OnDestroy()
-    {
-        UnsubscribeListFilterChanged();
     }
 
     void OnCastlePinClickedForListScroll(string castleId)
@@ -109,22 +116,6 @@ public class WorldMarketMapViewController : MonoBehaviour
 
         listSyncTarget = FindObjectOfType<WorldMarketCastleVirtualList>();
     }
-
-    void SubscribeListFilterChanged()
-    {
-        ResolveListSyncTarget();
-        if (listSyncTarget == null) return;
-        listSyncTarget.FilterChanged -= OnLinkedListFilterChanged;
-        listSyncTarget.FilterChanged += OnLinkedListFilterChanged;
-    }
-
-    void UnsubscribeListFilterChanged()
-    {
-        if (listSyncTarget == null) return;
-        listSyncTarget.FilterChanged -= OnLinkedListFilterChanged;
-    }
-
-    void OnLinkedListFilterChanged(WorldMarketCastleListFilter _) => RebuildPins();
 
     void TrySubscribe()
     {
@@ -171,10 +162,8 @@ public class WorldMarketMapViewController : MonoBehaviour
         }
 
         ResolveListSyncTarget();
-        var filter = listSyncTarget != null
-            ? listSyncTarget.CurrentFilter
-            : WorldMarketCastleListFilter.All;
-        var ids = dm.GetOrderedWorldCastleIds(filter);
+        // 리스트 상단 필터(보유·전쟁 등)는 스크롤 목록에만 적용. 지도는 항상 전체 거점·도로를 그린다.
+        var ids = dm.GetOrderedWorldCastleIds(WorldMarketCastleListFilter.All);
 
         var positions = new Dictionary<string, Vector2>(ids.Count);
         var visibleIds = new HashSet<string>();
@@ -221,7 +210,6 @@ public class WorldMarketMapViewController : MonoBehaviour
             string displayName = dm.GetCastleDisplayName(cidTrim);
             if (string.IsNullOrWhiteSpace(displayName))
                 displayName = master.name;
-            string status = BuildMapPinStatusLine(isWar, isDisaster, isFavorable, userInvested);
 
             var pin = GetPinAt(i);
             var rt = pin.GetComponent<RectTransform>();
@@ -230,9 +218,8 @@ public class WorldMarketMapViewController : MonoBehaviour
             rt.pivot = new Vector2(0.5f, 0.35f);
             rt.anchoredPosition = pos;
 
-            string gradeStr = master.grade.ToString();
-            pin.Bind(cidTrim, FactionPinColor(lord), isHq, isWar, isDisaster, isFavorable, displayName, status,
-                gradeStr);
+            pin.Bind(cidTrim, FactionPinColor(lord), isHq, isWar, isDisaster, isFavorable, userInvested,
+                dm.GetCastleRuntimeGrade(cidTrim), displayName);
             i++;
         }
 
@@ -240,16 +227,51 @@ public class WorldMarketMapViewController : MonoBehaviour
             _pinPool[k].Hide();
     }
 
-    static string BuildMapPinStatusLine(bool isWar, bool isDisaster, bool isFavorable, bool userInvested)
+    void ScrollMapToHomeCastle()
     {
-        var parts = new List<string>(4);
-        if (isWar) parts.Add("전쟁");
-        if (isDisaster) parts.Add("재해");
-        if (isFavorable) parts.Add("호재");
-        if (userInvested) parts.Add("투자");
-        if (parts.Count == 0)
-            return null;
-        return string.Join(" · ", parts);
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || string.IsNullOrWhiteSpace(dm.HomeCastleId))
+            return;
+        if (!dm.castleMasterDataMap.TryGetValue(dm.HomeCastleId.Trim(), out var master) || master == null)
+            return;
+        if (mapScroll == null || mapContent == null || mapScroll.viewport == null)
+            return;
+
+        float w = mapContent.rect.width;
+        float h = mapContent.rect.height;
+        if (w < 2f || h < 2f)
+        {
+            w = mapContent.sizeDelta.x;
+            h = mapContent.sizeDelta.y;
+        }
+
+        Vector2 focus = CastleMapCoordinateConverter.NormalizedWorldToAnchoredPosition(
+            master.posX, master.posY, mapWorldMax, w, h, mapMargin);
+        focus += new Vector2(0f, 28f);
+        ScrollContentCenterOnPoint(focus);
+    }
+
+    void ScrollContentCenterOnPoint(Vector2 pointInContentBottomLeftSpace)
+    {
+        Canvas.ForceUpdateCanvases();
+        RectTransform viewport = mapScroll.viewport;
+        RectTransform content = mapContent;
+
+        float contentW = content.rect.width;
+        float contentH = content.rect.height;
+        float viewW = viewport.rect.width;
+        float viewH = viewport.rect.height;
+
+        float dx = Mathf.Max(0.001f, contentW - viewW);
+        float dy = Mathf.Max(0.001f, contentH - viewH);
+
+        float nx = (pointInContentBottomLeftSpace.x - viewW * 0.5f) / dx;
+        float ny = (pointInContentBottomLeftSpace.y - viewH * 0.5f) / dy;
+        if (invertVerticalFocusScroll)
+            ny = 1f - ny;
+
+        mapScroll.horizontalNormalizedPosition = Mathf.Clamp01(nx);
+        mapScroll.verticalNormalizedPosition = Mathf.Clamp01(ny);
     }
 
     void EnsureRoadLayer()
@@ -413,6 +435,21 @@ public class WorldMarketMapViewController : MonoBehaviour
         return _pinPool[index];
     }
 
+    static Image CreateMapStatusChip(Transform parent, string nodeName, Color col)
+    {
+        var go = new GameObject(nodeName, typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        go.transform.SetParent(parent, false);
+        var img = go.GetComponent<Image>();
+        img.sprite = WhiteBlockSprite();
+        img.color = col;
+        img.raycastTarget = false;
+        var le = go.GetComponent<LayoutElement>();
+        le.preferredWidth = le.preferredHeight = 15f;
+        le.minWidth = le.minHeight = 15f;
+        go.SetActive(false);
+        return img;
+    }
+
     static WorldMarketMapCastlePin CreatePinObject(RectTransform parent)
     {
         var root = new GameObject("CastlePin", typeof(RectTransform), typeof(Button));
@@ -422,40 +459,6 @@ public class WorldMarketMapViewController : MonoBehaviour
 
         var btn = root.GetComponent<Button>();
         btn.transition = Selectable.Transition.ColorTint;
-
-        var nameGo = new GameObject("CastleName", typeof(RectTransform), typeof(TextMeshProUGUI));
-        nameGo.transform.SetParent(root.transform, false);
-        var nameRt = nameGo.GetComponent<RectTransform>();
-        nameRt.anchorMin = nameRt.anchorMax = new Vector2(0.5f, 1f);
-        nameRt.pivot = new Vector2(0.5f, 1f);
-        nameRt.anchoredPosition = new Vector2(0f, -2f);
-        nameRt.sizeDelta = new Vector2(220f, 30f);
-        var nameTmp = nameGo.GetComponent<TextMeshProUGUI>();
-        if (TMP_Settings.defaultFontAsset != null)
-            nameTmp.font = TMP_Settings.defaultFontAsset;
-        nameTmp.fontSize = 16;
-        nameTmp.fontStyle = FontStyles.Bold;
-        nameTmp.color = new Color(0.94f, 0.95f, 0.97f, 1f);
-        nameTmp.alignment = TextAlignmentOptions.Center;
-        nameTmp.enableWordWrapping = false;
-        nameTmp.overflowMode = TextOverflowModes.Ellipsis;
-
-        var statusGo = new GameObject("StatusHint", typeof(RectTransform), typeof(TextMeshProUGUI));
-        statusGo.transform.SetParent(root.transform, false);
-        var stRt = statusGo.GetComponent<RectTransform>();
-        stRt.anchorMin = stRt.anchorMax = new Vector2(0.5f, 1f);
-        stRt.pivot = new Vector2(0.5f, 1f);
-        stRt.anchoredPosition = new Vector2(0f, -30f);
-        stRt.sizeDelta = new Vector2(220f, 22f);
-        var statusTmp = statusGo.GetComponent<TextMeshProUGUI>();
-        if (TMP_Settings.defaultFontAsset != null)
-            statusTmp.font = TMP_Settings.defaultFontAsset;
-        statusTmp.fontSize = 13;
-        statusTmp.fontStyle = FontStyles.Bold;
-        statusTmp.color = new Color(0.92f, 0.72f, 0.95f, 1f);
-        statusTmp.alignment = TextAlignmentOptions.Center;
-        statusTmp.enableWordWrapping = false;
-        statusGo.SetActive(false);
 
         var dotGo = new GameObject("Dot", typeof(RectTransform), typeof(Image));
         dotGo.transform.SetParent(root.transform, false);
@@ -489,78 +492,50 @@ public class WorldMarketMapViewController : MonoBehaviour
         hqTmp.alignment = TextAlignmentOptions.Center;
         hq.SetActive(false);
 
-        var war = new GameObject("WarIcon", typeof(RectTransform), typeof(Image));
-        war.transform.SetParent(dotGo.transform, false);
-        var wrt = war.GetComponent<RectTransform>();
-        wrt.anchorMin = new Vector2(1f, 1f);
-        wrt.anchorMax = new Vector2(1f, 1f);
-        wrt.pivot = new Vector2(1f, 1f);
-        wrt.anchoredPosition = new Vector2(6f, 6f);
-        wrt.sizeDelta = new Vector2(18f, 18f);
-        war.GetComponent<Image>().color = new Color(0.95f, 0.35f, 0.3f, 1f);
-        war.GetComponent<Image>().sprite = WhiteBlockSprite();
-        war.SetActive(false);
-
-        var dis = new GameObject("DisasterIcon", typeof(RectTransform), typeof(Image));
-        dis.transform.SetParent(dotGo.transform, false);
-        var drt = dis.GetComponent<RectTransform>();
-        drt.anchorMin = new Vector2(0f, 1f);
-        drt.anchorMax = new Vector2(0f, 1f);
-        drt.pivot = new Vector2(0f, 1f);
-        drt.anchoredPosition = new Vector2(-6f, 6f);
-        drt.sizeDelta = new Vector2(16f, 16f);
-        var disImg = dis.GetComponent<Image>();
-        disImg.color = new Color(1f, 0.65f, 0.25f, 1f);
-        disImg.sprite = WhiteBlockSprite();
-        dis.SetActive(false);
-
-        var fav = new GameObject("FavorableIcon", typeof(RectTransform), typeof(Image));
-        fav.transform.SetParent(dotGo.transform, false);
-        var frt = fav.GetComponent<RectTransform>();
-        frt.anchorMin = new Vector2(1f, 0f);
-        frt.anchorMax = new Vector2(1f, 0f);
-        frt.pivot = new Vector2(1f, 0f);
-        frt.anchoredPosition = new Vector2(6f, -6f);
-        frt.sizeDelta = new Vector2(16f, 16f);
-        var favImg = fav.GetComponent<Image>();
-        favImg.color = new Color(0.35f, 0.85f, 0.45f, 1f);
-        favImg.sprite = WhiteBlockSprite();
-        fav.SetActive(false);
-
-        var evAlert = new GameObject("EventAlert", typeof(RectTransform), typeof(TextMeshProUGUI));
-        evAlert.transform.SetParent(dotGo.transform, false);
-        var ert0 = evAlert.GetComponent<RectTransform>();
-        ert0.anchorMin = new Vector2(0.5f, 1f);
-        ert0.anchorMax = new Vector2(0.5f, 1f);
-        ert0.pivot = new Vector2(0.5f, 1f);
-        ert0.anchoredPosition = new Vector2(0f, 8f);
-        ert0.sizeDelta = new Vector2(22f, 22f);
-        var evTmp = evAlert.GetComponent<TextMeshProUGUI>();
+        var centerGo = new GameObject("CastleNameOnDot", typeof(RectTransform), typeof(TextMeshProUGUI));
+        centerGo.transform.SetParent(dotGo.transform, false);
+        var cRt = centerGo.GetComponent<RectTransform>();
+        cRt.anchorMin = cRt.anchorMax = new Vector2(0.5f, 0.5f);
+        cRt.sizeDelta = new Vector2(52f, 40f);
+        cRt.anchoredPosition = Vector2.zero;
+        var centerTmp = centerGo.GetComponent<TextMeshProUGUI>();
         if (TMP_Settings.defaultFontAsset != null)
-            evTmp.font = TMP_Settings.defaultFontAsset;
-        evTmp.text = "!";
-        evTmp.fontSize = 18;
-        evTmp.fontStyle = FontStyles.Bold;
-        evTmp.color = new Color(1f, 0.88f, 0.2f, 1f);
-        evTmp.alignment = TextAlignmentOptions.Center;
-        evAlert.SetActive(false);
+            centerTmp.font = TMP_Settings.defaultFontAsset;
+        centerTmp.fontSize = 14;
+        centerTmp.fontStyle = FontStyles.Bold;
+        centerTmp.color = Color.white;
+        centerTmp.alignment = TextAlignmentOptions.Center;
+        centerTmp.enableWordWrapping = true;
+        centerTmp.overflowMode = TextOverflowModes.Ellipsis;
+        centerTmp.raycastTarget = false;
 
-        var gradeGo = new GameObject("GradeLetter", typeof(RectTransform), typeof(TextMeshProUGUI));
-        gradeGo.transform.SetParent(dotGo.transform, false);
-        var grt = gradeGo.GetComponent<RectTransform>();
-        grt.anchorMin = grt.anchorMax = new Vector2(0.5f, 0.5f);
-        grt.sizeDelta = new Vector2(34f, 34f);
-        grt.anchoredPosition = Vector2.zero;
-        var gradeTmp = gradeGo.GetComponent<TextMeshProUGUI>();
-        if (TMP_Settings.defaultFontAsset != null)
-            gradeTmp.font = TMP_Settings.defaultFontAsset;
-        gradeTmp.fontSize = 17;
-        gradeTmp.fontStyle = FontStyles.Bold;
-        gradeTmp.color = Color.white;
-        gradeTmp.alignment = TextAlignmentOptions.Center;
+        var rowGo = new GameObject("StatusIconRow", typeof(RectTransform), typeof(HorizontalLayoutGroup),
+            typeof(LayoutElement));
+        rowGo.transform.SetParent(root.transform, false);
+        var rowRt = rowGo.GetComponent<RectTransform>();
+        rowRt.anchorMin = rowRt.anchorMax = new Vector2(0.5f, 1f);
+        rowRt.pivot = new Vector2(0.5f, 1f);
+        rowRt.anchoredPosition = new Vector2(0f, -2f);
+        rowRt.sizeDelta = new Vector2(200f, 24f);
+        var rowLe = rowGo.GetComponent<LayoutElement>();
+        rowLe.minHeight = 24f;
+        rowLe.preferredHeight = 24f;
+        var hlg = rowGo.GetComponent<HorizontalLayoutGroup>();
+        hlg.childAlignment = TextAnchor.MiddleCenter;
+        hlg.spacing = 4f;
+        hlg.padding = new RectOffset(2, 2, 0, 2);
+        hlg.childForceExpandWidth = false;
+        hlg.childForceExpandHeight = false;
+        hlg.childControlWidth = true;
+        hlg.childControlHeight = true;
+
+        Image iconWar = CreateMapStatusChip(rowGo.transform, "IconWar", new Color(0.95f, 0.35f, 0.3f, 1f));
+        Image iconDis = CreateMapStatusChip(rowGo.transform, "IconDisaster", new Color(1f, 0.65f, 0.25f, 1f));
+        Image iconFav = CreateMapStatusChip(rowGo.transform, "IconFavorable", new Color(0.35f, 0.85f, 0.45f, 1f));
+        Image iconInv = CreateMapStatusChip(rowGo.transform, "IconInvest", new Color(0.92f, 0.78f, 0.28f, 1f));
 
         var pin = root.AddComponent<WorldMarketMapCastlePin>();
-        pin.ConfigureRuntime(dotImg, hq, war, dis, fav, evAlert, nameTmp, statusTmp, gradeTmp);
+        pin.ConfigureRuntime(dotImg, hq, centerTmp, iconWar, iconDis, iconFav, iconInv);
         return pin;
     }
 }

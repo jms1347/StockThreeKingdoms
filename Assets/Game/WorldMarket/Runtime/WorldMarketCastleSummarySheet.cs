@@ -170,7 +170,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         if (_hqBadgeGo != null)
             _hqBadgeGo.SetActive(isHq);
 
-        Grade g = master?.grade ?? Grade.D;
+        Grade g = dm.GetCastleRuntimeGrade(_castleId);
         if (_iconBg != null)
             _iconBg.color = GradeChipColor(g);
         if (_iconGlyphTmp != null)
