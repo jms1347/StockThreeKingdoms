@@ -89,6 +89,8 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
     int _deployMaxThisOpen;
     int _recallMaxThisOpen;
     bool _playOpenGaugeAnim;
+    bool _pendingDeployOnlyUi;
+    bool _deployOnlyUiSession;
 
     void Awake()
     {
@@ -203,11 +205,22 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         InstanceOrNull.OnRecallOpen();
     }
 
+    /// <summary>천하 요약 시트 등 — 상세 패널 없이 병력 투입 다이얼로그만 띄워 뎁스를 줄입니다.</summary>
+    public static void OpenDeployDialogOnly(string castleId)
+    {
+        if (InstanceOrNull == null || string.IsNullOrWhiteSpace(castleId)) return;
+        InstanceOrNull._pendingDeployOnlyUi = true;
+        InstanceOrNull.Open(castleId.Trim());
+    }
+
     public void Open(string castleId)
     {
         if (string.IsNullOrWhiteSpace(castleId)) return;
         var dm = DataManager.InstanceOrNull;
         if (dm == null || !dm.IsStateReady) return;
+
+        _deployOnlyUiSession = _pendingDeployOnlyUi;
+        _pendingDeployOnlyUi = false;
 
         _castleId = castleId.Trim();
         dm.SyncCastleMarketPricesFromFormula(_castleId);
@@ -225,6 +238,9 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         HookDm();
         Refresh();
+
+        if (_deployOnlyUiSession)
+            TryEnterDeployOnlyLayout();
     }
 
     void PlayBottomSheetEnter()
@@ -250,6 +266,12 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         if (recallDialogRoot != null)
             recallDialogRoot.gameObject.SetActive(false);
         UnhookDm();
+        if (_deployOnlyUiSession)
+        {
+            _deployOnlyUiSession = false;
+            RestoreDeployOnlyLayoutShell();
+        }
+
         if (panelRoot != null && _sheetRestCached)
         {
             panelRoot.DOKill();
@@ -258,6 +280,42 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
 
         gameObject.SetActive(false);
         _castleId = null;
+    }
+
+    void RestoreDeployOnlyLayoutShell()
+    {
+        var dimTr = transform.Find("Dim");
+        if (dimTr != null)
+            dimTr.gameObject.SetActive(true);
+        if (panelRoot != null)
+            panelRoot.gameObject.SetActive(true);
+    }
+
+    void TryEnterDeployOnlyLayout()
+    {
+        if (panelRoot != null)
+        {
+            panelRoot.DOKill();
+            panelRoot.gameObject.SetActive(false);
+        }
+
+        var dimTr = transform.Find("Dim");
+        if (dimTr != null)
+            dimTr.gameObject.SetActive(false);
+
+        transform.SetAsLastSibling();
+
+        var gmSpend = GameManager.InstanceOrNull;
+        bool can = _deployMaxThisOpen > 0 && (gmSpend?.CanSpendStrategicPurchases ?? false);
+        if (!can)
+        {
+            _deployOnlyUiSession = false;
+            RestoreDeployOnlyLayoutShell();
+            Close();
+            return;
+        }
+
+        OnDeployOpen();
     }
 
     void HookDm()
@@ -846,12 +904,25 @@ public class WorldMarketCastleDetailPopup : MonoBehaviour
         dm.AddUserCastleDeployment(_castleId, n, dm.EvaluateCastleQuoteForCastle(_castleId));
         deployDialogRoot.gameObject.SetActive(false);
         Refresh();
+        WorldMarketCastleSummarySheet.RefreshOpenSheet();
+        if (_deployOnlyUiSession)
+        {
+            _deployOnlyUiSession = false;
+            RestoreDeployOnlyLayoutShell();
+            Close();
+        }
     }
 
     void OnDeployCancel()
     {
         if (deployDialogRoot != null)
             deployDialogRoot.gameObject.SetActive(false);
+        if (_deployOnlyUiSession)
+        {
+            _deployOnlyUiSession = false;
+            RestoreDeployOnlyLayoutShell();
+            Close();
+        }
     }
 
     void OnRecallOpen()

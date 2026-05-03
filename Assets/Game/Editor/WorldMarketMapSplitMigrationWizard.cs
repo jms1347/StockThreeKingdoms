@@ -118,7 +118,7 @@ public static class WorldMarketMapSplitMigrationWizard
         }
 
         Selection.activeGameObject = rootGo;
-        EditorUtility.DisplayDialog("천하", "지도·리스트 분할을 적용했습니다. 씬을 저장하세요.\nCityDetailPanel에 TMP를 추가해 marchPointsTravelLineText를 연결하면 MP 안내가 표시됩니다.", "확인");
+        EditorUtility.DisplayDialog("천하", "지도·리스트 분할을 적용했습니다. 씬을 저장하세요.", "확인");
     }
 
     /// <summary>신규 「천하탭 만들기」 위저드에서 호출 — ListViewRoot가 이미 CastleStocks의 부모일 때.</summary>

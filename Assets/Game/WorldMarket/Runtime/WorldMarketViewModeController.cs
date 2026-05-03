@@ -92,6 +92,14 @@ public class WorldMarketViewModeController : MonoBehaviour
             listOnlyControlsRoot.SetActive(listMode);
     }
 
+    void TryScrollCastleListToTop()
+    {
+        if (listViewRoot == null) return;
+        var list = listViewRoot.GetComponentInChildren<WorldMarketCastleVirtualList>(true);
+        if (list != null)
+            list.ScrollToTopAndRefreshVisible();
+    }
+
     void AutoResolveRoots()
     {
         var t = transform;
@@ -140,6 +148,8 @@ public class WorldMarketViewModeController : MonoBehaviour
         if (warMapViewRoot != null)
             warMapViewRoot.SetActive(warMode);
         ApplyListOnlyControlsVisibility(listMode);
+        if (listMode)
+            TryScrollCastleListToTop();
         if (savePrefs)
             PlayerPrefs.SetInt(PrefsKey, mode);
     }

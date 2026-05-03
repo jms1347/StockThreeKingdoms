@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>천하 — 성 선택 시 하단 요약(MTS). 7일 추이·고저가·거래량 프록시·지분. 민심/백성 원시 수치는 표시하지 않습니다.</summary>
+/// <summary>천하 — 성 선택 시 하단 요약(MTS). 등급·세율·백성·민심·군사·배당·7일 추이·고저가·지분을 한 화면에 모읍니다.</summary>
 [DisallowMultipleComponent]
 public class WorldMarketCastleSummarySheet : MonoBehaviour
 {
@@ -39,6 +39,10 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     TextMeshProUGUI _causeTmp;
     TextMeshProUGUI _eventStripTmp;
 
+    TextMeshProUGUI _castleMetaLineTmp;
+    TextMeshProUGUI _castleVitalsLineTmp;
+    TextMeshProUGUI _governorLineTmp;
+
     Button _closeBtn;
     Button _investBtn;
     Button _locateBtn;
@@ -65,6 +69,14 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     {
         if (InstanceOrNull == this)
             InstanceOrNull = null;
+    }
+
+    /// <summary>요약 시트가 열려 있으면 본문만 다시 바인딩합니다(투입 확정 후 등).</summary>
+    public static void RefreshOpenSheet()
+    {
+        var inst = InstanceOrNull;
+        if (inst == null || !inst.gameObject.activeInHierarchy) return;
+        inst.RefreshBody();
     }
 
     public static void OpenCastle(string castleId)
@@ -263,12 +275,65 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
             _eventStripTmp.text = "최근 이슈 · " + ev;
         }
 
+        BindCastleDetailStrip(dm, st, live, hasLive, population, quote, g);
+
         var investMain = _investBtn != null ? _investBtn.transform.Find("LblMain")?.GetComponent<TextMeshProUGUI>() : null;
         var investSub = _investBtn != null ? _investBtn.transform.Find("LblSub")?.GetComponent<TextMeshProUGUI>() : null;
         if (investMain != null)
-            investMain.text = hasStock ? "호가창 · 관리" : "투자 및 전장 진입";
+            investMain.text = hasStock ? "호가창 · 관리" : "병사 투입";
         if (investSub != null)
-            investSub.text = hasStock ? "MANAGE ORDERS" : "ENTER BATTLEFRONT";
+            investSub.text = hasStock ? "MANAGE ORDERS" : "팝업에서 수량 선택";
+    }
+
+    void BindCastleDetailStrip(DataManager dm, CastleStateData st, CastleStateSo.CastleLiveStateEntry live, bool hasLive,
+        int population, float quote, Grade g)
+    {
+        if (_castleMetaLineTmp == null || _castleVitalsLineTmp == null)
+            return;
+
+        Faction lord = hasLive && live != null ? live.currentLord : (st != null ? st.currentLord : Faction.NONE);
+        string factionShort = lord == Faction.NONE ? "중립" : DataManager.GetFactionLordShortLabel(lord);
+        float taxPct = dm != null ? dm.GetCastleTaxRatePercent(_castleId) : 0f;
+        string region = dm != null ? dm.GetCastleRegionSubtitle(_castleId) : "";
+        string regionBit = string.IsNullOrWhiteSpace(region) ? "" : $" · 지역 {region.Trim()}";
+
+        _castleMetaLineTmp.text =
+            $"등급 [{g}] · {factionShort} 점령{regionBit} · 입성 세율 {taxPct:0.#}%";
+
+        float sentiment = hasLive && live != null ? live.currentSentiment : (st != null ? st.currentSentiment : 100f);
+        int totalMil = dm != null ? dm.EstimateCastleTotalGarrisonTroops(_castleId) : 0;
+        string divBit = "—";
+        if (dm != null && st != null)
+        {
+            var divPreview = dm.CalculateFinalDividend(st);
+            bool overloaded = divPreview.IsOverloaded;
+            float effPct = divPreview.FinalEfficiencyPercent;
+            divBit = overloaded
+                ? $"배당 효율 약 {effPct:F0}% (과부하)"
+                : $"배당 효율 약 {effPct:F0}%";
+        }
+
+        _castleVitalsLineTmp.text =
+            $"백성 {population:N0} · 민심 {Mathf.RoundToInt(sentiment)} / 200 · 군사력 {totalMil:N0} · {divBit}";
+
+        if (_governorLineTmp != null)
+        {
+            string govId = hasLive && live != null ? live.currentGovernorId : (st != null ? st.currentGovernorId : "");
+            GeneralMasterData gen = null;
+            if (dm != null && !string.IsNullOrWhiteSpace(govId))
+                gen = dm.GetGeneralMasterData(govId);
+            if (gen != null && !string.IsNullOrWhiteSpace(gen.name))
+            {
+                _governorLineTmp.gameObject.SetActive(true);
+                _governorLineTmp.text =
+                    $"태수 {gen.name.Trim()} · 무력 {gen.power} · 지력 {gen.intel} · 매력 {gen.charm} · 악명 {gen.infamy}";
+            }
+            else
+            {
+                _governorLineTmp.gameObject.SetActive(false);
+                _governorLineTmp.text = "";
+            }
+        }
     }
 
     static string FormatVolK(long v)
@@ -296,13 +361,14 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     void BuildUiIfNeeded()
     {
         Transform legacy = transform.Find("SheetPanel");
-        if (legacy != null && legacy.Find("ChartBandV2") == null)
+        if (legacy != null && (legacy.Find("ChartBandV2") == null || legacy.Find("StatsInfoStrip") == null))
         {
             Destroy(legacy.gameObject);
             _panelRt = null;
         }
 
-        if (_panelRt != null && transform.Find("SheetPanel/ChartBandV2") != null)
+        if (_panelRt != null && transform.Find("SheetPanel/ChartBandV2") != null
+                              && transform.Find("SheetPanel/StatsInfoStrip") != null)
             return;
 
         _canvasGroup = gameObject.GetComponent<CanvasGroup>();
@@ -326,7 +392,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         _panelRt.anchorMin = new Vector2(0.03f, 0f);
         _panelRt.anchorMax = new Vector2(0.97f, 0f);
         _panelRt.pivot = new Vector2(0.5f, 0f);
-        _panelRt.sizeDelta = new Vector2(0f, 540f);
+        _panelRt.sizeDelta = new Vector2(0f, 600f);
         _panelRt.anchoredPosition = Vector2.zero;
         sheet.GetComponent<Image>().color = new Color(0.07f, 0.08f, 0.11f, 0.99f);
         var outline = sheet.AddComponent<Outline>();
@@ -341,6 +407,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         sv.childForceExpandWidth = true;
 
         BuildHeader(sheet.transform);
+        BuildStatsInfoStrip(sheet.transform);
         BuildChartBandV2(sheet.transform);
         BuildMetricsRow(sheet.transform);
         BuildCauseStrip(sheet.transform);
@@ -423,11 +490,40 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         _closeBtn.onClick.AddListener(Close);
     }
 
+    void BuildStatsInfoStrip(Transform sheet)
+    {
+        var strip = new GameObject("StatsInfoStrip", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup),
+            typeof(LayoutElement));
+        strip.transform.SetParent(sheet, false);
+        strip.GetComponent<Image>().color = new Color(0.06f, 0.08f, 0.11f, 0.96f);
+        var sle = strip.GetComponent<LayoutElement>();
+        sle.minHeight = 92f;
+        sle.preferredHeight = 96f;
+        var sv = strip.GetComponent<VerticalLayoutGroup>();
+        sv.padding = new RectOffset(12, 12, 10, 10);
+        sv.spacing = 6;
+        sv.childAlignment = TextAnchor.UpperLeft;
+        sv.childControlWidth = true;
+        sv.childForceExpandWidth = true;
+
+        _castleMetaLineTmp = CreateTmp(strip.transform, "MetaLine", "", 13f, FontStyles.Normal, TextAlignmentOptions.Left);
+        _castleMetaLineTmp.color = new Color(0.72f, 0.76f, 0.82f, 1f);
+        _castleMetaLineTmp.enableWordWrapping = true;
+
+        _castleVitalsLineTmp = CreateTmp(strip.transform, "VitalsLine", "", 14f, FontStyles.Bold, TextAlignmentOptions.Left);
+        _castleVitalsLineTmp.color = new Color(0.9f, 0.92f, 0.96f, 1f);
+        _castleVitalsLineTmp.enableWordWrapping = true;
+
+        _governorLineTmp = CreateTmp(strip.transform, "GovLine", "", 12f, FontStyles.Normal, TextAlignmentOptions.Left);
+        _governorLineTmp.color = new Color(0.58f, 0.62f, 0.68f, 1f);
+        _governorLineTmp.enableWordWrapping = true;
+    }
+
     void BuildChartBandV2(Transform sheet)
     {
         var band = new GameObject("ChartBandV2", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         band.transform.SetParent(sheet, false);
-        band.GetComponent<LayoutElement>().minHeight = 172f;
+        band.GetComponent<LayoutElement>().minHeight = 156f;
         var bh = band.GetComponent<HorizontalLayoutGroup>();
         bh.spacing = 12;
         bh.childAlignment = TextAnchor.UpperLeft;
@@ -467,9 +563,9 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         var chartHost = new GameObject("ChartHost", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
         chartHost.transform.SetParent(chartCard.transform, false);
         chartHost.GetComponent<Image>().color = new Color(0.03f, 0.04f, 0.06f, 1f);
-        chartHost.GetComponent<LayoutElement>().minHeight = 118f;
+        chartHost.GetComponent<LayoutElement>().minHeight = 108f;
         var hostRt = chartHost.GetComponent<RectTransform>();
-        hostRt.sizeDelta = new Vector2(0f, 118f);
+        hostRt.sizeDelta = new Vector2(0f, 108f);
 
         var chartGo = new GameObject("PriceLine", typeof(RectTransform), typeof(UIPriceLine7DayGraphic));
         chartGo.transform.SetParent(chartHost.transform, false);
@@ -670,8 +766,23 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(_castleId)) return;
         string id = _castleId.Trim();
-        Close();
-        WorldMarketCastleDetailPopup.OpenCastle(id);
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady) return;
+
+        dm.TryGetUserCastleStock(id, out var userStock);
+        dm.castleStateDataMap.TryGetValue(id, out var st);
+        bool hasStockFromSo = userStock != null && userStock.troopCount > 0;
+        bool hasStockMap = st != null && st.IsUserInvested;
+        bool hasStock = hasStockFromSo || hasStockMap;
+
+        if (hasStock)
+        {
+            Close();
+            WorldMarketCastleDetailPopup.OpenCastle(id);
+            return;
+        }
+
+        WorldMarketCastleDetailPopup.OpenDeployDialogOnly(id);
     }
 
     void OnLocateClicked() => Close();

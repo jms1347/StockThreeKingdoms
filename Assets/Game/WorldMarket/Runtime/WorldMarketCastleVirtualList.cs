@@ -127,6 +127,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
     {
         ResolveScrollReferences();
         StripLegacyLayout();
+        ReparentNonListChildrenOffScrollContent();
     }
 
     void OnEnable()
@@ -261,6 +262,9 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
     void Start()
     {
+        ResolveScrollReferences();
+        ReparentNonListChildrenOffScrollContent();
+
         Transform t = transform;
         for (int i = 0; i < 16 && t != null; i++, t = t.parent)
         {
@@ -277,6 +281,30 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         RefreshData();
         if (scrollRect != null)
             scrollRect.onValueChanged.AddListener(_ => UpdateVisible());
+    }
+
+    /// <summary>
+    /// ScrollRect Content에는 가상 행·카드 템플릿만 두는 것이 안전합니다.
+    /// 위저드가 같은 Content에 둔 NewsRowTemplate 등은 바운드·레이아웃 혼선을 일으킬 수 있어 부모 밖으로 옮깁니다.
+    /// </summary>
+    void ReparentNonListChildrenOffScrollContent()
+    {
+        if (content == null || scrollRect == null) return;
+        Transform host = scrollRect.transform;
+        for (int i = content.childCount - 1; i >= 0; i--)
+        {
+            var ch = content.GetChild(i);
+            if (ch == null) continue;
+            if (cellTemplate != null && ch.gameObject == cellTemplate)
+                continue;
+            var name = ch.name ?? string.Empty;
+            if (!name.StartsWith("NewsRowTemplate", StringComparison.Ordinal))
+                continue;
+            ch.SetParent(host, false);
+            ch.SetAsLastSibling();
+            ch.gameObject.SetActive(false);
+            LogDiag($"Reparented off scroll Content → {host.name}: {name}");
+        }
     }
 
     void StripLegacyLayout()
@@ -583,6 +611,17 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
         return true;
     }
 
+    /// <summary>리스트 모드 복귀 시 등 — 세로 스크롤을 맨 위로 두고 가시 행만 다시 바인딩합니다.</summary>
+    public void ScrollToTopAndRefreshVisible()
+    {
+        ResolveScrollReferences();
+        if (scrollRect != null)
+            scrollRect.verticalNormalizedPosition = 1f;
+        Canvas.ForceUpdateCanvases();
+        RebuildViewportLayout();
+        UpdateVisible();
+    }
+
     void ApplyLayoutAfterOrderChange(DataManager dm, bool preserveScrollNorm, float verticalNorm)
     {
         Canvas.ForceUpdateCanvases();
@@ -645,7 +684,7 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
 
         // 콘텐츠가 짧다가 길어진 직후 ScrollRect가 norm=0(하단)에 남으면 첫 행만 보임 → 상단으로 복구
         if (healScrollToTopIfAtBottom && scrollRect != null && _orderedIds.Count > 4
-            && scrollRect.verticalNormalizedPosition < 0.02f)
+            && scrollRect.verticalNormalizedPosition < 0.08f)
         {
             scrollRect.verticalNormalizedPosition = 1f;
             Canvas.ForceUpdateCanvases();
@@ -686,11 +725,12 @@ public class WorldMarketCastleVirtualList : MonoBehaviour
             return 0;
 
         float vpH = Mathf.Max(1f, scrollRect.viewport.rect.height);
-        float contentH = Mathf.Max(
-            content.rect.height,
-            _orderedIds.Count * stride + ContentHeightExtra);
-
-        float scrollable = Mathf.Max(0f, contentH - vpH);
+        // ApplyLayoutAfterOrderChange와 동일: sizeDelta.y = max(viewport, 항목×stride).
+        // content.rect.height는 자식·한 프레임 레이아웃에 따라 과대/과소가 되어
+        // 스크롤이 하단으로 밀린 것처럼 보이거나 가시 행이 비는 현상을 낼 수 있음.
+        float itemsH = _orderedIds.Count * stride + ContentHeightExtra;
+        float totalH = Mathf.Max(vpH, itemsH);
+        float scrollable = Mathf.Max(0f, totalH - vpH);
         if (scrollable < 1f)
             return 0;
 

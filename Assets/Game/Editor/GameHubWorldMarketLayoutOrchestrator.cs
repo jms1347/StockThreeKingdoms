@@ -13,8 +13,8 @@ using UnityEngine.UI;
 ///       ├─ FactionMarketSharePanel
 ///       ├─ ViewModeRow (리스트/지도 토글)
 ///       ├─ ListViewRoot (flex) … CastleStocksPanel(필터·가상 스크롤)
-///       ├─ MapViewRoot (flex, 토글로 표시) … 지도 스크롤
-///       └─ CityDetailPanel (모달, LayoutElement.ignoreLayout, 형제 맨 뒤)
+///       └─ MapViewRoot (flex, 토글로 표시) … 지도 스크롤
+///       (레거시 CityDetailPanel이 있으면 형제 맨 뒤로 정렬 — 런타임 상세는 CastleDetailPopup 사용)
 /// </code>
 /// 메뉴 한 번으로 캔버스 루트·ContentRoot·지도/리스트 분할·형제 순서를 맞춥니다.
 /// </summary>

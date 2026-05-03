@@ -10,7 +10,7 @@ using TMPro;
 /// 메뉴: StockThreeKingdoms/Layout/천하 메뉴/천하탭 만들기 (MTS Layout)
 /// - 상단: Faction Market Share(가로 스택 막대)
 /// - 지도/리스트 전환(ViewModeRow) + ListViewRoot(필터·가상 스크롤) + MapViewRoot(스크롤·줌·성 핀)
-/// - 팝업: CityDetailPanel(기본 비활성)
+/// - 성 상세·투입 UI는 런타임 <see cref="WorldMarketCastleDetailPopup"/> / <see cref="WorldMarketCastleSummarySheet"/>가 생성·표시합니다.
 /// </summary>
 public static class WorldMarketLayoutWizard
 {
@@ -85,8 +85,6 @@ public static class WorldMarketLayoutWizard
 
         CreateCastleStocksPanel(listRootGo.transform);
         WorldMarketMapSplitMigrationWizard.SetupSplitUiForNewWizard(root, listRootGo);
-
-        CreateCityDetailPanel(root.transform);
 
         Selection.activeGameObject = root;
         Debug.Log("[WorldMarketLayoutWizard] 천하탭(MTS) + 지도/리스트 분할 생성 완료. 씬 저장 후 런타임 바인딩을 연결하세요.");
@@ -351,7 +349,6 @@ public static class WorldMarketLayoutWizard
 
         // 카드 템플릿(비활성) → 런타임 WorldMarketCastleVirtualList가 풀링
         GameObject template = CreateCastleStockCardTemplate(content.transform);
-        CreateNewsRowTemplate(content.transform);
 
         var vlist = scrollGo.AddComponent<WorldMarketCastleVirtualList>();
 
@@ -807,132 +804,6 @@ public static class WorldMarketLayoutWizard
         return card;
     }
 
-    static void CreateNewsRowTemplate(Transform parent)
-    {
-        var row = new GameObject("NewsRowTemplate", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        row.transform.SetParent(parent, false);
-        row.GetComponent<Image>().color = new Color(0.10f, 0.08f, 0.07f, 0.92f);
-        row.GetComponent<LayoutElement>().minHeight = 84f;
-
-        var h = row.AddComponent<HorizontalLayoutGroup>();
-        h.padding = new RectOffset(16, 16, 12, 12);
-        h.spacing = 12f;
-        h.childAlignment = TextAnchor.MiddleLeft;
-
-        var icon = new GameObject("Icon", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        icon.transform.SetParent(row.transform, false);
-        icon.GetComponent<Image>().color = new Color(0.85f, 0.70f, 0.20f, 1f);
-        icon.GetComponent<Image>().raycastTarget = false;
-        var ile = icon.GetComponent<LayoutElement>();
-        ile.preferredWidth = 44f;
-        ile.preferredHeight = 44f;
-
-        CreateTMP(row.transform, "Text", "[URGENT] Cao Cao's army occupies Luoyang! Value multiplier up 1.5x.", 24, FontStyles.Normal, TextAlignmentOptions.Left);
-
-        row.SetActive(false);
-    }
-
-    static void CreateCityDetailPanel(Transform parent)
-    {
-        var modal = new GameObject("CityDetailPanel", typeof(RectTransform), typeof(Image));
-        modal.transform.SetParent(parent, false);
-        StretchFull(modal.GetComponent<RectTransform>());
-        modal.GetComponent<Image>().color = new Color(0, 0, 0, 0.55f);
-
-        var modalBtn = modal.AddComponent<Button>();
-        modalBtn.transition = Selectable.Transition.None;
-
-        var modalLe = modal.AddComponent<LayoutElement>();
-        modalLe.ignoreLayout = true;
-
-        // Panel
-        var panel = new GameObject("PanelRoot", typeof(RectTransform), typeof(Image));
-        panel.transform.SetParent(modal.transform, false);
-        var pRt = panel.GetComponent<RectTransform>();
-        pRt.anchorMin = new Vector2(0, 0);
-        pRt.anchorMax = new Vector2(1, 0.74f);
-        pRt.pivot = new Vector2(0.5f, 0);
-        pRt.offsetMin = Vector2.zero;
-        pRt.offsetMax = Vector2.zero;
-        panel.GetComponent<Image>().color = new Color(0.08f, 0.09f, 0.12f, 0.98f);
-
-        var pv = panel.AddComponent<VerticalLayoutGroup>();
-        pv.padding = new RectOffset(22, 22, 18, 18);
-        pv.spacing = 14f;
-        pv.childControlWidth = true;
-        pv.childForceExpandWidth = true;
-        pv.childForceExpandHeight = false;
-
-        // Header
-        var header = new GameObject("Header", typeof(RectTransform), typeof(LayoutElement));
-        header.transform.SetParent(panel.transform, false);
-        header.GetComponent<LayoutElement>().minHeight = 120f;
-        var hh = header.AddComponent<HorizontalLayoutGroup>();
-        hh.spacing = 14f;
-        hh.childAlignment = TextAnchor.MiddleLeft;
-        hh.childControlWidth = true;
-        hh.childForceExpandWidth = true;
-
-        var titleBox = new GameObject("TitleBox", typeof(RectTransform), typeof(LayoutElement));
-        titleBox.transform.SetParent(header.transform, false);
-        titleBox.GetComponent<LayoutElement>().flexibleWidth = 1f;
-        var tv = titleBox.AddComponent<VerticalLayoutGroup>();
-        tv.spacing = 6f;
-        tv.childAlignment = TextAnchor.MiddleLeft;
-        CreateTMP(titleBox.transform, "CastleTitle", "Luoyang (SS)", 44, FontStyles.Bold, TextAlignmentOptions.Left);
-        CreateTMP(titleBox.transform, "BuyLine", "Buy Price 1,250  ▲ 5.2%", 30, FontStyles.Bold, TextAlignmentOptions.Left, color: new Color(0.50f, 0.95f, 0.60f));
-
-        // Chart panel
-        var chart = new GameObject("SentimentChart", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        chart.transform.SetParent(panel.transform, false);
-        chart.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.18f, 0.90f);
-        chart.GetComponent<LayoutElement>().minHeight = 260f;
-        CreateTMP(chart.transform, "ChartTitle", "Luoyang Sentiment Value (7-Day)", 26, FontStyles.Bold, TextAlignmentOptions.Left, pad: new Vector4(16, 0, 0, 0));
-
-        // Executive Info
-        var exec = new GameObject("ExecutiveInfo", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        exec.transform.SetParent(panel.transform, false);
-        exec.GetComponent<Image>().color = new Color(0.14f, 0.13f, 0.10f, 0.92f);
-        exec.GetComponent<LayoutElement>().minHeight = 240f;
-
-        var eh = exec.AddComponent<HorizontalLayoutGroup>();
-        eh.padding = new RectOffset(16, 16, 16, 16);
-        eh.spacing = 14f;
-        eh.childAlignment = TextAnchor.MiddleLeft;
-
-        var face = new GameObject("GovernorPortrait", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-        face.transform.SetParent(exec.transform, false);
-        face.GetComponent<Image>().color = new Color(0.22f, 0.24f, 0.30f, 1f);
-        face.GetComponent<Image>().raycastTarget = false;
-        face.GetComponent<LayoutElement>().preferredWidth = 170f;
-        face.GetComponent<LayoutElement>().preferredHeight = 200f;
-
-        var execText = new GameObject("InfoText", typeof(RectTransform), typeof(LayoutElement));
-        execText.transform.SetParent(exec.transform, false);
-        execText.GetComponent<LayoutElement>().flexibleWidth = 1f;
-        var ev = execText.AddComponent<VerticalLayoutGroup>();
-        ev.spacing = 6f;
-        ev.childAlignment = TextAnchor.UpperLeft;
-        CreateTMP(execText.transform, "GovernorName", "Governor\nCao Cao (SS Grade)", 28, FontStyles.Bold, TextAlignmentOptions.Left);
-        CreateTMP(execText.transform, "Charm", "Charm: 94", 26, FontStyles.Italic, TextAlignmentOptions.Left);
-        CreateTMP(execText.transform, "Infamy", "악명: 45 (0~100)", 24, FontStyles.Normal, TextAlignmentOptions.Left, color: new Color(0.95f, 0.88f, 0.55f));
-
-        // Action buttons
-        var actions = new GameObject("Actions", typeof(RectTransform), typeof(LayoutElement));
-        actions.transform.SetParent(panel.transform, false);
-        actions.GetComponent<LayoutElement>().minHeight = 120f;
-        var ah = actions.AddComponent<HorizontalLayoutGroup>();
-        ah.spacing = 16f;
-        ah.childAlignment = TextAnchor.MiddleCenter;
-        ah.childControlWidth = true;
-        ah.childForceExpandWidth = true;
-
-        CreateActionButton(actions.transform, "BuyButton", "[DEPLOY ARMY\n(BUY)]", new Color(0.65f, 0.20f, 0.18f));
-        CreateActionButton(actions.transform, "SellButton", "[RECALL ARMY\n(SELL)]", new Color(0.20f, 0.35f, 0.65f));
-
-        modal.SetActive(false);
-    }
-
     static GameObject CreatePanel(Transform parent, string name, string title)
     {
         GameObject panel = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(LayoutElement));
@@ -953,30 +824,6 @@ public static class WorldMarketLayoutWizard
 
         CreateTMP(panel.transform, "Title", title, 30, FontStyles.Bold, TextAlignmentOptions.Left);
         return panel;
-    }
-
-    static Button CreateActionButton(Transform parent, string name, string label, Color bg)
-    {
-        var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
-        go.transform.SetParent(parent, false);
-        var img = go.GetComponent<Image>();
-        img.color = bg;
-        var le = go.GetComponent<LayoutElement>();
-        le.minHeight = 108f;
-        le.flexibleWidth = 1f;
-
-        var tmpGo = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
-        tmpGo.transform.SetParent(go.transform, false);
-        var rt = tmpGo.GetComponent<RectTransform>();
-        StretchFull(rt);
-        var tmp = tmpGo.GetComponent<TextMeshProUGUI>();
-        tmp.text = label;
-        tmp.fontSize = 26;
-        tmp.fontStyle = FontStyles.Bold;
-        tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = Color.white;
-        tmp.raycastTarget = false;
-        return go.GetComponent<Button>();
     }
 
     static TextMeshProUGUI CreateTMP(Transform parent, string name, string text, int size, FontStyles style, TextAlignmentOptions align, Color? color = null, Vector4? pad = null)
