@@ -101,7 +101,11 @@ public static class RecruitController
         int maxByPopulation = Mathf.Max(0, population);
         // 기획 변경: 수용량 기반 모집 제한 해제(과부하는 배당 효율 페널티로 처리).
         int maxByCapacity = int.MaxValue;
-        int maxByGold = Mathf.Max(0, (int)Math.Floor(gm.currentGold / unitPrice));
+        double dutyMul = RecruitmentDutyCalculator.DeployCostMultiplier(s.recruitmentFee);
+        double effUnit = unitPrice * dutyMul;
+        int maxByGold = effUnit > 1e-9
+            ? Mathf.Max(0, (int)Math.Floor(gm.currentGold / effUnit))
+            : 0;
 
         quote = new RecruitQuote(
             castleId, basePrice, sentimentCoeff, scarcityCoeff, unitPrice,
@@ -128,7 +132,11 @@ public static class RecruitController
         int maxByPopulation = Mathf.Max(0, population);
         // 기획 변경: 수용량 기반 모집 제한 해제(과부하는 배당 효율 페널티로 처리).
         int maxByCapacity = int.MaxValue;
-        int maxByGold = Mathf.Max(0, (int)Math.Floor(gm.currentGold / stock));
+        double dutyMul = RecruitmentDutyCalculator.DeployCostMultiplier(s.recruitmentFee);
+        double effUnit = stock * dutyMul;
+        int maxByGold = effUnit > 1e-9
+            ? Mathf.Max(0, (int)Math.Floor(gm.currentGold / effUnit))
+            : 0;
 
         quote = new RecruitQuote(
             castleId, stock, 1f, 1f, stock,

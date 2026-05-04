@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DG.Tweening;
@@ -11,10 +12,18 @@ public class WorldMarketWarMapViewController : MonoBehaviour
 {
     [SerializeField] RectTransform mapContent;
     [SerializeField] TextMeshProUGUI warFeedText;
+    [Tooltip("비우면 이름 LeftTop_ViewText로 탐색하거나 런타임 생성합니다.")]
+    [SerializeField] TextMeshProUGUI leftTopViewText;
     [SerializeField] float mapWorldMax = 1000f;
     [SerializeField] float mapMargin = 40f;
 
+    RectTransform _headerChromeRt;
+    Image _headerGradientImage;
+
     readonly List<Image> _warMarkers = new List<Image>();
+
+    static readonly Color WarHeaderText = new Color(0.98f, 0.32f, 0.30f, 1f);
+    static readonly Color PeaceHeaderText = new Color(0.32f, 0.82f, 0.45f, 1f);
 
     void OnEnable()
     {
@@ -38,7 +47,121 @@ public class WorldMarketWarMapViewController : MonoBehaviour
         }
 
         if (warFeedText == null)
-            warFeedText = GetComponentInChildren<TextMeshProUGUI>(true);
+        {
+            var tmps = GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var t in tmps)
+            {
+                if (t == null) continue;
+                if (t.name == "LeftTop_ViewText") continue;
+                if (t.name.IndexOf("Header", StringComparison.OrdinalIgnoreCase) >= 0) continue;
+                warFeedText = t;
+                break;
+            }
+        }
+
+        if (leftTopViewText == null)
+        {
+            var trs = GetComponentsInChildren<Transform>(true);
+            for (int i = 0; i < trs.Length; i++)
+            {
+                if (trs[i] != null && trs[i].name == "LeftTop_ViewText")
+                {
+                    leftTopViewText = trs[i].GetComponent<TextMeshProUGUI>();
+                    break;
+                }
+            }
+        }
+    }
+
+    void EnsureWarHeaderChrome()
+    {
+        ResolveRefsIfNeeded();
+        var root = transform as RectTransform;
+        if (root == null) return;
+
+        if (leftTopViewText == null)
+        {
+            var chrome = new GameObject("WarHeaderChrome", typeof(RectTransform));
+            chrome.transform.SetParent(transform, false);
+            _headerChromeRt = chrome.GetComponent<RectTransform>();
+            _headerChromeRt.anchorMin = new Vector2(0f, 1f);
+            _headerChromeRt.anchorMax = new Vector2(1f, 1f);
+            _headerChromeRt.pivot = new Vector2(0.5f, 1f);
+            _headerChromeRt.sizeDelta = new Vector2(0f, 120f);
+            _headerChromeRt.anchoredPosition = Vector2.zero;
+
+            var grad = new GameObject("HeaderGradient", typeof(RectTransform), typeof(Image));
+            grad.transform.SetParent(_headerChromeRt, false);
+            var gRt = grad.GetComponent<RectTransform>();
+            StretchFull(gRt);
+            _headerGradientImage = grad.GetComponent<Image>();
+            _headerGradientImage.raycastTarget = false;
+            _headerGradientImage.color = new Color(0.02f, 0.03f, 0.06f, 0.72f);
+
+            var goTmp = new GameObject("LeftTop_ViewText", typeof(RectTransform), typeof(TextMeshProUGUI));
+            goTmp.transform.SetParent(_headerChromeRt, false);
+            var tRt = goTmp.GetComponent<RectTransform>();
+            tRt.anchorMin = new Vector2(0f, 0f);
+            tRt.anchorMax = new Vector2(1f, 1f);
+            tRt.offsetMin = new Vector2(16f, 12f);
+            tRt.offsetMax = new Vector2(-16f, -16f);
+            leftTopViewText = goTmp.GetComponent<TextMeshProUGUI>();
+            if (TMP_Settings.defaultFontAsset != null)
+                leftTopViewText.font = TMP_Settings.defaultFontAsset;
+            leftTopViewText.alignment = TextAlignmentOptions.TopLeft;
+            leftTopViewText.text = "천하 전쟁";
+        }
+        else if (_headerChromeRt == null && leftTopViewText != null)
+        {
+            var p = leftTopViewText.transform.parent as RectTransform;
+            if (p != null && p.GetComponentInParent<WorldMarketWarMapViewController>() == this)
+            {
+                if (p.Find("HeaderGradient") == null)
+                {
+                    var grad = new GameObject("HeaderGradient", typeof(RectTransform), typeof(Image));
+                    grad.transform.SetParent(p, false);
+                    var gRt = grad.GetComponent<RectTransform>();
+                    StretchFull(gRt);
+                    grad.transform.SetAsFirstSibling();
+                    _headerGradientImage = grad.GetComponent<Image>();
+                    _headerGradientImage.raycastTarget = false;
+                    _headerGradientImage.color = new Color(0.02f, 0.03f, 0.06f, 0.72f);
+                }
+
+                _headerChromeRt = p;
+            }
+        }
+    }
+
+    static void StretchFull(RectTransform rt)
+    {
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+    }
+
+    void RefreshWarHeader()
+    {
+        if (leftTopViewText == null) return;
+        var dm = DataManager.InstanceOrNull;
+        int warCount = 0;
+        if (dm != null && dm.IsStateReady && dm.castleStateDataMap != null)
+        {
+            foreach (var kv in dm.castleStateDataMap)
+            {
+                if (kv.Value != null && kv.Value.isWar)
+                    warCount++;
+            }
+        }
+
+        leftTopViewText.fontSize = 36;
+        leftTopViewText.fontStyle = FontStyles.Bold;
+        bool war = warCount > 0;
+        leftTopViewText.color = war ? WarHeaderText : PeaceHeaderText;
+        leftTopViewText.text = war
+            ? $"전쟁 · 교전 성 <size=28>{warCount}</size>곳"
+            : "평화 · 교전 없음";
     }
 
     void TrySubscribe()
@@ -64,6 +187,8 @@ public class WorldMarketWarMapViewController : MonoBehaviour
 
     void RefreshView()
     {
+        EnsureWarHeaderChrome();
+        RefreshWarHeader();
         RefreshMarkers();
         RefreshWarFeed();
     }

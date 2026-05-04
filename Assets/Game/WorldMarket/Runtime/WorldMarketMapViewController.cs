@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
@@ -26,10 +27,20 @@ public class WorldMarketMapViewController : MonoBehaviour
     [Tooltip("비우면 WorldMarketRoot에서 찾습니다. 핀 클릭 시 리스트만 해당 항목으로 스크롤(지도는 항상 전체 성).")]
     [SerializeField] WorldMarketCastleVirtualList listSyncTarget;
 
+    [Header("지도 줌 UI")]
+    [Tooltip("뷰포트 우측 상단에 − / + 버튼을 붙입니다. ScrollRect에 WorldMarketMapScrollZoom이 있어야 합니다.")]
+    [SerializeField] bool ensureMapZoomControls = true;
+
+    [Header("지도 범례")]
+    [Tooltip("뷰포트 왼쪽 위에 핀·아이콘 의미를 한글로 표시합니다.")]
+    [SerializeField] bool ensureMapPinLegend = true;
+
     readonly List<WorldMarketMapCastlePin> _pinPool = new List<WorldMarketMapCastlePin>();
     readonly List<Image> _roadEdgePool = new List<Image>();
     RectTransform _roadLayer;
     bool _pendingFocusHomeCastle;
+    RectTransform _mapZoomControlsRoot;
+    RectTransform _mapLegendRoot;
 
     void Awake()
     {
@@ -72,6 +83,10 @@ public class WorldMarketMapViewController : MonoBehaviour
         TrySubscribe();
         ResolveListSyncTarget();
         WorldMarketMapCastlePin.OnCastlePinClicked += OnCastlePinClickedForListScroll;
+        if (ensureMapZoomControls)
+            EnsureMapZoomControls();
+        if (ensureMapPinLegend)
+            EnsureMapPinLegend();
         StartCoroutine(CoRebuildAfterLayout());
     }
 
@@ -537,5 +552,218 @@ public class WorldMarketMapViewController : MonoBehaviour
         var pin = root.AddComponent<WorldMarketMapCastlePin>();
         pin.ConfigureRuntime(dotImg, hq, centerTmp, iconWar, iconDis, iconFav, iconInv);
         return pin;
+    }
+
+    void EnsureMapZoomControls()
+    {
+        if (!ensureMapZoomControls)
+            return;
+        if (_mapZoomControlsRoot != null)
+        {
+            if (mapScroll == null)
+                mapScroll = GetComponentInChildren<ScrollRect>(true);
+            var z = mapScroll != null ? mapScroll.GetComponent<WorldMarketMapScrollZoom>() : null;
+            if (z != null)
+                WireMapZoomButtons(_mapZoomControlsRoot, z);
+            return;
+        }
+
+        if (mapScroll == null)
+            mapScroll = GetComponentInChildren<ScrollRect>(true);
+        if (mapScroll == null || mapScroll.viewport == null)
+            return;
+
+        var zoom = mapScroll.GetComponent<WorldMarketMapScrollZoom>();
+        if (zoom == null)
+            return;
+
+        const string rootName = "MapZoomControls";
+        Transform vp = mapScroll.viewport;
+        var existing = vp.Find(rootName);
+        if (existing != null)
+        {
+            _mapZoomControlsRoot = existing as RectTransform;
+            WireMapZoomButtons(_mapZoomControlsRoot, zoom);
+            return;
+        }
+
+        var root = new GameObject(rootName, typeof(RectTransform), typeof(VerticalLayoutGroup));
+        root.transform.SetParent(vp, false);
+        root.transform.SetAsLastSibling();
+        var rt = root.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(1f, 1f);
+        rt.anchorMax = new Vector2(1f, 1f);
+        rt.pivot = new Vector2(1f, 1f);
+        rt.anchoredPosition = new Vector2(-8f, -8f);
+        var vlg = root.GetComponent<VerticalLayoutGroup>();
+        vlg.childAlignment = TextAnchor.MiddleCenter;
+        vlg.spacing = 4f;
+        vlg.childControlWidth = true;
+        vlg.childControlHeight = true;
+        vlg.childForceExpandWidth = false;
+        vlg.childForceExpandHeight = false;
+
+        _mapZoomControlsRoot = rt;
+
+        CreateMapZoomButton(root.transform, "BtnZoomOut", "\u2212", zoom.ZoomOutStep);
+        CreateMapZoomButton(root.transform, "BtnZoomIn", "+", zoom.ZoomInStep);
+    }
+
+    static void WireMapZoomButtons(RectTransform root, WorldMarketMapScrollZoom zoom)
+    {
+        if (root == null || zoom == null)
+            return;
+        var outB = root.Find("BtnZoomOut")?.GetComponent<Button>();
+        var inB = root.Find("BtnZoomIn")?.GetComponent<Button>();
+        if (outB != null)
+        {
+            outB.onClick.RemoveAllListeners();
+            outB.onClick.AddListener(zoom.ZoomOutStep);
+        }
+        if (inB != null)
+        {
+            inB.onClick.RemoveAllListeners();
+            inB.onClick.AddListener(zoom.ZoomInStep);
+        }
+    }
+
+    void CreateMapZoomButton(Transform parent, string goName, string symbol, UnityAction onClick)
+    {
+        var go = new GameObject(goName, typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+        go.transform.SetParent(parent, false);
+        var le = go.GetComponent<LayoutElement>();
+        le.preferredWidth = le.preferredHeight = 32f;
+        le.minWidth = le.minHeight = 30f;
+        var img = go.GetComponent<Image>();
+        img.sprite = WhiteBlockSprite();
+        img.type = Image.Type.Simple;
+        img.color = new Color(0.12f, 0.14f, 0.18f, 0.94f);
+        var btn = go.GetComponent<Button>();
+        btn.targetGraphic = img;
+        btn.transition = Selectable.Transition.ColorTint;
+        var colors = btn.colors;
+        colors.highlightedColor = new Color(0.2f, 0.24f, 0.3f, 1f);
+        colors.pressedColor = new Color(0.25f, 0.3f, 0.38f, 1f);
+        btn.colors = colors;
+
+        var lab = new GameObject("Txt", typeof(RectTransform), typeof(TextMeshProUGUI));
+        lab.transform.SetParent(go.transform, false);
+        var lrt = lab.GetComponent<RectTransform>();
+        lrt.anchorMin = Vector2.zero;
+        lrt.anchorMax = Vector2.one;
+        lrt.offsetMin = Vector2.zero;
+        lrt.offsetMax = Vector2.zero;
+        var tmp = lab.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.text = symbol;
+        tmp.fontSize = 20;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.color = new Color(0.92f, 0.94f, 0.96f, 1f);
+        tmp.raycastTarget = false;
+
+        btn.onClick.AddListener(onClick);
+    }
+
+    void EnsureMapPinLegend()
+    {
+        if (!ensureMapPinLegend)
+            return;
+        if (_mapLegendRoot != null)
+            return;
+        if (mapScroll == null)
+            mapScroll = GetComponentInChildren<ScrollRect>(true);
+        if (mapScroll == null || mapScroll.viewport == null)
+            return;
+
+        const string rootName = "MapPinLegend";
+        Transform vp = mapScroll.viewport;
+        var existing = vp.Find(rootName);
+        if (existing != null)
+        {
+            _mapLegendRoot = existing as RectTransform;
+            return;
+        }
+
+        var root = new GameObject(rootName, typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup),
+            typeof(ContentSizeFitter), typeof(CanvasGroup));
+        root.transform.SetParent(vp, false);
+        root.transform.SetAsLastSibling();
+        var rt = root.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0f, 1f);
+        rt.anchorMax = new Vector2(0f, 1f);
+        rt.pivot = new Vector2(0f, 1f);
+        rt.anchoredPosition = new Vector2(8f, -8f);
+        var bg = root.GetComponent<Image>();
+        bg.color = new Color(0.05f, 0.07f, 0.1f, 0.9f);
+        bg.raycastTarget = false;
+        root.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        var vlg = root.GetComponent<VerticalLayoutGroup>();
+        vlg.padding = new RectOffset(10, 10, 8, 8);
+        vlg.spacing = 5;
+        vlg.childAlignment = TextAnchor.UpperLeft;
+        vlg.childControlWidth = true;
+        vlg.childForceExpandWidth = true;
+        var csf = root.GetComponent<ContentSizeFitter>();
+        csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        var le = root.AddComponent<LayoutElement>();
+        le.minWidth = 200f;
+        le.preferredWidth = 228f;
+        le.flexibleWidth = 0f;
+
+        var cap = new GameObject("Cap", typeof(RectTransform), typeof(TextMeshProUGUI));
+        cap.transform.SetParent(root.transform, false);
+        var capTmp = cap.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            capTmp.font = TMP_Settings.defaultFontAsset;
+        capTmp.text = "지도 표시";
+        capTmp.fontSize = 14;
+        capTmp.fontStyle = FontStyles.Bold;
+        capTmp.color = new Color(0.9f, 0.92f, 0.96f, 1f);
+        capTmp.alignment = TextAlignmentOptions.Left;
+
+        AddMapLegendLine(root.transform, new Color(0.35f, 0.55f, 0.95f, 1f), "점 색: 위(청)·촉(녹)·오(적)·기타(회)");
+        AddMapLegendLine(root.transform, new Color(0.95f, 0.35f, 0.3f, 1f), "빨강 뱃지: 교전(전쟁)");
+        AddMapLegendLine(root.transform, new Color(1f, 0.65f, 0.25f, 1f), "주황 뱃지: 재해·역병");
+        AddMapLegendLine(root.transform, new Color(0.35f, 0.85f, 0.45f, 1f), "녹 뱃지: 호재(풍년 등)");
+        AddMapLegendLine(root.transform, new Color(0.92f, 0.78f, 0.28f, 1f), "황 뱃지: 투자·주문 체크");
+        AddMapLegendLine(root.transform, new Color(0.88f, 0.82f, 0.45f, 1f), "깃발/강조: 본영(HQ)");
+
+        _mapLegendRoot = rt;
+    }
+
+    void AddMapLegendLine(Transform parent, Color chipCol, string line)
+    {
+        var row = new GameObject("LegRow", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+        row.transform.SetParent(parent, false);
+        var h = row.GetComponent<HorizontalLayoutGroup>();
+        h.spacing = 8;
+        h.childAlignment = TextAnchor.MiddleLeft;
+        h.childControlWidth = true;
+        h.childForceExpandWidth = true;
+        row.GetComponent<LayoutElement>().minHeight = 22f;
+
+        var chip = new GameObject("Chip", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        chip.transform.SetParent(row.transform, false);
+        var chipImg = chip.GetComponent<Image>();
+        chipImg.sprite = WhiteBlockSprite();
+        chipImg.color = chipCol;
+        var cle = chip.GetComponent<LayoutElement>();
+        cle.minWidth = cle.preferredWidth = 11f;
+        cle.minHeight = cle.preferredHeight = 11f;
+
+        var lab = new GameObject("Txt", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        lab.transform.SetParent(row.transform, false);
+        var tmp = lab.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null)
+            tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.text = line;
+        tmp.fontSize = 12.5f;
+        tmp.color = new Color(0.82f, 0.86f, 0.91f, 1f);
+        tmp.alignment = TextAlignmentOptions.Left;
+        tmp.enableWordWrapping = true;
+        lab.GetComponent<LayoutElement>().flexibleWidth = 1f;
     }
 }

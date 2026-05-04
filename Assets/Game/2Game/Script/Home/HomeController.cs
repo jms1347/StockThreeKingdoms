@@ -20,14 +20,50 @@ public class HomeController : MonoBehaviour
 
     static long NowUnixSeconds() => TimeManager.GetUnixNow();
 
-    /// <summary>주머니에 쌓인 시장 금화 (파생값).</summary>
+    /// <summary>
+    /// 8시간 만축 시 담을 수 있는 금화 상한(창고). 창고 시트 <see cref="LevelRuleData.warehouseMaxCapacity"/> 우선,
+    /// 없으면 시장 <see cref="LevelRuleData.marketValuePerSec"/>×28800. 0이면 레거시 시장 초당 식의 암묵 상한 사용.
+    /// </summary>
+    public static double ResolveMarketPocketGoldCap()
+    {
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null) return 0d;
+        return ResolveMarketPocketGoldCap(gm.currentUser);
+    }
+
+    /// <inheritdoc cref="ResolveMarketPocketGoldCap()"/>
+    public static double ResolveMarketPocketGoldCap(UserData u)
+    {
+        if (u == null) return 0d;
+        int w = Mathf.Max(0, u.warehouseLevel);
+        var d = DataManager.InstanceOrNull?.GetLevelData(w);
+        if (d != null && d.warehouseMaxCapacity > 0d)
+            return d.warehouseMaxCapacity;
+        int m = Mathf.Max(0, u.marketLevel);
+        var md = DataManager.InstanceOrNull?.GetLevelData(m);
+        if (md != null && md.marketValuePerSec > 0d)
+            return md.marketValuePerSec * MaxMarketAccumulatedSec;
+        return 0d;
+    }
+
+    static void MigrateHomeMarketPocketGoldOnce(UserData u)
+    {
+        if (u == null || u.homeMarketPocketGoldMigrated) return;
+        u.homeMarketPocketGoldMigrated = true;
+        int mkt = Mathf.Max(0, u.marketLevel);
+        float acc = Mathf.Clamp(u.homeMarketAccumulatedSec, 0f, MaxMarketAccumulatedSec);
+        double maxCap = ResolveMarketPocketGoldCap(u);
+        double raw = mkt * MarketGoldPerLevelPerSec * acc;
+        u.homeMarketPocketGold = maxCap > 0d ? Math.Min(raw, maxCap) : raw;
+    }
+
+    /// <summary>주머니에 쌓인 시장 금화. 시장·민심으로만 초당 증가하고, 창고는 상한만 올림(업그레이드 시 금액 점프 없음).</summary>
     public double ComputePendingMarketGold()
     {
         var gm = GameManager.InstanceOrNull;
         if (gm?.currentUser == null) return 0d;
-        int lv = Mathf.Max(0, gm.currentUser.marketLevel);
-        float acc = Mathf.Clamp(gm.currentUser.homeMarketAccumulatedSec, 0f, MaxMarketAccumulatedSec);
-        return lv * MarketGoldPerLevelPerSec * acc;
+        MigrateHomeMarketPocketGoldOnce(gm.currentUser);
+        return Math.Max(0d, gm.currentUser.homeMarketPocketGold);
     }
 
     /// <summary>레거시 UI 호환 (<see cref="VaultDisplay"/> 등).</summary>
@@ -36,6 +72,9 @@ public class HomeController : MonoBehaviour
     /// <summary>8시간 만축 시 주머니 최대 금화.</summary>
     public double GetMarketMaxCapacity()
     {
+        double cap = ResolveMarketPocketGoldCap();
+        if (cap > 0d)
+            return cap;
         var gm = GameManager.InstanceOrNull;
         int lv = Mathf.Max(0, gm?.currentUser?.marketLevel ?? 0);
         return lv * MarketGoldPerLevelPerSec * MaxMarketAccumulatedSec;
@@ -61,6 +100,9 @@ public class HomeController : MonoBehaviour
         float dt = Time.unscaledDeltaTime;
         if (dt <= 0f) return;
 
+        var u = gm.currentUser;
+        MigrateHomeMarketPocketGoldOnce(u);
+
         float sentimentIncomeMul = 1f;
         var dm = DataManager.InstanceOrNull;
         if (dm != null && !string.IsNullOrWhiteSpace(dm.HomeCastleId)
@@ -72,13 +114,30 @@ public class HomeController : MonoBehaviour
             sentimentIncomeMul = Mathf.Lerp(0.75f, 1.25f, Mathf.Clamp01(homeSt.currentSentiment / 200f));
         }
 
-        float next = gm.currentUser.homeMarketAccumulatedSec + dt * sentimentIncomeMul;
-        if (next > MaxMarketAccumulatedSec)
-            next = MaxMarketAccumulatedSec;
-        if (!Mathf.Approximately(next, gm.currentUser.homeMarketAccumulatedSec))
-        {
-            gm.currentUser.homeMarketAccumulatedSec = next;
-        }
+        double maxCap = ResolveMarketPocketGoldCap(u);
+        if (maxCap <= 0d)
+            maxCap = u.marketLevel * MarketGoldPerLevelPerSec * MaxMarketAccumulatedSec;
+
+        u.homeMarketPocketGold = Math.Min(Math.Max(0d, u.homeMarketPocketGold), maxCap);
+
+        float acc = u.homeMarketAccumulatedSec;
+        double G = u.homeMarketPocketGold;
+
+        const float accEps = 0.02f;
+        const double goldEps = 0.5d;
+
+        bool goldFull = G >= maxCap - goldEps;
+        bool accFull = acc >= MaxMarketAccumulatedSec - accEps;
+
+        double rate = u.marketLevel * MarketGoldPerLevelPerSec * sentimentIncomeMul;
+        double nextG = goldFull ? G : Math.Min(G + rate * dt, maxCap);
+
+        float nextAcc = acc;
+        if (!accFull && !goldFull)
+            nextAcc = Mathf.Min(acc + dt * sentimentIncomeMul, MaxMarketAccumulatedSec);
+
+        u.homeMarketPocketGold = nextG;
+        u.homeMarketAccumulatedSec = nextAcc;
     }
 
     /// <summary>성벽 터치: 노동 수익 + 주머니 합산.</summary>
@@ -96,6 +155,7 @@ public class HomeController : MonoBehaviour
             gm.AddGold(totalGain);
 
         gm.currentUser.homeMarketAccumulatedSec = 0f;
+        gm.currentUser.homeMarketPocketGold = 0d;
         gm.currentUser.lastMarketCollectTime = NowUnixSeconds();
         gm.SaveUserData();
 
@@ -133,6 +193,7 @@ public class HomeController : MonoBehaviour
         if (oldLevel <= 0)
         {
             gm.currentUser.homeMarketAccumulatedSec = 0f;
+            gm.currentUser.homeMarketPocketGold = 0d;
             gm.currentUser.lastMarketCollectTime = NowUnixSeconds();
         }
         gm.SaveUserData();
@@ -158,7 +219,6 @@ public class HomeController : MonoBehaviour
         if (!gm.UseGold((long)cost)) return;
         gm.currentUser.farmLevel++;
         gm.SaveUserData();
-        DataManager.InstanceOrNull?.RefreshHomeCastleMaxGarrisonFromUserBuildings();
         GlobalUIManager.InstanceOrNull?.RefreshMaintenanceHudFromEconomy();
     }
 

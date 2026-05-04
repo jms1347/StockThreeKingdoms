@@ -32,6 +32,7 @@ public partial class DataManager
             PushHistory7(s.historyPopulation7Day, s.currentPopulation);
             PushHistory7(s.historySentiment7Day, s.currentSentiment);
             float px = CalculateCastleQuote(s);
+            PushHistory7(s.historyPrice7Day, px);
             s.buyPricePrevDayClose = px;
         }
 
@@ -166,6 +167,7 @@ public partial class DataManager
         if (s == null) return;
         if (s.historyPopulation7Day == null) s.historyPopulation7Day = new List<float>();
         if (s.historySentiment7Day == null) s.historySentiment7Day = new List<float>();
+        if (s.historyPrice7Day == null) s.historyPrice7Day = new List<float>();
 
         if (s.historyPopulation7Day.Count >= 7 && s.historySentiment7Day.Count >= 7)
             return;
@@ -188,8 +190,11 @@ public partial class DataManager
 
         while (s.historyPopulation7Day.Count > 7) s.historyPopulation7Day.RemoveAt(0);
         while (s.historySentiment7Day.Count > 7) s.historySentiment7Day.RemoveAt(0);
+        while (s.historyPrice7Day.Count > 7) s.historyPrice7Day.RemoveAt(0);
 
         if (s.buyPricePrevDayClose < 0.5f)
             s.buyPricePrevDayClose = CalculateCastleQuote(s);
+        while (s.historyPrice7Day.Count < 7)
+            s.historyPrice7Day.Add(Mathf.Max(1f, s.buyPricePrevDayClose));
     }
 }

@@ -42,6 +42,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     TextMeshProUGUI _castleMetaLineTmp;
     TextMeshProUGUI _castleVitalsLineTmp;
     TextMeshProUGUI _governorLineTmp;
+    TextMeshProUGUI _castleSituationLineTmp;
 
     Button _closeBtn;
     Button _investBtn;
@@ -108,15 +109,11 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         if (_panelRt != null)
         {
             _panelRt.DOKill();
-            if (!_sheetPosCached)
-            {
-                _sheetRestPos = _panelRt.anchoredPosition;
-                _sheetPosCached = true;
-            }
-
-            float drop = Mathf.Max(Screen.height * 0.2f, 460f);
-            _panelRt.anchoredPosition = _sheetRestPos + new Vector2(0f, -drop);
-            _panelRt.DOAnchorPos(_sheetRestPos, 0.38f).SetEase(Ease.OutCubic).SetUpdate(true);
+            ApplyPreferredSheetLayout();
+            _sheetRestPos = Vector2.zero;
+            _sheetPosCached = true;
+            _panelRt.localScale = new Vector3(1f, 0.94f, 1f);
+            _panelRt.DOScale(1f, 0.42f).SetEase(Ease.OutCubic).SetUpdate(true);
         }
     }
 
@@ -125,6 +122,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         if (_panelRt != null)
         {
             _panelRt.DOKill();
+            _panelRt.localScale = Vector3.one;
             if (_sheetPosCached)
                 _panelRt.anchoredPosition = _sheetRestPos;
         }
@@ -143,6 +141,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     void RefreshBody()
     {
         BuildUiIfNeeded();
+        ApplyPreferredSheetLayout();
         var dm = DataManager.InstanceOrNull;
         if (dm == null || !dm.IsStateReady || string.IsNullOrWhiteSpace(_castleId))
         {
@@ -276,6 +275,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         }
 
         BindCastleDetailStrip(dm, st, live, hasLive, population, quote, g);
+        BindCastleSituationBlock(dm, isWar, isDisaster, isFavorable);
 
         var investMain = _investBtn != null ? _investBtn.transform.Find("LblMain")?.GetComponent<TextMeshProUGUI>() : null;
         var investSub = _investBtn != null ? _investBtn.transform.Find("LblSub")?.GetComponent<TextMeshProUGUI>() : null;
@@ -336,6 +336,34 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         }
     }
 
+    void BindCastleSituationBlock(DataManager dm, bool isWar, bool isDisaster, bool isFavorable)
+    {
+        if (_castleSituationLineTmp == null || dm == null || string.IsNullOrWhiteSpace(_castleId))
+            return;
+
+        var lines = new List<string>(8);
+        if (isWar)
+            lines.Add("<b>교전</b> · 전쟁 반영 중 — 입성·민심 변동에 유의.");
+        if (isDisaster)
+            lines.Add("<b>재해</b> · 역병 등으로 민심·시세 악화 가능.");
+        if (isFavorable)
+            lines.Add("<b>호재</b> · 풍년 등 긍정 이벤트 반영.");
+        if (!isWar && !isDisaster && !isFavorable)
+            lines.Add("<color=#aab6c4>교전·재해·호재</color> 특이 이벤트 없음.");
+
+        bool isHq = !string.IsNullOrWhiteSpace(dm.HomeCastleId)
+                    && string.Equals(dm.HomeCastleId.Trim(), _castleId, StringComparison.Ordinal);
+        lines.Add(isHq
+            ? "<color=#ffd866>본영</color> · 현재 주 거점."
+            : "<color=#e8ecf2>외부 성</color> · 본영과 거리·이주 비용 확인.");
+
+        int mp = dm.GetTravelMarchPointsCostRounded(_castleId.Trim());
+        if (!isHq && mp >= 0)
+            lines.Add($"이주 예상 <color=#ffffff>MP {mp}</color> · 지도 거리 기준");
+
+        _castleSituationLineTmp.text = string.Join("\n", lines);
+    }
+
     static string FormatVolK(long v)
     {
         if (v >= 1000000L)
@@ -358,18 +386,114 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         }
     }
 
+    void ApplyPreferredSheetLayout()
+    {
+        if (_panelRt == null) return;
+        _panelRt.anchorMin = new Vector2(0.02f, 0.06f);
+        _panelRt.anchorMax = new Vector2(0.98f, 0.97f);
+        _panelRt.pivot = new Vector2(0.5f, 0.5f);
+        _panelRt.offsetMin = Vector2.zero;
+        _panelRt.offsetMax = Vector2.zero;
+        _sheetRestPos = Vector2.zero;
+    }
+
+    RectTransform CreateBodyScrollContent(Transform sheet, out ScrollRect scrollOut)
+    {
+        var root = new GameObject("BodyScroll", typeof(RectTransform), typeof(ScrollRect), typeof(Image), typeof(LayoutElement));
+        root.transform.SetParent(sheet, false);
+        var le = root.GetComponent<LayoutElement>();
+        le.flexibleHeight = 1f;
+        le.minHeight = 320f;
+        le.flexibleWidth = 1f;
+        root.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+        var scroll = root.GetComponent<ScrollRect>();
+        scroll.horizontal = false;
+        scroll.vertical = true;
+        scroll.movementType = ScrollRect.MovementType.Clamped;
+        scroll.scrollSensitivity = 22f;
+        scrollOut = scroll;
+
+        var vpGo = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(Mask));
+        vpGo.transform.SetParent(root.transform, false);
+        var vpRt = vpGo.GetComponent<RectTransform>();
+        StretchFull(vpRt);
+        vpGo.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.01f);
+        var mask = vpGo.GetComponent<Mask>();
+        mask.showMaskGraphic = false;
+
+        var contentGo = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+        contentGo.transform.SetParent(vpGo.transform, false);
+        var cRt = contentGo.GetComponent<RectTransform>();
+        cRt.anchorMin = new Vector2(0f, 1f);
+        cRt.anchorMax = new Vector2(1f, 1f);
+        cRt.pivot = new Vector2(0.5f, 1f);
+        cRt.anchoredPosition = Vector2.zero;
+        cRt.sizeDelta = new Vector2(0f, 0f);
+        var cv = contentGo.GetComponent<VerticalLayoutGroup>();
+        cv.padding = new RectOffset(0, 0, 0, 0);
+        cv.spacing = 10;
+        cv.childAlignment = TextAnchor.UpperLeft;
+        cv.childControlWidth = true;
+        cv.childForceExpandWidth = true;
+        var csf = contentGo.GetComponent<ContentSizeFitter>();
+        csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        scroll.viewport = vpRt;
+        scroll.content = cRt;
+        return cRt;
+    }
+
+    void BuildSituationStrip(Transform parent)
+    {
+        var box = new GameObject("SituationStrip", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
+        box.transform.SetParent(parent, false);
+        box.GetComponent<Image>().color = new Color(0.05f, 0.12f, 0.16f, 0.96f);
+        var le = box.GetComponent<LayoutElement>();
+        le.minHeight = 108f;
+        le.preferredHeight = 120f;
+        le.flexibleHeight = 0f;
+        var vg = box.GetComponent<VerticalLayoutGroup>();
+        vg.padding = new RectOffset(12, 12, 10, 10);
+        vg.spacing = 6;
+        vg.childControlWidth = true;
+        vg.childForceExpandWidth = true;
+
+        var cap = CreateTmp(box.transform, "SituationCap", "현재 성 상황", 17f, FontStyles.Bold, TextAlignmentOptions.Left);
+        cap.color = new Color(0.88f, 0.93f, 1f, 1f);
+
+        _castleSituationLineTmp = CreateTmp(box.transform, "SituationBody", "—", 15.5f, FontStyles.Normal, TextAlignmentOptions.Left);
+        _castleSituationLineTmp.color = new Color(0.9f, 0.92f, 0.95f, 1f);
+        _castleSituationLineTmp.enableWordWrapping = true;
+        _castleSituationLineTmp.richText = true;
+    }
+
     void BuildUiIfNeeded()
     {
-        Transform legacy = transform.Find("SheetPanel");
-        if (legacy != null && (legacy.Find("ChartBandV2") == null || legacy.Find("StatsInfoStrip") == null))
+        Transform sheetTf = transform.Find("SheetPanel");
+        if (sheetTf != null)
         {
-            Destroy(legacy.gameObject);
-            _panelRt = null;
+            bool validNew = sheetTf.Find("BodyScroll/Viewport/Content/ChartBandV2") != null
+                            && sheetTf.Find("BodyScroll/Viewport/Content/StatsInfoStrip") != null
+                            && sheetTf.Find("BodyScroll/Viewport/Content/SituationStrip") != null;
+            if (!validNew)
+            {
+                Destroy(sheetTf.gameObject);
+                _panelRt = null;
+                sheetTf = null;
+            }
         }
 
-        if (_panelRt != null && transform.Find("SheetPanel/ChartBandV2") != null
-                              && transform.Find("SheetPanel/StatsInfoStrip") != null)
+        sheetTf = transform.Find("SheetPanel");
+        if (sheetTf != null
+            && sheetTf.Find("BodyScroll/Viewport/Content/ChartBandV2") != null
+            && sheetTf.Find("BodyScroll/Viewport/Content/StatsInfoStrip") != null
+            && sheetTf.Find("BodyScroll/Viewport/Content/SituationStrip") != null)
+        {
+            _panelRt = sheetTf.GetComponent<RectTransform>();
+            ApplyPreferredSheetLayout();
             return;
+        }
 
         _canvasGroup = gameObject.GetComponent<CanvasGroup>();
         if (_canvasGroup == null)
@@ -378,22 +502,21 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         var rt = transform as RectTransform;
         StretchFull(rt);
 
-        var dim = new GameObject("Dim", typeof(RectTransform), typeof(Image), typeof(Button));
-        dim.transform.SetParent(transform, false);
-        StretchFull(dim.GetComponent<RectTransform>());
-        dim.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.52f);
-        var dimBtn = dim.GetComponent<Button>();
-        dimBtn.transition = Selectable.Transition.None;
-        dimBtn.onClick.AddListener(Close);
+        if (transform.Find("Dim") == null)
+        {
+            var dim = new GameObject("Dim", typeof(RectTransform), typeof(Image), typeof(Button));
+            dim.transform.SetParent(transform, false);
+            StretchFull(dim.GetComponent<RectTransform>());
+            dim.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.52f);
+            var dimBtn = dim.GetComponent<Button>();
+            dimBtn.transition = Selectable.Transition.None;
+            dimBtn.onClick.AddListener(Close);
+        }
 
         var sheet = new GameObject("SheetPanel", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(LayoutElement));
         sheet.transform.SetParent(transform, false);
         _panelRt = sheet.GetComponent<RectTransform>();
-        _panelRt.anchorMin = new Vector2(0.03f, 0f);
-        _panelRt.anchorMax = new Vector2(0.97f, 0f);
-        _panelRt.pivot = new Vector2(0.5f, 0f);
-        _panelRt.sizeDelta = new Vector2(0f, 600f);
-        _panelRt.anchoredPosition = Vector2.zero;
+        ApplyPreferredSheetLayout();
         sheet.GetComponent<Image>().color = new Color(0.07f, 0.08f, 0.11f, 0.99f);
         var outline = sheet.AddComponent<Outline>();
         outline.effectColor = new Color(1f, 0.72f, 0.2f, 0.28f);
@@ -405,12 +528,16 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         sv.childAlignment = TextAnchor.UpperLeft;
         sv.childControlWidth = true;
         sv.childForceExpandWidth = true;
+        sv.childControlHeight = true;
+        sv.childForceExpandHeight = true;
 
         BuildHeader(sheet.transform);
-        BuildStatsInfoStrip(sheet.transform);
-        BuildChartBandV2(sheet.transform);
-        BuildMetricsRow(sheet.transform);
-        BuildCauseStrip(sheet.transform);
+        RectTransform bodyContent = CreateBodyScrollContent(sheet.transform, out _);
+        BuildStatsInfoStrip(bodyContent);
+        BuildSituationStrip(bodyContent);
+        BuildChartBandV2(bodyContent);
+        BuildMetricsRow(bodyContent);
+        BuildCauseStrip(bodyContent);
         BuildFooter(sheet.transform);
     }
 
@@ -467,7 +594,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         titleCol.transform.SetParent(header.transform, false);
         titleCol.GetComponent<LayoutElement>().flexibleWidth = 1f;
 
-        _titleTmp = CreateTmp(titleCol.transform, "Title", "", 21, FontStyles.Bold, TextAlignmentOptions.Left);
+        _titleTmp = CreateTmp(titleCol.transform, "Title", "", 26, FontStyles.Bold, TextAlignmentOptions.Left);
         _titleTmp.color = Color.white;
 
         _hqBadgeGo = new GameObject("HqBadge", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
@@ -497,8 +624,8 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         strip.transform.SetParent(sheet, false);
         strip.GetComponent<Image>().color = new Color(0.06f, 0.08f, 0.11f, 0.96f);
         var sle = strip.GetComponent<LayoutElement>();
-        sle.minHeight = 92f;
-        sle.preferredHeight = 96f;
+        sle.minHeight = 100f;
+        sle.preferredHeight = 108f;
         var sv = strip.GetComponent<VerticalLayoutGroup>();
         sv.padding = new RectOffset(12, 12, 10, 10);
         sv.spacing = 6;
@@ -506,15 +633,15 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         sv.childControlWidth = true;
         sv.childForceExpandWidth = true;
 
-        _castleMetaLineTmp = CreateTmp(strip.transform, "MetaLine", "", 13f, FontStyles.Normal, TextAlignmentOptions.Left);
-        _castleMetaLineTmp.color = new Color(0.72f, 0.76f, 0.82f, 1f);
+        _castleMetaLineTmp = CreateTmp(strip.transform, "MetaLine", "", 16f, FontStyles.Normal, TextAlignmentOptions.Left);
+        _castleMetaLineTmp.color = new Color(0.78f, 0.82f, 0.88f, 1f);
         _castleMetaLineTmp.enableWordWrapping = true;
 
-        _castleVitalsLineTmp = CreateTmp(strip.transform, "VitalsLine", "", 14f, FontStyles.Bold, TextAlignmentOptions.Left);
-        _castleVitalsLineTmp.color = new Color(0.9f, 0.92f, 0.96f, 1f);
+        _castleVitalsLineTmp = CreateTmp(strip.transform, "VitalsLine", "", 19f, FontStyles.Bold, TextAlignmentOptions.Left);
+        _castleVitalsLineTmp.color = new Color(0.94f, 0.95f, 0.98f, 1f);
         _castleVitalsLineTmp.enableWordWrapping = true;
 
-        _governorLineTmp = CreateTmp(strip.transform, "GovLine", "", 12f, FontStyles.Normal, TextAlignmentOptions.Left);
+        _governorLineTmp = CreateTmp(strip.transform, "GovLine", "", 14f, FontStyles.Normal, TextAlignmentOptions.Left);
         _governorLineTmp.color = new Color(0.58f, 0.62f, 0.68f, 1f);
         _governorLineTmp.enableWordWrapping = true;
     }
@@ -523,7 +650,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
     {
         var band = new GameObject("ChartBandV2", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement));
         band.transform.SetParent(sheet, false);
-        band.GetComponent<LayoutElement>().minHeight = 156f;
+        band.GetComponent<LayoutElement>().minHeight = 188f;
         var bh = band.GetComponent<HorizontalLayoutGroup>();
         bh.spacing = 12;
         bh.childAlignment = TextAnchor.UpperLeft;
@@ -549,12 +676,12 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         tr.childControlWidth = true;
         tr.childForceExpandWidth = true;
 
-        var t7 = CreateTmp(trendRow.transform, "TrendLbl", "7D TREND", 12, FontStyles.Bold, TextAlignmentOptions.Left);
+        var t7 = CreateTmp(trendRow.transform, "TrendLbl", "7D TREND", 14, FontStyles.Bold, TextAlignmentOptions.Left);
         t7.color = new Color(0.55f, 0.58f, 0.64f);
         var t7le = t7.gameObject.AddComponent<LayoutElement>();
         t7le.flexibleWidth = 1f;
 
-        _trendBiasTmp = CreateTmp(trendRow.transform, "Bias", "—", 12, FontStyles.Bold, TextAlignmentOptions.Right);
+        _trendBiasTmp = CreateTmp(trendRow.transform, "Bias", "—", 14, FontStyles.Bold, TextAlignmentOptions.Right);
         _trendBiasTmp.color = RiseColor;
         var biasLe = _trendBiasTmp.gameObject.AddComponent<LayoutElement>();
         biasLe.flexibleWidth = 0f;
@@ -563,11 +690,11 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         var chartHost = new GameObject("ChartHost", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
         chartHost.transform.SetParent(chartCard.transform, false);
         chartHost.GetComponent<Image>().color = new Color(0.03f, 0.04f, 0.06f, 1f);
-        chartHost.GetComponent<LayoutElement>().minHeight = 108f;
+        chartHost.GetComponent<LayoutElement>().minHeight = 132f;
         var hostRt = chartHost.GetComponent<RectTransform>();
-        hostRt.sizeDelta = new Vector2(0f, 108f);
+        hostRt.sizeDelta = new Vector2(0f, 132f);
 
-        var chartGo = new GameObject("PriceLine", typeof(RectTransform), typeof(UIPriceLine7DayGraphic));
+        var chartGo = new GameObject("PriceLine", typeof(RectTransform), typeof(CanvasRenderer), typeof(UIPriceLine7DayGraphic));
         chartGo.transform.SetParent(chartHost.transform, false);
         StretchFull(chartGo.GetComponent<RectTransform>());
         _priceLineGraphic = chartGo.GetComponent<UIPriceLine7DayGraphic>();
@@ -583,13 +710,13 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
 
         var priceCard = CreateMiniCard(rightCol.transform, "PriceMini");
         CreateCaption(priceCard.transform, "CURRENT PRICE");
-        _rightPriceTmp = CreateTmp(priceCard.transform, "Px", "0", 28, FontStyles.Bold, TextAlignmentOptions.Left);
+        _rightPriceTmp = CreateTmp(priceCard.transform, "Px", "0", 34, FontStyles.Bold, TextAlignmentOptions.Left);
         _rightPriceTmp.color = new Color(1f, 0.85f, 0.28f, 1f);
-        _rightChgTmp = CreateTmp(priceCard.transform, "Chg", "+0.00%", 16, FontStyles.Bold, TextAlignmentOptions.Left);
+        _rightChgTmp = CreateTmp(priceCard.transform, "Chg", "+0.00%", 18, FontStyles.Bold, TextAlignmentOptions.Left);
 
         var volCard = CreateMiniCard(rightCol.transform, "VolCard");
         CreateCaption(volCard.transform, "TRADING VOL.");
-        _volTmp = CreateTmp(volCard.transform, "Vol", "0K 兵", 17, FontStyles.Bold, TextAlignmentOptions.Left);
+        _volTmp = CreateTmp(volCard.transform, "Vol", "0K 兵", 19, FontStyles.Bold, TextAlignmentOptions.Left);
         _volTmp.color = new Color(0.82f, 0.86f, 0.92f, 1f);
     }
 
@@ -636,7 +763,7 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         v.padding = new RectOffset(8, 8, 8, 8);
         v.childControlWidth = true;
         CreateCaption(cell.transform, cap);
-        valTmp = CreateTmp(cell.transform, "Val", "—", 18, FontStyles.Bold, TextAlignmentOptions.Left);
+        valTmp = CreateTmp(cell.transform, "Val", "—", 22, FontStyles.Bold, TextAlignmentOptions.Left);
         valTmp.color = numCol;
         return cell;
     }
@@ -651,9 +778,9 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         v.padding = new RectOffset(8, 8, 8, 8);
         v.childControlWidth = true;
         CreateCaption(cell.transform, "MY STAKE");
-        _metricsStakeTmp = CreateTmp(cell.transform, "StakePct", "0%", 18, FontStyles.Bold, TextAlignmentOptions.Left);
+        _metricsStakeTmp = CreateTmp(cell.transform, "StakePct", "0%", 22, FontStyles.Bold, TextAlignmentOptions.Left);
         _metricsStakeTmp.color = new Color(0.35f, 0.85f, 1f, 1f);
-        _metricsTroopsTmp = CreateTmp(cell.transform, "StakeTroop", "", 12, FontStyles.Normal, TextAlignmentOptions.Left);
+        _metricsTroopsTmp = CreateTmp(cell.transform, "StakeTroop", "", 14, FontStyles.Normal, TextAlignmentOptions.Left);
         _metricsTroopsTmp.color = new Color(0.55f, 0.58f, 0.64f);
         return cell;
     }
@@ -667,10 +794,10 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         v.spacing = 4;
         v.childControlWidth = true;
 
-        _causeTmp = CreateTmp(strip.transform, "Cause", "", 13, FontStyles.Bold, TextAlignmentOptions.Left);
-        _causeTmp.color = new Color(0.62f, 0.66f, 0.72f);
+        _causeTmp = CreateTmp(strip.transform, "Cause", "", 15, FontStyles.Bold, TextAlignmentOptions.Left);
+        _causeTmp.color = new Color(0.7f, 0.74f, 0.8f, 1f);
 
-        _eventStripTmp = CreateTmp(strip.transform, "Events", "", 12, FontStyles.Normal, TextAlignmentOptions.Left);
+        _eventStripTmp = CreateTmp(strip.transform, "Events", "", 14, FontStyles.Normal, TextAlignmentOptions.Left);
         _eventStripTmp.color = new Color(0.48f, 0.52f, 0.58f);
     }
 
@@ -708,9 +835,9 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
         vl.childForceExpandWidth = true;
         vl.padding = new RectOffset(8, 8, 8, 8);
 
-        var main = CreateTmp(go.transform, "LblMain", "투자 및 전장 진입", 16, FontStyles.Bold, TextAlignmentOptions.Center);
+        var main = CreateTmp(go.transform, "LblMain", "투자 및 전장 진입", 18, FontStyles.Bold, TextAlignmentOptions.Center);
         main.color = Color.white;
-        var sub = CreateTmp(go.transform, "LblSub", "ENTER BATTLEFRONT", 11, FontStyles.Normal, TextAlignmentOptions.Center);
+        var sub = CreateTmp(go.transform, "LblSub", "ENTER BATTLEFRONT", 12, FontStyles.Normal, TextAlignmentOptions.Center);
         sub.color = new Color(0.92f, 0.82f, 0.55f, 0.95f);
 
         if (btn.GetComponent<WorldMarketGoldButtonShimmer>() == null)
@@ -741,8 +868,8 @@ public class WorldMarketCastleSummarySheet : MonoBehaviour
 
     static void CreateCaption(Transform parent, string txt)
     {
-        var t = CreateTmp(parent, "Cap", txt, 11, FontStyles.Bold, TextAlignmentOptions.Left);
-        t.color = new Color(0.48f, 0.52f, 0.58f);
+        var t = CreateTmp(parent, "Cap", txt, 12.5f, FontStyles.Bold, TextAlignmentOptions.Left);
+        t.color = new Color(0.55f, 0.6f, 0.66f, 1f);
     }
 
     static TextMeshProUGUI CreateTmp(Transform parent, string name, string text, float size, FontStyles style,

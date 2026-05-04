@@ -12,13 +12,17 @@ public class WorldMarketMapScrollZoom : MonoBehaviour, IScrollHandler
     [Tooltip("최소 배율(너무 축소되면 핀이 모두 한 덩어리로 보임).")]
     [SerializeField] float minScale = 0.55f;
     [Tooltip("최대 배율(성·길을 자세히 보려면 높게).")]
-    [SerializeField] float maxScale = 4.5f;
+    [SerializeField] float maxScale = 6.5f;
     [SerializeField] float wheelZoomSensitivity = 0.14f;
     [Tooltip("처음 열릴 때 확대 비율(1이면 위저드 기본 맵 크기 그대로 — 요약 느낌). 1.6~2 권장.")]
     [SerializeField] float defaultZoom = 1.75f;
     [Tooltip("레거시 Input Manager 휠 — ScrollRect가 스크롤을 가로채도 확대가 되도록 Update에서 보조.")]
     [SerializeField] bool useLegacyMouseWheelZoom = true;
     [SerializeField] float legacyWheelMultiplier = 0.42f;
+
+    [Header("UI +/- 버튼 (선택)")]
+    [Tooltip("지도 중앙 기준 한 단계 확대·축소 배율.")]
+    [SerializeField] float buttonZoomStepFactor = 1.12f;
 
     Vector2 _baseSize;
     float _zoom = 1f;
@@ -117,6 +121,35 @@ public class WorldMarketMapScrollZoom : MonoBehaviour, IScrollHandler
             return;
         float factor = 1f + Mathf.Sign(delta) * Mathf.Min(Mathf.Abs(delta) * wheelZoomSensitivity * 0.12f, 0.35f);
         ApplyZoomFactor(factor, eventData.position);
+    }
+
+    /// <summary>뷰포트 중심 기준 확대(모바일 지도 오른쪽 상단 + 버튼).</summary>
+    public void ZoomInStep()
+    {
+        float f = Mathf.Clamp(buttonZoomStepFactor, 1.02f, 1.5f);
+        ApplyZoomFactor(f, GetViewportCenterScreenPoint());
+    }
+
+    /// <summary>뷰포트 중심 기준 축소(모바일 지도 오른쪽 상단 − 버튼).</summary>
+    public void ZoomOutStep()
+    {
+        float f = Mathf.Clamp(buttonZoomStepFactor, 1.02f, 1.5f);
+        ApplyZoomFactor(1f / f, GetViewportCenterScreenPoint());
+    }
+
+    Vector2 GetViewportCenterScreenPoint()
+    {
+        if (scrollRect == null || scrollRect.viewport == null)
+            return new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+
+        var vp = scrollRect.viewport;
+        Vector3 world = vp.TransformPoint(vp.rect.center);
+        Canvas canvas = scrollRect.GetComponentInParent<Canvas>();
+        Camera cam = null;
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            cam = canvas.worldCamera != null ? canvas.worldCamera : Camera.main;
+
+        return RectTransformUtility.WorldToScreenPoint(cam, world);
     }
 
     void ApplyZoomFactor(float factor, Vector2 screenPoint)

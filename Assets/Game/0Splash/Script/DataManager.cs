@@ -181,6 +181,8 @@ public partial class DataManager : Singleton<DataManager>
     float travelIdlePointsPerMinute = 10f;
     [SerializeField, Tooltip("만보기 1걸음당 이동 게이지 포인트")]
     float travelPointsPerStep = 1f;
+    [SerializeField, Tooltip("본영 이주 거리 비용의 바닥 — 최소 이 많은 ‘보’만큼의 게이지 포인트가 필요(가까운 성 즉시 완료 완화).")]
+    int minHqTravelCostSteps = 100;
     [SerializeField, Tooltip("이동 게이지 바 시각화용 상한(실제 값은 무제한에 가깝게 누적)")]
     float travelGaugeVisualCap = 25000f;
     [Header("천하 전쟁 변동성")]
@@ -193,6 +195,8 @@ public partial class DataManager : Singleton<DataManager>
     bool _gameManagerStepsHooked;
     string _pendingHqMoveCastleId = "";
     float _pendingHqMoveCost;
+    /// <summary>MP 주입으로만 이동 게이지에 더해진 포인트(− 버튼 환급 상한).</summary>
+    float _travelGaugeFromMpInjections;
 
     /// <summary>마지막 주간 배당이 반영된 로컬 월요일 06:00 앵커(Unix 초). 세이브에 포함.</summary>
     long _lastWeeklyDividendPaidAnchorUnix;
@@ -356,6 +360,8 @@ public partial class DataManager : Singleton<DataManager>
         LoadWorldPortfolioHqFromSo();
         EnsureDefaultHomeCastleIfEmpty();
         HookGameManagerStepsForTravelGauge();
+
+        RefreshRecruitmentFeesForAllCastles();
 
         OnStateDataReady?.Invoke();
 
@@ -585,7 +591,9 @@ public partial class DataManager : Singleton<DataManager>
                     accumulatedDividendPool = s.accumulatedDividendPool,
                     historyPopulation7Day = s.historyPopulation7Day != null ? new List<float>(s.historyPopulation7Day) : new List<float>(),
                     historySentiment7Day = s.historySentiment7Day != null ? new List<float>(s.historySentiment7Day) : new List<float>(),
-                    buyPricePrevDayClose = s.buyPricePrevDayClose
+                    historyPrice7Day = s.historyPrice7Day != null ? new List<float>(s.historyPrice7Day) : new List<float>(),
+                    buyPricePrevDayClose = s.buyPricePrevDayClose,
+                    recruitmentFee = s.recruitmentFee
                 });
             }
 #if UNITY_EDITOR
@@ -719,6 +727,7 @@ public partial class DataManager : Singleton<DataManager>
                     s.populationHistory = new List<int> { s.currentPopulation };
                 if (s.historyPopulation7Day == null) s.historyPopulation7Day = new List<float>();
                 if (s.historySentiment7Day == null) s.historySentiment7Day = new List<float>();
+                if (s.historyPrice7Day == null) s.historyPrice7Day = new List<float>();
                 if (s.worldEventCooldowns == null) s.worldEventCooldowns = new List<WorldEventCooldownEntry>();
                 if (s.residentGeneralIds == null) s.residentGeneralIds = new List<string>();
                 if (castleMasterDataMap.TryGetValue(s.id, out var m0) && m0 != null)
@@ -758,6 +767,7 @@ public partial class DataManager : Singleton<DataManager>
                         populationHistory = new List<int>(10) { master.initPopulation },
                         historyPopulation7Day = new List<float>(),
                         historySentiment7Day = new List<float>(),
+                        historyPrice7Day = new List<float>(),
                         buyPricePrevDayClose = 0f,
                         castleTaxRatePercent = master.initialTaxRatePercent,
                         worldEventCooldowns = new List<WorldEventCooldownEntry>(),
@@ -960,6 +970,29 @@ public partial class DataManager : Singleton<DataManager>
     }
 
     /// <summary>
+    /// 본영 ID가 월드 UI 데이터(상태 맵·라이브 SO·마스터)에 존재할 때만 상단 고정에 사용합니다.
+    /// </summary>
+    bool IsKnownWorldCastleIdForListPin(string castleId)
+    {
+        if (string.IsNullOrWhiteSpace(castleId)) return false;
+        castleId = castleId.Trim();
+        if (castleStateDataMap != null && castleStateDataMap.ContainsKey(castleId)) return true;
+        if (castleMasterDataMap != null && castleMasterDataMap.ContainsKey(castleId)) return true;
+        if (HasLiveCastleSoListForWorldUi() && castleStateLiveSo.castles != null)
+        {
+            for (int i = 0; i < castleStateLiveSo.castles.Count; i++)
+            {
+                var e = castleStateLiveSo.castles[i];
+                if (e == null || string.IsNullOrWhiteSpace(e.castleId)) continue;
+                if (string.Equals(e.castleId.Trim(), castleId, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// 본영 성은 필터에 포함되지 않아도 항상 첫 카드로 고정하고,
     /// 나머지는 본영까지 거리 오름차순입니다.
     /// </summary>
@@ -987,7 +1020,7 @@ public partial class DataManager : Singleton<DataManager>
             others.Sort(StringComparer.OrdinalIgnoreCase);
 
         var result = new List<string>(others.Count + 1);
-        if (!string.IsNullOrEmpty(home) && castleStateDataMap != null && castleStateDataMap.ContainsKey(home))
+        if (!string.IsNullOrEmpty(home) && IsKnownWorldCastleIdForListPin(home))
             result.Add(home);
         result.AddRange(others);
         return result;

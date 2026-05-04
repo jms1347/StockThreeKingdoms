@@ -76,6 +76,8 @@ public partial class CastleStateData
     public List<float> historyPopulation7Day = new List<float>();
     /// <summary>7일 일간 스냅샷(민심 0~200, 100 기준).</summary>
     public List<float> historySentiment7Day = new List<float>();
+    /// <summary>7일 일간 스냅샷(성채 호가). 일자 롤오버 시점 종가를 저장합니다.</summary>
+    public List<float> historyPrice7Day = new List<float>();
     /// <summary>전일 종가에 가까운 성채 호가 앵커 — <see cref="DataManager.CalculateChangeRate24h"/>용.</summary>
     public float buyPricePrevDayClose;
 
@@ -83,6 +85,11 @@ public partial class CastleStateData
     public float currentBuyPrice;
     /// <summary>해 성 입성 관부율(%). 마스터 초기값에서 시드 후 성별로 유지.</summary>
     public float castleTaxRatePercent;
+
+    /// <summary>징집·입성·해산 AI 가변 수수료율 0~20(표시·세이브). 실제 과금은 <see cref="RecruitmentDutyCalculator"/>.</summary>
+    public float recruitmentFee;
+    /// <summary>AI가 산정한 수수료 사유(상세 UI).</summary>
+    public string recruitmentFeeReason = "";
 
     // 천하 탭: 성별 유저 주둔(지분). AMM 매매로 AI 수비군과 금화 풀에서 이동.
     public int userDeployedTroops;

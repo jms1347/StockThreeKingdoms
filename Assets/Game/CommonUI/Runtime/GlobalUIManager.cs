@@ -88,6 +88,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
         FixGlobalUiScaleIfBroken();
         EnsureGlobalCanvasFillsScreen();
         EnsureTopBarAndScalerLayout();
+        GlobalMarchProgressStrip.EnsureOn(transform);
         ResolveTopBarRefsIfMissing();
         WireTabs();
         ApplyBottomTabLabelAutoSizing();
@@ -314,20 +315,7 @@ public class GlobalUIManager : Singleton<GlobalUIManager>
             .SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
     }
 
-    static double ResolveWarehouseGoldCap()
-    {
-        var gm = GameManager.InstanceOrNull;
-        if (gm?.currentUser == null) return 0d;
-        int w = Mathf.Max(0, gm.currentUser.warehouseLevel);
-        var d = DataManager.InstanceOrNull?.GetLevelData(w);
-        if (d != null && d.warehouseMaxCapacity > 0d)
-            return d.warehouseMaxCapacity;
-        int m = gm.currentUser.marketLevel;
-        var md = DataManager.InstanceOrNull?.GetLevelData(m);
-        if (md != null && md.marketValuePerSec > 0d)
-            return md.marketValuePerSec * 28800d;
-        return 0d;
-    }
+    static double ResolveWarehouseGoldCap() => HomeController.ResolveMarketPocketGoldCap();
 
     void RefreshLocationHud()
     {

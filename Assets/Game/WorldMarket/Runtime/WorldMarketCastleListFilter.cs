@@ -1,12 +1,12 @@
 /// <summary>
 /// 천하 탭 성 카드 리스트 필터(상단 탭). <see cref="WorldMarketCastleVirtualList.SetFilter"/>, <see cref="WorldMarketFilterTabBar"/>.
-/// 정렬은 필터 공통으로 <see cref="DataManager"/>에서 이슈 &gt; 내 투자 &gt; 등급 순 적용.
+/// 목록 순서는 필터 적용 후 <see cref="DataManager.GetOrderedWorldCastleIds"/> — 본영 고정 → 거리순.
 /// </summary>
 public enum WorldMarketCastleListFilter
 {
     /// <summary>전체</summary>
     All = 0,
-    /// <summary>내 투자 — 병력 투입 성만</summary>
+    /// <summary>보유 — 병력 투입 성만</summary>
     MyHoldings = 1,
     /// <summary>전쟁 중</summary>
     War = 2,

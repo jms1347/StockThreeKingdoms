@@ -42,6 +42,8 @@ public partial class DataManager
             UpdateAICastleStrategy(s, nowUnix);
         }
 
+        RefreshRecruitmentFeesForAllCastles();
+
         _stateDirty = true;
         FlushLiveScriptableObjects();
         OnStateTicked?.Invoke();

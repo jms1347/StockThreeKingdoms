@@ -299,6 +299,18 @@ public class EconomyManager : MonoBehaviour
         return Math.Max(0L, gm.currentUser.soldierCount);
     }
 
+    /// <summary>성별 AI 징집·입성 의무율(0~20%). 상태 틱에서 갱신된 캐시를 우선합니다.</summary>
+    public static float CalculateRecruitmentFee(string castleId)
+    {
+        var dm = DataManager.InstanceOrNull;
+        if (dm == null || !dm.IsStateReady || string.IsNullOrWhiteSpace(castleId))
+            return 0f;
+        castleId = castleId.Trim();
+        if (dm.castleStateDataMap.TryGetValue(castleId, out var s) && s != null)
+            return Mathf.Clamp(s.recruitmentFee, 0f, 20f);
+        return RecruitmentDutyCalculator.CalculateRecruitmentFee(dm, castleId, out _);
+    }
+
     void OnValidate()
     {
         maintenanceGoldPerSoldierPerDay = Math.Max(0d, maintenanceGoldPerSoldierPerDay);

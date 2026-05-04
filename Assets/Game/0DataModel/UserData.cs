@@ -22,7 +22,7 @@ public class UserData
     // [성장 레벨]
     public int laborLevel;          // 노동력 레벨 (클릭당 금화) [cite: 12, 149]
     public int marketLevel;         // 시장 레벨 (자동 수익) [cite: 12, 151]
-    public int warehouseLevel;      // 창고 레벨 (시장 창고 최대 저장량)
+    public int warehouseLevel;      // 창고 레벨 — 8시간 만축 시 주머니 금화 상한(시트 warehouseMaxCapacity 등)
     public int farmLevel;           // 병참 레벨 (일일 병사 유지비 할인). JSON 호환용 필드명 유지.
     public int soldierGradeLevel;   // 병사 등급 레벨 (투자 효율) [cite: 12]
 
@@ -32,6 +32,12 @@ public class UserData
 
     /// <summary>본영 시장 주머니: 마지막 성벽 수거 이후 누적 시간(초). 최대 28,800(8시간). HUD 금화와 별도.</summary>
     public float homeMarketAccumulatedSec;
+
+    /// <summary>주머니에 실제 쌓인 금화. 창고 업그레이드 시 값이 점프하지 않도록 시간축과 별도 저장.</summary>
+    public double homeMarketPocketGold;
+
+    /// <summary>구세이브 1회: acc만 있고 pocket 필드가 없을 때 <see cref="homeMarketPocketGold"/>를 채움.</summary>
+    public bool homeMarketPocketGoldMigrated;
 
     // [M2E 데이터]
     public int dailyStepCount;      // 레거시 호환 (구 세이브)
@@ -68,5 +74,7 @@ public class UserData
         lastMarketCollectTime = 0;
         lastFarmCollectTime = 0;
         homeMarketAccumulatedSec = 0f;
+        homeMarketPocketGold = 0d;
+        homeMarketPocketGoldMigrated = false;
     }
 }

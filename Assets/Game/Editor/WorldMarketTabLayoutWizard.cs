@@ -517,7 +517,7 @@ public static class WorldMarketTabLayoutWizard
         var specs = new (string goName, WorldMarketCastleListFilter filter, string label)[]
         {
             ("FilterTab_All", WorldMarketCastleListFilter.All, "전체"),
-            ("FilterTab_My", WorldMarketCastleListFilter.MyHoldings, "내 투자"),
+            ("FilterTab_My", WorldMarketCastleListFilter.MyHoldings, "보유"),
             ("FilterTab_War", WorldMarketCastleListFilter.War, "전쟁 중"),
             ("FilterTab_Event", WorldMarketCastleListFilter.Event, "이벤트"),
             ("FilterTab_Premium", WorldMarketCastleListFilter.Premium, "우량"),

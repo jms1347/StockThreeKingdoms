@@ -193,6 +193,7 @@ MonoBehaviour:
   sellCaptionText: {fileID: 0}
   sellPriceText: {fileID: 0}
   taxRateHintText: {fileID: 0}
+  recruitmentDutySummaryText: {fileID: 0}
   changePctText: {fileID: 0}
   gradeExpectationText: {fileID: 0}
   chart7Dual: {fileID: 0}

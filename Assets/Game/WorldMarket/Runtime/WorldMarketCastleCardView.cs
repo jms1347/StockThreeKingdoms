@@ -13,6 +13,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
     static readonly Color RoiFallReadable = new Color(0.62f, 0.78f, 1f, 1f);
     static readonly Color PersonalGold = new Color(1f, 0.88f, 0.48f, 1f);
     static readonly Color PersonalGoldDim = new Color(0.85f, 0.78f, 0.55f, 1f);
+    /// <summary>MTS 스펙: 병력(군대) — 초록.</summary>
+    static readonly Color ArmyGreen = new Color(0.38f, 0.90f, 0.58f, 1f);
     static readonly Color BuyBoxUp = new Color(0.20f, 0.14f, 0.14f, 0.96f);
     static readonly Color BuyBoxDown = new Color(0.14f, 0.16f, 0.24f, 0.96f);
     static readonly Color InvestOutline = new Color(1f, 0.82f, 0.35f, 0.92f);
@@ -31,6 +33,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
     [Header("2구역 · 시세")]
     [SerializeField] TextMeshProUGUI buyLabelText;
     [SerializeField] TextMeshProUGUI buyPriceText;
+    /// <summary>주가 옆 징집·입성 의무 배지(비우면 BuyPriceBg 아래 자동 생성).</summary>
+    [SerializeField] TextMeshProUGUI recruitmentFeeBadgeText;
     [SerializeField] TextMeshProUGUI sentimentArrowText;
     [SerializeField] TextMeshProUGUI sentimentChangeText;
     [SerializeField] TextMeshProUGUI priceCauseTagText;
@@ -80,6 +84,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     bool _cachedColors;
     Sequence _warPulseSeq;
     Sequence _favorablePulseSeq;
+    Sequence _deployWarBounceSeq;
     GameObject _hqBadgeGo;
     TextMeshProUGUI _deployDisabledHintTmp;
 
@@ -90,6 +95,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         EnsureHqMoveButtonUi();
         EnsureHqBadgeUi();
         EnsureOverloadBadgeUi();
+        EnsureRecruitmentFeeBadgeUi();
         EnsureYieldTextsUi();
         EnsureDeployDisabledHintUi();
         CacheDefaultColors();
@@ -115,7 +121,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
     void OnCastleCardOpenDetail()
     {
         if (string.IsNullOrWhiteSpace(_boundCastleId)) return;
-        WorldMarketCastleSummarySheet.OpenCastle(_boundCastleId.Trim());
+        WorldMarketCastleDetailPopup.OpenCastle(_boundCastleId.Trim());
     }
 
     void WireActionButtons()
@@ -168,7 +174,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         var lab = new GameObject("Label", typeof(RectTransform), typeof(TextMeshProUGUI));
         lab.transform.SetParent(go.transform, false);
         var tmp = lab.GetComponent<TextMeshProUGUI>();
-        tmp.text = "이주하기";
+        tmp.text = "본영 이주";
         tmp.fontSize = 15;
         tmp.fontStyle = FontStyles.Bold;
         tmp.color = Color.white;
@@ -262,6 +268,65 @@ public class WorldMarketCastleCardView : MonoBehaviour
         tmp.richText = false;
         go.SetActive(false);
         _deployDisabledHintTmp = tmp;
+    }
+
+    void EnsureRecruitmentFeeBadgeUi()
+    {
+        if (recruitmentFeeBadgeText != null) return;
+        var z2 = transform.Find("MainRow/Zone2") ?? transform.Find("Left/MidRow/PriceBlock");
+        var buyBg = z2?.Find("BuyPriceBg");
+        if (buyBg == null) return;
+        var existing = buyBg.Find("RecruitmentDutyBadge");
+        if (existing != null)
+        {
+            recruitmentFeeBadgeText = existing.GetComponent<TextMeshProUGUI>();
+            return;
+        }
+
+        var hlg = buyBg.GetComponent<HorizontalLayoutGroup>();
+        if (hlg == null)
+        {
+            hlg = buyBg.gameObject.AddComponent<HorizontalLayoutGroup>();
+            hlg.childAlignment = TextAnchor.MiddleLeft;
+            hlg.spacing = 8f;
+            hlg.childControlWidth = false;
+            hlg.childControlHeight = true;
+            hlg.childForceExpandWidth = false;
+            hlg.childForceExpandHeight = false;
+        }
+
+        var go = new GameObject("RecruitmentDutyBadge", typeof(RectTransform), typeof(TextMeshProUGUI), typeof(LayoutElement));
+        go.transform.SetParent(buyBg, false);
+        go.transform.SetAsLastSibling();
+        var le = go.GetComponent<LayoutElement>();
+        le.minWidth = 56f;
+        le.preferredWidth = 72f;
+        le.preferredHeight = 28f;
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        if (TMP_Settings.defaultFontAsset != null) tmp.font = TMP_Settings.defaultFontAsset;
+        tmp.fontSize = 17;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.alignment = TextAlignmentOptions.MidlineLeft;
+        tmp.enableAutoSizing = false;
+        tmp.text = "";
+        recruitmentFeeBadgeText = tmp;
+    }
+
+    static Color RecruitmentFeeBadgeColor(float feePct)
+    {
+        if (feePct < 1f)
+            return new Color(0.45f, 0.98f, 0.72f, 1f);
+        if (feePct >= 10f)
+            return new Color(1f, 0.35f, 0.38f, 1f);
+        return new Color(0.93f, 0.94f, 0.96f, 1f);
+    }
+
+    void ApplyRecruitmentFeeBadge(float feePct)
+    {
+        if (recruitmentFeeBadgeText == null) return;
+        recruitmentFeeBadgeText.gameObject.SetActive(true);
+        recruitmentFeeBadgeText.text = $"⚖ {feePct:0.#}%";
+        recruitmentFeeBadgeText.color = RecruitmentFeeBadgeColor(feePct);
     }
 
     void EnsureOverloadBadgeUi()
@@ -415,6 +480,13 @@ public class WorldMarketCastleCardView : MonoBehaviour
         _warPulseSeq = null;
         _favorablePulseSeq?.Kill();
         _favorablePulseSeq = null;
+        _deployWarBounceSeq?.Kill();
+        _deployWarBounceSeq = null;
+        if (deployButton != null)
+        {
+            deployButton.transform.DOKill(false);
+            deployButton.transform.localScale = Vector3.one;
+        }
         // 카드 루트 anchoredPosition은 WorldMarketCastleVirtualList가 행 인덱스마다 설정함.
         // 여기서 복원하면 매 Bind마다 (0,0)으로 덮여 전부 한곳에 겹침.
         if (warTintImage != null)
@@ -587,6 +659,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         EnsureHqBadgeUi();
         EnsureOverloadBadgeUi();
         EnsureYieldTextsUi();
+        EnsureRecruitmentFeeBadgeUi();
         WireActionButtons();
         CacheDefaultColors();
 
@@ -605,6 +678,8 @@ public class WorldMarketCastleCardView : MonoBehaviour
             if (hqMoveButton != null)
                 hqMoveButton.gameObject.SetActive(false);
             ClearDeployDisabledHint();
+            if (recruitmentFeeBadgeText != null)
+                recruitmentFeeBadgeText.gameObject.SetActive(false);
             return;
         }
 
@@ -687,6 +762,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
                                       && Mathf.Abs(_lastBoundBuyPrice - buyPrice) < 0.5f;
         SetBuyPriceAnimated(buyPrice, scrollRefreshSamePrice);
 
+        float dutyPct = st != null ? st.recruitmentFee : (hasLive ? live.recruitmentFee : 0f);
+        ApplyRecruitmentFeeBadge(dutyPct);
+
         ResolveTrendUiFromLive(live, st, out bool trendUp, out bool trendFlat, out float pctDisplay, out bool riskDown);
 
         if (sentimentArrowText != null)
@@ -754,9 +832,9 @@ public class WorldMarketCastleCardView : MonoBehaviour
                 hqLbl.richText = true;
                 int mpCost = dm.GetTravelMarchPointsCostRounded(castleId);
                 if (mpCost > 0)
-                    hqLbl.text = "<color=#f0f0f0>이주</color>  <color=#ff4444>MP " + mpCost + "</color>";
+                    hqLbl.text = "<color=#ffffff>본영 이주</color>  <color=#ff4444>MP " + mpCost + "</color>";
                 else
-                    hqLbl.text = "이주하기";
+                    hqLbl.text = "본영 이주";
             }
         }
 
@@ -770,7 +848,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         if (troopsText != null)
         {
             troopsText.text = hasStock ? $"{troopCount:N0}명" : "";
-            troopsText.color = PersonalGold;
+            troopsText.color = hasStock ? ArmyGreen : PersonalGoldDim;
             troopsText.fontStyle = FontStyles.Bold;
             troopsText.fontSize = 20f;
         }
@@ -819,7 +897,7 @@ public class WorldMarketCastleCardView : MonoBehaviour
         {
             var dLbl = deployButton.GetComponentInChildren<TextMeshProUGUI>(true);
             if (dLbl != null)
-                dLbl.text = hasStock ? "관리" : "투자";
+                dLbl.text = hasStock ? "관리" : "투입";
         }
 
         if (distanceHintText != null)
@@ -987,10 +1065,19 @@ public class WorldMarketCastleCardView : MonoBehaviour
 
         if (glossOverlayImage != null)
         {
+            bool roiPos = hasUserStock && !war && !disaster
+                                       && DataManager.InstanceOrNull != null
+                                       && DataManager.InstanceOrNull.TryGetCastleRoiSellBasis(_boundCastleId,
+                                           out float rg)
+                                       && rg > 0.001f;
             bool glossOn = hasUserStock && !war && !disaster;
             glossOverlayImage.gameObject.SetActive(glossOn);
             if (glossOn)
-                glossOverlayImage.color = new Color(1f, 0.94f, 0.78f, 0.09f);
+            {
+                glossOverlayImage.color = roiPos
+                    ? new Color(0.22f, 0.88f, 0.48f, 0.12f)
+                    : new Color(1f, 0.94f, 0.78f, 0.09f);
+            }
         }
 
         if (cardBackgroundImage != null)
@@ -1029,6 +1116,16 @@ public class WorldMarketCastleCardView : MonoBehaviour
         }
         else if (warTintImage != null)
             warTintImage.gameObject.SetActive(false);
+
+        if (war && deployButton != null)
+        {
+            deployButton.transform.localScale = Vector3.one;
+            _deployWarBounceSeq = DOTween.Sequence();
+            _deployWarBounceSeq.Append(deployButton.transform.DOScale(1.07f, 0.32f).SetEase(Ease.OutQuad));
+            _deployWarBounceSeq.Append(deployButton.transform.DOScale(1f, 0.32f).SetEase(Ease.InQuad));
+            _deployWarBounceSeq.SetLoops(-1);
+            _deployWarBounceSeq.SetTarget(gameObject);
+        }
 
         if (!war && favorableEvent && statusIconFavorable != null && statusIconFavorable.activeSelf)
         {

@@ -81,7 +81,7 @@ public partial class DataManager
         s.goldReserve = (long)Math.Round(r);
     }
 
-    /// <summary>본영 시장·농장 레벨에 따라 본거지 성의 <see cref="CastleStateData.maxGarrison"/>만 증가시킵니다. AI 병력은 일일 리젠으로만 늘어납니다.</summary>
+    /// <summary>본영 시장 레벨에 따라 본거지 성의 <see cref="CastleStateData.maxGarrison"/> 보너스만 증가시킵니다. 병참(유지비 할인)은 주둔 상한과 무관합니다.</summary>
     public void RefreshHomeCastleMaxGarrisonFromUserBuildings()
     {
         if (!IsStateReady || string.IsNullOrWhiteSpace(_homeCastleId)) return;
@@ -93,7 +93,7 @@ public partial class DataManager
         int baseCap = Mathf.Max(2, m.maxTroops);
         int bonus = 0;
         if (gm?.currentUser != null)
-            bonus = gm.currentUser.marketLevel * 25 + gm.currentUser.farmLevel * 15; // farmLevel = 병참
+            bonus = gm.currentUser.marketLevel * 25;
 
         int target = Mathf.Max(s.maxGarrison, baseCap + bonus);
         if (target == s.maxGarrison) return;
@@ -168,6 +168,7 @@ public partial class DataManager
     static int MaxAffordableAmmBuy(CastleStateData s, double gold, float taxPercent)
     {
         if (!CastleAmmCore.IsInitialized(s) || gold < 0d) return 0;
+        double deployMul = RecruitmentDutyCalculator.DeployCostMultiplier(s.recruitmentFee);
         int hi = Mathf.Max(0, s.currentAiGarrison);
         int lo = 1;
         int best = 0;
@@ -178,7 +179,8 @@ public partial class DataManager
             if (!CastleAmmCore.TryComputeBuyGoldPrincipal(s, mid, out long principal)) { hi = mid - 1; continue; }
             double rate = Mathf.Clamp(taxPercent, 0f, 500f) / 100.0;
             long tax = (long)Math.Round(principal * rate);
-            long total = principal + tax;
+            long subtotal = principal + tax;
+            long total = (long)Math.Round(subtotal * deployMul);
             if ((double)total <= gold)
             {
                 best = mid;
@@ -271,7 +273,8 @@ public partial class DataManager
         if (!CastleAmmCore.TryComputeBuyGoldPrincipal(s, additionalTroops, out long principalGold)) return;
         double taxRate = Mathf.Clamp(s.castleTaxRatePercent, 0f, 500f) / 100.0;
         long taxGold = (long)Math.Round(principalGold * taxRate);
-        long goldCost = principalGold + taxGold;
+        double dutyMul = RecruitmentDutyCalculator.DeployCostMultiplier(s.recruitmentFee);
+        long goldCost = (long)Math.Round((principalGold + taxGold) * dutyMul);
         float effectivePerTroop = additionalTroops > 0 ? (float)(goldCost / (double)additionalTroops) : 0f;
 
         var gmSpend = GameManager.InstanceOrNull;
@@ -317,7 +320,8 @@ public partial class DataManager
         if (!CastleAmmCore.IsInitialized(s)) return false;
         if (CastleAmmCore.TryComputeSellGoldProceeds(s, troops, out long recv))
         {
-            totalGold = Math.Max(0L, recv);
+            double rMul = RecruitmentDutyCalculator.RecallPayoutMultiplier(s.recruitmentFee);
+            totalGold = Math.Max(0L, (long)Math.Floor(recv * rMul));
             unitFaceGold = troops > 0 ? Math.Max(0L, totalGold / troops) : 0L;
             return true;
         }
@@ -325,7 +329,8 @@ public partial class DataManager
         if (s.currentAiGarrison <= 0)
         {
             float face = EvaluateBasePriceForCastle(castleId);
-            totalGold = Math.Max(0L, (long)Math.Floor(face * troops));
+            double rMul = RecruitmentDutyCalculator.RecallPayoutMultiplier(s.recruitmentFee);
+            totalGold = Math.Max(0L, (long)Math.Floor(face * troops * rMul));
             unitFaceGold = troops > 0 ? Math.Max(0L, totalGold / troops) : 0L;
             return true;
         }
@@ -355,6 +360,8 @@ public partial class DataManager
             float face = EvaluateBasePriceForCastle(castleId);
             payoutGold = Math.Max(0L, (long)Math.Floor(face * recall));
         }
+
+        payoutGold = Math.Max(0L, (long)Math.Floor(payoutGold * RecruitmentDutyCalculator.RecallPayoutMultiplier(s.recruitmentFee)));
 
         CastleAmmCore.ApplySellFill(s, recall);
         s.userDeployedTroops = have - recall;
@@ -388,7 +395,8 @@ public partial class DataManager
         if (!CastleAmmCore.TryComputeBuyGoldPrincipal(s, troops, out principalGold)) return false;
         double rate = Mathf.Clamp(s.castleTaxRatePercent, 0f, 500f) / 100.0;
         taxGold = (long)Math.Round(principalGold * rate);
-        totalGold = principalGold + taxGold;
+        double dutyMul = RecruitmentDutyCalculator.DeployCostMultiplier(s.recruitmentFee);
+        totalGold = (long)Math.Round((principalGold + taxGold) * dutyMul);
         return true;
     }
 
@@ -464,15 +472,22 @@ public partial class DataManager
             return false;
         }
 
-        totalGoldCost = (long)Math.Ceiling(q.UnitPrice * recruitCount);
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.TryGetValue(castleId, out var stRec) || stRec == null)
+        {
+            reason = "성 데이터를 찾을 수 없습니다.";
+            return false;
+        }
+
+        double dutyMul = RecruitmentDutyCalculator.DeployCostMultiplier(stRec.recruitmentFee);
+        totalGoldCost = (long)Math.Ceiling(q.UnitPrice * recruitCount * dutyMul);
         if (!gm.UseGold(totalGoldCost))
         {
             reason = "금화가 부족합니다.";
             return false;
         }
 
-        castleId = castleId.Trim();
-        var s = castleStateDataMap[castleId];
+        var s = stRec;
         s.userDeployedTroops = Mathf.Max(0, s.userDeployedTroops + recruitCount);
         s.currentPopulation = Mathf.Max(0, s.currentPopulation - recruitCount);
 
@@ -524,15 +539,22 @@ public partial class DataManager
             return false;
         }
 
-        totalGoldCost = (long)Math.Ceiling(q.UnitPrice * recruitCount);
+        castleId = castleId.Trim();
+        if (!castleStateDataMap.TryGetValue(castleId, out var stStock) || stStock == null)
+        {
+            reason = "성 데이터를 찾을 수 없습니다.";
+            return false;
+        }
+
+        double dutyMul = RecruitmentDutyCalculator.DeployCostMultiplier(stStock.recruitmentFee);
+        totalGoldCost = (long)Math.Ceiling(q.UnitPrice * recruitCount * dutyMul);
         if (!gm.UseGold(totalGoldCost))
         {
             reason = "금화가 부족합니다.";
             return false;
         }
 
-        castleId = castleId.Trim();
-        var s = castleStateDataMap[castleId];
+        var s = stStock;
         s.userDeployedTroops = Mathf.Max(0, s.userDeployedTroops + recruitCount);
         s.currentPopulation = Mathf.Max(0, s.currentPopulation - recruitCount);
 
@@ -583,7 +605,8 @@ public partial class DataManager
             return false;
         }
 
-        gainedGold = (long)Math.Floor(q.UnitPrice * dischargeCount);
+        double rMul = RecruitmentDutyCalculator.RecallPayoutMultiplier(s.recruitmentFee);
+        gainedGold = (long)Math.Floor(q.UnitPrice * dischargeCount * rMul);
         var gm = GameManager.InstanceOrNull;
         if (gm == null)
         {
@@ -632,7 +655,8 @@ public partial class DataManager
         dischargeCount = Mathf.Min(dischargeCount, have);
         float unit = Mathf.Max(0.01f, s.currentBuyPrice);
         double gross = unit * dischargeCount;
-        gainedGold = (long)Math.Floor(gross * 0.95d);
+        double rMul = RecruitmentDutyCalculator.RecallPayoutMultiplier(s.recruitmentFee);
+        gainedGold = (long)Math.Floor(gross * 0.95d * rMul);
 
         var gm = GameManager.InstanceOrNull;
         if (gm == null)

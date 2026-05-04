@@ -327,11 +327,13 @@ public class HomeUIController : MonoBehaviour
         {
             _controller?.UpgradeWarehouse();
             UpdateWarehouseUI();
+            GlobalUIManager.InstanceOrNull?.RefreshTopBarFromGameManager();
         });
         WireHoldRepeat(logisticsUpgradeButton, () =>
         {
             _controller?.UpgradeLogistics();
             UpdateLogisticsUI();
+            RefreshMilitaryPreview();
         });
 
         if (stepRewardButtons != null && _controller != null)
@@ -722,13 +724,24 @@ public class HomeUIController : MonoBehaviour
         if (logisticsLabelText == null || gm?.currentUser == null) return;
         int lv = gm.currentUser.farmLevel;
         double c = HomeController.GetLogisticsUpgradeGoldCost(lv);
-        logisticsLabelText.text = $"병참 Lv.{lv}\n유지비 할인 계열\n업그레이드 {c:F0} G";
+        double pct = 0d;
+        var dm = DataManager.InstanceOrNull;
+        if (dm != null && dm.IsReady)
+        {
+            var d = dm.GetLevelData(lv);
+            if (d != null) pct = Math.Max(0d, Math.Min(50d, d.logisticsDiscountRate));
+        }
+
+        logisticsLabelText.text =
+            $"병참 Lv.{lv}\n일일 유지비 −{pct:0.#}%\n업그레이드 {c:F0} G";
     }
 
     void UpdateWarehouseUI()
     {
         if (warehouseLabelText == null) return;
-        warehouseLabelText.text = "창고\n(레거시 한도 UI — 추후 정리)";
+        double cap = HomeController.ResolveMarketPocketGoldCap();
+        string capLine = cap > 0d ? $"8h 만축 주머니 상한: {cap:N0} G" : "시트 한도 확인 (창고·시장)";
+        warehouseLabelText.text = $"창고 Lv.{GameManager.InstanceOrNull?.currentUser?.warehouseLevel ?? 0}\n{capLine}";
     }
 
     void OnVisitorEventRaised(string title, string body)

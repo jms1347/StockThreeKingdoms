@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>최근 7일 시세용 단일 라인 + 하단 그라데이션 영역(MTS 상세 차트). 선택적으로 지지/저항 가격대 수평선.</summary>
-public class UIPriceLine7DayGraphic : MaskableGraphic
+[RequireComponent(typeof(CanvasRenderer))]
+public class UIPriceLine7DayGraphic : MaskableGraphic, IPointerClickHandler
 {
     [SerializeField] float lineThickness = 2f;
     [SerializeField, FormerlySerializedAs("lineColor")]
@@ -40,13 +43,36 @@ public class UIPriceLine7DayGraphic : MaskableGraphic
     float _wallSuY = -1f;
     float _wallReY = -1f;
 
+    /// <summary>Y축(차트 영역) 클릭 시 해당 높이의 가격(G). 입성료 표시 등에 사용.</summary>
+    public event Action<float> PriceClicked;
+
     static readonly Color32 WallSupportColor = new Color32(90, 200, 255, 130);
     static readonly Color32 WallResistColor = new Color32(255, 170, 70, 130);
 
     protected override void Awake()
     {
         base.Awake();
+        if (GetComponent<CanvasRenderer>() == null)
+            gameObject.AddComponent<CanvasRenderer>();
         raycastTarget = false;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (_norm == null || _norm.Length < 2 || _rangeV < 1e-6f)
+            return;
+        var r = rectTransform.rect;
+        float h = r.height;
+        float padY = 6f;
+        float innerH = h - padY * 2f;
+        if (innerH < 2f)
+            return;
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform, eventData.position, eventData.pressEventCamera, out var local))
+            return;
+        float vn = Mathf.InverseLerp(padY, padY + innerH, local.y);
+        float price = _minV + Mathf.Clamp01(vn) * _rangeV;
+        PriceClicked?.Invoke(Mathf.Max(1f, price));
     }
 
     public void SetPrices(IReadOnlyList<float> sevenDailyCloses)

@@ -29,6 +29,17 @@ public partial class DataManager
         float spot = Mathf.Max(1f, CalculateCastleQuote(s));
         float anchor = s.buyPricePrevDayClose > 0.5f ? s.buyPricePrevDayClose : spot * 0.94f;
 
+        if (s.historyPrice7Day != null && s.historyPrice7Day.Count > 0)
+        {
+            int n = Mathf.Min(7, s.historyPrice7Day.Count);
+            for (int i = s.historyPrice7Day.Count - n; i < s.historyPrice7Day.Count; i++)
+                result.Add(Mathf.Max(1f, s.historyPrice7Day[i]));
+            while (result.Count < 7)
+                result.Insert(0, result[0]);
+            result[6] = spot;
+            return result;
+        }
+
         var sent = s.historySentiment7Day;
         if (sent == null || sent.Count < 7)
         {

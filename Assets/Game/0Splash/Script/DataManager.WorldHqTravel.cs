@@ -5,6 +5,8 @@ public partial class DataManager
 {
     public event Action OnHomeCastleChanged;
     public event Action OnTravelGaugeChanged;
+    /// <summary>본영 이주가 완료되어 <see cref="HomeCastleId"/>가 갱신된 직후(목표 성 ID).</summary>
+    public event Action<string> OnHqRelocationCompleted;
 
     public string HomeCastleId => _homeCastleId ?? "";
     public float TravelGaugePoints => _travelGaugePoints;
@@ -24,12 +26,15 @@ public partial class DataManager
     {
         _pendingHqMoveCastleId = (targetCastleId ?? "").Trim();
         _pendingHqMoveCost = Mathf.Max(0f, costPoints);
+        OnTravelGaugeChanged?.Invoke();
     }
 
     public void ClearPendingHqMove()
     {
         _pendingHqMoveCastleId = "";
         _pendingHqMoveCost = 0f;
+        _travelGaugeFromMpInjections = 0f;
+        OnTravelGaugeChanged?.Invoke();
     }
 
     /// <summary>이동 게이지가 이주 비용 이상이면 차감·본영 갱신 후 대기 상태를 해제합니다.</summary>
@@ -67,9 +72,41 @@ public partial class DataManager
 
         gm.AddMarchPoints(-consumedMp);
         _travelGaugePoints += consumedMp;
+        _travelGaugeFromMpInjections += consumedMp;
         _stateDirty = true;
         OnTravelGaugeChanged?.Invoke();
         TryCompletePendingHqMoveIfReady();
+        return true;
+    }
+
+    /// <summary>
+    /// MP 주입으로 넣은 포인트만큼 이동 게이지에서 되돌려 MP를 회수합니다(− 버튼).
+    /// 걸음·시간 자동 충전분은 건드리지 않습니다.
+    /// </summary>
+    public bool TryRefundMarchInjectionChunk(int chunkPoints, out int refundedMp)
+    {
+        refundedMp = 0;
+        if (!IsStateReady || !HasPendingHqMove || chunkPoints <= 0)
+            return false;
+
+        int capFromMp = Mathf.FloorToInt(_travelGaugeFromMpInjections);
+        if (capFromMp <= 0)
+            return false;
+
+        int take = Mathf.Min(chunkPoints, capFromMp, Mathf.FloorToInt(_travelGaugePoints));
+        if (take <= 0)
+            return false;
+
+        var gm = GameManager.InstanceOrNull;
+        if (gm?.currentUser == null)
+            return false;
+
+        _travelGaugePoints -= take;
+        _travelGaugeFromMpInjections -= take;
+        gm.AddMarchPoints(take);
+        refundedMp = take;
+        _stateDirty = true;
+        OnTravelGaugeChanged?.Invoke();
         return true;
     }
 
@@ -92,7 +129,12 @@ public partial class DataManager
         if (string.IsNullOrWhiteSpace(_homeCastleId)) return 0f;
         float d = GetDistance(_homeCastleId, targetCastleId);
         if (d < 0f) return float.MaxValue;
-        return Mathf.Max(0f, d / 100f * travelPointsPer100Distance);
+        float raw = Mathf.Max(0f, d / 100f * travelPointsPer100Distance);
+        float step = TravelPointsPerStep;
+        if (step <= 1e-5f || minHqTravelCostSteps <= 0)
+            return raw;
+        float minBySteps = minHqTravelCostSteps * step;
+        return Mathf.Max(raw, minBySteps);
     }
 
     /// <summary>UI 표시용 — 거리 기반 이동 비용을 정수 MP로 반올림(이동 게이지 차감량과 동일 스케일).</summary>
@@ -166,6 +208,7 @@ public partial class DataManager
         FlushLiveScriptableObjects();
         OnHomeCastleChanged?.Invoke();
         OnTravelGaugeChanged?.Invoke();
+        OnHqRelocationCompleted?.Invoke(targetCastleId);
         RequestWorldUiRefresh();
     }
 

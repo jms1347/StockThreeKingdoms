@@ -373,6 +373,9 @@ public class WorldHqTravelHud : MonoBehaviour
 
     void SetTravelPanelVisible(bool visible)
     {
+        if (visible && GlobalMarchProgressStrip.InstanceOrNull != null)
+            visible = false;
+
         ResolveHudRoot();
         if (hudRoot != null)
             hudRoot.gameObject.SetActive(visible);
