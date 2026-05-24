@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c4a90db64d7b347ba85055b410b8df, type: 3}
   m_Name: UserPortfolioSo
   m_EditorClassIdentifier: Assembly-CSharp::UserPortfolioSo
-  totalGold: 3078
+  totalGold: 2598
   holdings: []
   homeCastleId: C55
-  travelGaugePoints: 61.66882
+  travelGaugePoints: 253.50644
   currentStepCount: 33000

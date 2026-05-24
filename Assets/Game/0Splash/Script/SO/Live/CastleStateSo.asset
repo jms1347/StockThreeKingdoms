@@ -14,43 +14,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CastleStateSo
   castles:
   - castleId: C01
-    currentPopulation: 13466232
+    currentPopulation: 13466229
     currentSentiment: 200
     isWar: 1
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: U_006
     currentLord: 1
-    currentBuyPrice: 4916437.5
+    currentBuyPrice: 4916292
     castleTaxRatePercent: 5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 67500
-    currentAiGarrison: 67497
-    goldReserve: 219528694946
-    constantK: 14817528322762500
+    currentAiGarrison: 67480
+    goldReserve: 219583988037
+    constantK: 14817527512762500
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 13479732
-    - 13472982
-    - 13466234
-    - 13466233
-    - 13466232
-    - 13466232
-    - 13466232
+    - 13466229
+    - 13466229
+    - 13466229
+    - 13466229
+    - 13466229
+    - 13466229
+    - 13466229
     historySentiment7Day:
-    - 168.892
-    - 182.534
-    - 196.176
+    - 200
+    - 200
+    - 200
     - 200
     - 200
     - 200
     - 200
     historyPrice7Day:
-    - 4916292
-    - 4916437.5
-    - 4916583.5
-    buyPricePrevDayClose: 4916583.5
+    - 4918186.5
+    - 4918331.5
+    - 4918478.5
+    - 4918623.5
+    - 4918769
+    - 4918914.5
+    - 4919061.5
+    buyPricePrevDayClose: 4919061.5
     recruitmentFee: 0
   - castleId: C02
     currentPopulation: 10239779
@@ -86,6 +90,10 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
+    - 8651462
+    - 8651462
+    - 8651462
+    - 8651462
     - 8651462
     - 8651462
     - 8651462
@@ -128,24 +136,28 @@ MonoBehaviour:
     - 4669361.5
     - 4669361.5
     - 4669361.5
+    - 4669361.5
+    - 4669361.5
+    - 4669361.5
+    - 4669361.5
     buyPricePrevDayClose: 4669361.5
     recruitmentFee: 0
   - castleId: C04
     currentPopulation: 9600000
-    currentSentiment: 159.79999
+    currentSentiment: 165.77998
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 8403301
+    currentBuyPrice: 8403300
     castleTaxRatePercent: 4
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 48000
     currentAiGarrison: 24000
-    goldReserve: 193969092000
-    constantK: 4655258208000000
+    goldReserve: 193969080000
+    constantK: 4655257920000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 9600000
@@ -156,22 +168,26 @@ MonoBehaviour:
     - 9600000
     - 9600000
     historySentiment7Day:
-    - 135.88
-    - 141.86
-    - 147.84
-    - 153.81999
-    - 159.79999
-    - 159.79999
-    - 159.79999
+    - 165.77998
+    - 165.77998
+    - 165.77998
+    - 165.77998
+    - 165.77998
+    - 165.77998
+    - 165.77998
     historyPrice7Day:
-    - 8403301
-    - 8403301
-    - 8403301
-    buyPricePrevDayClose: 8403301
+    - 8403300
+    - 8403300
+    - 8403300
+    - 8403300
+    - 8403300
+    - 8403300
+    - 8403300
+    buyPricePrevDayClose: 8403300
     recruitmentFee: 0
   - castleId: C05
     currentPopulation: 4840000
-    currentSentiment: 23
+    currentSentiment: 12
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -195,14 +211,18 @@ MonoBehaviour:
     - 4840000
     - 4840000
     historySentiment7Day:
-    - 67
-    - 56
-    - 45
-    - 34
-    - 23
-    - 23
-    - 23
+    - 12
+    - 12
+    - 12
+    - 12
+    - 12
+    - 12
+    - 12
     historyPrice7Day:
+    - 3689031.2
+    - 3689031.2
+    - 3689031.2
+    - 3689031.2
     - 3689031.2
     - 3689031.2
     - 3689031.2
@@ -245,11 +265,15 @@ MonoBehaviour:
     - 2252231.8
     - 2252231.8
     - 2252231.8
+    - 2252231.8
+    - 2252231.8
+    - 2252231.8
+    - 2252231.8
     buyPricePrevDayClose: 2252231.8
     recruitmentFee: 0
   - castleId: C07
     currentPopulation: 12149779
-    currentSentiment: 162.68002
+    currentSentiment: 168.94803
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
@@ -261,8 +285,8 @@ MonoBehaviour:
     averagePurchasePrice: 0
     maxGarrison: 60750
     currentAiGarrison: 30375
-    goldReserve: 353619251250
-    constantK: 10741184756718750
+    goldReserve: 353619239250
+    constantK: 10741184392218750
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 12149779
@@ -273,14 +297,18 @@ MonoBehaviour:
     - 12149779
     - 12149779
     historySentiment7Day:
-    - 137.608
-    - 143.876
-    - 150.14401
-    - 156.41202
-    - 162.68002
-    - 162.68002
-    - 162.68002
+    - 168.94803
+    - 168.94803
+    - 168.94803
+    - 168.94803
+    - 168.94803
+    - 168.94803
+    - 168.94803
     historyPrice7Day:
+    - 11642169
+    - 11642169
+    - 11642169
+    - 11642169
     - 11642169
     - 11642169
     - 11642169
@@ -312,10 +340,10 @@ MonoBehaviour:
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
@@ -323,24 +351,28 @@ MonoBehaviour:
     - 1.0001003
     - 1.0001003
     - 1.0001003
+    - 1.0001003
+    - 1.0001003
+    - 1.0001003
+    - 1.0001003
     buyPricePrevDayClose: 1.0001003
     recruitmentFee: 0
   - castleId: C09
     currentPopulation: 3420000
-    currentSentiment: 151.88004
+    currentSentiment: 157.06804
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 2486505.5
+    currentBuyPrice: 2486504.2
     castleTaxRatePercent: 2.2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 17100
     currentAiGarrison: 8550
-    goldReserve: 21257135812
-    constantK: 181748511192600
+    goldReserve: 21257123812
+    constantK: 181748408592600
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 3420000
@@ -351,18 +383,22 @@ MonoBehaviour:
     - 3420000
     - 3420000
     historySentiment7Day:
-    - 131.12802
-    - 136.31602
-    - 141.50403
-    - 146.69203
-    - 151.88004
-    - 151.88004
-    - 151.88004
+    - 157.06804
+    - 157.06804
+    - 157.06804
+    - 157.06804
+    - 157.06804
+    - 157.06804
+    - 157.06804
     historyPrice7Day:
-    - 2486505.5
-    - 2486505.5
-    - 2486505.5
-    buyPricePrevDayClose: 2486505.5
+    - 2486504.2
+    - 2486504.2
+    - 2486504.2
+    - 2486504.2
+    - 2486504.2
+    - 2486504.2
+    - 2486504.2
+    buyPricePrevDayClose: 2486504.2
     recruitmentFee: 0
   - castleId: C10
     currentPopulation: 7680000
@@ -390,10 +426,10 @@ MonoBehaviour:
     - 7680000
     - 7680000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
@@ -401,24 +437,28 @@ MonoBehaviour:
     - 1.6500859
     - 1.6500859
     - 1.6500859
+    - 1.6500859
+    - 1.6500859
+    - 1.6500859
+    - 1.6500859
     buyPricePrevDayClose: 1.6500859
     recruitmentFee: 0
   - castleId: C11
     currentPopulation: 7425000
-    currentSentiment: 163.88
+    currentSentiment: 170.268
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 2
-    currentBuyPrice: 6926579.5
+    currentBuyPrice: 6926579
     castleTaxRatePercent: 3.8
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 37125
     currentAiGarrison: 18562
-    goldReserve: 128564245706
-    constantK: 2386409528794772
+    goldReserve: 128564233706
+    constantK: 2386409306050772
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 7425000
@@ -429,18 +469,22 @@ MonoBehaviour:
     - 7425000
     - 7425000
     historySentiment7Day:
-    - 138.328
-    - 144.716
-    - 151.104
-    - 157.492
-    - 163.88
-    - 163.88
-    - 163.88
+    - 170.268
+    - 170.268
+    - 170.268
+    - 170.268
+    - 170.268
+    - 170.268
+    - 170.268
     historyPrice7Day:
-    - 6926579.5
-    - 6926579.5
-    - 6926579.5
-    buyPricePrevDayClose: 6926579.5
+    - 6926579
+    - 6926579
+    - 6926579
+    - 6926579
+    - 6926579
+    - 6926579
+    - 6926579
+    buyPricePrevDayClose: 6926579
     recruitmentFee: 0
   - castleId: C12
     currentPopulation: 2675000
@@ -478,11 +522,15 @@ MonoBehaviour:
     historyPrice7Day:
     - 2135675
     - 2135675
-    - 2135675
-    buyPricePrevDayClose: 2135675
+    - 1971812.5
+    - 1971812.5
+    - 1971812.5
+    - 1971812.5
+    - 1971812.5
+    buyPricePrevDayClose: 1971812.5
     recruitmentFee: 0
   - castleId: C13
-    currentPopulation: 11446294
+    currentPopulation: 11446291
     currentSentiment: 100
     isWar: 1
     isDisaster: 0
@@ -494,18 +542,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 57375
-    currentAiGarrison: 57372
-    goldReserve: 157228399695
+    currentAiGarrison: 57355
+    goldReserve: 157275002132
     constantK: 9020507747304754
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 11452036
-    - 11446298
-    - 11446296
-    - 11446295
-    - 11446294
-    - 11446294
-    - 11446294
+    - 11446291
+    - 11446291
+    - 11446291
+    - 11446291
+    - 11446291
+    - 11446291
+    - 11446291
     historySentiment7Day:
     - 100
     - 100
@@ -515,27 +563,31 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
-    - 4521444
-    - 4521601
-    - 4521759
-    buyPricePrevDayClose: 4521759
+    - 4523493.5
+    - 4523651
+    - 4523808
+    - 4523966
+    - 4524123.5
+    - 4524281.5
+    - 4524439.5
+    buyPricePrevDayClose: 4524439.5
     recruitmentFee: 0
   - castleId: C14
     currentPopulation: 8320000
-    currentSentiment: 157.40002
+    currentSentiment: 163.14003
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 3
-    currentBuyPrice: 6950237
+    currentBuyPrice: 6950236.5
     castleTaxRatePercent: 4
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 41600
     currentAiGarrison: 20800
-    goldReserve: 144557976800
-    constantK: 3006805917440000
+    goldReserve: 144557964800
+    constantK: 3006805667840000
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 8320000
@@ -546,22 +598,26 @@ MonoBehaviour:
     - 8320000
     - 8320000
     historySentiment7Day:
-    - 134.44
-    - 140.18001
-    - 145.92001
-    - 151.66002
-    - 157.40002
-    - 157.40002
-    - 157.40002
+    - 163.14003
+    - 163.14003
+    - 163.14003
+    - 163.14003
+    - 163.14003
+    - 163.14003
+    - 163.14003
     historyPrice7Day:
-    - 6950237
-    - 6950237
-    - 6950237
-    buyPricePrevDayClose: 6950237
+    - 6950236.5
+    - 6950236.5
+    - 6950236.5
+    - 6950236.5
+    - 6950236.5
+    - 6950236.5
+    - 6950236.5
+    buyPricePrevDayClose: 6950236.5
     recruitmentFee: 0
   - castleId: C16
     currentPopulation: 9449558
-    currentSentiment: 173.71997
+    currentSentiment: 181.09196
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
@@ -573,8 +629,8 @@ MonoBehaviour:
     averagePurchasePrice: 0
     maxGarrison: 47250
     currentAiGarrison: 23625
-    goldReserve: 211029838125
-    constantK: 4985579925703125
+    goldReserve: 211029826125
+    constantK: 4985579642203125
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 9449558
@@ -585,14 +641,18 @@ MonoBehaviour:
     - 9449558
     - 9449558
     historySentiment7Day:
-    - 144.232
-    - 151.60399
-    - 158.97598
-    - 166.34798
-    - 173.71997
-    - 173.71997
-    - 173.71997
+    - 181.09196
+    - 181.09196
+    - 181.09196
+    - 181.09196
+    - 181.09196
+    - 181.09196
+    - 181.09196
     historyPrice7Day:
+    - 8932858
+    - 8932858
+    - 8932858
+    - 8932858
     - 8932858
     - 8932858
     - 8932858
@@ -635,24 +695,28 @@ MonoBehaviour:
     - 3370240.8
     - 3370240.8
     - 3370240.8
+    - 3370240.8
+    - 3370240.8
+    - 3370240.8
+    - 3370240.8
     buyPricePrevDayClose: 3370240.8
     recruitmentFee: 0
   - castleId: C18
     currentPopulation: 6049558
-    currentSentiment: 160.93997
+    currentSentiment: 167.03397
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 4669354.5
+    currentBuyPrice: 4669353.5
     castleTaxRatePercent: 3.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 30250
     currentAiGarrison: 15125
-    goldReserve: 70619314188
-    constantK: 1068117127093500
+    goldReserve: 70619302188
+    constantK: 1068116945593500
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 6049558
@@ -663,21 +727,25 @@ MonoBehaviour:
     - 6049558
     - 6049558
     historySentiment7Day:
-    - 136.564
-    - 142.65799
-    - 148.75198
-    - 154.84598
-    - 160.93997
-    - 160.93997
-    - 160.93997
+    - 167.03397
+    - 167.03397
+    - 167.03397
+    - 167.03397
+    - 167.03397
+    - 167.03397
+    - 167.03397
     historyPrice7Day:
-    - 4669354.5
-    - 4669354.5
-    - 4669354.5
-    buyPricePrevDayClose: 4669354.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    buyPricePrevDayClose: 4669353.5
     recruitmentFee: 0
   - castleId: C19
-    currentPopulation: 6638347
+    currentPopulation: 6638344
     currentSentiment: 112.656006
     isWar: 1
     isDisaster: 0
@@ -689,18 +757,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 33275
-    currentAiGarrison: 33272
-    goldReserve: 42953297836
+    currentAiGarrison: 33255
+    goldReserve: 42975255619
     constantK: 1429142125614782
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6641688
-    - 6638360
-    - 6638349
-    - 6638348
-    - 6638347
-    - 6638347
-    - 6638347
+    - 6638344
+    - 6638344
+    - 6638344
+    - 6638344
+    - 6638344
+    - 6638344
+    - 6638344
     historySentiment7Day:
     - 112.656006
     - 112.656006
@@ -710,10 +778,14 @@ MonoBehaviour:
     - 112.656006
     - 112.656006
     historyPrice7Day:
-    - 2129787
-    - 2129915.5
-    - 2130043.5
-    buyPricePrevDayClose: 2130043.5
+    - 2131452.8
+    - 2131581.8
+    - 2131708.5
+    - 2131836.5
+    - 2131965.8
+    - 2132094.5
+    - 2132222.5
+    buyPricePrevDayClose: 2132222.5
     recruitmentFee: 0
   - castleId: C20
     currentPopulation: 1499558
@@ -741,14 +813,18 @@ MonoBehaviour:
     - 1499558
     - 1499558
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0002668
+    - 1.0002668
+    - 1.0002668
+    - 1.0002668
     - 1.0002668
     - 1.0002668
     - 1.0002668
@@ -756,20 +832,20 @@ MonoBehaviour:
     recruitmentFee: 0
   - castleId: C21
     currentPopulation: 2675000
-    currentSentiment: 167.23999
+    currentSentiment: 173.96399
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 1857090.9
+    currentBuyPrice: 1857089.1
     castleTaxRatePercent: 1.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 13375
     currentAiGarrison: 6687
-    goldReserve: 12416509733
-    constantK: 83029200584571
+    goldReserve: 12416497733
+    constantK: 83029120340571
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 2675000
@@ -780,35 +856,39 @@ MonoBehaviour:
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 140.344
-    - 147.068
-    - 153.79199
-    - 160.51599
-    - 167.23999
-    - 167.23999
-    - 167.23999
+    - 173.96399
+    - 173.96399
+    - 173.96399
+    - 173.96399
+    - 173.96399
+    - 173.96399
+    - 173.96399
     historyPrice7Day:
-    - 1857090.9
-    - 1857090.9
-    - 1857090.9
-    buyPricePrevDayClose: 1857090.9
+    - 1857089.1
+    - 1857089.1
+    - 2135652.5
+    - 2135652.5
+    - 2135652.5
+    - 2135652.5
+    - 2135652.5
+    buyPricePrevDayClose: 2135652.5
     recruitmentFee: 0
   - castleId: C22
     currentPopulation: 5129779
-    currentSentiment: 152.35999
+    currentSentiment: 157.59598
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 3816796.8
+    currentBuyPrice: 3816795.8
     castleTaxRatePercent: 2.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 25650
     currentAiGarrison: 12825
-    goldReserve: 48946601512
-    constantK: 627740164391400
+    goldReserve: 48946589512
+    constantK: 627740010491400
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 5129779
@@ -819,35 +899,39 @@ MonoBehaviour:
     - 5129779
     - 5129779
     historySentiment7Day:
-    - 131.416
-    - 136.65201
-    - 141.888
-    - 147.124
-    - 152.35999
-    - 152.35999
-    - 152.35999
+    - 157.59598
+    - 157.59598
+    - 157.59598
+    - 157.59598
+    - 157.59598
+    - 157.59598
+    - 157.59598
     historyPrice7Day:
-    - 3816796.8
-    - 3816796.8
-    - 3816796.8
-    buyPricePrevDayClose: 3816796.8
+    - 3816795.8
+    - 3816795.8
+    - 3816795.8
+    - 3816795.8
+    - 3816795.8
+    - 3816795.8
+    - 3816795.8
+    buyPricePrevDayClose: 3816795.8
     recruitmentFee: 0
   - castleId: C23
     currentPopulation: 3989779
-    currentSentiment: 164.66003
+    currentSentiment: 171.12604
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 2926656.2
+    currentBuyPrice: 2926655.2
     castleTaxRatePercent: 2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 19950
     currentAiGarrison: 9975
-    goldReserve: 29190470625
-    constantK: 291174944484375
+    goldReserve: 29190458625
+    constantK: 291174824784375
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 3989779
@@ -858,35 +942,39 @@ MonoBehaviour:
     - 3989779
     - 3989779
     historySentiment7Day:
-    - 138.79602
-    - 145.26202
-    - 151.72803
-    - 158.19403
-    - 164.66003
-    - 164.66003
-    - 164.66003
+    - 171.12604
+    - 171.12604
+    - 171.12604
+    - 171.12604
+    - 171.12604
+    - 171.12604
+    - 171.12604
     historyPrice7Day:
-    - 2926656.2
-    - 2926656.2
-    - 2926656.2
-    buyPricePrevDayClose: 2926656.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    buyPricePrevDayClose: 2926655.2
     recruitmentFee: 0
   - castleId: C24
     currentPopulation: 4560000
-    currentSentiment: 160.76004
+    currentSentiment: 166.83604
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 3370230
+    currentBuyPrice: 3370229
     castleTaxRatePercent: 2.2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 22800
     currentAiGarrison: 11400
-    goldReserve: 38417253000
-    constantK: 437956684200000
+    goldReserve: 38417241000
+    constantK: 437956547400000
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 4560000
@@ -897,18 +985,22 @@ MonoBehaviour:
     - 4560000
     - 4560000
     historySentiment7Day:
-    - 136.45602
-    - 142.53203
-    - 148.60803
-    - 154.68404
-    - 160.76004
-    - 160.76004
-    - 160.76004
+    - 166.83604
+    - 166.83604
+    - 166.83604
+    - 166.83604
+    - 166.83604
+    - 166.83604
+    - 166.83604
     historyPrice7Day:
-    - 3370230
-    - 3370230
-    - 3370230
-    buyPricePrevDayClose: 3370230
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    buyPricePrevDayClose: 3370229
     recruitmentFee: 0
   - castleId: C25
     currentPopulation: 3209779
@@ -936,35 +1028,39 @@ MonoBehaviour:
     - 3209779
     - 3209779
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
     - 0.9604139
     - 0.9604139
-    - 0.9604139
-    buyPricePrevDayClose: 0.9604139
+    - 0.8721676
+    - 0.8721676
+    - 0.8721676
+    - 0.8721676
+    - 0.8721676
+    buyPricePrevDayClose: 0.8721676
     recruitmentFee: 0
   - castleId: C26
     currentPopulation: 5444558
-    currentSentiment: 169.16
+    currentSentiment: 176.076
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 4177737.5
+    currentBuyPrice: 4177736.8
     castleTaxRatePercent: 3.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 27225
     currentAiGarrison: 13612
-    goldReserve: 56863186474
-    constantK: 774021694284088
+    goldReserve: 56863174474
+    constantK: 774021530940088
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 5444558
@@ -975,21 +1071,25 @@ MonoBehaviour:
     - 5444558
     - 5444558
     historySentiment7Day:
-    - 141.496
-    - 148.412
-    - 155.328
-    - 162.244
-    - 169.16
-    - 169.16
-    - 169.16
+    - 176.076
+    - 176.076
+    - 176.076
+    - 176.076
+    - 176.076
+    - 176.076
+    - 176.076
     historyPrice7Day:
-    - 4177737.5
-    - 4177737.5
-    - 4177737.5
-    buyPricePrevDayClose: 4177737.5
+    - 4177736.8
+    - 4177736.8
+    - 4177736.8
+    - 4177736.8
+    - 4177736.8
+    - 4177736.8
+    - 4177736.8
+    buyPricePrevDayClose: 4177736.8
     recruitmentFee: 0
   - castleId: C27
-    currentPopulation: 6034640
+    currentPopulation: 6034637
     currentSentiment: 100
     isWar: 0
     isDisaster: 0
@@ -1001,18 +1101,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 30250
-    currentAiGarrison: 30247
-    goldReserve: 35313219231
+    currentAiGarrison: 30230
+    goldReserve: 35333077806
     constantK: 1068118942085937.6
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 6037679
-    - 6034654
-    - 6034648
-    - 6034642
-    - 6034640
-    - 6034640
-    - 6034640
+    - 6034637
+    - 6034637
+    - 6034637
+    - 6034637
+    - 6034637
+    - 6034637
+    - 6034637
     historySentiment7Day:
     - 100
     - 100
@@ -1022,10 +1122,14 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
-    - 1167301.8
-    - 1167378.9
-    - 1167456.2
-    buyPricePrevDayClose: 1167456.2
+    - 1168305.6
+    - 1168382.8
+    - 1168460.2
+    - 1168538.1
+    - 1168615.2
+    - 1168692.6
+    - 1168769.4
+    buyPricePrevDayClose: 1168769.4
     recruitmentFee: 18
   - castleId: C28
     currentPopulation: 3989779
@@ -1061,6 +1165,10 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
+    - 2926668.5
+    - 2926668.5
+    - 2926668.5
+    - 2926668.5
     - 2926668.5
     - 2926668.5
     - 2926668.5
@@ -1103,11 +1211,15 @@ MonoBehaviour:
     - 1314448.4
     - 1314448.4
     - 1314448.4
+    - 1314448.4
+    - 1314448.4
+    - 1314448.4
+    - 1314448.4
     buyPricePrevDayClose: 1314448.4
     recruitmentFee: 0
   - castleId: C30
     currentPopulation: 5445000
-    currentSentiment: 61.544006
+    currentSentiment: 50.544006
     isWar: 1
     isDisaster: 0
     isFavorableEvent: 1
@@ -1131,14 +1243,18 @@ MonoBehaviour:
     - 5445000
     - 5445000
     historySentiment7Day:
-    - 105.54401
-    - 94.54401
-    - 83.54401
-    - 72.54401
-    - 61.544006
-    - 61.544006
-    - 61.544006
+    - 50.544006
+    - 50.544006
+    - 50.544006
+    - 50.544006
+    - 50.544006
+    - 50.544006
+    - 50.544006
     historyPrice7Day:
+    - 6893276
+    - 6893276
+    - 6893276
+    - 6893276
     - 6893276
     - 6893276
     - 6893276
@@ -1146,20 +1262,20 @@ MonoBehaviour:
     recruitmentFee: 0
   - castleId: C31
     currentPopulation: 3989779
-    currentSentiment: 166.88004
+    currentSentiment: 173.56804
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 1
-    currentBuyPrice: 2926656.2
+    currentBuyPrice: 2926655.2
     castleTaxRatePercent: 2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 19950
     currentAiGarrison: 9975
-    goldReserve: 29190470625
-    constantK: 291174944484375
+    goldReserve: 29190458625
+    constantK: 291174824784375
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 3989779
@@ -1170,35 +1286,39 @@ MonoBehaviour:
     - 3989779
     - 3989779
     historySentiment7Day:
-    - 140.12802
-    - 146.81602
-    - 153.50403
-    - 160.19203
-    - 166.88004
-    - 166.88004
-    - 166.88004
+    - 173.56804
+    - 173.56804
+    - 173.56804
+    - 173.56804
+    - 173.56804
+    - 173.56804
+    - 173.56804
     historyPrice7Day:
-    - 2926656.2
-    - 2926656.2
-    - 2926656.2
-    buyPricePrevDayClose: 2926656.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    buyPricePrevDayClose: 2926655.2
     recruitmentFee: 0
   - castleId: C32
     currentPopulation: 2675000
-    currentSentiment: 157.81998
+    currentSentiment: 163.60197
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 1971793.6
+    currentBuyPrice: 1971791.8
     castleTaxRatePercent: 1
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 13375
     currentAiGarrison: 6687
-    goldReserve: 12416509733
-    constantK: 83029200584571
+    goldReserve: 12416497733
+    constantK: 83029120340571
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 2675000
@@ -1209,18 +1329,22 @@ MonoBehaviour:
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 134.69199
-    - 140.47398
-    - 146.25598
-    - 152.03798
-    - 157.81998
-    - 157.81998
-    - 157.81998
+    - 163.60197
+    - 163.60197
+    - 163.60197
+    - 163.60197
+    - 163.60197
+    - 163.60197
+    - 163.60197
     historyPrice7Day:
-    - 1971793.6
-    - 1971793.6
-    - 1971793.6
-    buyPricePrevDayClose: 1971793.6
+    - 1971791.8
+    - 1971791.8
+    - 1971791.8
+    - 1971791.8
+    - 1971791.8
+    - 1971791.8
+    - 1971791.8
+    buyPricePrevDayClose: 1971791.8
     recruitmentFee: 0
   - castleId: C33
     currentPopulation: 3210000
@@ -1259,6 +1383,10 @@ MonoBehaviour:
     - 2252231.8
     - 2252231.8
     - 2252231.8
+    - 2252231.8
+    - 2252231.8
+    - 2252231.8
+    - 2252231.8
     buyPricePrevDayClose: 2252231.8
     recruitmentFee: 0
   - castleId: C34
@@ -1287,18 +1415,22 @@ MonoBehaviour:
     - 3209779
     - 3209779
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
     - 0.8721676
     - 0.8721676
-    - 0.8721676
-    buyPricePrevDayClose: 0.8721676
+    - 0.9604139
+    - 0.9604139
+    - 0.9604139
+    - 0.9604139
+    - 0.9604139
+    buyPricePrevDayClose: 0.9604139
     recruitmentFee: 0
   - castleId: C35
     currentPopulation: 4559779
@@ -1326,10 +1458,10 @@ MonoBehaviour:
     - 4559779
     - 4559779
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
@@ -1337,24 +1469,28 @@ MonoBehaviour:
     - 1.6501447
     - 1.6501447
     - 1.6501447
+    - 1.6501447
+    - 1.6501447
+    - 1.6501447
+    - 1.6501447
     buyPricePrevDayClose: 1.6501447
     recruitmentFee: 0
   - castleId: C36
     currentPopulation: 6049779
-    currentSentiment: 167.59998
+    currentSentiment: 174.35997
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 3
-    currentBuyPrice: 4854755.5
+    currentBuyPrice: 4854754.5
     castleTaxRatePercent: 3
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 30250
     currentAiGarrison: 15125
-    goldReserve: 70619314188
-    constantK: 1068117127093500
+    goldReserve: 70619302188
+    constantK: 1068116945593500
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 6049779
@@ -1365,18 +1501,22 @@ MonoBehaviour:
     - 6049779
     - 6049779
     historySentiment7Day:
-    - 140.56
-    - 147.31999
-    - 154.07999
-    - 160.83998
-    - 167.59998
-    - 167.59998
-    - 167.59998
+    - 174.35997
+    - 174.35997
+    - 174.35997
+    - 174.35997
+    - 174.35997
+    - 174.35997
+    - 174.35997
     historyPrice7Day:
-    - 4854755.5
-    - 4854755.5
-    - 4854755.5
-    buyPricePrevDayClose: 4854755.5
+    - 4854754.5
+    - 4854754.5
+    - 4854754.5
+    - 4854754.5
+    - 4854754.5
+    - 4854754.5
+    - 4854754.5
+    buyPricePrevDayClose: 4854754.5
     recruitmentFee: 0
   - castleId: C37
     currentPopulation: 2000000
@@ -1404,14 +1544,18 @@ MonoBehaviour:
     - 2000000
     - 2000000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0002
+    - 1.0002
+    - 1.0002
+    - 1.0002
     - 1.0002
     - 1.0002
     - 1.0002
@@ -1443,14 +1587,18 @@ MonoBehaviour:
     - 2675000
     - 2675000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0001496
+    - 1.0001496
+    - 1.0001496
+    - 1.0001496
     - 1.0001496
     - 1.0001496
     - 1.0001496
@@ -1493,24 +1641,28 @@ MonoBehaviour:
     - 3816806.5
     - 3816806.5
     - 3816806.5
+    - 3816806.5
+    - 3816806.5
+    - 3816806.5
+    - 3816806.5
     buyPricePrevDayClose: 3816806.5
     recruitmentFee: 0
   - castleId: C40
     currentPopulation: 3209779
-    currentSentiment: 168.37997
+    currentSentiment: 175.21797
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 3
-    currentBuyPrice: 2252217.2
+    currentBuyPrice: 2252215.8
     castleTaxRatePercent: 1.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 16050
     currentAiGarrison: 8025
-    goldReserve: 18071790788
-    constantK: 145026121073700
+    goldReserve: 18071778788
+    constantK: 145026024773700
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 3209779
@@ -1521,18 +1673,22 @@ MonoBehaviour:
     - 3209779
     - 3209779
     historySentiment7Day:
-    - 141.02798
-    - 147.86598
-    - 154.70398
-    - 161.54198
-    - 168.37997
-    - 168.37997
-    - 168.37997
+    - 175.21797
+    - 175.21797
+    - 175.21797
+    - 175.21797
+    - 175.21797
+    - 175.21797
+    - 175.21797
     historyPrice7Day:
-    - 2252217.2
-    - 2252217.2
-    - 2252217.2
-    buyPricePrevDayClose: 2252217.2
+    - 2252215.8
+    - 2252215.8
+    - 2252215.8
+    - 2252215.8
+    - 2252215.8
+    - 2252215.8
+    - 2252215.8
+    buyPricePrevDayClose: 2252215.8
     recruitmentFee: 0
   - castleId: C41
     currentPopulation: 2675000
@@ -1570,25 +1726,29 @@ MonoBehaviour:
     historyPrice7Day:
     - 1971812.5
     - 1971812.5
-    - 1971812.5
-    buyPricePrevDayClose: 1971812.5
+    - 1857108.8
+    - 1857108.8
+    - 1857108.8
+    - 1857108.8
+    - 1857108.8
+    buyPricePrevDayClose: 1857108.8
     recruitmentFee: 0
   - castleId: C42
     currentPopulation: 3989779
-    currentSentiment: 152.89998
+    currentSentiment: 158.18997
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 2
-    currentBuyPrice: 2926656.2
+    currentBuyPrice: 2926655.2
     castleTaxRatePercent: 2.2
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 19950
     currentAiGarrison: 9975
-    goldReserve: 29190470625
-    constantK: 291174944484375
+    goldReserve: 29190458625
+    constantK: 291174824784375
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 3989779
@@ -1599,18 +1759,22 @@ MonoBehaviour:
     - 3989779
     - 3989779
     historySentiment7Day:
-    - 131.74
-    - 137.03
-    - 142.31999
-    - 147.60999
-    - 152.89998
-    - 152.89998
-    - 152.89998
+    - 158.18997
+    - 158.18997
+    - 158.18997
+    - 158.18997
+    - 158.18997
+    - 158.18997
+    - 158.18997
     historyPrice7Day:
-    - 2926656.2
-    - 2926656.2
-    - 2926656.2
-    buyPricePrevDayClose: 2926656.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    - 2926655.2
+    buyPricePrevDayClose: 2926655.2
     recruitmentFee: 0
   - castleId: C43
     currentPopulation: 1999558
@@ -1638,14 +1802,18 @@ MonoBehaviour:
     - 1999558
     - 1999558
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0002
+    - 1.0002
+    - 1.0002
+    - 1.0002
     - 1.0002
     - 1.0002
     - 1.0002
@@ -1688,24 +1856,28 @@ MonoBehaviour:
     - 3370240.8
     - 3370240.8
     - 3370240.8
+    - 3370240.8
+    - 3370240.8
+    - 3370240.8
+    - 3370240.8
     buyPricePrevDayClose: 3370240.8
     recruitmentFee: 0
   - castleId: C45
     currentPopulation: 6050000
-    currentSentiment: 157.57999
+    currentSentiment: 163.33798
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 4669354.5
+    currentBuyPrice: 4669353.5
     castleTaxRatePercent: 3.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 30250
     currentAiGarrison: 15125
-    goldReserve: 70619314188
-    constantK: 1068117127093500
+    goldReserve: 70619302188
+    constantK: 1068116945593500
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 6050000
@@ -1716,35 +1888,39 @@ MonoBehaviour:
     - 6050000
     - 6050000
     historySentiment7Day:
-    - 134.548
-    - 140.306
-    - 146.064
-    - 151.82199
-    - 157.57999
-    - 157.57999
-    - 157.57999
+    - 163.33798
+    - 163.33798
+    - 163.33798
+    - 163.33798
+    - 163.33798
+    - 163.33798
+    - 163.33798
     historyPrice7Day:
-    - 4669354.5
-    - 4669354.5
-    - 4669354.5
-    buyPricePrevDayClose: 4669354.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    - 4669353.5
+    buyPricePrevDayClose: 4669353.5
     recruitmentFee: 0
   - castleId: C46
     currentPopulation: 9599779
-    currentSentiment: 177.5
+    currentSentiment: 185.25
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 9116452
+    currentBuyPrice: 9116451
     castleTaxRatePercent: 4.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 48000
     currentAiGarrison: 24000
-    goldReserve: 193969092000
-    constantK: 4655258208000000
+    goldReserve: 193969080000
+    constantK: 4655257920000000
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 9599779
@@ -1755,35 +1931,39 @@ MonoBehaviour:
     - 9599779
     - 9599779
     historySentiment7Day:
-    - 146.5
-    - 154.25
-    - 162
-    - 169.75
-    - 177.5
-    - 177.5
-    - 177.5
+    - 185.25
+    - 185.25
+    - 185.25
+    - 185.25
+    - 185.25
+    - 185.25
+    - 185.25
     historyPrice7Day:
-    - 9116452
-    - 9116452
-    - 9116452
-    buyPricePrevDayClose: 9116452
+    - 9116451
+    - 9116451
+    - 9116451
+    - 9116451
+    - 9116451
+    - 9116451
+    - 9116451
+    buyPricePrevDayClose: 9116451
     recruitmentFee: 0
   - castleId: C47
     currentPopulation: 4559779
-    currentSentiment: 167.12003
+    currentSentiment: 173.83203
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 3370230
+    currentBuyPrice: 3370229
     castleTaxRatePercent: 2.5
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 22800
     currentAiGarrison: 11400
-    goldReserve: 38417253000
-    constantK: 437956684200000
+    goldReserve: 38417241000
+    constantK: 437956547400000
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 4559779
@@ -1794,22 +1974,26 @@ MonoBehaviour:
     - 4559779
     - 4559779
     historySentiment7Day:
-    - 140.272
-    - 146.98401
-    - 153.69601
-    - 160.40802
-    - 167.12003
-    - 167.12003
-    - 167.12003
+    - 173.83203
+    - 173.83203
+    - 173.83203
+    - 173.83203
+    - 173.83203
+    - 173.83203
+    - 173.83203
     historyPrice7Day:
-    - 3370230
-    - 3370230
-    - 3370230
-    buyPricePrevDayClose: 3370230
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    - 3370229
+    buyPricePrevDayClose: 3370229
     recruitmentFee: 0
   - castleId: C48
     currentPopulation: 3990000
-    currentSentiment: 24.619995
+    currentSentiment: 13.619995
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
@@ -1833,21 +2017,25 @@ MonoBehaviour:
     - 3990000
     - 3990000
     historySentiment7Day:
-    - 68.619995
-    - 57.619995
-    - 46.619995
-    - 35.619995
-    - 24.619995
-    - 24.619995
-    - 24.619995
+    - 13.619995
+    - 13.619995
+    - 13.619995
+    - 13.619995
+    - 13.619995
+    - 13.619995
+    - 13.619995
     historyPrice7Day:
+    - 2926666
+    - 2926666
+    - 2926666
+    - 2926666
     - 2926666
     - 2926666
     - 2926666
     buyPricePrevDayClose: 2926666
     recruitmentFee: 0
   - castleId: C49
-    currentPopulation: 5431369
+    currentPopulation: 5431366
     currentSentiment: 100
     isWar: 0
     isDisaster: 0
@@ -1859,18 +2047,18 @@ MonoBehaviour:
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 27225
-    currentAiGarrison: 27222
-    goldReserve: 28433742110
+    currentAiGarrison: 27205
+    goldReserve: 28451509933
     constantK: 774023327724088
     accumulatedDividendPool: 0
     historyPopulation7Day:
-    - 5431373
-    - 5431372
-    - 5431371
-    - 5431370
-    - 5431369
-    - 5431369
-    - 5431369
+    - 5431366
+    - 5431366
+    - 5431366
+    - 5431366
+    - 5431366
+    - 5431366
+    - 5431366
     historySentiment7Day:
     - 100
     - 100
@@ -1880,27 +2068,31 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
-    - 1044322
-    - 1044398.25
-    - 1044475.2
-    buyPricePrevDayClose: 1044475.2
+    - 1045319.6
+    - 1045396
+    - 1045473.25
+    - 1045550.4
+    - 1045627.3
+    - 1045704.2
+    - 1045780.9
+    buyPricePrevDayClose: 1045780.9
     recruitmentFee: 15
   - castleId: C50
     currentPopulation: 1499779
-    currentSentiment: 162.31998
+    currentSentiment: 168.55197
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 1
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 968998.75
+    currentBuyPrice: 968995.56
     castleTaxRatePercent: 0.8
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 7500
     currentAiGarrison: 3750
-    goldReserve: 3632776406
-    constantK: 13622911522500
+    goldReserve: 3632764406
+    constantK: 13622866522500
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 1499779
@@ -1911,18 +2103,22 @@ MonoBehaviour:
     - 1499779
     - 1499779
     historySentiment7Day:
-    - 137.392
-    - 143.624
-    - 149.85599
-    - 156.08798
-    - 162.31998
-    - 162.31998
-    - 162.31998
+    - 168.55197
+    - 168.55197
+    - 168.55197
+    - 168.55197
+    - 168.55197
+    - 168.55197
+    - 168.55197
     historyPrice7Day:
-    - 968998.75
-    - 968998.75
-    - 968998.75
-    buyPricePrevDayClose: 968998.75
+    - 968995.56
+    - 968995.56
+    - 968995.56
+    - 968995.56
+    - 968995.56
+    - 968995.56
+    - 968995.56
+    buyPricePrevDayClose: 968995.56
     recruitmentFee: 0
   - castleId: C51
     currentPopulation: 4560000
@@ -1958,6 +2154,10 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
+    - 3370240.8
+    - 3370240.8
+    - 3370240.8
+    - 3370240.8
     - 3370240.8
     - 3370240.8
     - 3370240.8
@@ -2000,6 +2200,10 @@ MonoBehaviour:
     - 5266765
     - 5266765
     - 5266765
+    - 5266765
+    - 5266765
+    - 5266765
+    - 5266765
     buyPricePrevDayClose: 5266765
     recruitmentFee: 0
   - castleId: C53
@@ -2028,14 +2232,18 @@ MonoBehaviour:
     - 2850000
     - 2850000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0001404
+    - 1.0001404
+    - 1.0001404
+    - 1.0001404
     - 1.0001404
     - 1.0001404
     - 1.0001404
@@ -2078,6 +2286,10 @@ MonoBehaviour:
     - 2926668.5
     - 2926668.5
     - 2926668.5
+    - 2926668.5
+    - 2926668.5
+    - 2926668.5
+    - 2926668.5
     buyPricePrevDayClose: 2926668.5
     recruitmentFee: 0
   - castleId: C55
@@ -2114,6 +2326,10 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
+    - 2486520
+    - 2486520
+    - 2486520
+    - 2486520
     - 2486520
     - 2486520
     - 2486520
@@ -2156,6 +2372,10 @@ MonoBehaviour:
     - 3042874
     - 3042874
     - 3042874
+    - 3042874
+    - 3042874
+    - 3042874
+    - 3042874
     buyPricePrevDayClose: 3042874
     recruitmentFee: 0
   - castleId: C57
@@ -2195,24 +2415,28 @@ MonoBehaviour:
     - 5060764
     - 5060764
     - 5060764
+    - 5060764
+    - 5060764
+    - 5060764
+    - 5060764
     buyPricePrevDayClose: 5060764
     recruitmentFee: 0
   - castleId: C58
     currentPopulation: 4787779
-    currentSentiment: 12
+    currentSentiment: 1
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
     currentGovernorId: 
     currentLord: 4
-    currentBuyPrice: 3548527.8
+    currentBuyPrice: 35485.383
     castleTaxRatePercent: 2.6
     userDeployedTroops: 0
     averagePurchasePrice: 0
     maxGarrison: 23940
     currentAiGarrison: 11970
-    goldReserve: 42472334048
-    constantK: 508393838548575
+    goldReserve: 424722205
+    constantK: 5083924796187.891
     accumulatedDividendPool: 0
     historyPopulation7Day:
     - 4787779
@@ -2223,22 +2447,26 @@ MonoBehaviour:
     - 4787779
     - 4787779
     historySentiment7Day:
-    - 56
-    - 45
-    - 34
-    - 23
-    - 12
-    - 12
-    - 12
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
     historyPrice7Day:
-    - 3548527.8
-    - 3548527.8
-    - 3548527.8
-    buyPricePrevDayClose: 3548527.8
+    - 35485.383
+    - 35485.383
+    - 35485.383
+    - 35485.383
+    - 35485.383
+    - 35485.383
+    - 35485.383
+    buyPricePrevDayClose: 35485.383
     recruitmentFee: 0
   - castleId: C59
     currentPopulation: 4104000
-    currentSentiment: 23
+    currentSentiment: 12
     isWar: 0
     isDisaster: 0
     isFavorableEvent: 0
@@ -2262,18 +2490,22 @@ MonoBehaviour:
     - 4104000
     - 4104000
     historySentiment7Day:
-    - 67
-    - 56
-    - 45
-    - 34
-    - 23
-    - 23
-    - 23
+    - 12
+    - 12
+    - 12
+    - 12
+    - 12
+    - 12
+    - 12
     historyPrice7Day:
     - 3400882.8
     - 3400882.8
-    - 3400882.8
-    buyPricePrevDayClose: 3400882.8
+    - 3267863
+    - 3267863
+    - 3267863
+    - 3267863
+    - 3267863
+    buyPricePrevDayClose: 3267863
     recruitmentFee: 0
   - castleId: C60
     currentPopulation: 4331779
@@ -2301,14 +2533,18 @@ MonoBehaviour:
     - 4331779
     - 4331779
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0000924
+    - 1.0000924
+    - 1.0000924
+    - 1.0000924
     - 1.0000924
     - 1.0000924
     - 1.0000924
@@ -2351,6 +2587,10 @@ MonoBehaviour:
     - 1935811.4
     - 1935811.4
     - 1935811.4
+    - 1935811.4
+    - 1935811.4
+    - 1935811.4
+    - 1935811.4
     buyPricePrevDayClose: 1935811.4
     recruitmentFee: 0
   - castleId: C62
@@ -2390,6 +2630,10 @@ MonoBehaviour:
     - 1622073.4
     - 1622073.4
     - 1622073.4
+    - 1622073.4
+    - 1622073.4
+    - 1622073.4
+    - 1622073.4
     buyPricePrevDayClose: 1622073.4
     recruitmentFee: 0
   - castleId: C63
@@ -2418,14 +2662,18 @@ MonoBehaviour:
     - 2140000
     - 2140000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0001869
+    - 1.0001869
+    - 1.0001869
+    - 1.0001869
     - 1.0001869
     - 1.0001869
     - 1.0001869
@@ -2468,6 +2716,10 @@ MonoBehaviour:
     - 764806.56
     - 764806.56
     - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
     buyPricePrevDayClose: 764806.56
     recruitmentFee: 0
   - castleId: C65
@@ -2507,6 +2759,10 @@ MonoBehaviour:
     - 630252.44
     - 630252.44
     - 630252.44
+    - 630252.44
+    - 630252.44
+    - 630252.44
+    - 630252.44
     buyPricePrevDayClose: 630252.44
     recruitmentFee: 0
   - castleId: C66
@@ -2535,14 +2791,18 @@ MonoBehaviour:
     - 2736000
     - 2736000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0001463
+    - 1.0001463
+    - 1.0001463
+    - 1.0001463
     - 1.0001463
     - 1.0001463
     - 1.0001463
@@ -2585,6 +2845,10 @@ MonoBehaviour:
     - 2311541.2
     - 2311541.2
     - 2311541.2
+    - 2311541.2
+    - 2311541.2
+    - 2311541.2
+    - 2311541.2
     buyPricePrevDayClose: 2311541.2
     recruitmentFee: 0
   - castleId: C68
@@ -2613,14 +2877,18 @@ MonoBehaviour:
     - 1925558
     - 1925558
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0002078
+    - 1.0002078
+    - 1.0002078
+    - 1.0002078
     - 1.0002078
     - 1.0002078
     - 1.0002078
@@ -2663,6 +2931,10 @@ MonoBehaviour:
     - 1311510.4
     - 1311510.4
     - 1311510.4
+    - 1311510.4
+    - 1311510.4
+    - 1311510.4
+    - 1311510.4
     buyPricePrevDayClose: 1311510.4
     recruitmentFee: 0
   - castleId: C70
@@ -2691,14 +2963,18 @@ MonoBehaviour:
     - 1925779
     - 1925779
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0002078
+    - 1.0002078
+    - 1.0002078
+    - 1.0002078
     - 1.0002078
     - 1.0002078
     - 1.0002078
@@ -2741,6 +3017,10 @@ MonoBehaviour:
     - 1466357.2
     - 1466357.2
     - 1466357.2
+    - 1466357.2
+    - 1466357.2
+    - 1466357.2
+    - 1466357.2
     buyPricePrevDayClose: 1466357.2
     recruitmentFee: 0
   - castleId: C72
@@ -2779,8 +3059,12 @@ MonoBehaviour:
     historyPrice7Day:
     - 3460031.8
     - 3460031.8
-    - 3460031.8
-    buyPricePrevDayClose: 3460031.8
+    - 3192430.5
+    - 3192430.5
+    - 3192430.5
+    - 3192430.5
+    - 3192430.5
+    buyPricePrevDayClose: 3192430.5
     recruitmentFee: 0
   - castleId: C73
     currentPopulation: 2782000
@@ -2816,6 +3100,10 @@ MonoBehaviour:
     - 100
     - 100
     historyPrice7Day:
+    - 1935811.4
+    - 1935811.4
+    - 1935811.4
+    - 1935811.4
     - 1935811.4
     - 1935811.4
     - 1935811.4
@@ -2858,6 +3146,10 @@ MonoBehaviour:
     - 764806.56
     - 764806.56
     - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
     buyPricePrevDayClose: 764806.56
     recruitmentFee: 0
   - castleId: C75
@@ -2896,8 +3188,12 @@ MonoBehaviour:
     historyPrice7Day:
     - 2926668.5
     - 2926668.5
-    - 2926668.5
-    buyPricePrevDayClose: 2926668.5
+    - 3301109.8
+    - 3301109.8
+    - 3301109.8
+    - 3301109.8
+    - 3301109.8
+    buyPricePrevDayClose: 3301109.8
     recruitmentFee: 0
   - castleId: C76
     currentPopulation: 4332000
@@ -2925,14 +3221,18 @@ MonoBehaviour:
     - 4332000
     - 4332000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0000924
+    - 1.0000924
+    - 1.0000924
+    - 1.0000924
     - 1.0000924
     - 1.0000924
     - 1.0000924
@@ -2975,6 +3275,10 @@ MonoBehaviour:
     - 3548527.8
     - 3548527.8
     - 3548527.8
+    - 3548527.8
+    - 3548527.8
+    - 3548527.8
+    - 3548527.8
     buyPricePrevDayClose: 3548527.8
     recruitmentFee: 0
   - castleId: C78
@@ -3003,14 +3307,18 @@ MonoBehaviour:
     - 3210000
     - 3210000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0001246
+    - 1.0001246
+    - 1.0001246
+    - 1.0001246
     - 1.0001246
     - 1.0001246
     - 1.0001246
@@ -3053,6 +3361,10 @@ MonoBehaviour:
     - 3281274.2
     - 3281274.2
     - 3281274.2
+    - 3281274.2
+    - 3281274.2
+    - 3281274.2
+    - 3281274.2
     buyPricePrevDayClose: 3281274.2
     recruitmentFee: 0
   - castleId: C80
@@ -3081,14 +3393,18 @@ MonoBehaviour:
     - 1600000
     - 1600000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0002501
+    - 1.0002501
+    - 1.0002501
+    - 1.0002501
     - 1.0002501
     - 1.0002501
     - 1.0002501
@@ -3131,6 +3447,10 @@ MonoBehaviour:
     - 1857108.8
     - 1857108.8
     - 1857108.8
+    - 1857108.8
+    - 1857108.8
+    - 1857108.8
+    - 1857108.8
     buyPricePrevDayClose: 1857108.8
     recruitmentFee: 0
   - castleId: C82
@@ -3170,6 +3490,10 @@ MonoBehaviour:
     - 1622073.4
     - 1622073.4
     - 1622073.4
+    - 1622073.4
+    - 1622073.4
+    - 1622073.4
+    - 1622073.4
     buyPricePrevDayClose: 1622073.4
     recruitmentFee: 0
   - castleId: C83
@@ -3198,14 +3522,18 @@ MonoBehaviour:
     - 2140000
     - 2140000
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0001869
+    - 1.0001869
+    - 1.0001869
+    - 1.0001869
     - 1.0001869
     - 1.0001869
     - 1.0001869
@@ -3248,6 +3576,10 @@ MonoBehaviour:
     - 764806.56
     - 764806.56
     - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
     buyPricePrevDayClose: 764806.56
     recruitmentFee: 0
   - castleId: C85
@@ -3287,6 +3619,10 @@ MonoBehaviour:
     - 764806.56
     - 764806.56
     - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
+    - 764806.56
     buyPricePrevDayClose: 764806.56
     recruitmentFee: 0
   - castleId: C86
@@ -3315,14 +3651,18 @@ MonoBehaviour:
     - 1199337
     - 1199337
     historySentiment7Day:
-    - 34
-    - 23
-    - 12
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     - 0
     - 0
     - 0
     historyPrice7Day:
+    - 1.0003334
+    - 1.0003334
+    - 1.0003334
+    - 1.0003334
     - 1.0003334
     - 1.0003334
     - 1.0003334
